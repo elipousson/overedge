@@ -13,7 +13,9 @@
 #'   "manifestinteractive/weather-underground-icons", or
 #'   "Esri/calcite-point-symbols". Optional but may be required to differentiate
 #'   icons with duplicate names.
-#' @param ... Parameters to ggsvg::geom_point_svg()
+#' @param svg Optional. Custom file path or URL with SVG to pass to `svg`
+#'   parameter for `ggsvg::geom_point_svg()`.
+#' @param ... Additional arameters to ggsvg::geom_point_svg()
 #' @examples
 #' \dontrun{
 #' if(interactive()){
@@ -51,7 +53,14 @@ geom_sf_icon <- function(data = NULL, icon = NULL, px = NULL, source = NULL, svg
       suppressWarnings(sf::st_centroid(data))
   }
 
-  if (!is.null(icon)) {
+  if (!is.null(svg)) {
+    ggsvg::geom_point_svg(
+      data = as.data.frame(sf::st_coordinates(data)),
+      ggplot2::aes(x = X, y = Y),
+      svg = svg,
+      ...
+    )
+  } else if (!is.null(icon)) {
     icon <-
       dplyr::filter(overedge::map_icons, name == icon)
 

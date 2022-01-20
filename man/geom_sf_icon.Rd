@@ -30,7 +30,10 @@ icons with duplicate names.}
 "Esri/calcite-point-symbols". Optional but may be required to differentiate
 icons with duplicate names.}
 
-\item{...}{Parameters to ggsvg::geom_point_svg()}
+\item{svg}{Optional. Custom file path or URL with SVG to pass to \code{svg}
+parameter for \code{ggsvg::geom_point_svg()}.}
+
+\item{...}{Additional arameters to ggsvg::geom_point_svg()}
 }
 \description{
 Use the \code{ggsvg::geom_point_svg()} function to plot icons at
