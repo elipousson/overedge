@@ -19,16 +19,22 @@ used as is. If not, the object is converted to POINT using
 sf::st_centroid(). If the sf object has a column named "icon" and \code{icon} is
 NULL, the value of the column will be used as the icon name.}
 
-\item{icon}{Icon name. If the data includes a column named icon, \code{icon} is optional. Otherwise, \code{icon} is required.}
+\item{icon}{Icon name. If the data includes a column named icon, \code{icon} is
+optional. Otherwise, \code{icon} is required.}
 
-\item{px}{Icon size in pixels. Optional but may be required to differentiate icons with duplicate names.}
+\item{px}{Icon size in pixels. Optional but may be required to differentiate
+icons with duplicate names.}
 
-\item{source}{Icon source. Optional but may be required to differentiate icons with duplicate names.}
+\item{source}{Icon source. Options include "mapbox/maki", "ideditor/temaki",
+"manifestinteractive/weather-underground-icons", or
+"Esri/calcite-point-symbols". Optional but may be required to differentiate
+icons with duplicate names.}
 
 \item{...}{Parameters to ggsvg::geom_point_svg()}
 }
 \description{
-Use the \code{ggsvg::geom_point_svg()} function to plot icons at coordinates for an sf object.
+Use the \code{ggsvg::geom_point_svg()} function to plot icons at
+coordinates for an sf object.
 }
 \examples{
 \dontrun{
