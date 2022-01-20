@@ -1,0 +1,45 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# overedge
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of overedge is to provide useful functions for making maps with R. This is a collection of miscellaneous functions primarily for working with ggplot2 and sf.
+
+## Installation
+
+You can install the development version of overedge like so:
+
+``` r
+remotes::install_github("elipousson/overedge")
+```
+
+## Example
+
+`overedge` currently provides a single function (`geom_sf_icon`) that wraps `ggsvg::geom_point_svg()` to provide an convenient way to make icon maps:
+
+```{r geom_sf_icon}
+library(overedge)
+library(ggplot2)
+library(sf)
+
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
+ggplot() +
+  geom_sf_icon(data = nc, icon = "point-start", size = 8) +
+  theme_void()
+```
+

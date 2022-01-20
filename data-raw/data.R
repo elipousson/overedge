@@ -1,6 +1,6 @@
 ## code to prepare `DATASET` dataset goes here
 
-library(httr2)
+library(httr)
 library(tidyverse)
 
 get_repo_svg <- function(repo, branch = "main") {
