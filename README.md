@@ -22,7 +22,10 @@ remotes::install_github("elipousson/overedge")
 
 `overedge` currently provides a single function (`geom_sf_icon`) that
 wraps `ggsvg::geom_point_svg()` to provide an convenient way to make
-icon maps:
+icon maps.
+
+You can create maps using a single named icon that matches one of the
+icons in `map_icons`.
 
 ``` r
 library(overedge)
@@ -46,4 +49,43 @@ ggplot() +
 #> Warning: Converting data from MULTIPOLYGON to POINT with `sf::st_centroid()`.
 ```
 
-<img src="man/figures/README-geom_sf_icon-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+
+You can also use an `icon` column from the provided sf object.
+
+``` r
+nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc)/4)
+ggplot() +
+  geom_sf_icon(data = nc, size = 5) +
+  theme_void()
+#> Warning: Converting data from MULTIPOLYGON to POINT with `sf::st_centroid()`.
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+Check `map_icons` to see all supported icon names.
+
+``` r
+head(map_icons)
+#>                name
+#> 1         aerialway
+#> 2          airfield
+#> 3           airport
+#> 4      alcohol-shop
+#> 5 american-football
+#> 6    amusement-park
+#>                                                                              url
+#> 1         https://raw.githubusercontent.com/mapbox/maki/main/icons/aerialway.svg
+#> 2          https://raw.githubusercontent.com/mapbox/maki/main/icons/airfield.svg
+#> 3           https://raw.githubusercontent.com/mapbox/maki/main/icons/airport.svg
+#> 4      https://raw.githubusercontent.com/mapbox/maki/main/icons/alcohol-shop.svg
+#> 5 https://raw.githubusercontent.com/mapbox/maki/main/icons/american-football.svg
+#> 6    https://raw.githubusercontent.com/mapbox/maki/main/icons/amusement-park.svg
+#>   size style        repo
+#> 1   15  <NA> mapbox/maki
+#> 2   15  <NA> mapbox/maki
+#> 3   15  <NA> mapbox/maki
+#> 4   15  <NA> mapbox/maki
+#> 5   15  <NA> mapbox/maki
+#> 6   15  <NA> mapbox/maki
+```

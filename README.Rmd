@@ -30,9 +30,11 @@ remotes::install_github("elipousson/overedge")
 
 ## Example
 
-`overedge` currently provides a single function (`geom_sf_icon`) that wraps `ggsvg::geom_point_svg()` to provide an convenient way to make icon maps:
+`overedge` currently provides a single function (`geom_sf_icon`) that wraps `ggsvg::geom_point_svg()` to provide an convenient way to make icon maps.
 
-```{r geom_sf_icon}
+You can create maps using a single named icon that matches one of the icons in `map_icons`.
+
+```{r}
 library(overedge)
 library(ggplot2)
 library(sf)
@@ -41,5 +43,20 @@ nc <- st_read(system.file("shape/nc.shp", package="sf"))
 ggplot() +
   geom_sf_icon(data = nc, icon = "point-start", size = 8) +
   theme_void()
+```
+
+You can also use an `icon` column from the provided sf object.
+
+```{r}
+nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc)/4)
+ggplot() +
+  geom_sf_icon(data = nc, size = 5) +
+  theme_void()
+```
+
+Check `map_icons` to see all supported icon names.
+
+```{r}
+head(map_icons)
 ```
 
