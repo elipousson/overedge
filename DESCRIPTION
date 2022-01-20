@@ -1,0 +1,18 @@
+Package: overedge
+Title: Assorted Functions For Easier Map Making
+Version: 0.0.0.9000
+Authors@R: 
+    person("Eli", "Pousson", , "eli.pousson@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-8280-1706"))
+Description: Assorted functions to support data wrangling and visualization for map making with a focus on the ggplot2 and sf packages.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    dplyr,
+    ggplot2,
+    ggsvg,
+    sf,
+    stringr,
+    usethis
