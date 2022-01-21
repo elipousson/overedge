@@ -23,7 +23,6 @@ DETAILS
 \dontrun{
 if(interactive()){
  library(ggplot2)
- library(overedge)
 
  nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
  nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)

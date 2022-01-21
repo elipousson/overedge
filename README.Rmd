@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
 # overedge
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/overedge)](https://CRAN.R-project.org/package=overedge)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
 The goal of overedge is to provide useful functions for making maps with R. This is a collection of miscellaneous functions primarily for working with ggplot2 and sf.
@@ -28,9 +31,13 @@ You can install the development version of overedge like so:
 remotes::install_github("elipousson/overedge")
 ```
 
-## Example
+## Examples
 
-`overedge` currently provides a single function (`geom_sf_icon`) that wraps `ggsvg::geom_point_svg()` to provide an convenient way to make icon maps.
+`overedge` currently provides just a few functions.
+
+### Make icon maps with sf objects and ggplot2
+
+`geom_sf_icon` wraps `ggsvg::geom_point_svg()` to provide an convenient way to make icon maps.
 
 You can create maps using a single named icon that matches one of the icons in `map_icons`.
 
@@ -40,23 +47,49 @@ library(ggplot2)
 library(sf)
 
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
-ggplot() +
-  geom_sf_icon(data = nc, icon = "point-start", size = 8) +
-  theme_void()
+nc <- st_transform(nc, 2264)
+theme_set(theme_void())
+
+nc_map <-
+  ggplot() +
+  geom_sf(data = nc)
+
+nc_map +
+  geom_sf_icon(data = nc, icon = "point-start", size = 8)
 ```
 
 You can also use an `icon` column from the provided sf object.
 
 ```{r}
 nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc)/4)
-ggplot() +
-  geom_sf_icon(data = nc, size = 5) +
-  theme_void()
+
+nc_map +
+  geom_sf_icon(data = nc, size = 5)
 ```
 
 Check `map_icons` to see all supported icon names.
 
 ```{r}
 head(map_icons)
+```
+
+### Scale and rotate sf objects
+
+`st_scale_rotate()` is a convenience function for apply affine transformations to sf objects.
+
+```{r}
+nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)
+
+nc_map +
+  geom_sf(data = nc_rotated, fill = NA, color = "red")
+```
+
+### Create inscribed squares in sf objects
+
+```{r}
+nc_squares <- st_inscribed_square(nc)
+
+nc_map +
+  geom_sf(data = nc_squares, fill = NA, color = "red")
 ```
 
