@@ -55,18 +55,18 @@ geom_sf_icon <- function(data = NULL,
                          source = NULL,
                          svg = NULL,
                          ...) {
-  geom_type <- as.character(sf::st_geometry_type(data, by_geometry = FALSE))
+  geometry_type <- as.character(sf::st_geometry_type(data, by_geometry = FALSE))
 
-  if (geom_type != "POINT") {
-    usethis::ui_warn("Converting data from {geom_type} to POINT with `sf::st_centroid()`.")
+  if (geometry_type != "POINT") {
+    usethis::ui_warn("Converting data from {geometry_type} to POINT with `sf::st_centroid()`.")
     data <-
       suppressWarnings(sf::st_centroid(data))
   }
 
   coord_df <- get_coord_df(data)
 
-  if ((icon_col %in% names(data)) && is.null(icon)) {
-    icon_options <- dplyr::rename(map_icons, svg_url = url, {{ icon_col }} := name)
+  if ((iconname_col %in% names(data)) && is.null(icon)) {
+    icon_options <- dplyr::rename(map_icons, svg_url = url, {{ iconname_col }} := name)
 
     if (!is.null(px)) {
       icon_options <- dplyr::filter(icon_options, px == px)
@@ -80,7 +80,7 @@ geom_sf_icon <- function(data = NULL,
       dplyr::left_join(
         data,
         icon_options,
-        by = {{ icon_col }}
+        by = {{ iconname_col }}
       )
 
     data <-
