@@ -1,10 +1,10 @@
-#' @title Convert data frame with to sf object
+#' @title Convert data frame with coordinates to simple feature object
 #' @param x data frame with lat/lon coordinates in 1 combined or 2 separated columns
 #' @param coords character string with names of longitude and latitude column or columns, Default: c('LONGITUD', 'LATITUDE')
 #' @param into If coords is a single column name with both longitude and latitude, `into` is used as the names of the new columns that coords is separated into. Passed to tidyr::separate().
 #' @param sep If coords is a single column name with both longitude and latitude, `sep` is used as the separator between coordinate values. Passed to tidyr::separate().
 #' @param lonlat If coords are ordered as latitude, longitude order or if into is latitude, longitude order, set to FALSE. Default TRUE.
-#' @param crs coordinate reference system, Default: 4326
+#' @param crs coordinate reference system for returned sf object, Default: 4326
 #' @return sf object
 #' @details DETAILS
 #' @examples
@@ -13,11 +13,11 @@
 #'   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
 #'   nc_df <- ggspatial::df_spatial(nc)
 #'
-#'   df_as_sf(nc_df, coords = c("x", "y"))
+#'   df_to_sf(nc_df, coords = c("x", "y"))
 #'
 #'   nc_df$xy <- paste(nc_df$x, nc_df$y, sep = ",")
 #'
-#'   df_as_sf(nc_df, coords = "xy", into = c("lon", "lat"))
+#'   df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
 #' }
 #' }
 #' @seealso
@@ -38,6 +38,7 @@ df_to_sf <- function(x,
                      sep = ",",
                      lonlat = TRUE,
                      crs = 4326) {
+
   if ((length(coords) == 1) && !is.null(into) && (length(into) == 2)) {
     x <-
       tidyr::separate(x, col = tidyselect::all_of(coords), into = into, sep = sep)

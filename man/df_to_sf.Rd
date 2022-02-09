@@ -2,7 +2,7 @@
 % Please edit documentation in R/df_to_sf.R
 \name{df_to_sf}
 \alias{df_to_sf}
-\title{Convert data frame with to sf object}
+\title{Convert data frame with coordinates to simple feature object}
 \usage{
 df_to_sf(
   x,
@@ -24,13 +24,13 @@ df_to_sf(
 
 \item{lonlat}{If coords are ordered as latitude, longitude order or if into is latitude, longitude order, set to FALSE. Default TRUE.}
 
-\item{crs}{coordinate reference system, Default: 4326}
+\item{crs}{coordinate reference system for returned sf object, Default: 4326}
 }
 \value{
 sf object
 }
 \description{
-Convert data frame with to sf object
+Convert data frame with coordinates to simple feature object
 }
 \details{
 DETAILS
@@ -41,11 +41,11 @@ if (interactive()) {
   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
   nc_df <- ggspatial::df_spatial(nc)
 
-  df_as_sf(nc_df, coords = c("x", "y"))
+  df_to_sf(nc_df, coords = c("x", "y"))
 
   nc_df$xy <- paste(nc_df$x, nc_df$y, sep = ",")
 
-  df_as_sf(nc_df, coords = "xy", into = c("lon", "lat"))
+  df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
 }
 }
 }
