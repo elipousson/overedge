@@ -71,9 +71,9 @@ layer_neatline <- function(data = NULL,
     neatline <-
       list(
         neatline,
-      ggplot2::scale_y_continuous(expand = c(0, 0)),
-      ggplot2::scale_x_continuous(expand = c(0, 0))
-    )
+        ggplot2::scale_y_continuous(expand = c(0, 0)),
+        ggplot2::scale_x_continuous(expand = c(0, 0))
+      )
   }
 
   if (hide_grid) {
@@ -83,15 +83,15 @@ layer_neatline <- function(data = NULL,
         ggplot2::theme(
           panel.grid.major = ggplot2::element_line(color = "transparent")
         )
-        )
+      )
   }
 
-  limits <- list(
-    limits,
+  neatline <- list(
+    neatline,
     ggplot2::theme(
       panel.border = ggplot2::element_rect(color = color, size = size, linetype = linetype, fill = NA)
     )
   )
 
-  limits
+  neatline
 }
