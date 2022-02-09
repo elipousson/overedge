@@ -4,7 +4,8 @@
 #' @param data sf object. If the geometry type for data is POINT, the object is
 #'   used as is. If not, the object is converted to POINT using
 #'   sf::st_centroid(). If the sf object has a column named "icon" and `icon` is
-#'   NULL, the value of the column will be used as the icon name.
+#'   NULL, the value of the column will be used as the icon name. Note that the
+#'   icon column should not be mapped with `aes()`.
 #' @param icon Icon name. If the data includes a column named icon, `icon` is
 #'   optional. Otherwise, `icon` is required.
 #' @param px Icon size in pixels. Optional but may be required to differentiate
@@ -18,20 +19,20 @@
 #' @param ... Additional arameters to ggsvg::geom_point_svg()
 #' @examples
 #' \dontrun{
-#' if(interactive()){
-#'  library(sf)
-#'  library(ggplot2)
-#'  library(overedge)
+#' if (interactive()) {
+#'   library(sf)
+#'   library(ggplot2)
+#'   library(overedge)
 #'
-#'  nc <- st_read(system.file("shape/nc.shp", package="sf"))
-#'  ggplot() +
-#'   geom_sf_icon(data = nc, icon = "point-start", size = 10)
+#'   nc <- st_read(system.file("shape/nc.shp", package = "sf"))
+#'   ggplot() +
+#'     geom_sf_icon(data = nc, icon = "point-start", size = 10)
 #'
 #'
-#'  nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc)/4)
-#'  ggplot() +
-#'    geom_sf_icon(data = nc, size = 5)
-#'  }
+#'   nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc) / 4)
+#'   ggplot() +
+#'     geom_sf_icon(data = nc, size = 5)
+#' }
 #' }
 #' @seealso
 #'  \code{\link[ggsvg]{geom_point_svg}}
@@ -44,7 +45,13 @@
 #' @importFrom ggsvg geom_point_svg
 #' @importFrom ggplot2 aes
 #' @importFrom stringr str_detect
-geom_sf_icon <- function(data = NULL, icon = NULL, px = NULL, source = NULL, svg = NULL, ...) {
+geom_sf_icon <- function(data = NULL,
+                         icon = NULL,
+                         px = NULL,
+                         source = NULL,
+                         svg = NULL,
+                         ...) {
+
   geometry_type <- as.character(sf::st_geometry_type(data, by_geometry = FALSE))
 
   if (geometry_type != "POINT") {
@@ -53,9 +60,30 @@ geom_sf_icon <- function(data = NULL, icon = NULL, px = NULL, source = NULL, svg
       suppressWarnings(sf::st_centroid(data))
   }
 
-  if (!is.null(svg)) {
+  coords_df <- as.data.frame(sf::st_coordinates(data))
+
+  if (("icon" %in% names(data)) && is.null(icon)) {
+    data <-
+      dplyr::left_join(
+        data,
+        dplyr::rename(map_icons, svg_url = url),
+        by = c("icon" = "name")
+      )
+
+    data <-
+      dplyr::bind_cols(
+        coords_df,
+      "svg_url" = data$svg_url
+    )
+
     ggsvg::geom_point_svg(
-      data = as.data.frame(sf::st_coordinates(data)),
+      data = data,
+      ggplot2::aes(x = X, y = Y, svg = svg_url),
+      ...
+    )
+  } else if (!is.null(svg)) {
+    ggsvg::geom_point_svg(
+      data = coords_df,
       ggplot2::aes(x = X, y = Y),
       svg = svg,
       ...
@@ -74,7 +102,7 @@ geom_sf_icon <- function(data = NULL, icon = NULL, px = NULL, source = NULL, svg
 
     if (nrow(icon) == 1) {
       ggsvg::geom_point_svg(
-        data = as.data.frame(sf::st_coordinates(data)),
+        data = coords_df,
         ggplot2::aes(x = X, y = Y),
         svg = icon$url,
         ...
@@ -82,21 +110,5 @@ geom_sf_icon <- function(data = NULL, icon = NULL, px = NULL, source = NULL, svg
     } else {
       usethis::ui_stop("Provided parameters match more than one icon. Provide the `px` or `source` to select a single icon for display.")
     }
-  } else if ("icon" %in% names(data)) {
-    data <-
-      dplyr::left_join(
-        data,
-        dplyr::rename(overedge::map_icons, icon_svg = url),
-        by = c("icon" = "name")
-      )
-
-    ggsvg::geom_point_svg(
-      data = dplyr::bind_cols(
-        as.data.frame(sf::st_coordinates(data)),
-        "icon_svg" = data$icon_svg
-      ),
-      ggplot2::aes(x = X, y = Y, svg = icon_svg),
-      ...
-    )
   }
 }

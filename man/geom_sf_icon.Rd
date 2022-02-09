@@ -17,7 +17,8 @@ geom_sf_icon(
 \item{data}{sf object. If the geometry type for data is POINT, the object is
 used as is. If not, the object is converted to POINT using
 sf::st_centroid(). If the sf object has a column named "icon" and \code{icon} is
-NULL, the value of the column will be used as the icon name.}
+NULL, the value of the column will be used as the icon name. Note that the
+icon column should not be mapped with \code{aes()}.}
 
 \item{icon}{Icon name. If the data includes a column named icon, \code{icon} is
 optional. Otherwise, \code{icon} is required.}
@@ -41,20 +42,20 @@ coordinates for an sf object.
 }
 \examples{
 \dontrun{
-if(interactive()){
- library(sf)
- library(ggplot2)
- library(overedge)
+if (interactive()) {
+  library(sf)
+  library(ggplot2)
+  library(overedge)
 
- nc <- st_read(system.file("shape/nc.shp", package="sf"))
- ggplot() +
-  geom_sf_icon(data = nc, icon = "point-start", size = 10)
+  nc <- st_read(system.file("shape/nc.shp", package = "sf"))
+  ggplot() +
+    geom_sf_icon(data = nc, icon = "point-start", size = 10)
 
 
- nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc)/4)
- ggplot() +
-   geom_sf_icon(data = nc, size = 5)
- }
+  nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc) / 4)
+  ggplot() +
+    geom_sf_icon(data = nc, size = 5)
+}
 }
 }
 \seealso{
