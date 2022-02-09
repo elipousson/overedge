@@ -4,26 +4,25 @@ st_diag_dist <- function(x) {
 
   sf::st_distance(
     sf::st_point(
-      c(bbox$xmin, bbox$ymin)
+      c(bbox[["xmin"]], bbox[["ymin"]])
     ),
     sf::st_point(
-      c(bbox$xmax, bbox$ymax)
+      c(bbox[["xmax"]], bbox[["ymax"]])
     )
   )
 }
 
-#' Get buffered feature
+#' Get buffered sf or bbox object
 #'
-#' Return an sf object with a buffer applied to it using either a distance The
-#' metadata for the provided area remains the same.
+#' Return an sf object with a buffer based on `dist` or a proportion of the
+#' diagonal distance defined by `diag_ratio`.
 #'
-#' @param x sf object.
-#' @param dist buffer distance in meters. Optional.
+#' @param x sf or bbox object.
+#' @param dist buffer distance in units. Optional.
 #' @param diag_ratio ratio to set map extent based diagonal distance of area's
 #'   bounding box. Ignored when \code{dist} is provided.
 #' @param unit Units passed to `units::set_units()`.
-#'   Default NULL. Must match units of the CRS for the provided object.
-#'
+#'   Default "metre" Must match units of the CRS for the provided object.
 #' @export
 #' @importFrom sf st_crs st_is_longlat st_buffer
 #' @importFrom usethis ui_warn

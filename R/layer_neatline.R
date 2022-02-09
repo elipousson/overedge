@@ -1,4 +1,4 @@
-#' Set map limits to x with optional adjustments and panel border
+#' Set map limits to sf or bbox object with optional adjustments and panel border
 #'
 #' Set limits for a map to the bounding box of an x using
 #' \code{\link[sf]{coord_sf}}. Optionally, adjust the x size by applying a
@@ -19,7 +19,7 @@
 #'   '----' which hides axes labels.
 #' @param ... Additional parameters to pass to \code{\link[sf]{coord_sf}}.
 #' @return \code{ggplot2::coord_sf()} function with xlim and ylim parameters
-#' #' @examples
+#' @examples
 #' \dontrun{
 #' if(interactive()){
 #'  library(ggplot2)

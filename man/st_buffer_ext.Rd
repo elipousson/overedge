@@ -2,22 +2,22 @@
 % Please edit documentation in R/st_buffer_ext.R
 \name{st_buffer_ext}
 \alias{st_buffer_ext}
-\title{Get buffered feature}
+\title{Get buffered sf or bbox object}
 \usage{
 st_buffer_ext(x, dist = NULL, diag_ratio = NULL, unit = "metre")
 }
 \arguments{
-\item{x}{sf object.}
+\item{x}{sf or bbox object.}
 
-\item{dist}{buffer distance in meters. Optional.}
+\item{dist}{buffer distance in units. Optional.}
 
 \item{diag_ratio}{ratio to set map extent based diagonal distance of area's
 bounding box. Ignored when \code{dist} is provided.}
 
 \item{unit}{Units passed to \code{units::set_units()}.
-Default NULL. Must match units of the CRS for the provided object.}
+Default "metre" Must match units of the CRS for the provided object.}
 }
 \description{
-Return an sf object with a buffer applied to it using either a distance The
-metadata for the provided area remains the same.
+Return an sf object with a buffer based on \code{dist} or a proportion of the
+diagonal distance defined by \code{diag_ratio}.
 }

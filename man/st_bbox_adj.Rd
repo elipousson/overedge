@@ -16,7 +16,7 @@ st_bbox_adj(
 \arguments{
 \item{x}{\code{sf} to adjust}
 
-\item{dist}{buffer distance in meters. Optional.}
+\item{dist}{buffer distance in units. Optional.}
 
 \item{diag_ratio}{ratio to set map extent based diagonal distance of area's
 bounding box. Ignored when \code{dist} is provided.}
@@ -25,7 +25,7 @@ bounding box. Ignored when \code{dist} is provided.}
 character (e.g. "1:3").}
 
 \item{unit}{Units passed to \code{units::set_units()}.
-Default NULL. Must match units of the CRS for the provided object.}
+Default "metre" Must match units of the CRS for the provided object.}
 
 \item{crs}{Coordinate reference system of bounding box to return}
 }

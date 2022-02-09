@@ -2,4 +2,17 @@ url: ~
 template:
   package: preferably
   bootstrap: 5
-
+reference:
+- title: Utility functions for sf objects
+  contents:
+  - starts_with("st_")
+- title: geoms and layers map making with ggplot2
+  contents:
+  - starts_with("geom_")
+  - starts_with("layer_")
+- title: Additional utility functions
+  contents:
+  - '`df_to_sf`'
+- title: Related data objects
+  contents:
+  - '`map_icons`'

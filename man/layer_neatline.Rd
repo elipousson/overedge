@@ -3,7 +3,7 @@
 \name{layer_neatline}
 \alias{layer_neatline}
 \alias{set_map_limits}
-\title{Set map limits to x with optional adjustments and panel border}
+\title{Set map limits to sf or bbox object with optional adjustments and panel border}
 \usage{
 layer_neatline(
   data = NULL,
@@ -23,7 +23,7 @@ layer_neatline(
 \arguments{
 \item{data}{sf or bbox class object}
 
-\item{dist}{buffer distance in meters. Optional.}
+\item{dist}{buffer distance in units. Optional.}
 
 \item{diag_ratio}{ratio to set map extent based diagonal distance of area's
 bounding box. Ignored when \code{dist} is provided.}
@@ -52,7 +52,14 @@ scale_x_continuous to expand map extent to provided parameters.}
 }
 \value{
 \code{ggplot2::coord_sf()} function with xlim and ylim parameters
-#' @examples
+}
+\description{
+Set limits for a map to the bounding box of an x using
+\code{\link[sf]{coord_sf}}. Optionally, adjust the x size by applying a
+buffer and/or adjust the aspect ratio of the limiting bounding box to match a
+set aspect ratio.
+}
+\examples{
 \dontrun{
 if(interactive()){
  library(ggplot2)
@@ -64,12 +71,6 @@ if(interactive()){
 
   }
 }
-}
-\description{
-Set limits for a map to the bounding box of an x using
-\code{\link[sf]{coord_sf}}. Optionally, adjust the x size by applying a
-buffer and/or adjust the aspect ratio of the limiting bounding box to match a
-set aspect ratio.
 }
 \seealso{
 \code{\link[ggplot2]{CoordSf}},\code{\link[ggplot2]{scale_continuous}}

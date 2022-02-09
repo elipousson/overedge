@@ -16,10 +16,16 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/reference/df_to_sf.html</loc>
+  </url>
+  <url>
     <loc>/reference/geom_sf_icon.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/layer_neatline.html</loc>
   </url>
   <url>
     <loc>/reference/map_icons.html</loc>
@@ -28,7 +34,16 @@
     <loc>/reference/overedge-package.html</loc>
   </url>
   <url>
+    <loc>/reference/st_bbox_adj.html</loc>
+  </url>
+  <url>
+    <loc>/reference/st_bbox_asp.html</loc>
+  </url>
+  <url>
     <loc>/reference/st_bearing.html</loc>
+  </url>
+  <url>
+    <loc>/reference/st_buffer_ext.html</loc>
   </url>
   <url>
     <loc>/reference/st_inscribed_square.html</loc>
