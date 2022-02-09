@@ -1,7 +1,8 @@
 ## code to prepare `DATASET` dataset goes here
 
 library(httr)
-library(tidyverse)
+library(dplyr)
+library(stringr)
 
 get_repo_svg <- function(repo, branch = "main") {
   req <- GET(
@@ -22,13 +23,15 @@ get_repo_svg <- function(repo, branch = "main") {
 maki <-
   get_repo_svg(repo = "mapbox/maki") |>
   mutate(
-    size = 15
+    size = 15,
+    style = ""
   )
 
 temaki <-
   get_repo_svg(repo = "ideditor/temaki") |>
   mutate(
-    size = 40
+    size = 40,
+    style = ""
   )
 
 wu_icons <-
@@ -47,7 +50,24 @@ calcite <-
       str_detect(name, "17") ~ 17,
       str_detect(name, "21") ~ 21
     ),
+    style = "",
     name = str_remove(name, "-[:digit:]+$")
+  ) |>
+  arrange(name, desc(size))
+
+lane_icons <-
+  get_repo_svg(repo = "openstreetmap/lane-icons", branch = "master") |>
+  mutate(
+    size = 40,
+    style = ""
+  )
+
+osm_map_icons <-
+  get_repo_svg(repo = "openstreetmap/map-icons", branch = "master") |>
+  filter(str_detect(url, "/svg/")) |>
+  mutate(
+    size = 40,
+    style = ""
   )
 
 map_icons <-
@@ -55,6 +75,8 @@ map_icons <-
     maki,
     temaki,
     wu_icons,
+    lane_icons,
+    osm_map_icons,
     calcite
   ) |>
   relocate(

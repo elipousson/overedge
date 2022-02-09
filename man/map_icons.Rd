@@ -23,13 +23,18 @@ An index of map icons from four sources:
 \item \href{https://github.com/mapbox/maki}{mapbox/maki}
 \item \href{https://github.com/ideditor/temaki}{ideditor/temaki}
 \item \href{https://github.com/manifestinteractive/weather-underground-icons/}{manifestinteractive/weather-underground-icons}
+\item \href{https://github.com/openstreetmap/map-icons/}{openstreetmap/map-icons}
+\item \href{https://github.com/openstreetmap/lane-icons/}{openstreetmap/lane-icons}
 \item \href{https://github.com/Esri/calcite-point-symbols}{Esri/calcite-point-symbols}
 }
 
-The first three icon sources use open licenses.
-\href{https://github.com/mapbox/maki/blob/main/LICENSE.txt}{Maki} and
-\href{https://github.com/ideditor/temaki/blob/main/LICENSE.md}{Temaki} both use a
-CC0 license. The Weather Underground Icons use an \href{https://github.com/manifestinteractive/weather-underground-icons/blob/master/LICENSE}{MIT license}.
+Most of these icon sources use open licenses.
+\href{https://github.com/mapbox/maki/blob/main/LICENSE.txt}{Maki},
+\href{https://github.com/ideditor/temaki/blob/main/LICENSE.md}{Temaki}, and the
+\href{https://github.com/openstreetmap/lane-icons/blob/master/LICENSE.md}{OSM lane icons}
+all use a CC0 license. The Weather Underground Icons use an
+\href{https://github.com/manifestinteractive/weather-underground-icons/blob/master/LICENSE}{MIT license}.
+The OSM map icons use an unspecified PD style license.
 The Calcite icons are \href{https://github.com/Esri/calcite-point-symbols#licensing}{available under the Esri Master License Agreement (MLA)}.
 }
 \keyword{datasets}
