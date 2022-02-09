@@ -27,6 +27,12 @@
 #' @importFrom sf st_inscribed_circle st_geometry st_dimension st_set_geometry
 #' @importFrom purrr discard
 st_inscribed_square <- function(x, rotate = 0) {
+
+  if (sf::st_is_longlat(x)) {
+    usethis::ui_stop("st_inscribed_square does not work for data using geographic coordinates.
+                      Use sf::st_transform() to change the data to use projected coordinates to use this function.")
+  }
+
   geom <- sf::st_inscribed_circle(sf::st_geometry(x), nQuadSegs = 1)
   geom <- purrr::discard(geom, ~ is.na(sf::st_dimension(.x)))
   x <- sf::st_set_geometry(x, geom)
