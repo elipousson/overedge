@@ -1,22 +1,25 @@
-#' @title Draw SVG icons for sf objects
-#' @description Use the `ggsvg::geom_point_svg()` function to plot icons at
-#'   coordinates for an sf object.
+#' @title Draw SVG icons for simple feature objects
+#' @description Use the \code{\link[ggsvg]{geom_point_svg()}} function to plot
+#'   icons using the centroids from the input simple feature object to set the
+#'   icon location.
 #' @param data sf object. If the geometry type for data is POINT, the object is
 #'   used as is. If not, the object is converted to POINT using
-#'   sf::st_centroid(). If the sf object has a column named "icon" and `icon` is
-#'   NULL, the value of the column will be used as the icon name. Note that the
-#'   icon column should not be mapped with `aes()`.
-#' @param icon Icon name. If the data includes a column named icon, `icon` is
-#'   optional. Otherwise, `icon` is required.
-#' @param px Icon size in pixels. Optional but may be required to differentiate
-#'   icons with duplicate names.
-#' @param source Icon source. Options include "mapbox/maki", "ideditor/temaki",
-#'   "manifestinteractive/weather-underground-icons", or
-#'   "Esri/calcite-point-symbols". Optional but may be required to differentiate
-#'   icons with duplicate names.
+#'   \code{\link[sf]{st_centroid()}}.
+#' @param iconname_col The column name in the input data to use as the icon
+#'   name. If the name matches multiple icons, the first match from `map_icons`
+#'   is used. You may provide a px or source value to select a different match
+#'   if needed but, in that case, all icons must use the same px or source
+#'   value. Note that the icon column should not be mapped with `aes()`.
+#' @param icon Icon name. Default NULL. If `icon` is provided, `iconname_col` is
+#'   not used.
+#' @param px Icon size in pixels. See `map_icons$px` for supported options.
+#'   Optional but may be necessary to differentiate icons with duplicate names.
+#' @param source Icon source. See `map_icons$repo` for supported options.
+#'   Optional but may be required to differentiate icons with duplicate names.
 #' @param svg Optional. Custom file path or URL with SVG to pass to `svg`
-#'   parameter for `ggsvg::geom_point_svg()`.
-#' @param ... Additional arameters to ggsvg::geom_point_svg()
+#'   parameter for `ggsvg::geom_point_svg()`.  If `icon` is provided, `svg` is
+#'   not used.
+#' @param ... Additional parameters to ggsvg::geom_point_svg()
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -46,51 +49,53 @@
 #' @importFrom ggplot2 aes
 #' @importFrom stringr str_detect
 geom_sf_icon <- function(data = NULL,
+                         iconname_col = "icon",
                          icon = NULL,
                          px = NULL,
                          source = NULL,
                          svg = NULL,
                          ...) {
+  geom_type <- as.character(sf::st_geometry_type(data, by_geometry = FALSE))
 
-  geometry_type <- as.character(sf::st_geometry_type(data, by_geometry = FALSE))
-
-  if (geometry_type != "POINT") {
-    usethis::ui_warn("Converting data from {geometry_type} to POINT with `sf::st_centroid()`.")
+  if (geom_type != "POINT") {
+    usethis::ui_warn("Converting data from {geom_type} to POINT with `sf::st_centroid()`.")
     data <-
       suppressWarnings(sf::st_centroid(data))
   }
 
-  coords_df <- as.data.frame(sf::st_coordinates(data))
+  coord_df <- get_coord_df(data)
 
-  if (("icon" %in% names(data)) && is.null(icon)) {
+  if ((icon_col %in% names(data)) && is.null(icon)) {
+    icon_options <- dplyr::rename(map_icons, svg_url = url, {{ icon_col }} := name)
+
+    if (!is.null(px)) {
+      icon_options <- dplyr::filter(icon_options, px == px)
+    }
+
+    if (!is.null(source)) {
+      icon_options <- dplyr::filter(icon_options, repo == source)
+    }
+
     data <-
       dplyr::left_join(
         data,
-        dplyr::rename(map_icons, svg_url = url),
-        by = c("icon" = "name")
+        icon_options,
+        by = {{ icon_col }}
       )
 
     data <-
       dplyr::bind_cols(
-        coords_df,
-      "svg_url" = data$svg_url
-    )
+        data,
+        coord_df
+      )
 
     ggsvg::geom_point_svg(
       data = data,
       ggplot2::aes(x = X, y = Y, svg = svg_url),
       ...
     )
-  } else if (!is.null(svg)) {
-    ggsvg::geom_point_svg(
-      data = coords_df,
-      ggplot2::aes(x = X, y = Y),
-      svg = svg,
-      ...
-    )
   } else if (!is.null(icon)) {
-    icon <-
-      dplyr::filter(overedge::map_icons, name == icon)
+    icon <- dplyr::filter(overedge::map_icons, name == icon)
 
     if (!is.null(px)) {
       icon <- dplyr::filter(icon, size == px)
@@ -102,13 +107,21 @@ geom_sf_icon <- function(data = NULL,
 
     if (nrow(icon) == 1) {
       ggsvg::geom_point_svg(
-        data = coords_df,
+        data = coord_df,
         ggplot2::aes(x = X, y = Y),
         svg = icon$url,
         ...
       )
     } else {
-      usethis::ui_stop("Provided parameters match more than one icon. Provide the `px` or `source` to select a single icon for display.")
+      usethis::ui_stop("The provided parameters match more than one icon.
+                        Provide the `px` and/or `source` to select a single icon.")
     }
+  } else if (!is.null(svg)) {
+    ggsvg::geom_point_svg(
+      data = coord_df,
+      ggplot2::aes(x = X, y = Y),
+      svg = svg,
+      ...
+    )
   }
 }

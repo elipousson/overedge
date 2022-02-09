@@ -2,10 +2,11 @@
 % Please edit documentation in R/geom_sf_icon.R
 \name{geom_sf_icon}
 \alias{geom_sf_icon}
-\title{Draw SVG icons for sf objects}
+\title{Draw SVG icons for simple feature objects}
 \usage{
 geom_sf_icon(
   data = NULL,
+  iconname_col = "icon",
   icon = NULL,
   px = NULL,
   source = NULL,
@@ -16,29 +17,33 @@ geom_sf_icon(
 \arguments{
 \item{data}{sf object. If the geometry type for data is POINT, the object is
 used as is. If not, the object is converted to POINT using
-sf::st_centroid(). If the sf object has a column named "icon" and \code{icon} is
-NULL, the value of the column will be used as the icon name. Note that the
-icon column should not be mapped with \code{aes()}.}
+\code{\link[sf]{st_centroid()}}.}
 
-\item{icon}{Icon name. If the data includes a column named icon, \code{icon} is
-optional. Otherwise, \code{icon} is required.}
+\item{iconname_col}{The column name in the input data to use as the icon
+name. If the name matches multiple icons, the first match from \code{map_icons}
+is used. You may provide a px or source value to select a different match
+if needed but, in that case, all icons must use the same px or source
+value. Note that the icon column should not be mapped with \code{aes()}.}
 
-\item{px}{Icon size in pixels. Optional but may be required to differentiate
-icons with duplicate names.}
+\item{icon}{Icon name. Default NULL. If \code{icon} is provided, \code{iconname_col} is
+not used.}
 
-\item{source}{Icon source. Options include "mapbox/maki", "ideditor/temaki",
-"manifestinteractive/weather-underground-icons", or
-"Esri/calcite-point-symbols". Optional but may be required to differentiate
-icons with duplicate names.}
+\item{px}{Icon size in pixels. See \code{map_icons$px} for supported options.
+Optional but may be necessary to differentiate icons with duplicate names.}
+
+\item{source}{Icon source. See \code{map_icons$repo} for supported options.
+Optional but may be required to differentiate icons with duplicate names.}
 
 \item{svg}{Optional. Custom file path or URL with SVG to pass to \code{svg}
-parameter for \code{ggsvg::geom_point_svg()}.}
+parameter for \code{ggsvg::geom_point_svg()}.  If \code{icon} is provided, \code{svg} is
+not used.}
 
-\item{...}{Additional arameters to ggsvg::geom_point_svg()}
+\item{...}{Additional parameters to ggsvg::geom_point_svg()}
 }
 \description{
-Use the \code{ggsvg::geom_point_svg()} function to plot icons at
-coordinates for an sf object.
+Use the \code{\link[ggsvg]{geom_point_svg()}} function to plot
+icons using the centroids from the input simple feature object to set the
+icon location.
 }
 \examples{
 \dontrun{
