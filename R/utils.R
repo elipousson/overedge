@@ -1,7 +1,9 @@
 #' @importFrom sf st_transform st_coordinates
 get_coord_df <-
-  function(x, crs = 4326) {
-    x <- sf::st_transform(x, crs)
+  function(x, crs = NULL) {
+    if (!is.null(crs)) {
+     x <- sf::st_transform(x, crs)
+    }
     x <- subset(sf::st_coordinates(x), select = c(X, Y))
     as.data.frame(x)
   }
