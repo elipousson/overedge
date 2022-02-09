@@ -13,6 +13,6 @@ reference:
 - title: Additional utility functions
   contents:
   - '`df_to_sf`'
-- title: Related data objects
+- title: Related data
   contents:
   - '`map_icons`'

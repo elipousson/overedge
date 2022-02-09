@@ -20,7 +20,6 @@
 #'   df_as_sf(nc_df, coords = "xy", into = c("lon", "lat"))
 #' }
 #' }
-#' # TODO: reference this one? https://docs.ropensci.org/stats19/reference/format_sf.html
 #' @seealso
 #'  \code{\link[ggspatial]{df_spatial}},
 #'  \code{\link[sf]{st_as_sf}}
