@@ -44,10 +44,3 @@ st_bearing <- function(x, dir = FALSE, crs = 4326) {
 
   dplyr::bind_cols(x, bearing = x_bearing)
 }
-
-get_coord_df <-
-  function(x, crs = 4326) {
-  x <- sf::st_transform(x, crs)
-  x <- subset(sf::st_coordinates(x), select = c(X, Y))
-  as.data.frame(x)
-}

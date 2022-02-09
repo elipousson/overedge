@@ -1,22 +1,3 @@
-#' @importFrom usethis ui_stop
-#' @importFrom stringr str_detect str_extract
-check_asp <- function(asp) {
-  # Check aspect ratio
-  if (is.character(asp) && stringr::str_detect(asp, ":")) {
-    # If asp is provided as character string (e.g. "16:9") convert to a numeric ratio
-    as.numeric(stringr::str_extract(asp, ".+(?=:)")) / as.numeric(stringr::str_extract(asp, "(?<=:).+"))
-  } else if (!is.numeric(asp) && !is.null(asp)) {
-    usethis::ui_stop("`asp` must be numeric (e.g. 0.666) or a string with the ratio ratio of width to height (e.g. '4:6').")
-  } else {
-    asp
-  }
-}
-
-#' @importFrom sf st_as_sf st_as_sfc
-sf_bbox_to_sf <- function(bbox) {
-  sf::st_as_sf(sf::st_as_sfc(bbox))
-}
-
 #' Get bounding box buffered and adjusted to match aspect ratio
 #'
 #' Takes an area as an sf object or a bounding box and returns a bounding box
@@ -96,7 +77,7 @@ st_bbox_asp <- function(x = NULL,
   ydist <- bbox["ymax"] - bbox["ymin"] # Get height
   x_asp <- as.numeric(xdist) / as.numeric(ydist) # Get width to height aspect ratio for bbox
 
-  asp <- check_asp(asp)
+  asp <- get_asp(asp)
 
   if (!is.null(asp)) {
     # Compare aspect ratio to bbox aspect ratio
