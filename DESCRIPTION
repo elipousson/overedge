@@ -10,15 +10,24 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
+    checkmate,
     dplyr,
     geosphere,
     ggplot2,
     ggsvg,
     lwgeom,
     purrr,
+    readr,
     sf,
     stringr,
+    tidyr,
+    tidyselect,
+    units,
     usethis
 Depends: 
     R (>= 2.10)
 LazyData: true
+Suggests: 
+    covr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

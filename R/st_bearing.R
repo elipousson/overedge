@@ -33,8 +33,8 @@
 #' @importFrom geosphere bearing
 st_bearing <- function(x, dir = FALSE, crs = 4326) {
 
-  start <- get_point_matrix(lwgeom::st_startpoint(x), crs = crs)
-  end <- get_point_matrix(lwgeom::st_endpoint(x), crs = crs)
+  start <- get_coord_df(lwgeom::st_startpoint(x), crs = crs)
+  end <- get_coord_df(lwgeom::st_endpoint(x), crs = crs)
 
   x_bearing <- geosphere::bearing(start, end)
 
@@ -45,8 +45,9 @@ st_bearing <- function(x, dir = FALSE, crs = 4326) {
   dplyr::bind_cols(x, bearing = x_bearing)
 }
 
-get_point_matrix <- function(x, crs = 4326) {
+get_coord_df <-
+  function(x, crs = 4326) {
   x <- sf::st_transform(x, crs)
   x <- subset(sf::st_coordinates(x), select = c(X, Y))
-  as.matrix(x)
+  as.data.frame(x)
 }

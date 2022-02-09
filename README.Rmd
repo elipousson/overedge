@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/overedge)](https://CRAN.R-project.org/package=overedge)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Codecov test coverage](https://codecov.io/gh/elipousson/overedge/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/overedge?branch=main)
 <!-- badges: end -->
 
 The goal of overedge is to provide useful functions for making maps with R. This is a collection of miscellaneous functions primarily for working with ggplot2 and sf.
