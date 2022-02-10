@@ -21,15 +21,14 @@
 #' @return \code{ggplot2::coord_sf()} function with xlim and ylim parameters
 #' @examples
 #' \dontrun{
-#' if(interactive()){
-#'  library(ggplot2)
+#' if (interactive()) {
+#'   library(ggplot2)
 #'
-#'   nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+#'   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
 #'   ggplot() +
 #'     geom_sf(data = nc) +
-#'     layer_neatline(data = nc[1,], asp = 1, color = "red")
-#'
-#'   }
+#'     layer_neatline(data = nc[1, ], asp = 1, color = "red")
+#' }
 #' }
 #' @seealso
 #'  \code{\link[ggplot2]{CoordSf}},\code{\link[ggplot2]{scale_continuous}}
@@ -71,6 +70,9 @@ layer_neatline <- function(data = NULL,
     neatline <-
       list(
         neatline,
+        ggplot2::theme(
+          plot.margin = ggplot2::unit(x = c(0, 0, 0, 0), units = "mm")
+        ),
         ggplot2::scale_y_continuous(expand = c(0, 0)),
         ggplot2::scale_x_continuous(expand = c(0, 0))
       )
@@ -84,6 +86,18 @@ layer_neatline <- function(data = NULL,
           panel.grid.major = ggplot2::element_line(color = "transparent")
         )
       )
+  }
+
+  if (label_axes == "----") {
+    neatline <- list(
+      neatline,
+      ggplot2::theme(
+        axis.text = ggplot2::element_blank(),
+        axis.ticks.length = ggplot2::unit(x = 0, units = "mm"),
+        axis.line = ggplot2::element_blank(),
+        axis.title = ggplot2::element_blank()
+      )
+    )
   }
 
   neatline <- list(

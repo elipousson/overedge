@@ -61,15 +61,14 @@ set aspect ratio.
 }
 \examples{
 \dontrun{
-if(interactive()){
- library(ggplot2)
+if (interactive()) {
+  library(ggplot2)
 
-  nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
   ggplot() +
     geom_sf(data = nc) +
-    layer_neatline(data = nc[1,], asp = 1, color = "red")
-
-  }
+    layer_neatline(data = nc[1, ], asp = 1, color = "red")
+}
 }
 }
 \seealso{
