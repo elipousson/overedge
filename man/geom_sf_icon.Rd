@@ -11,6 +11,7 @@ geom_sf_icon(
   px = NULL,
   source = NULL,
   svg = NULL,
+  color = "black",
   ...
 )
 }
@@ -37,6 +38,8 @@ Optional but may be required to differentiate icons with duplicate names.}
 \item{svg}{Optional. Custom file path or URL with SVG to pass to \code{svg}
 parameter for \code{ggsvg::geom_point_svg()}.  If \code{icon} is provided, \code{svg} is
 not used.}
+
+\item{color}{SVG color passed to ggsvg::geom_point_svg(). default color is set to "black".}
 
 \item{...}{Additional parameters to ggsvg::geom_point_svg()}
 }

@@ -19,6 +19,7 @@
 #' @param svg Optional. Custom file path or URL with SVG to pass to `svg`
 #'   parameter for `ggsvg::geom_point_svg()`.  If `icon` is provided, `svg` is
 #'   not used.
+#' @param color SVG color passed to ggsvg::geom_point_svg(). default color is set to "black".
 #' @param ... Additional parameters to ggsvg::geom_point_svg()
 #' @examples
 #' \dontrun{
@@ -54,6 +55,7 @@ geom_sf_icon <- function(data = NULL,
                          px = NULL,
                          source = NULL,
                          svg = NULL,
+                         color = "black",
                          ...) {
   geometry_type <- as.character(sf::st_geometry_type(data, by_geometry = FALSE))
 
@@ -110,6 +112,8 @@ geom_sf_icon <- function(data = NULL,
         data = coord_df,
         ggplot2::aes(x = X, y = Y),
         svg = icon$url,
+        color = color,
+        defaults = list(color = "black"),
         ...
       )
     } else {
@@ -121,6 +125,7 @@ geom_sf_icon <- function(data = NULL,
       data = coord_df,
       ggplot2::aes(x = X, y = Y),
       svg = svg,
+      color = color,
       ...
     )
   }
