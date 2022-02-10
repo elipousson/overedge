@@ -3,6 +3,7 @@
 export(df_to_sf)
 export(geom_sf_icon)
 export(layer_neatline)
+export(sf_bbox_to_sf)
 export(st_bbox_adj)
 export(st_bbox_asp)
 export(st_bearing)

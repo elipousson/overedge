@@ -22,6 +22,15 @@ get_asp <- function(asp) {
   }
 }
 
+#' Convert a bounding box into simple feature object
+#'
+#' @param bbox bbox object
+#' @return sf object
+#' @seealso
+#'  - \code{\link[sf]{st_as_sf}},\code{\link[sf]{st_as_sfc}}
+#'  - \code{\link[sfx]{st_extent}}
+#' @rdname sf_bbox_to_sf
+#' @export
 #' @importFrom sf st_as_sf st_as_sfc
 sf_bbox_to_sf <- function(bbox) {
   sf::st_as_sf(sf::st_as_sfc(bbox))
