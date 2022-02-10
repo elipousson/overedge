@@ -40,11 +40,15 @@ st_bbox_adj <- function(x = NULL,
     x <- sf::st_transform(x, crs)
   }
 
-  # Get aspect adjusted bbox
-  st_bbox_asp(
-    x = x,
-    asp = asp
-  )
+  if (!is.null(asp)) {
+    # Get aspect adjusted bbox
+    st_bbox_asp(
+      x = x,
+      asp = asp
+    )
+  } else {
+    sf::st_bbox(x)
+  }
 }
 
 
@@ -68,11 +72,13 @@ st_bbox_adj <- function(x = NULL,
 #' @importFrom sf st_as_sfc st_as_sf st_bbox
 st_bbox_asp <- function(x = NULL,
                         asp = NULL) {
-  if (checkmate::test_class(x, "bbox")) {
-    x <- sf_bbox_to_sf(x)
+
+  if (!checkmate::test_class(x, "bbox")) {
+    bbox <- st_bbox(x)
+  } else {
+    bbox <- x
   }
 
-  bbox <- sf::st_bbox(x)
   xdist <- bbox["xmax"] - bbox["xmin"] # Get width
   ydist <- bbox["ymax"] - bbox["ymin"] # Get height
   x_asp <- as.numeric(xdist) / as.numeric(ydist) # Get width to height aspect ratio for bbox
