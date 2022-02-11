@@ -97,7 +97,7 @@ geom_sf_icon <- function(data = NULL,
       ...
     )
   } else if (!is.null(icon)) {
-    icon <- dplyr::filter(overedge::map_icons, name == icon)
+    icon <- dplyr::filter(map_icons, name == icon)
 
     if (!is.null(px)) {
       icon <- dplyr::filter(icon, size == px)
