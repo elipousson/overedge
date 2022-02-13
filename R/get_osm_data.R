@@ -30,16 +30,19 @@ get_osm_data <- function(location = NULL,
                          crs = NULL,
                          geometry = NULL,
                          osmdata = FALSE) {
+  osm_geometry <-
+    c(
+      "polygons",
+      "points",
+      "lines",
+      "multilines",
+      "multipolygons"
+    )
+
   if (!is.null(geometry)) {
     osm_geometry <-
       match.arg(geometry,
-        c(
-          "polygons",
-          "points",
-          "lines",
-          "multilines",
-          "multipolygons"
-        ),
+        osm_geometry,
         several.ok = TRUE
       )
   }
@@ -55,9 +58,9 @@ get_osm_data <- function(location = NULL,
     crs = osm_crs
   )
 
- if (key == "building" && is.null(value)) {
-   value <- "all"
- }
+  if (key == "building" && is.null(value)) {
+    value <- "all"
+  }
 
   if (value == "all") {
     value <- osmdata::available_tags(key)
