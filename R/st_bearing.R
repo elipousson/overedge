@@ -33,8 +33,8 @@
 #' @importFrom geosphere bearing
 st_bearing <- function(x, dir = FALSE, crs = 4326) {
 
-  start <- get_coord_df(lwgeom::st_startpoint(x), crs = crs)
-  end <- get_coord_df(lwgeom::st_endpoint(x), crs = crs)
+  start <- st_coordinates_df(lwgeom::st_startpoint(x), crs = crs)
+  end <- st_coordinates_df(lwgeom::st_endpoint(x), crs = crs)
 
   x_bearing <- geosphere::bearing(start, end)
 

@@ -24,7 +24,7 @@ eval_data_label <- function(data, label = NULL) {
 
 #' @importFrom sf st_transform st_coordinates
 #' @noRd
-get_coord_df <-
+st_coordinates_df <-
   function(x, crs = NULL) {
     if (!is.null(crs)) {
      x <- sf::st_transform(x, crs)

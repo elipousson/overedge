@@ -65,7 +65,7 @@ geom_sf_icon <- function(data = NULL,
       suppressWarnings(sf::st_centroid(data))
   }
 
-  coord_df <- get_coord_df(data)
+  coord_df <- st_coordinates_df(data)
 
   if ((iconname_col %in% names(data)) && is.null(icon)) {
     icon_options <- dplyr::rename(map_icons, svg_url = url, {{ iconname_col }} := name)
