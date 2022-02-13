@@ -67,6 +67,7 @@ icon location.</p>
   px <span class="op">=</span> <span class="cn">NULL</span>,
   source <span class="op">=</span> <span class="cn">NULL</span>,
   svg <span class="op">=</span> <span class="cn">NULL</span>,
+  color <span class="op">=</span> <span class="st">"black"</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -96,6 +97,8 @@ Optional but may be required to differentiate icons with duplicate names.</p></d
 <dd><p>Optional. Custom file path or URL with SVG to pass to <code>svg</code>
 parameter for <code><a href="https://rdrr.io/pkg/ggsvg/man/geom_point_svg.html" class="external-link">ggsvg::geom_point_svg()</a></code>.  If <code>icon</code> is provided, <code>svg</code> is
 not used.</p></dd>
+<dt>color</dt>
+<dd><p>SVG color passed to ggsvg::geom_point_svg(). default color is set to "black".</p></dd>
 <dt>...</dt>
 <dd><p>Additional parameters to ggsvg::geom_point_svg()</p></dd>
 </dl></div>

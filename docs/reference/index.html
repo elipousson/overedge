@@ -47,7 +47,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="utility-functions-for-sf-objects">Utility functions for sf objects<a class="anchor" aria-label="anchor" href="#utility-functions-for-sf-objects"></a></h2>
+      <h2 id="utility-functions-for-sf-and-bbox-objects">Utility functions for sf and bbox objects<a class="anchor" aria-label="anchor" href="#utility-functions-for-sf-and-bbox-objects"></a></h2>
       
       
 
@@ -87,8 +87,28 @@
           <code><a href="st_scale_rotate.html">st_scale_rotate()</a></code> 
         </dt>
         <dd>Scale or rotate a simple feature object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sf_bbox_to_lonlat_query.html">sf_bbox_to_lonlat_query()</a></code> 
+        </dt>
+        <dd>Convert a bounding box to lon/lat query string</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sf_bbox_to_sf.html">sf_bbox_to_sf()</a></code> 
+        </dt>
+        <dd>Convert a bounding box into simple feature object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sf_bbox_to_wkt.html">sf_bbox_to_wkt()</a></code> 
+        </dt>
+        <dd>Convert a bounding box to well known text (wkt)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="df_to_sf.html">df_to_sf()</a></code> 
+        </dt>
+        <dd>Convert data frame with coordinates to simple feature object</dd>
       </dl></div><div class="section level2">
-      <h2 id="layer-functions-for-ggplot-">Layer functions for ggplot2<a class="anchor" aria-label="anchor" href="#layer-functions-for-ggplot-"></a></h2>
+      <h2 id="layers-and-geoms-for-mapping-with-ggplot-">Layers and geoms for mapping with ggplot2<a class="anchor" aria-label="anchor" href="#layers-and-geoms-for-mapping-with-ggplot-"></a></h2>
       
       
 
@@ -100,6 +120,11 @@
 
       <dl><dt>
           
+          <code><a href="layer_mask.html">layer_mask()</a></code> 
+        </dt>
+        <dd>Create a mask layer based on an sf object</dd>
+      </dl><dl><dt>
+          
           <code><a href="layer_neatline.html">layer_neatline()</a></code> 
         </dt>
         <dd>Set map limits to sf or bbox object with optional adjustments and panel border</dd>
@@ -108,6 +133,42 @@
           <code><a href="geom_sf_icon.html">geom_sf_icon()</a></code> 
         </dt>
         <dd>Draw SVG icons for simple feature objects</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utility-functions-for-accessing-spatial-data">Utility functions for accessing spatial data<a class="anchor" aria-label="anchor" href="#utility-functions-for-accessing-spatial-data"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="get_esri_data.html">get_esri_data()</a></code> 
+        </dt>
+        <dd>Get data from an ArcGIS FeatureServer or MapServer</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_location.html">get_location()</a></code> 
+        </dt>
+        <dd>Get location of specified type</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_location_data.html">get_location_data()</a></code> 
+        </dt>
+        <dd>Get data for a location</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_osm_data.html">get_osm_data()</a></code> 
+        </dt>
+        <dd>Get Open Street Map features for location</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_package()</a></code> 
+        </dt>
+        <dd>Read spatial data to simple features object extended  bounding box</dd>
       </dl></div><div class="section level2">
       <h2 id="additional-utility-functions">Additional utility functions<a class="anchor" aria-label="anchor" href="#additional-utility-functions"></a></h2>
       
@@ -121,9 +182,9 @@
 
       <dl><dt>
           
-          <code><a href="df_to_sf.html">df_to_sf()</a></code> 
+          <code><a href="theme_text.html">theme_text()</a></code> 
         </dt>
-        <dd>Convert data frame with coordinates to simple feature object</dd>
+        <dd>Set, update, or replace ggplot theme and geom text family</dd>
       </dl></div><div class="section level2">
       <h2 id="related-data">Related data<a class="anchor" aria-label="anchor" href="#related-data"></a></h2>
       
