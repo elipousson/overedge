@@ -1,0 +1,114 @@
+#' Read spatial data to simple features object extended  bounding box
+#'
+#' An extended version of \code{\link[sf]{read_sf}} that support reading spatial
+#' data based on a file path, url (for spatial data or ArcGIS FeatureServer or
+#' MapServer), or the data name and associated package. Optionally provide a bounding box
+#' to filter data.
+#'
+#' @param bbox bbox object; Default: NULL. If bbox is provided, read_sf only
+#'   returns features intersecting the bounding box.
+#' @param path file path
+#' @param ... additional parameters passed to \code{\link[sf]{read_sf}}
+#' @rdname read_sf_ext
+#' @export
+#' @importFrom checkmate check_file_exists
+#' @importFrom sf read_sf
+read_sf_path <- function(path, bbox = NULL, ...) {
+
+  checkmate::check_file_exists(path)
+
+  if (!is.null(bbox)) {
+    # Convert bbox to well known text
+    wkt <- sf_bbox_to_wkt(bbox = bbox)
+    # Read external, cached, or data at path with wkt_filter
+    data <- sf::read_sf(
+      dsn = path,
+      wkt_filter = wkt,
+      ...
+    )
+  } else {
+    data <- sf::read_sf(
+      dsn = path,
+      ...
+    )
+  }
+
+  return(data)
+}
+
+#' @rdname read_sf_ext
+#' @param url url for spatial data file or for ArcGIS FeatureServer or MapServer to access with get_esri_data()
+#' @aliases read_sf_url
+#' @export
+#' @importFrom sf read_sf
+read_sf_url <- function(url, bbox = NULL, ...) {
+
+  # Check url
+  check_url(url)
+
+  # Check MapServer or FeatureServer url
+  if (check_esri_url(url)) {
+    data <- get_esri_data(
+      location = bbox,
+      url = url,
+      ...
+    )
+  } else {
+    # TODO: Check if it is possible to use a WKT filter
+    # when reading data from a url (e.g. a hosted GeoJSON file)
+    data <- sf::read_sf(
+      dsn = url,
+      ...
+    )
+  }
+
+  return(data)
+}
+
+#' @param data character; name of data.
+#' @param package character; package name
+#' @param filetype file type supported by sf::sf::st_read(), Default: 'gpkg'. Required if the data is in the cache directory or extdata system files.
+#' @return sf object
+#' @details This function looks for three types of package data:
+#'   = Data loaded with the package
+#'   - External data in the `extdata` system files folder.
+#'   - Cached data in the cache directory returned by \code{\link[rappdirs]{user_cache_dir}}
+#' @rdname read_sf_ext
+#' @aliases read_sf_package
+#' @export
+#' @importFrom checkmate test_directory_exists
+#' @importFrom rappdirs user_cache_dir
+#' @importFrom usethis ui_warn ui_yeah
+read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
+  if (!checkmate::test_directory_exists(find.package(package, quiet = TRUE))) {
+    usethis::ui_warn("{usethis::ui_value(package)} is not installed.")
+    if (usethis::ui_yeah("Do you want to try to install {package}?")) {
+      install.packages(package)
+    }
+  }
+
+  # Read package data
+  package_files <- data(package = package)$results[, "Item"]
+
+  if (data %in% package_files) {
+    return(eval_data_label(data = paste0(package, "::", data)))
+  }
+
+  filename <- paste0(data, ".", filetype)
+  extdata_files <- list.files(system.file("extdata", package = package))
+  user_cache_dir_files <- list.files(rappdirs::user_cache_dir(package))
+
+  # Get path to external package data or data from the package user cache
+  if (filename %in% extdata_files) {
+    # If data is in extdata folder
+    path <- system.file("extdata", filename, package = package)
+  } else if (filename %in% user_cache_dir_files) {
+    # If data is in the cache directory
+    path <- file.path(rappdirs::user_cache_dir(package), filename)
+  }
+
+  # Read data from path
+  data <- read_sf_path(path = path, bbox = bbox, ...)
+
+  return(data)
+}
