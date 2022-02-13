@@ -3,6 +3,6 @@ test_that("get_osm_data works", {
   nc_parks <- get_osm_data(location = nc[1,], key = "leisure", value = "park", osmdata = TRUE)
   checkmate::test_class(nc_parks, "osmdata") # Check class with default param
   checkmate::test_class(nc_parks$osm_polygons, "sf") # Check class with default params
-  nc_buildings <- get_osm_data(location = nc[5,], key = "building", crs = 4326)
-  checkmate::test_class(nc_buildings, "sf")
+  nc_barns <- get_osm_data(location = nc[87,], key = "building", value = "barn", crs = 4326)
+  checkmate::test_class(nc_barns, "sf")
 })
