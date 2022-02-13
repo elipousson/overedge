@@ -17,8 +17,8 @@ check_esri_url <- function(x) {
 }
 
 #' @noRd
-eval_data_label <- function(data, label = NULL) {
-  data <- paste0(collapse = "_", c(label, data))
+eval_data <- function(data, package = NULL, label = NULL) {
+  data <- paste0(collapse = "::", c(package, data))
   eval(parse(text = data))
 }
 

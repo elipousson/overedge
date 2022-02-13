@@ -67,7 +67,9 @@ read_sf_url <- function(url, bbox = NULL, ...) {
 
 #' @param data character; name of data.
 #' @param package character; package name
-#' @param filetype file type supported by sf::sf::st_read(), Default: 'gpkg'. Required if the data is in the cache directory or extdata system files.
+#' @param filetype file type supported by  \code{\link[sf]{read_sf}}., Default: 'gpkg'.
+#'   Required only if the data is in the cache directory or extdata system
+#'   files.
 #' @return sf object
 #' @details This function looks for three types of package data:
 #'   = Data loaded with the package
@@ -79,6 +81,7 @@ read_sf_url <- function(url, bbox = NULL, ...) {
 #' @importFrom checkmate test_directory_exists
 #' @importFrom rappdirs user_cache_dir
 #' @importFrom usethis ui_warn ui_yeah
+#' @importFrom utils install.packages
 read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
   if (!checkmate::test_directory_exists(find.package(package, quiet = TRUE))) {
     usethis::ui_warn("{usethis::ui_value(package)} is not installed.")
@@ -91,7 +94,7 @@ read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) 
   package_files <- data(package = package)$results[, "Item"]
 
   if (data %in% package_files) {
-    return(eval_data_label(data = paste0(package, "::", data)))
+    return(eval_data(data = data, package = package))
   }
 
   filename <- paste0(data, ".", filetype)
