@@ -1,14 +1,22 @@
 #' Get data from an ArcGIS FeatureServer or MapServer
 #'
-#' Wraps the \code{esri2sf::esri2sf()} function to download an ArcGIS
-#' FeatureServer or MapServer.
+#' Wraps the \code{\link[esri2sf]{esri2sf}} and \code{\link[esri2sf]{esri2df}}
+#' function to download an ArcGIS FeatureServer or MapServer. Supports spatial
+#' filtering with bounding box based on location and filtering by location name
+#' (if location name column is provided).
 #'
 #' @param location \code{sf} object. Optional. Only used if trim is TRUE.
 #' @param url FeatureServer or MapServer url to retrieve data from. Passed to
-#'   \code{url} parameter of \code{esri2sf::esri2sf()} function.
+#'   \code{url} parameter of \code{\link[esri2sf]{esri2sf}} or
+#'   \code{\link[esri2sf]{esri2df}} functions.
 #' @param where string for where condition. Default is 1=1 for all rows.
-#' @param trim Logical. Default \code{FALSE}. If \code{TRUE}, area is required.
-#' @param where PARAM_DESCRIPTION, Default: '1=1'
+#' @param where where query string passed to esri2sf, Default: NULL
+#' @param coords_col coordinate columns, e.g. c("longitude", "latitude")
+#' @param lonlat If FALSE, assume coords_col is in lat/lon order; defaults to
+#'   TRUE,
+#' @param locationname_col name of ArcGIS FeatureServer or MapServer column with
+#'   location names for features
+#' @param locationname location name
 #' @inheritParams sf_bbox_to_lonlat_query
 #' @inheritParams st_bbox_adj
 #' @seealso

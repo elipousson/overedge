@@ -12,18 +12,27 @@ RoxygenNote: 7.1.2
 Imports: 
     checkmate,
     dplyr,
+    esri2sf,
     geosphere,
     ggplot2,
     ggsvg,
+    glue,
+    janitor,
+    knitr,
     lwgeom,
+    osmdata,
     purrr,
+    rappdirs,
     readr,
+    rlang,
     sf,
     stringr,
+    tidygeocoder,
     tidyr,
     tidyselect,
     units,
-    usethis
+    usethis,
+    utils
 Depends: 
     R (>= 2.10)
 LazyData: true

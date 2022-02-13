@@ -23,7 +23,8 @@ get_esri_data(
 \item{location}{\code{sf} object. Optional. Only used if trim is TRUE.}
 
 \item{url}{FeatureServer or MapServer url to retrieve data from. Passed to
-\code{url} parameter of \code{esri2sf::esri2sf()} function.}
+\code{url} parameter of \code{\link[esri2sf]{esri2sf}} or
+\code{\link[esri2sf]{esri2df}} functions.}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -35,15 +36,25 @@ character (e.g. "1:3").}
 
 \item{crs}{coordinate reference system to use for query; default 4326}
 
-\item{where}{PARAM_DESCRIPTION, Default: '1=1'}
+\item{where}{where query string passed to esri2sf, Default: NULL}
 
-\item{lonlat}{Default TRUE. If FALSE, coords is assumed to be lat/lon order instead of lon/lat.}
+\item{coords_col}{coordinate columns, e.g. c("longitude", "latitude")}
+
+\item{lonlat}{If FALSE, assume coords_col is in lat/lon order; defaults to
+TRUE,}
+
+\item{locationname_col}{name of ArcGIS FeatureServer or MapServer column with
+location names for features}
+
+\item{locationname}{location name}
 
 \item{trim}{Logical. Default \code{FALSE}. If \code{TRUE}, area is required.}
 }
 \description{
-Wraps the \code{esri2sf::esri2sf()} function to download an ArcGIS
-FeatureServer or MapServer.
+Wraps the \code{\link[esri2sf]{esri2sf}} and \code{\link[esri2sf]{esri2df}}
+function to download an ArcGIS FeatureServer or MapServer. Supports spatial
+filtering with bounding box based on location and filtering by location name
+(if location name column is provided).
 }
 \seealso{
 \code{\link[esri2sf]{esri2sf}}

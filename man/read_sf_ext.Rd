@@ -26,7 +26,9 @@ returns features intersecting the bounding box.}
 
 \item{package}{character; package name}
 
-\item{filetype}{file type supported by sf::sf::st_read(), Default: 'gpkg'. Required if the data is in the cache directory or extdata system files.}
+\item{filetype}{file type supported by  \code{\link[sf]{read_sf}}., Default: 'gpkg'.
+Required only if the data is in the cache directory or extdata system
+files.}
 }
 \value{
 sf object

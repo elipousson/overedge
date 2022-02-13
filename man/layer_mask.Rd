@@ -14,6 +14,7 @@ layer_mask(
   color = NA,
   alpha = 0.5,
   mask = NULL,
+  neatline = FALSE,
   ...
 )
 }
@@ -39,6 +40,8 @@ character (e.g. "1:3").}
 \item{mask}{\code{bbox} object to define the edge of the mask.
 \code{diag_ratio}, \code{dist}, and \code{asp} parameters are ignored if a
 \code{mask} is provided. defaults to NULL}
+
+\item{neatline}{If TRUE, add \code{layer_neatline} with \code{expand = TRUE}; defaults to FALSE.}
 
 \item{...}{Additional parameters to pass to \code{\link[ggplot2]{geom_sf}}}
 }
