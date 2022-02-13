@@ -1,4 +1,29 @@
+#' @importFrom checkmate test_character
+#' @noRd
+check_url <- function(x) {
+  checkmate::test_character(
+    x = x,
+    pattern = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+  )
+}
+
+#' @importFrom checkmate test_character
+#' @noRd
+check_esri_url <- function(x) {
+  checkmate::test_character(
+    x = x,
+    pattern = "/MapServer|/FeatureServer"
+  )
+}
+
+#' @noRd
+eval_data_label <- function(data, label = NULL) {
+  data <- paste0(collapse = "_", c(label, data))
+  eval(parse(text = data))
+}
+
 #' @importFrom sf st_transform st_coordinates
+#' @noRd
 get_coord_df <-
   function(x, crs = NULL) {
     if (!is.null(crs)) {
@@ -10,6 +35,7 @@ get_coord_df <-
 
 #' @importFrom usethis ui_stop
 #' @importFrom stringr str_detect str_extract
+#' @noRd
 get_asp <- function(asp) {
   # Check aspect ratio
   if (is.character(asp) && stringr::str_detect(asp, ":")) {
@@ -20,18 +46,4 @@ get_asp <- function(asp) {
   } else {
     asp
   }
-}
-
-#' Convert a bounding box into simple feature object
-#'
-#' @param bbox bbox object
-#' @return sf object
-#' @seealso
-#'  - \code{\link[sf]{st_as_sf}},\code{\link[sf]{st_as_sfc}}
-#'  - \code{\link[sfx]{st_extent}}
-#' @rdname sf_bbox_to_sf
-#' @export
-#' @importFrom sf st_as_sf st_as_sfc
-sf_bbox_to_sf <- function(bbox) {
-  sf::st_as_sf(sf::st_as_sfc(bbox))
 }
