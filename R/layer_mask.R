@@ -10,6 +10,7 @@
 #' @param mask \code{bbox} object to define the edge of the mask.
 #'   \code{diag_ratio}, \code{dist}, and \code{asp} parameters are ignored if a
 #'   \code{mask} is provided. defaults to NULL
+#' @param neatline If TRUE, add \code{layer_neatline} with `expand = TRUE`; defaults to FALSE.
 #' @param ... Additional parameters to pass to \code{\link[ggplot2]{geom_sf}}
 #' @return  \code{\link[ggplot2]{geom_sf}} function.
 #' @export
@@ -23,6 +24,7 @@ layer_mask <- function(data = NULL,
                        color = NA,
                        alpha = 0.5,
                        mask = NULL,
+                       neatline = FALSE,
                        ...) {
   # Check if mask is provided
   if (is.null(mask)) {
@@ -45,14 +47,30 @@ layer_mask <- function(data = NULL,
       data <- sf_bbox_to_sf(data)
     }
 
-    if (sf::st_crs(data) != sf::st_crs(crs)) {
-      data <- sf::st_transform(data, crs)
+    if (!is.null(crs)) {
+      if (sf::st_crs(data) != sf::st_crs(crs)) {
+        data <- sf::st_transform(data, crs)
+      }
     }
 
     mask <- sf::st_difference(mask, sf::st_union(data))
   }
 
-  mask_layer <- layer_sf_data(data = mask, fill = fill, color = color, alpha = alpha, ...)
+  mask_layer <- layer_location_data(data = mask, geom = "sf", fill = fill, color = color, alpha = alpha, ...)
 
-  return(mask_layer)
+  if (neatline) {
+    neatline_layer <-
+      layer_neatline(
+      data = data,
+      dist = dist,
+      diag_ratio = diag_ratio,
+      asp = asp,
+      crs = crs,
+      expand = TRUE
+    )
+  } else {
+    neatline_layer <- NULL
+  }
+
+  return(list(mask_layer, neatline_layer))
 }
