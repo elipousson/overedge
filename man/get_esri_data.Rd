@@ -47,8 +47,6 @@ TRUE,}
 location names for features}
 
 \item{locationname}{location name}
-
-\item{trim}{Logical. Default \code{FALSE}. If \code{TRUE}, area is required.}
 }
 \description{
 Wraps the \code{\link[esri2sf]{esri2sf}} and \code{\link[esri2sf]{esri2df}}

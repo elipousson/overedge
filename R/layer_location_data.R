@@ -13,11 +13,9 @@
 #' @return ggplot2 geom
 #' @seealso
 #'  \code{\link[ggplot2]{CoordSf}}
-#' @rdname make_layer
-#' @noRd
-#' @importFrom janitor make_clean_names
+#' @rdname layer_location_data
+#' @export
 #' @importFrom ggplot2 geom_sf geom_sf_text geom_sf_label
-#' @importFrom rlang as_function
 layer_location_data <-
   function(data = NULL,
            label,
@@ -65,7 +63,7 @@ layer_location_data <-
     }
 
     if (geom == "icon") {
-      layer <- overedge::geom_sf_icon(
+      layer <- geom_sf_icon(
         data = data,
         ...
       )
