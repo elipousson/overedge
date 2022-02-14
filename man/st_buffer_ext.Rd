@@ -4,7 +4,7 @@
 \alias{st_buffer_ext}
 \title{Get buffered sf or bbox object}
 \usage{
-st_buffer_ext(x, dist = NULL, diag_ratio = NULL, unit = "metre")
+st_buffer_ext(x, dist = NULL, diag_ratio = NULL, unit = "metre", ...)
 }
 \arguments{
 \item{x}{sf or bbox object.}
@@ -16,6 +16,8 @@ bounding box. Ignored when \code{dist} is provided.}
 
 \item{unit}{Units passed to \code{units::set_units()}.
 Default "metre" Must match units of the CRS for the provided object.}
+
+\item{...}{additional parameters passed to  \code{\link[sf]{st_buffer}}.}
 }
 \description{
 Return an sf object with a buffer based on \code{dist} or a proportion of the

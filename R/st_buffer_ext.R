@@ -23,6 +23,7 @@ st_diag_dist <- function(x) {
 #'   bounding box. Ignored when \code{dist} is provided.
 #' @param unit Units passed to `units::set_units()`.
 #'   Default "metre" Must match units of the CRS for the provided object.
+#' @param ... additional parameters passed to  \code{\link[sf]{st_buffer}}.
 #' @export
 #' @importFrom sf st_crs st_is_longlat st_buffer
 #' @importFrom usethis ui_warn
@@ -31,7 +32,8 @@ st_diag_dist <- function(x) {
 st_buffer_ext <- function(x,
                           dist = NULL,
                           diag_ratio = NULL,
-                          unit = "metre") {
+                          unit = "metre",
+                          ...) {
   if (checkmate::test_class(x, "bbox")) {
     x <- sf_bbox_to_sf(x)
   }
@@ -65,5 +67,5 @@ st_buffer_ext <- function(x,
       )
   }
 
-  sf::st_buffer(x, dist)
+  sf::st_buffer(x = x, dist = dist, ...)
 }

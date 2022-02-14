@@ -73,10 +73,15 @@ st_bbox_adj <- function(x = NULL,
 st_bbox_asp <- function(x = NULL,
                         asp = NULL) {
 
-  if (!checkmate::test_class(x, "bbox")) {
-    bbox <- st_bbox(x)
-  } else {
+  geom_type <- sf::st_geometry_type(x)
+
+  if (checkmate::test_class(x, "bbox")) {
     bbox <- x
+  } else if (geom_type != "POINT") {
+    x <- st_buffer_ext(x, dist = 1)
+    bbox <- sf::st_bbox(x)
+  } else {
+    bbox <- sf::st_bbox(x)
   }
 
   xdist <- bbox["xmax"] - bbox["xmin"] # Get width
