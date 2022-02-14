@@ -83,12 +83,8 @@ read_sf_url <- function(url, bbox = NULL, ...) {
 #' @importFrom usethis ui_warn ui_yeah
 #' @importFrom utils install.packages
 read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
-  if (!checkmate::test_directory_exists(find.package(package, quiet = TRUE))) {
-    usethis::ui_warn("{usethis::ui_value(package)} is not installed.")
-    if (usethis::ui_yeah("Do you want to try to install {package}?")) {
-      install.packages(package)
-    }
-  }
+
+  check_package_exists(package)
 
   # Read package data
   package_files <- data(package = package)$results[, "Item"]
