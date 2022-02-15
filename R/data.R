@@ -27,3 +27,24 @@
 #'}
 #' @md
 "map_icons"
+
+
+#'  Common paper sizes
+#'
+#' Reference table of common paper sizes used for `get_paper()` and
+#' `ggsave_ext()` functions. Derived from
+#' [visioguy/PaperSizes](https://github.com/visioguy/PaperSizes/) repo.
+#' @format A data frame with 85 rows and 9 variables:
+#' \describe{
+#'   \item{\code{name}}{Name of paper}
+#'   \item{\code{series}}{Series}
+#'   \item{\code{standard}}{Standard}
+#'   \item{\code{units}}{Units ("in" or "mm") for dimensions}
+#'   \item{\code{width}}{Width in units}
+#'   \item{\code{height}}{Height in units}
+#'   \item{\code{asp_portrait}}{Aspect ratio (portrait)}
+#'   \item{\code{asp_landscape}}{Aspect ratio (landscape)}
+#'   \item{\code{asp_text}}{Aspect ratio ("width:height")}
+#'}
+"paper_sizes"
+
