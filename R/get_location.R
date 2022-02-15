@@ -67,6 +67,7 @@
 #' @importFrom sf st_crs st_filter st_as_sf st_union
 #' @importFrom tidygeocoder geo
 #' @importFrom knitr combine_words
+#' @importFrom tibble tibble
 get_location <- function(type,
                          name = NULL,
                          id = NULL,
@@ -133,9 +134,9 @@ get_location <- function(type,
 
   if (union && (nrow(location) > 1)) {
     location <- sf::st_as_sf(
-      as.data.frame(
-        name = as.character(knitr::combine_words(location[[name_col]])),
-        geometry = sf::st_union(location)
+      tibble::tibble(
+        "name" = as.character(knitr::combine_words(words = location[[name_col]])),
+        "geometry" = sf::st_union(location)
       )
     )
   }
