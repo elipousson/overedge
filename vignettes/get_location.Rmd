@@ -1,0 +1,165 @@
+---
+title: "Get locations and location data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{get_location}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(overedge)
+```
+
+# Get location
+
+## Supported location types
+
+The "type" of location data that you can access with `get_location()` is very flexible. You can provide:
+
+- A simple feature object
+- A url to a spatial data file compatible with `sf::read_sf()`
+- A url for an ArcGIS MapServer or FeatureServer
+- A file path
+
+You can also provide the name of a simple feature object that is either already loaded to the global environment or available to load through any installed package.
+
+Data in packages include exported data that is available when a package is loaded, data that is available in the system files but not loaded (and may sometimes be undocumented), and data that is in the default cache folder path from `rappdirs::user_cache_dir()`. If you want to use package data that is cached in a different location, you need to provide the file path (or filename and directory) in order to use it with `get_location()`.
+
+All of these parameters are passed from `get_location()` to `get_location_data()` so the following section of this vignette includes more details on how the more general function works.
+
+Finally, you can alternatively pass a named list to index that serves as a look-up table for matching the "type" to a an sf object.
+
+## Supported parameters to accessing a location
+
+The most basic parameters for accessing a specific location are:
+
+- name (with name_col matching column to filter)
+- id (with id_col matching column to filter)
+
+The passed value for name is coerced to character and id is coerced to numeric so, if the "id" column for this type of location is in a character format, you need to treat it as a "name" instead.
+
+Alternatively you can use the location parameter which supports either:
+
+- a valid street address (geocoded with `tidygeocoder::geo()`)
+- a simple feature object or bounding box
+
+Note: as of 2022-02-14, get_location() currently only supports a single address at a time but I expect to update the function so it supports multiple addresses).
+
+If you provide a sf or bbox object, the object is used as a spatial filter either when reading in the data (using the bbox parameter for `read_sf_path` or `read_sf_url`) or before returning the data using the `sf::st_filter()` function.
+
+### Working with union and label parameters
+
+Location types that are administrative boundaries can often be grouped together into larger areas. The `union` parameter makes it easy to do this.
+
+## What is `get_location()` good for?
+
+### Building custom look-up functions
+
+Here is are a few examples showing how you can use `get_location()` to create new custom look-up functions.
+
+If your location data is from another package, you can use the package parameters passed to `get_location_data()` to access that data even without loading the package. This approach works best when the package data uses a consistent naming scheme for columns and data to support. This makes it easy to turn the names into parameters as the example below using the [nycgeo package](https://nycgeo.mattherman.info/).
+
+```{r get_location_package}
+# NOTE: install nycgeo from GitHub not CRAN
+# remotes::install_github("mfherman/nycgeo")
+get_nyc_borough <- function(name = NULL, id = NULL, type = "simple") {
+  
+  data <- "borough_sf"
+  if (type == "simple") {
+    data <- paste(data, type, sep = "_")
+  }
+  
+  package <- "nycgeo"
+
+  get_location(
+    type = data,
+    package = package,
+    name = name,
+    id = id,
+    name_col = "borough_name",
+    id_col = "borough_id"
+  )
+}
+
+get_nyc_borough("Manhattan")
+```
+
+If your location data is sourced from an ArcGIS MapServer or FeatureServer, you can use the `locationname` and `locationname_col` parameters from the underlying `get_esri_data()` function. This avoids the need to download the full dataset every time.
+
+```{r get_location_esri}
+# get_anc looks up the Advisory Neighborhoood 
+# Data from Open Data DC https://opendata.dc.gov/datasets/fcfbf29074e549d8aff9b9c708179291
+
+get_anc <- function(name) {
+  url <- "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Administrative_Other_Boundaries_WebMercator/MapServer/1"
+
+  get_location(
+    type = url,
+    locationname = toupper(name),
+    locationname_col = "name"
+  )
+}
+
+get_anc(name = "5B")
+```
+
+Location data can also be loaded from a URL with a GeoJSON or other spatial data file.
+
+### Accessing overlapping geographies
+
+Since location supports both addresses and sf objects, you can pull individual locations without knowing the name or id of an area. For example, you can use an address:
+
+```{r location_address}
+# NOTE: mapbaltimore is not currently available on CRAN
+# remotes::install_github("elipousson/mapbaltimore")
+lookup_tract <- function(address) {
+  get_location(
+    type = "baltimore_tracts",
+    package = "mapbaltimore",
+    location = address
+  )
+}
+
+lookup_tract("100 Holliday St, Baltimore, MD 21202")
+```
+
+You can also combine multiple approaches to create a look-up function that returns overlapping geography for a named characteristic. For example, the following function takes the name of a school and returns any Baltimore City neighborhoods that overlap with that school's attendance zone.
+
+```{r location_sf}
+
+lookup_school_neighborhoods <- function(school_name) {
+  school <-
+    get_location(
+    type = "bcps_es_zones_SY2021",
+    package = "bcpss",
+    name = school_name,
+    name_col = "program_name_short"
+  )
+  
+  school_neighborhoods <- get_location(
+    type = "neighborhoods",
+    package = "mapbaltimore",
+    location = school
+  )
+  
+  return(school_neighborhoods)
+}
+
+lookup_school_neighborhoods("Eutaw-Marshburn E")
+```
+
+## Get location data
+
+As noted in the previous section, `get_location()` is largely built around `get_location_data()`. But, get_location_data() is also a helpful function just by itself.
+
+While the data parameter supports all of the options for the type parameter described in the prior section, `get_location_data()` also supports named parameters for path or url.
+
+Note: This vignette is a work in progress with additional details to be added soon. 
