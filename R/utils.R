@@ -16,6 +16,16 @@ check_esri_url <- function(x) {
   )
 }
 
+#' @importFrom checkmate test_class
+#' @noRd
+check_sf_list <- function(x) {
+  if (!checkmate::test_class(x, "sf") && is.list(x)) {
+    all(vapply(x, check_sf_list, TRUE))
+  } else {
+    checkmate::test_class(x, "sf")
+  }
+}
+
 #' @importFrom checkmate test_directory_exists
 #' @importFrom usethis ui_warn ui_yeah
 #' @noRd
@@ -54,7 +64,7 @@ get_asp <- function(asp) {
     # If asp is provided as character string (e.g. "16:9") convert to a numeric ratio
     as.numeric(stringr::str_extract(asp, ".+(?=:)")) / as.numeric(stringr::str_extract(asp, "(?<=:).+"))
   } else if (!is.numeric(asp) && !is.null(asp)) {
-    usethis::ui_stop("`asp` must be numeric (e.g. 0.666) or a string with the ratio ratio of width to height (e.g. '4:6').")
+    usethis::ui_stop("{usethis::ui_value('asp')} must be numeric (e.g. 0.666) or a string representing a width to height ratio (e.g. '4:6').")
   } else {
     asp
   }
