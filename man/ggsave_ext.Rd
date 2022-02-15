@@ -11,12 +11,14 @@ ggsave_ext(
   filename = NULL,
   path = NULL,
   device,
+  paper = NULL,
+  orientation = "portrait",
   scale = 1,
-  asp,
   width,
   height,
   units = "in",
-  dpi,
+  dpi = 300,
+  bg = NULL,
   exif = TRUE,
   title = NULL,
   author,
@@ -29,9 +31,40 @@ ggsave_ext(
 
 \item{label}{label is appending to filename as a prefix.}
 
-\item{asp}{aspect ratio}
+\item{plot}{Plot to save, defaults to last plot displayed.}
 
-\item{exif}{If TRUE, edit exif metadata for exported file, Default: TRUE}
+\item{filename}{File name to create on disk.}
+
+\item{path}{Path of the directory to save plot to: \code{path} and \code{filename}
+are combined to create the fully qualified file name. Defaults to the
+working directory.}
+
+\item{device}{Device to use. Can either be a device function
+(e.g. \link{png}), or one of "eps", "ps", "tex" (pictex),
+"pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).}
+
+\item{paper}{paper matching name from \code{paper_sizes} (e.g. "letter"). Not case sensitive}
+
+\item{orientation}{"portrait", "landscape", or "square"}
+
+\item{scale}{Multiplicative scaling factor.}
+
+\item{width}{Plot size in \code{units} ("in", "cm", "mm", or "px").
+If not supplied, uses the size of current graphics device.}
+
+\item{height}{Plot size in \code{units} ("in", "cm", "mm", or "px").
+If not supplied, uses the size of current graphics device.}
+
+\item{units}{Plot size in \code{units} ("in", "cm", "mm", or "px").
+If not supplied, uses the size of current graphics device.}
+
+\item{dpi}{Plot resolution. Also accepts a string input: "retina" (320),
+"print" (300), or "screen" (72). Applies only to raster output types.}
+
+\item{bg}{Background colour. If \code{NULL}, uses the \code{plot.background} fill value
+from the plot theme.}
+
+\item{exif}{If TRUE, edit exif metadata for exported file using the exifr package, Default: TRUE}
 
 \item{title}{title of plot or map, added to exif metadata, Default: NULL}
 
@@ -47,6 +80,28 @@ Save a plot or map then update the EXIF metadata for the title, author, and
 create data. \code{ggsave_ext()} also supports creating a file name based on a
 sentence case name with spaces (e.g. "Baltimore city map") and appending a
 label (e.g. "baltcity") as a prefix to the output file name.
+}
+\examples{
+\dontrun{
+if (interactive()) {
+  neighborhoods <-
+    get_location(
+      type = "neighborhoods",
+      package = "mapbaltimore"
+    )
+
+  ggplot2::ggplot() +
+    ggplot2::geom_sf(data = neighborhoods)
+
+  ggsave_ext(
+    name = "neighborhoods",
+    label = "Baltimore City",
+    author = "Thomas H. Poppleton",
+    device = "pdf",
+    paper = "letter"
+  )
+}
+}
 }
 \seealso{
 \code{\link[exifr]{exiftool_call}}

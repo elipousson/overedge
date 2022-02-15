@@ -39,6 +39,7 @@
 #'   \item{\code{name}}{Name of paper}
 #'   \item{\code{series}}{Series}
 #'   \item{\code{standard}}{Standard}
+#'   \item{\code{size}}{Size in series}
 #'   \item{\code{units}}{Units ("in" or "mm") for dimensions}
 #'   \item{\code{width}}{Width in units}
 #'   \item{\code{height}}{Height in units}

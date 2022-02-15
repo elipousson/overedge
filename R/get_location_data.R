@@ -31,8 +31,9 @@
 #' @param ... additional parameters passed to read_sf_path, read_sf_url, or read_sf_package
 #' @rdname get_location_data
 #' @export
-#' @importFrom checkmate check_character check_file_exists
-#' @importFrom sf st_crop st_intersection st_filter st_transform
+#' @importFrom usethis ui_yeah ui_warn
+#' @importFrom checkmate test_class test_file_exists
+#' @importFrom sf st_crs st_crop st_transform st_intersection st_filter
 #' @importFrom rlang as_function
 get_location_data <- function(location = NULL,
                               dist = NULL,
@@ -63,35 +64,41 @@ get_location_data <- function(location = NULL,
     bbox <- NULL
   }
 
+  # Check if data is in local environment
+  if (data %in% ls(envir = .GlobalEnv)) {
+    if (usethis::ui_yeah("Do you want to load {data} from the global environment?")) {
+      data <- eval_data(data = data)
+    }
+
+    if (!(checkmate::test_class(data, "sf"))) {
+      usethis::ui_warn("The loaded data is not an sf object.")
+    }
+  }
+
   # Check if data is not an  sf object
   if (!(checkmate::test_class(data, "sf"))) {
 
-    # Check if data is in local environment
-    if (data %in% ls(envir = .GlobalEnv)) {
-      data <- eval_data(data = data)
-      usethis::ui_warn("Loading data from global environment.")
       # Check if data is a url
-    } else if (check_url(data)) {
-      url <- data
-      # Check if data is a path to an existing file
-    } else if (checkmate::test_file_exists(x = data)) {
-      path <- data
-    }
+      if (check_url(data)) {
+        url <- data
+        # Check if data is a path to an existing file
+      } else if (checkmate::test_file_exists(x = data)) {
+        path <- data
+      }
 
-    # Call the appropriate read_sf function
-    if (!is.null(path)) {
-      data <- read_sf_path(path = path, bbox = bbox, ...)
-    } else if (!is.null(url)) {
-      data <- read_sf_url(url = url, bbox = bbox, ...)
-    } else if (!is.null(package)) {
-      data <- read_sf_package(data = data, bbox = bbox, package = package, filetype = filetype, ...)
+      # Call the appropriate read_sf function
+      if (!is.null(path)) {
+        data <- read_sf_path(path = path, bbox = bbox, ...)
+      } else if (!is.null(url)) {
+        data <- read_sf_url(url = url, bbox = bbox, ...)
+      } else if (!is.null(package)) {
+        data <- read_sf_package(data = data, bbox = bbox, package = package, filetype = filetype, ...)
+      }
     }
-  }
 
   if (is.null(from_crs)) {
     from_crs <- sf::st_crs(data)
   }
-
 
   if (!is.null(bbox)) {
     if (crop && !trim) {
