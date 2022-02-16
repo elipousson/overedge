@@ -23,13 +23,14 @@ ggsave_ext(
   title = NULL,
   author,
   args = NULL,
+  prefix = "date",
   ...
 )
 }
 \arguments{
-\item{name}{name of plot, used to create filename}
+\item{name}{name of plot, used to create filename (if filename is not provided)}
 
-\item{label}{label is appending to filename as a prefix.}
+\item{label}{label is appended to filename as a prefix.}
 
 \item{plot}{Plot to save, defaults to last plot displayed.}
 
@@ -72,6 +73,8 @@ from the plot theme.}
 
 \item{args}{args passed to exiftoolr, If args is not NULL, title and author
 are ignored, Default: NULL}
+
+\item{prefix}{If "date", the date from \code{Sys.Date()} is appended to filename as a prefix (before label). If "time", \code{Sys.time()} is appended.}
 
 \item{...}{additional parameters passed to \code{\link[ggplot2]{ggsave}}}
 }

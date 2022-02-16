@@ -72,7 +72,7 @@ label (e.g. "baltcity") as a prefix to the output file name.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ggsave_ext</span><span class="op">(</span>
   name <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">label</span>,
-  plot <span class="op">=</span> <span class="fu">last_plot</span><span class="op">(</span><span class="op">)</span>,
+  plot <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/last_plot.html" class="external-link">last_plot</a></span><span class="op">(</span><span class="op">)</span>,
   filename <span class="op">=</span> <span class="cn">NULL</span>,
   path <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">device</span>,
@@ -88,6 +88,7 @@ label (e.g. "baltcity") as a prefix to the output file name.</p>
   title <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">author</span>,
   args <span class="op">=</span> <span class="cn">NULL</span>,
+  prefix <span class="op">=</span> <span class="st">"date"</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -95,9 +96,9 @@ label (e.g. "baltcity") as a prefix to the output file name.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>name</dt>
-<dd><p>name of plot, used to create filename</p></dd>
+<dd><p>name of plot, used to create filename (if filename is not provided)</p></dd>
 <dt>label</dt>
-<dd><p>label is appending to filename as a prefix.</p></dd>
+<dd><p>label is appended to filename as a prefix.</p></dd>
 <dt>plot</dt>
 <dd><p>Plot to save, defaults to last plot displayed.</p></dd>
 <dt>filename</dt>
@@ -140,6 +141,8 @@ from the plot theme.</p></dd>
 <dt>args</dt>
 <dd><p>args passed to exiftoolr, If args is not NULL, title and author
 are ignored, Default: NULL</p></dd>
+<dt>prefix</dt>
+<dd><p>If "date", the date from <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date()</a></code> is appended to filename as a prefix (before label). If "time", <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time()</a></code> is appended.</p></dd>
 <dt>...</dt>
 <dd><p>additional parameters passed to <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></code></p></dd>
 </dl></div>

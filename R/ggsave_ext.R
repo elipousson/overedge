@@ -5,8 +5,9 @@
 #' sentence case name with spaces (e.g. "Baltimore city map") and appending a
 #' label (e.g. "baltcity") as a prefix to the output file name.
 #'
-#' @param name name of plot, used to create filename
-#' @param label label is appending to filename as a prefix.
+#' @param name name of plot, used to create filename (if filename is not provided)
+#' @param label label is appended to filename as a prefix.
+#' @param prefix If "date", the date from `Sys.Date()` is appended to filename as a prefix (before label). If "time", `Sys.time()` is appended.
 #' @param paper paper matching name from `paper_sizes` (e.g. "letter"). Not case sensitive
 #' @param orientation "portrait", "landscape", or "square"
 #' @param exif If TRUE, edit exif metadata for exported file using the exifr package, Default: TRUE
@@ -65,6 +66,7 @@ ggsave_ext <- function(name = NULL,
                        title = NULL,
                        author,
                        args = NULL,
+                       prefix = "date",
                        ...) {
   if (!any(sapply(c(name, device), is.null))) {
     checkmate::check_character(name)
@@ -80,7 +82,17 @@ ggsave_ext <- function(name = NULL,
     units <- paper$units
   }
 
-  filename <- paste0(c(janitor::make_clean_names(label), filename), collapse = "_")
+  if (prefix == "date") {
+    prefix <- gsub("^x","", janitor::make_clean_names(Sys.Date(), sep_out = "-"))
+  } else if (prefix == "time") {
+    prefix <- gsub("^x","", janitor::make_clean_names(Sys.time(), sep_out = "-"))
+  } else {
+    prefix <- NULL
+  }
+
+  label <- janitor::make_clean_names(label)
+
+  filename <- paste0(c(prefix, label, filename), collapse = "_")
 
   ggplot2::ggsave(
     filename = filename,
