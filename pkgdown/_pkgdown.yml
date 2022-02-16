@@ -20,12 +20,13 @@ reference:
   contents:
   - starts_with("layer_")
   - starts_with("geom_")
-- title: Additional ggplot2 utility functions
+- title: Utility functions for ggplot2 themes and file export
   contents:
   - '`ggsave_ext`'
   - '`get_paper`'
+  - '`get_margin`'
   - '`theme_text`'
-- title: Related data
+- title: Reference data used by functions
   contents:
   - '`map_icons`'
   - '`paper_sizes`'

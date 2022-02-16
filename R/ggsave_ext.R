@@ -240,3 +240,87 @@ get_paper <- function(paper = "letter",
 
   return(paper)
 }
+
+#' Get margins for a ggplot2 plot or map based on style or distance
+#'
+#' This function works in combination with the `get_paper()` function to make it
+#' easier to position a map on a page before saving to file. This is primarily
+#' useful when adapting a gglpot2 map or plot to a print document format that is
+#' composed outside of R using a page layout application such as Adobe InDesign.
+#'
+#' @param margin Margin style (options include "extrawide", "wide", "standard",
+#'   "narrow", "none"), Additional "auto" option to generate margin based on
+#'   line length is planned but not yet implemented. Default: NULL
+#' @param dist Margin distance (single value used to all sides), Default: NULL
+#' @param unit Unit for margin distance, Default: 'in'
+#' @param plot_width Plot or map width in units. If `paper` and `plot_width` are
+#'   provided, margins are half the distance between the two evenly distributed.
+#'   This is not tested and may not work with all page sizes/orientations.
+#' @inheritParams get_paper
+#' @return A ggplot2::margin() element intended for use with
+#'   ggplot2::element_rect() and the plot.background theme element.
+#' @examples
+#' \dontrun{
+#' if(interactive()){
+#'  get_margins("standard")
+#'
+#'  get_margins("none")
+#'
+#'  get_margins(dist = 25, unit = "mm")
+#'
+#'  get_margins(paper = "letter", plot_width = 5.5)
+#'  }
+#' }
+#' @seealso
+#'  \code{\link[ggplot2]{margin}}
+#' @rdname get_margin
+#' @export
+#' @importFrom ggplot2 margin
+get_margin <- function(margin = "standard",
+                        paper = NULL,
+                        orientation = NULL,
+                        dist = NULL,
+                        unit = "in",
+                        plot_width = NULL) {
+  unit <- match.arg(unit, c("mm", "in"))
+
+  if (!is.null(paper) && !is.null(plot_width)) {
+    paper <- get_paper(paper = paper, orientation = orientation)
+    dist <- (paper$width - plot_width) / 2
+  }
+
+  if (is.null(dist)) {
+    if (is.character(margin) && (margin != "auto")) {
+      if (unit == "in") {
+        margin <- switch(margin,
+                         "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = "in"),
+                         "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = "in"),
+                         "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = "in"),
+                         "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = "in"),
+                         "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = "in")
+        )
+      } else if (unit == "mm") {
+        margin <- switch(margin,
+                         "extrawide" = ggplot2::margin(t = 80, r = 80, b = 80, l = 80, unit = unit),
+                         "wide" = ggplot2::margin(t = 60, r = 60, b = 60, l = 60, unit = unit),
+                         "standard" = ggplot2::margin(t = 40, r = 40, b = 40, l = 40, unit = unit),
+                         "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
+                         "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
+        )
+      }
+    } else if (margin == "auto") {
+      # TODO: implement margin settings that respond to font family and size and/or paper
+      # e.g. LaTeX default is 1.5 in margin w/ 12pt text, 1.75 in for 11pt, 1.875 for 10pt
+      # See https://practicaltypography.com/page-margins.html for more information on linelength and margins
+    }
+  } else {
+    if (length(dist) == 1) {
+      margin <- ggplot2::margin(t = dist, r = dist, b = dist, l = dist, unit = unit)
+    } else if (length(dist) == 4) {
+      margin <- ggplot2::margin(t = margin[[1]], r = margin[[2]], b = margin[[3]], l = margin[[4]], unit = unit)
+    }
+  }
+
+  return(margin)
+}
+
