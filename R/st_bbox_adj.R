@@ -8,7 +8,6 @@
 #' (1.777). The asp parameter supports both numeric values and character
 #' strings with ratios matching the format of "width:height".
 #'
-#' @title Get bounding box buffered and adjusted to aspect ratio
 #' @param x \code{sf} to adjust
 #' @inheritParams st_buffer_ext
 #' @inheritParams st_bbox_asp
@@ -16,7 +15,7 @@
 #' @return Class \code{bbox} object
 #' @export
 #' @importFrom checkmate test_class
-#' @importFrom sf st_transform
+#' @importFrom sf st_transform st_bbox
 st_bbox_adj <- function(x = NULL,
                         dist = NULL,
                         diag_ratio = NULL,
@@ -42,13 +41,17 @@ st_bbox_adj <- function(x = NULL,
 
   if (!is.null(asp)) {
     # Get aspect adjusted bbox
-    st_bbox_asp(
+    bbox <-
+      st_bbox_asp(
       x = x,
       asp = asp
     )
   } else {
-    sf::st_bbox(x)
+    bbox <-
+      sf::st_bbox(x)
   }
+
+  return(bbox)
 }
 
 

@@ -6,6 +6,7 @@
 #' set aspect ratio.
 #'
 #' @inheritParams st_bbox_adj
+#' @param unit buffer units; defaults to meter.
 #' @param data sf or bbox class object
 #' @param crs Coordinate reference system to use for
 #'   \code{\link[sf]{coord_sf}}.
@@ -38,6 +39,7 @@
 layer_neatline <- function(data = NULL,
                            dist = NULL,
                            diag_ratio = NULL,
+                           unit = "meter",
                            asp = NULL,
                            crs = NULL,
                            color = "black",
@@ -53,6 +55,7 @@ layer_neatline <- function(data = NULL,
     x = data,
     dist = dist,
     diag_ratio = diag_ratio,
+    unit = unit,
     asp = asp,
     crs = crs
   )

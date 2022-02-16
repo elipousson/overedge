@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_bbox_adj.R
 \name{st_bbox_adj}
 \alias{st_bbox_adj}
-\title{Get bounding box buffered and adjusted to aspect ratio}
+\title{Get bounding box buffered and adjusted to match aspect ratio}
 \usage{
 st_bbox_adj(
   x = NULL,
@@ -18,14 +18,18 @@ st_bbox_adj(
 
 \item{dist}{buffer distance in units. Optional.}
 
-\item{diag_ratio}{ratio to set map extent based diagonal distance of area's
-bounding box. Ignored when \code{dist} is provided.}
+\item{diag_ratio}{ratio of diagonal distance of area's bounding box used as
+buffer distance. e.g. if the diagonal distance is 3000 meters and the
+"diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
+provided.}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3").}
 
-\item{unit}{Units passed to \code{units::set_units()}.
-Default "metre" Must match units of the CRS for the provided object.}
+\item{unit}{Units for buffer. Supported options include "m", "ft", "km", and
+"mi". Equivalent values (e.g. "mile" instead of "mi") are also supported.
+Units are passed to \code{units::set_units()} and then converted to units
+matching GDAL; defaults to "meter"}
 
 \item{crs}{Coordinate reference system of bounding box to return}
 }
@@ -33,13 +37,11 @@ Default "metre" Must match units of the CRS for the provided object.}
 Class \code{bbox} object
 }
 \description{
-Get bounding box buffered and adjusted to match aspect ratio
-}
-\details{
 Takes an area as an sf object or a bounding box and returns a bounding box
 that matches the provided aspect ratio and contains the area or bounding box
 provided.
-
+}
+\details{
 Common aspect ratios include "1:1" (1), "4:6" (0.666), "8.5:11", "16:9"
 (1.777). The asp parameter supports both numeric values and character
 strings with ratios matching the format of "width:height".

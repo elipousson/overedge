@@ -23,13 +23,14 @@
 #'  \code{\link[esri2sf]{esri2sf}}
 #' @rdname get_esri_data
 #' @export
-#' @importFrom esri2sf esri2sf esri2df
-#' @importFrom sf st_intersection
+#' @importFrom esri2sf esri2df esri2sf esrimeta
+#' @importFrom glue glue
 #' @importFrom janitor clean_names
 get_esri_data <- function(location = NULL,
                           url,
                           dist = NULL,
                           diag_ratio = NULL,
+                          unit = NULL,
                           asp = NULL,
                           crs = NULL,
                           where = NULL,
@@ -44,6 +45,7 @@ get_esri_data <- function(location = NULL,
       x = location,
       dist = dist,
       diag_ratio = diag_ratio,
+      unit = unit,
       asp = asp
     )
 

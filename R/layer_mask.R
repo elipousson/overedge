@@ -18,6 +18,7 @@
 layer_mask <- function(data = NULL,
                        dist = NULL,
                        diag_ratio = NULL,
+                       unit = NULL,
                        asp = NULL,
                        crs = NULL,
                        fill = "white",
@@ -33,6 +34,7 @@ layer_mask <- function(data = NULL,
       x = data,
       dist = dist,
       diag_ratio = diag_ratio,
+      unit = unit,
       asp = asp,
       crs = crs
     )
@@ -53,7 +55,7 @@ layer_mask <- function(data = NULL,
       }
     }
 
-    mask <- sf::st_difference(mask, sf::st_union(data))
+    mask <- suppressWarnings(sf::st_difference(mask, sf::st_union(data)))
   }
 
   mask_layer <- layer_location_data(data = mask, geom = "sf", fill = fill, color = color, alpha = alpha, ...)

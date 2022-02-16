@@ -18,7 +18,6 @@
 #' @param filetype file type supported by \code{\link[sf]{read_sf}}. The file
 #'   type must be provided for extdata and cached data.
 #' @param fn Function to apply to data before returning.
-#' @inheritParams st_bbox_adj
 #' @param crop  If TRUE, data cropped to location or bounding box
 #'   \code{\link[sf]{st_crop}} adjusted by the `dist`, `diag_ratio`, and `asp`
 #'   parameters provided. Default TRUE.
@@ -38,6 +37,7 @@
 get_location_data <- function(location = NULL,
                               dist = NULL,
                               diag_ratio = NULL,
+                              unit = NULL,
                               asp = NULL,
                               data = NULL,
                               url = NULL,
@@ -57,6 +57,7 @@ get_location_data <- function(location = NULL,
         x = location,
         dist = dist,
         diag_ratio = diag_ratio,
+        unit = unit,
         asp = asp,
         crs = from_crs
       )
@@ -64,8 +65,9 @@ get_location_data <- function(location = NULL,
     bbox <- NULL
   }
 
+
   # Check if data is in local environment
-  if (data %in% ls(envir = .GlobalEnv)) {
+  if ((data %in% ls(envir = .GlobalEnv)) && !(checkmate::test_class(data, "sf"))) {
     if (usethis::ui_yeah("Do you want to load {data} from the global environment?")) {
       data <- eval_data(data = data)
     }

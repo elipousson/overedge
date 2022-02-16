@@ -9,6 +9,7 @@ layer_neatline(
   data = NULL,
   dist = NULL,
   diag_ratio = NULL,
+  unit = "meter",
   asp = NULL,
   crs = NULL,
   color = "black",
@@ -25,8 +26,12 @@ layer_neatline(
 
 \item{dist}{buffer distance in units. Optional.}
 
-\item{diag_ratio}{ratio to set map extent based diagonal distance of area's
-bounding box. Ignored when \code{dist} is provided.}
+\item{diag_ratio}{ratio of diagonal distance of area's bounding box used as
+buffer distance. e.g. if the diagonal distance is 3000 meters and the
+"diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
+provided.}
+
+\item{unit}{buffer units; defaults to meter.}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3").}

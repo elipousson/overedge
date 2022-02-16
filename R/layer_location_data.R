@@ -8,6 +8,7 @@
 #' @param geom ggplot2 geom to use, Default: 'sf'. Options include "sf"
 #'   (geom_sf), "icon" (geom_sf_icon), "text" (geom_sf_text), "label"
 #'   (geom_sf_label)
+#' @param unit unit to adjust location by dist or diag_ratio; defaults to "meter"
 #' @param ... Parameters passed to selected geom
 #' @inheritParams get_location_data
 #' @return ggplot2 geom
@@ -23,6 +24,7 @@ layer_location_data <-
            location = NULL,
            dist = NULL,
            diag_ratio = NULL,
+           unit = "meter",
            asp = NULL,
            package = NULL,
            filetype,
@@ -43,6 +45,7 @@ layer_location_data <-
         location = location,
         dist = dist,
         diag_ratio = diag_ratio,
+        unit = unit,
         asp = asp,
         package = package,
         filetype = filetype,

@@ -4,22 +4,29 @@
 \alias{st_buffer_ext}
 \title{Buffer a simple feature or bounding box object}
 \usage{
-st_buffer_ext(x, dist = NULL, diag_ratio = NULL, unit = "metre", ...)
+st_buffer_ext(x, dist = NULL, diag_ratio = NULL, unit = "meter", ...)
 }
 \arguments{
 \item{x}{sf or bbox object.}
 
 \item{dist}{buffer distance in units. Optional.}
 
-\item{diag_ratio}{ratio to set map extent based diagonal distance of area's
-bounding box. Ignored when \code{dist} is provided.}
+\item{diag_ratio}{ratio of diagonal distance of area's bounding box used as
+buffer distance. e.g. if the diagonal distance is 3000 meters and the
+"diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
+provided.}
 
-\item{unit}{Units passed to \code{units::set_units()}.
-Default "metre" Must match units of the CRS for the provided object.}
+\item{unit}{Units for buffer. Supported options include "m", "ft", "km", and
+"mi". Equivalent values (e.g. "mile" instead of "mi") are also supported.
+Units are passed to \code{units::set_units()} and then converted to units
+matching GDAL; defaults to "meter"}
 
 \item{...}{additional parameters passed to  \code{\link[sf]{st_buffer}}.}
 }
 \description{
 Return an sf object with a buffer based on \code{dist} or a proportion of the
-diagonal distance defined by \code{diag_ratio}.
+diagonal distance defined by \code{diag_ratio}. If x uses geographic coordinates,
+the coordinate reference system is transformed into the crs returned by
+\code{\link[crsuggest]{suggest_top_crs}} and then transformed back into the
+original CRS after the buffer has been applied.
 }
