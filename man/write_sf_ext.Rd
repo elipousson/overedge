@@ -2,10 +2,7 @@
 % Please edit documentation in R/write_sf_ext.R
 \name{write_sf_ext}
 \alias{write_sf_ext}
-\title{Save simple features to files, cache features, or load features to the environment
-
-This function wraps \code{sf::write_sf()} and \code{list2env()} to facilitate both
-saving simple feature objects and named lists of simple feature objects.}
+\title{Save simple features to files, cache features, or load features to the environment}
 \usage{
 write_sf_ext(
   data,
@@ -31,8 +28,6 @@ write_sf_ext(
 \item{x}{sf object or a list of sf objects}
 }
 \description{
-Save simple features to files, cache features, or load features to the environment
-
 This function wraps \code{sf::write_sf()} and \code{list2env()} to facilitate both
 saving simple feature objects and named lists of simple feature objects.
 }

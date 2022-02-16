@@ -3,7 +3,15 @@ template:
   package: preferably
   bootstrap: 5
 reference:
-- title: Utility functions for sf and bbox objects
+- title: Utility functions for downloading, reading, and writing spatial data
+  contents:
+  - '`get_location`'
+  - '`get_location_data`'
+  - '`get_esri_data`'
+  - '`get_osm_data`'
+  - starts_with("read")
+  - starts_with("write")
+- title: Utility functions for simple feature objects
   contents:
   - starts_with("st_")
   - starts_with("sf_bbox")
@@ -12,13 +20,12 @@ reference:
   contents:
   - starts_with("layer_")
   - starts_with("geom_")
-- title: Utility functions for accessing spatial data
+- title: Additional ggplot2 utility functions
   contents:
-  - starts_with("get_")
-  - starts_with("read")
-- title: Additional utility functions
-  contents:
+  - '`ggsave_ext`'
+  - '`get_paper`'
   - '`theme_text`'
 - title: Related data
   contents:
   - '`map_icons`'
+  - '`paper_sizes`'

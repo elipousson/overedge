@@ -1,4 +1,4 @@
-#' @title Draw SVG icons for simple feature objects
+#' @title Draw SVG icons for a simple feature object
 #' @description Use the \code{\link[ggsvg]{geom_point_svg()}} function to plot
 #'   icons using the centroids from the input simple feature object to set the
 #'   icon location.

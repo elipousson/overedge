@@ -1,4 +1,4 @@
-#' Get data from an ArcGIS FeatureServer or MapServer
+#' Get data from an ArcGIS FeatureServer or MapServer for a location
 #'
 #' Wraps the \code{\link[esri2sf]{esri2sf}} and \code{\link[esri2sf]{esri2df}}
 #' function to download an ArcGIS FeatureServer or MapServer. Supports spatial

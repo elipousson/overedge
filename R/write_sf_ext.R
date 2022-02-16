@@ -1,4 +1,4 @@
-#' @title Save simple features to files, cache features, or load features to the environment
+#' Save simple features to files, cache features, or load features to the environment
 #'
 #' This function wraps `sf::write_sf()` and `list2env()` to facilitate both
 #' saving simple feature objects and named lists of simple feature objects.

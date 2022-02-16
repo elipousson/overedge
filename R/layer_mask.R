@@ -1,4 +1,4 @@
-#' Create a mask layer based on an sf object
+#' Create a mask layer based on a simple feature object
 #'
 #' Returns a mask for an area or areas as an  \code{sf} object.
 #'

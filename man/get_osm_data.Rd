@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_osm_data.R
 \name{get_osm_data}
 \alias{get_osm_data}
-\title{Get Open Street Map features for location}
+\title{Get Open Street Map features for a location}
 \usage{
 get_osm_data(
   location = NULL,

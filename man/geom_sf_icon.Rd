@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom_sf_icon.R
 \name{geom_sf_icon}
 \alias{geom_sf_icon}
-\title{Draw SVG icons for simple feature objects}
+\title{Draw SVG icons for a simple feature object}
 \usage{
 geom_sf_icon(
   data = NULL,

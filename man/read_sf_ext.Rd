@@ -4,7 +4,7 @@
 \alias{read_sf_path}
 \alias{read_sf_url}
 \alias{read_sf_package}
-\title{Read spatial data to simple features object extended  bounding box}
+\title{Read spatial data in a bounding box to a simple feature object}
 \usage{
 read_sf_path(path, bbox = NULL, ...)
 

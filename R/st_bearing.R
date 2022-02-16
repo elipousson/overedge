@@ -1,4 +1,4 @@
-#' @title Get bearing of sf object with LINESTRING geometry
+#' @title Get bearing of a simple feature object with LINESTRING geometry
 #' @param x object of class sf
 #' @param dir logical; If FALSE, return the absolute (positive) bearing value.
 #'   If TRUE, return negative and positive bearing values. Default: FALSE.

@@ -33,6 +33,12 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/get_location.html">Get locations and location data</a>
+  </div>
+</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -47,7 +53,48 @@
     </div>
 
     <div class="section level2">
-      <h2 id="utility-functions-for-sf-and-bbox-objects">Utility functions for sf and bbox objects<a class="anchor" aria-label="anchor" href="#utility-functions-for-sf-and-bbox-objects"></a></h2>
+      <h2 id="utility-functions-for-downloading-reading-and-writing-spatial-data">Utility functions for downloading, reading, and writing spatial data<a class="anchor" aria-label="anchor" href="#utility-functions-for-downloading-reading-and-writing-spatial-data"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="get_location.html">get_location()</a></code> 
+        </dt>
+        <dd>Get location of specified type</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_location_data.html">get_location_data()</a></code> 
+        </dt>
+        <dd>Get data for a location</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_esri_data.html">get_esri_data()</a></code> 
+        </dt>
+        <dd>Get data from an ArcGIS FeatureServer or MapServer for a location</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_osm_data.html">get_osm_data()</a></code> 
+        </dt>
+        <dd>Get Open Street Map features for a location</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_package()</a></code> 
+        </dt>
+        <dd>Read spatial data in a bounding box to a simple feature object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="write_sf_ext.html">write_sf_ext()</a></code> 
+        </dt>
+        <dd>Save simple features to files, cache features, or load features to the environment</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utility-functions-for-simple-feature-objects">Utility functions for simple feature objects<a class="anchor" aria-label="anchor" href="#utility-functions-for-simple-feature-objects"></a></h2>
       
       
 
@@ -71,12 +118,12 @@
           
           <code><a href="st_bearing.html">st_bearing()</a></code> 
         </dt>
-        <dd>Get bearing of sf object with LINESTRING geometry</dd>
+        <dd>Get bearing of a simple feature object with LINESTRING geometry</dd>
       </dl><dl><dt>
           
           <code><a href="st_buffer_ext.html">st_buffer_ext()</a></code> 
         </dt>
-        <dd>Get buffered sf or bbox object</dd>
+        <dd>Buffer a simple feature or bounding box object</dd>
       </dl><dl><dt>
           
           <code><a href="st_inscribed_square.html">st_inscribed_square()</a></code> 
@@ -127,7 +174,7 @@
           
           <code><a href="layer_mask.html">layer_mask()</a></code> 
         </dt>
-        <dd>Create a mask layer based on an sf object</dd>
+        <dd>Create a mask layer based on a simple feature object</dd>
       </dl><dl><dt>
           
           <code><a href="layer_neatline.html">layer_neatline()</a></code> 
@@ -137,9 +184,9 @@
           
           <code><a href="geom_sf_icon.html">geom_sf_icon()</a></code> 
         </dt>
-        <dd>Draw SVG icons for simple feature objects</dd>
+        <dd>Draw SVG icons for a simple feature object</dd>
       </dl></div><div class="section level2">
-      <h2 id="utility-functions-for-accessing-spatial-data">Utility functions for accessing spatial data<a class="anchor" aria-label="anchor" href="#utility-functions-for-accessing-spatial-data"></a></h2>
+      <h2 id="additional-ggplot-utility-functions">Additional ggplot2 utility functions<a class="anchor" aria-label="anchor" href="#additional-ggplot-utility-functions"></a></h2>
       
       
 
@@ -151,41 +198,15 @@
 
       <dl><dt>
           
-          <code><a href="get_esri_data.html">get_esri_data()</a></code> 
+          <code><a href="ggsave_ext.html">ggsave_ext()</a></code> 
         </dt>
-        <dd>Get data from an ArcGIS FeatureServer or MapServer</dd>
+        <dd>Save a ggplot and update file EXIF metadata</dd>
       </dl><dl><dt>
           
-          <code><a href="get_location.html">get_location()</a></code> 
+          <code><a href="get_paper.html">get_paper()</a></code> 
         </dt>
-        <dd>Get location of specified type</dd>
+        <dd>Get paper sizes</dd>
       </dl><dl><dt>
-          
-          <code><a href="get_location_data.html">get_location_data()</a></code> 
-        </dt>
-        <dd>Get data for a location</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_osm_data.html">get_osm_data()</a></code> 
-        </dt>
-        <dd>Get Open Street Map features for location</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_package()</a></code> 
-        </dt>
-        <dd>Read spatial data to simple features object extended  bounding box</dd>
-      </dl></div><div class="section level2">
-      <h2 id="additional-utility-functions">Additional utility functions<a class="anchor" aria-label="anchor" href="#additional-utility-functions"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
           
           <code><a href="theme_text.html">theme_text()</a></code> 
         </dt>
@@ -206,6 +227,11 @@
           <code><a href="map_icons.html">map_icons</a></code> 
         </dt>
         <dd>Map icons</dd>
+      </dl><dl><dt>
+          
+          <code><a href="paper_sizes.html">paper_sizes</a></code> 
+        </dt>
+        <dd>Common paper sizes</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

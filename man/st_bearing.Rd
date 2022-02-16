@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_bearing.R
 \name{st_bearing}
 \alias{st_bearing}
-\title{Get bearing of sf object with LINESTRING geometry}
+\title{Get bearing of a simple feature object with LINESTRING geometry}
 \usage{
 st_bearing(x, dir = FALSE, crs = 4326)
 }
@@ -16,7 +16,7 @@ If TRUE, return negative and positive bearing values. Default: FALSE.}
 be geographic not projected). Default: 4326}
 }
 \description{
-Get bearing of sf object with LINESTRING geometry
+Get bearing of a simple feature object with LINESTRING geometry
 }
 \examples{
 \dontrun{

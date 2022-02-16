@@ -1,4 +1,4 @@
-#' Read spatial data to simple features object extended  bounding box
+#' Read spatial data in a bounding box to a simple feature object
 #'
 #' An extended version of \code{\link[sf]{read_sf}} that support reading spatial
 #' data based on a file path, url (for spatial data or ArcGIS FeatureServer or

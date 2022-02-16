@@ -2,7 +2,7 @@
 % Please edit documentation in R/layer_mask.R
 \name{layer_mask}
 \alias{layer_mask}
-\title{Create a mask layer based on an sf object}
+\title{Create a mask layer based on a simple feature object}
 \usage{
 layer_mask(
   data = NULL,

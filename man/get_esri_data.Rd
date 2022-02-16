@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_esri_data.R
 \name{get_esri_data}
 \alias{get_esri_data}
-\title{Get data from an ArcGIS FeatureServer or MapServer}
+\title{Get data from an ArcGIS FeatureServer or MapServer for a location}
 \usage{
 get_esri_data(
   location = NULL,

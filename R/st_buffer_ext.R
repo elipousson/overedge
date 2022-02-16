@@ -12,7 +12,7 @@ st_diag_dist <- function(x) {
   )
 }
 
-#' Get buffered sf or bbox object
+#' Buffer a simple feature or bounding box object
 #'
 #' Return an sf object with a buffer based on `dist` or a proportion of the
 #' diagonal distance defined by `diag_ratio`.

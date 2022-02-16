@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_buffer_ext.R
 \name{st_buffer_ext}
 \alias{st_buffer_ext}
-\title{Get buffered sf or bbox object}
+\title{Buffer a simple feature or bounding box object}
 \usage{
 st_buffer_ext(x, dist = NULL, diag_ratio = NULL, unit = "metre", ...)
 }
