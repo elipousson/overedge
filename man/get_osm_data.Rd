@@ -33,10 +33,11 @@ buffer distance. e.g. if the diagonal distance is 3000 meters and the
 "diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
 provided.}
 
-\item{unit}{Units for buffer. Supported options include "m", "ft", "km", and
-"mi". Equivalent values (e.g. "mile" instead of "mi") are also supported.
-Units are passed to \code{units::set_units()} and then converted to units
-matching GDAL; defaults to "meter"}
+\item{unit}{Units for buffer. Supported options include "meter", "foot",
+"kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
+instead of "kilometer") are also supported. Units are passed to
+\code{units::set_units()} and then converted to units matching GDAL; defaults to
+"meter"}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3").}

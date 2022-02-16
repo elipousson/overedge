@@ -27,10 +27,11 @@ st_diag_dist <- function(x) {
 #'   buffer distance. e.g. if the diagonal distance is 3000 meters and the
 #'   "diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
 #'   provided.
-#' @param unit Units for buffer. Supported options include "m", "ft", "km", and
-#'   "mi". Equivalent values (e.g. "mile" instead of "mi") are also supported.
-#'   Units are passed to `units::set_units()` and then converted to units
-#'   matching GDAL; defaults to "meter"
+#' @param unit Units for buffer. Supported options include "meter", "foot",
+#'   "kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
+#'   instead of "kilometer") are also supported. Units are passed to
+#'   `units::set_units()` and then converted to units matching GDAL; defaults to
+#'   "meter"
 #' @param ... additional parameters passed to  \code{\link[sf]{st_buffer}}.
 #' @export
 #' @importFrom checkmate test_class
@@ -76,9 +77,9 @@ st_buffer_ext <- function(x,
     )
 
   # Match parameter units to permitted options
-  unit <- match.arg(unit, c(
+  unit <- match.arg(gsub(" ", "_", unit), c(
     units_gdal, "m", "metre", "meter", "meters", "km", "kilometer", "kilometers",
-    "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles"
+    "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile"
   ))
 
   dist <-
