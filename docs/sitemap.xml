@@ -13,6 +13,9 @@
     <loc>/articles/get_location.html</loc>
   </url>
   <url>
+    <loc>/articles/ggsave_ext.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -28,6 +31,9 @@
     <loc>/reference/geom_sf_icon.html</loc>
   </url>
   <url>
+    <loc>/reference/get_asp.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_esri_data.html</loc>
   </url>
   <url>
@@ -37,7 +43,16 @@
     <loc>/reference/get_location_data.html</loc>
   </url>
   <url>
+    <loc>/reference/get_margin.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_osm_data.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_paper.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ggsave_ext.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
@@ -56,6 +71,9 @@
   </url>
   <url>
     <loc>/reference/overedge-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/paper_sizes.html</loc>
   </url>
   <url>
     <loc>/reference/read_sf_ext.html</loc>
@@ -88,6 +106,12 @@
     <loc>/reference/st_scale_rotate.html</loc>
   </url>
   <url>
+    <loc>/reference/theme_margin.html</loc>
+  </url>
+  <url>
     <loc>/reference/theme_text.html</loc>
+  </url>
+  <url>
+    <loc>/reference/write_sf_ext.html</loc>
   </url>
 </urlset>

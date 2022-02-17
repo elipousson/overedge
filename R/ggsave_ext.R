@@ -122,6 +122,8 @@ ggsave_ext <- function(name = NULL,
     check_package_exists("exifr")
 
     if (!is.null(title) & is.null(args)) {
+      title <- glue::glue(title)
+
       exifr::exiftool_call(
         args = glue::glue(
           "-Author='{author}' ",
