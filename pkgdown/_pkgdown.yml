@@ -23,8 +23,10 @@ reference:
 - title: Utility functions for ggplot2 themes and file export
   contents:
   - '`ggsave_ext`'
+  - '`get_asp`'
   - '`get_paper`'
   - '`get_margin`'
+  - '`theme_margin`'
   - '`theme_text`'
 - title: Reference data used by functions
   contents:

@@ -73,9 +73,6 @@ layer_neatline <- function(data = NULL,
     neatline <-
       list(
         neatline,
-        ggplot2::theme(
-          plot.margin = ggplot2::unit(x = c(0, 0, 0, 0), units = "mm")
-        ),
         ggplot2::scale_y_continuous(expand = c(0, 0)),
         ggplot2::scale_x_continuous(expand = c(0, 0))
       )
@@ -95,10 +92,11 @@ layer_neatline <- function(data = NULL,
     neatline <- list(
       neatline,
       ggplot2::theme(
+        axis.title = ggplot2::element_blank(),
         axis.text = ggplot2::element_blank(),
+        axis.ticks = ggplot2::element_blank(),
         axis.ticks.length = ggplot2::unit(x = 0, units = "mm"),
-        axis.line = ggplot2::element_blank(),
-        axis.title = ggplot2::element_blank()
+        axis.line = ggplot2::element_blank()
       )
     )
   }

@@ -36,7 +36,7 @@ instead of "kilometer") are also supported. Units are passed to
 "meter"}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3").}
+character (e.g. "1:3"). If numeric, get_asp returns the same value without modification.}
 
 \item{crs}{Coordinate reference system of bounding box to return}
 

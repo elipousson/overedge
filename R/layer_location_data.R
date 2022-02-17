@@ -27,7 +27,7 @@ layer_location_data <-
            unit = "meter",
            asp = NULL,
            package = NULL,
-           filetype,
+           filetype = NULL,
            fn = NULL,
            crop = TRUE,
            trim = FALSE,
@@ -41,12 +41,14 @@ layer_location_data <-
 
     data <-
       get_location_data(
-        data = data,
         location = location,
         dist = dist,
         diag_ratio = diag_ratio,
         unit = unit,
         asp = asp,
+        data = data,
+        url = NULL,
+        path = NULL,
         package = package,
         filetype = filetype,
         fn = fn,

@@ -56,3 +56,20 @@ sf_bbox_to_lonlat_query <- function(bbox, coords = c("longitude",  "latitude"), 
 
   glue::glue("({coords[1]} >= {bbox$xmin[[1]]}) AND ({coords[1]} <= {bbox$xmax[[1]]}) AND {coords[2]} >= {bbox$ymin[[1]]}) AND ({coords[2]} <= {bbox$ymax[[1]]})")
 }
+
+sf_bbox_asp <- function(bbox) {
+  xdist <- sf_bbox_xdist(bbox) # Get width
+  ydist <- sf_bbox_ydist(bbox) # Get height
+  bbox_asp <- as.numeric(xdist / ydist) # Get width to height aspect ratio for bbox
+  return(bbox_asp)
+}
+
+
+sf_bbox_xdist <- function(bbox) {
+  abs(bbox["xmax"] - bbox["xmin"]) # Get width
+}
+
+sf_bbox_ydist <- function(bbox) {
+  abs(bbox["ymax"] - bbox["ymin"]) # Get height
+}
+

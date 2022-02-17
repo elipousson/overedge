@@ -67,8 +67,7 @@ st_bbox_adj <- function(x = NULL,
 #' "width:height".
 #'
 #' @param x \code{sf} or bbox object
-#' @param asp Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-#'   character (e.g. "1:3").
+#' @inheritParams get_asp
 #' @return \code{bbox} object
 #' @export
 #' @importFrom stringr str_detect str_extract
@@ -76,7 +75,7 @@ st_bbox_adj <- function(x = NULL,
 st_bbox_asp <- function(x = NULL,
                         asp = NULL) {
 
-  geom_type <- sf::st_geometry_type(x)
+  geom_type <- sf::st_geometry_type(x, by_geometry = FALSE)
 
   if (checkmate::test_class(x, "bbox")) {
     bbox <- x
@@ -87,21 +86,26 @@ st_bbox_asp <- function(x = NULL,
     bbox <- sf::st_bbox(x)
   }
 
-  xdist <- bbox["xmax"] - bbox["xmin"] # Get width
-  ydist <- bbox["ymax"] - bbox["ymin"] # Get height
-  x_asp <- as.numeric(xdist) / as.numeric(ydist) # Get width to height aspect ratio for bbox
+  # Get bbox aspect ratio
+  bbox_asp <- sf_bbox_asp(bbox)
 
-  asp <- get_asp(asp)
+  # Get width/height
+  xdist <- sf_bbox_xdist(bbox) # Get width
+  ydist <- sf_bbox_ydist(bbox) # Get height
+
+  # Get adjusted aspect ratio
+  asp <- get_asp(asp = asp)
 
   if (!is.null(asp)) {
-    # Compare aspect ratio to bbox aspect ratio
-    if (asp >= x_asp) {
+    # Compare adjust aspect ratio to bbox aspect ratio
+    if (asp >= bbox_asp) {
       # adjust x
       x_nudge <- (asp * ydist - xdist) / 2
       y_nudge <- 0
     } else {
       # adjust y
       y_nudge <- ((1 / asp) * xdist - ydist) / 2
+      #y_nudge <- ((xdist - ydist) / asp) / 2
       x_nudge <- 0
     }
 

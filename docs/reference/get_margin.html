@@ -43,6 +43,7 @@ composed outside of R using a page layout application such as Adobe InDesign."><
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/get_location.html">Get locations and location data</a>
+    <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -70,7 +71,7 @@ composed outside of R using a page layout application such as Adobe InDesign.</p
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_margin</span><span class="op">(</span>
-  margin <span class="op">=</span> <span class="st">"standard"</span>,
+  margin <span class="op">=</span> <span class="cn">NULL</span>,
   paper <span class="op">=</span> <span class="cn">NULL</span>,
   orientation <span class="op">=</span> <span class="cn">NULL</span>,
   dist <span class="op">=</span> <span class="cn">NULL</span>,
@@ -84,7 +85,7 @@ composed outside of R using a page layout application such as Adobe InDesign.</p
     <dl><dt>margin</dt>
 <dd><p>Margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on
-line length is planned but not yet implemented. Default: NULL</p></dd>
+line length is planned but not yet implemented. Default: NULL (equivalent to "none")</p></dd>
 <dt>paper</dt>
 <dd><p>Paper, Default: 'letter'</p></dd>
 <dt>orientation</dt>
@@ -111,15 +112,15 @@ ggplot2::element_rect() and the plot.background theme element.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in"> <span class="fu">get_margins</span><span class="op">(</span><span class="st">"standard"</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu">get_margins</span><span class="op">(</span><span class="st">"standard"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"> <span class="fu">get_margins</span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_margins</span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"> <span class="fu">get_margins</span><span class="op">(</span>dist <span class="op">=</span> <span class="fl">25</span>, unit <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_margins</span><span class="op">(</span>dist <span class="op">=</span> <span class="fl">25</span>, unit <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"> <span class="fu">get_margins</span><span class="op">(</span>paper <span class="op">=</span> <span class="st">"letter"</span>, plot_width <span class="op">=</span> <span class="fl">5.5</span><span class="op">)</span></span>
-<span class="r-in"> <span class="op">}</span></span>
+<span class="r-in">  <span class="fu">get_margins</span><span class="op">(</span>paper <span class="op">=</span> <span class="st">"letter"</span>, plot_width <span class="op">=</span> <span class="fl">5.5</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>

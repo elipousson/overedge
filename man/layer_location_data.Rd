@@ -14,7 +14,7 @@ layer_location_data(
   unit = "meter",
   asp = NULL,
   package = NULL,
-  filetype,
+  filetype = NULL,
   fn = NULL,
   crop = TRUE,
   trim = FALSE,
@@ -48,7 +48,7 @@ provided.}
 \item{unit}{unit to adjust location by dist or diag_ratio; defaults to "meter"}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3").}
+character (e.g. "1:3"). If numeric, get_asp returns the same value without modification.}
 
 \item{package}{package name.}
 

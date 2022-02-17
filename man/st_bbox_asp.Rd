@@ -10,7 +10,7 @@ st_bbox_asp(x = NULL, asp = NULL)
 \item{x}{\code{sf} or bbox object}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3").}
+character (e.g. "1:3"). If numeric, get_asp returns the same value without modification.}
 }
 \value{
 \code{bbox} object

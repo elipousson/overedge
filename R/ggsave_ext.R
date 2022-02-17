@@ -5,12 +5,16 @@
 #' sentence case name with spaces (e.g. "Baltimore city map") and appending a
 #' label (e.g. "baltcity") as a prefix to the output file name.
 #'
-#' @param name name of plot, used to create filename (if filename is not provided)
-#' @param label label is appended to filename as a prefix.
-#' @param prefix If "date", the date from `Sys.Date()` is appended to filename as a prefix (before label). If "time", `Sys.time()` is appended.
-#' @param paper paper matching name from `paper_sizes` (e.g. "letter"). Not case sensitive
+#' @param name name of plot, used to create filename (if filename is not
+#'   provided)
+#' @param label label is appended to filename as a prefix; defaults to NULL
+#' @param prefix If "date", the date from `Sys.Date()` is appended to filename
+#'   as a prefix (before label). If "time", `Sys.time()` is appended.
+#' @param paper paper matching name from `paper_sizes` (e.g. "letter"). Not case
+#'   sensitive
 #' @param orientation "portrait", "landscape", or "square"
-#' @param exif If TRUE, edit exif metadata for exported file using the exifr package, Default: TRUE
+#' @param exif If TRUE, edit exif metadata for exported file using the exifr
+#'   package, Default: FALSE
 #' @param title title of plot or map, added to exif metadata, Default: NULL
 #' @param author author of plot or map, added to exif metadata,
 #' @param args args passed to exiftoolr, If args is not NULL, title and author
@@ -49,11 +53,11 @@
 #' @importFrom janitor make_clean_names
 #' @importFrom exifr exiftool_call
 ggsave_ext <- function(name = NULL,
-                       label,
+                       label = NULL,
                        plot = last_plot(),
                        filename = NULL,
                        path = NULL,
-                       device,
+                       device = "png",
                        paper = NULL,
                        orientation = "portrait",
                        scale = 1,
@@ -62,7 +66,7 @@ ggsave_ext <- function(name = NULL,
                        units = "in",
                        dpi = 300,
                        bg = NULL,
-                       exif = TRUE,
+                       exif = FALSE,
                        title = NULL,
                        author,
                        args = NULL,
@@ -83,22 +87,28 @@ ggsave_ext <- function(name = NULL,
   }
 
   if (prefix == "date") {
-    prefix <- gsub("^x","", janitor::make_clean_names(Sys.Date(), sep_out = "-"))
+    prefix <- gsub("^x", "", janitor::make_clean_names(Sys.Date(), sep_out = "-"))
   } else if (prefix == "time") {
-    prefix <- gsub("^x","", janitor::make_clean_names(Sys.time(), sep_out = "-"))
+    prefix <- gsub("^x", "", janitor::make_clean_names(Sys.time(), sep_out = "-"))
   } else {
     prefix <- NULL
   }
 
-  label <- janitor::make_clean_names(label)
+  if (!is.null(label)) {
+    label <- janitor::make_clean_names(label)
+  }
 
   filename <- paste0(c(prefix, label, filename), collapse = "_")
+
+  if (!is.null(path)) {
+    checkmate::check_directory_exists(path)
+    filename <- file.path(path, filename)
+  }
 
   ggplot2::ggsave(
     filename = filename,
     plot = plot,
     device = device,
-    path = path,
     scale = scale,
     width = width,
     height = height,
@@ -111,10 +121,6 @@ ggsave_ext <- function(name = NULL,
   if (exif) {
     check_package_exists("exifr")
 
-    checkmate::check_directory_exists(path)
-
-    fname <- file.path(path, filename)
-
     if (!is.null(title) & is.null(args)) {
       exifr::exiftool_call(
         args = glue::glue(
@@ -124,12 +130,12 @@ ggsave_ext <- function(name = NULL,
           "-CreateDate='", format(Sys.time(), "%Y:%m:%d %H:%M:%S"), "' ",
           "-overwrite_original"
         ),
-        fnames = fname
+        fnames = filename
       )
     } else if (!is.null(args)) {
       exifr::exiftool_call(
         args = args,
-        fnames = fname
+        fnames = filename
       )
     }
   }
@@ -220,18 +226,18 @@ get_paper <- function(paper = "letter",
   height <- paper$height
 
   if (orientation == "portrait") {
-    paper_sizes <-
+    paper <-
       dplyr::rename(
-        paper_sizes,
+        paper,
         asp = asp_portrait
       )
   } else if (orientation == "landscape") {
     paper$width <- height
     paper$height <- width
 
-    paper_sizes <-
+    paper <-
       dplyr::rename(
-        paper_sizes,
+        paper,
         asp = asp_landscape
       )
   } else if (orientation == "square") {
@@ -250,7 +256,7 @@ get_paper <- function(paper = "letter",
 #'
 #' @param margin Margin style (options include "extrawide", "wide", "standard",
 #'   "narrow", "none"), Additional "auto" option to generate margin based on
-#'   line length is planned but not yet implemented. Default: NULL
+#'   line length is planned but not yet implemented. Default: NULL (equivalent to "none")
 #' @param dist Margin distance (single value used to all sides), Default: NULL
 #' @param unit Unit for margin distance, Default: 'in'
 #' @param plot_width Plot or map width in units. If `paper` and `plot_width` are
@@ -261,27 +267,29 @@ get_paper <- function(paper = "letter",
 #'   ggplot2::element_rect() and the plot.background theme element.
 #' @examples
 #' \dontrun{
-#' if(interactive()){
-#'  get_margins("standard")
+#' if (interactive()) {
+#'   get_margins("standard")
 #'
-#'  get_margins("none")
+#'   get_margins("none")
 #'
-#'  get_margins(dist = 25, unit = "mm")
+#'   get_margins(dist = 25, unit = "mm")
 #'
-#'  get_margins(paper = "letter", plot_width = 5.5)
-#'  }
+#'   get_margins(paper = "letter", plot_width = 5.5)
+#' }
 #' }
 #' @seealso
 #'  \code{\link[ggplot2]{margin}}
 #' @rdname get_margin
 #' @export
 #' @importFrom ggplot2 margin
-get_margin <- function(margin = "standard",
-                        paper = NULL,
-                        orientation = NULL,
-                        dist = NULL,
-                        unit = "in",
-                        plot_width = NULL) {
+get_margin <- function(margin = NULL,
+                       paper = NULL,
+                       orientation = NULL,
+                       dist = NULL,
+                       unit = "in",
+                       plot_width = NULL) {
+
+  margin <- match.arg(margin, c("none", "narrow", "standard", "extrawide", "wide"))
   unit <- match.arg(unit, c("mm", "in"))
 
   if (!is.null(paper) && !is.null(plot_width)) {
@@ -293,19 +301,19 @@ get_margin <- function(margin = "standard",
     if (is.character(margin) && (margin != "auto")) {
       if (unit == "in") {
         margin <- switch(margin,
-                         "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = "in"),
-                         "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = "in"),
-                         "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = "in"),
-                         "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = "in"),
-                         "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = "in")
+          "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = "in"),
+          "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = "in"),
+          "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = "in"),
+          "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = "in"),
+          "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = "in")
         )
       } else if (unit == "mm") {
         margin <- switch(margin,
-                         "extrawide" = ggplot2::margin(t = 80, r = 80, b = 80, l = 80, unit = unit),
-                         "wide" = ggplot2::margin(t = 60, r = 60, b = 60, l = 60, unit = unit),
-                         "standard" = ggplot2::margin(t = 40, r = 40, b = 40, l = 40, unit = unit),
-                         "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
-                         "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
+          "extrawide" = ggplot2::margin(t = 80, r = 80, b = 80, l = 80, unit = unit),
+          "wide" = ggplot2::margin(t = 60, r = 60, b = 60, l = 60, unit = unit),
+          "standard" = ggplot2::margin(t = 40, r = 40, b = 40, l = 40, unit = unit),
+          "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
+          "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
         )
       }
     } else if (margin == "auto") {
@@ -317,10 +325,9 @@ get_margin <- function(margin = "standard",
     if (length(dist) == 1) {
       margin <- ggplot2::margin(t = dist, r = dist, b = dist, l = dist, unit = unit)
     } else if (length(dist) == 4) {
-      margin <- ggplot2::margin(t = margin[[1]], r = margin[[2]], b = margin[[3]], l = margin[[4]], unit = unit)
+      margin <- ggplot2::margin(t = dist[[1]], r = dist[[2]], b = dist[[3]], l = dist[[4]], unit = unit)
     }
   }
 
   return(margin)
 }
-

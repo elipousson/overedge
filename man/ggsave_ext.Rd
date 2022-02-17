@@ -6,11 +6,11 @@
 \usage{
 ggsave_ext(
   name = NULL,
-  label,
+  label = NULL,
   plot = last_plot(),
   filename = NULL,
   path = NULL,
-  device,
+  device = "png",
   paper = NULL,
   orientation = "portrait",
   scale = 1,
@@ -19,7 +19,7 @@ ggsave_ext(
   units = "in",
   dpi = 300,
   bg = NULL,
-  exif = TRUE,
+  exif = FALSE,
   title = NULL,
   author,
   args = NULL,
@@ -28,9 +28,10 @@ ggsave_ext(
 )
 }
 \arguments{
-\item{name}{name of plot, used to create filename (if filename is not provided)}
+\item{name}{name of plot, used to create filename (if filename is not
+provided)}
 
-\item{label}{label is appended to filename as a prefix.}
+\item{label}{label is appended to filename as a prefix; defaults to NULL}
 
 \item{plot}{Plot to save, defaults to last plot displayed.}
 
@@ -44,7 +45,8 @@ working directory.}
 (e.g. \link{png}), or one of "eps", "ps", "tex" (pictex),
 "pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).}
 
-\item{paper}{paper matching name from \code{paper_sizes} (e.g. "letter"). Not case sensitive}
+\item{paper}{paper matching name from \code{paper_sizes} (e.g. "letter"). Not case
+sensitive}
 
 \item{orientation}{"portrait", "landscape", or "square"}
 
@@ -65,7 +67,8 @@ If not supplied, uses the size of current graphics device.}
 \item{bg}{Background colour. If \code{NULL}, uses the \code{plot.background} fill value
 from the plot theme.}
 
-\item{exif}{If TRUE, edit exif metadata for exported file using the exifr package, Default: TRUE}
+\item{exif}{If TRUE, edit exif metadata for exported file using the exifr
+package, Default: FALSE}
 
 \item{title}{title of plot or map, added to exif metadata, Default: NULL}
 
@@ -74,7 +77,8 @@ from the plot theme.}
 \item{args}{args passed to exiftoolr, If args is not NULL, title and author
 are ignored, Default: NULL}
 
-\item{prefix}{If "date", the date from \code{Sys.Date()} is appended to filename as a prefix (before label). If "time", \code{Sys.time()} is appended.}
+\item{prefix}{If "date", the date from \code{Sys.Date()} is appended to filename
+as a prefix (before label). If "time", \code{Sys.time()} is appended.}
 
 \item{...}{additional parameters passed to \code{\link[ggplot2]{ggsave}}}
 }

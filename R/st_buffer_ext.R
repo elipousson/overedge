@@ -50,61 +50,72 @@ st_buffer_ext <- function(x,
     x <- sf_bbox_to_sf(x)
   }
 
-  # If longlat, save crs and transform to suggested crs
-  lonlat <- sf::st_is_longlat(x)
+  # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf if no buffer applied)
+  if (!is.null(dist) | !is.null(diag_ratio)) {
 
-  if (lonlat) {
-    lonlat_crs <- sf::st_crs(x)
-    top_crs <- suppressMessages(crsuggest::suggest_top_crs(x))
-    x <- sf::st_transform(x, top_crs)
-  }
+    # If longlat, save crs and transform to suggested crs
+    is_lonlat <- sf::st_is_longlat(x)
 
-  # If dist is NULL and diag_ratio is NULL return x
-  if (is.null(dist) && is.null(diag_ratio)) {
-    return(x)
-  } else if (is.null(dist) && !is.null(diag_ratio)) {
-    # Use the bbox diagonal distance to make proportional buffer distance
-    dist <- st_diag_dist(x) * diag_ratio
-  }
+    if (is_lonlat) {
+      lonlat_crs <- sf::st_crs(x)
+      top_crs <- suppressMessages(crsuggest::suggest_top_crs(x))
+      x <- sf::st_transform(x, top_crs)
+    }
 
-  # Get crs and rename gdal units to match options for set_units
-  crs <- sf::st_crs(x)
-  units_gdal <-
-    switch(crs$units_gdal,
-      "US survey foot" = "US_survey_foot",
-      "metre" = "meter",
-      "meter" = "meter"
-    )
+    if (is.null(dist) && !is.null(diag_ratio)) {
+      # Use the bbox diagonal distance to make proportional buffer distance
+      dist <- st_diag_dist(x) * diag_ratio
+    }
 
-  # Match parameter units to permitted options
-  unit <- match.arg(gsub(" ", "_", unit), c(
-    units_gdal, "m", "metre", "meter", "meters", "km", "kilometer", "kilometers",
-    "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile"
-  ))
+    # Get crs and rename gdal units to match options for set_units
+    crs <- sf::st_crs(x)
 
-  dist <-
-    units::set_units(
-      x = dist,
-      value = unit,
-      mode = "standard"
-    )
+    if (!is.null(unit)) {
+      unit <- gsub(" ", "_", unit)
+    }
 
-  if (units_gdal == "meter") {
-    dist <- units::set_units(
-      x = dist,
-      value = "meter"
-    )
-  } else if (units_gdal == "US_survey_foot") {
-    dist <- units::set_units(
-      x = dist,
-      value = "US_survey_foot"
-    )
-  }
+    units_gdal <-
+      switch(crs$units_gdal,
+        "US survey foot" = "US_survey_foot",
+        "metre" = "meter",
+        "meter" = "meter"
+      )
 
-  x <- sf::st_buffer(x = x, dist = dist, ...)
+    unit_options <-
+      unique(
+        c(
+          units_gdal, "m", "metre", "meter", "meters", "km", "kilometer", "kilometers",
+          "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile"
+        )
+      )
 
-  if (lonlat) {
-    x <- sf::st_transform(x, lonlat_crs)
+    # Match parameter units to permitted options
+    unit <- match.arg(unit, unit_options)
+
+    dist <-
+      units::set_units(
+        x = dist,
+        value = unit,
+        mode = "standard"
+      )
+
+    if (units_gdal == "meter") {
+      dist <- units::set_units(
+        x = dist,
+        value = "meter"
+      )
+    } else if (units_gdal == "US_survey_foot") {
+      dist <- units::set_units(
+        x = dist,
+        value = "US_survey_foot"
+      )
+    }
+
+    x <- sf::st_buffer(x = x, dist = dist, ...)
+
+    if (is_lonlat) {
+      x <- sf::st_transform(x, lonlat_crs)
+    }
   }
 
   return(x)

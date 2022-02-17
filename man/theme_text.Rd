@@ -2,9 +2,14 @@
 % Please edit documentation in R/theme_text.R
 \name{theme_text}
 \alias{theme_text}
-\title{Set, update, or replace ggplot theme and geom text family}
+\title{Set, update, or replace text family for ggplot theme and geoms}
 \usage{
-theme_text(font_family = "Helvetica", method = "set", label = FALSE)
+theme_text(
+  font_family = "Helvetica",
+  color = "black",
+  method = NULL,
+  geom = TRUE
+)
 }
 \arguments{
 \item{font_family}{Font family, Default: 'Helvetica' If NULL, font_family is
@@ -14,12 +19,11 @@ families to the theme.}
 \item{method}{ggplot2 function to use in changing text "set", "update", or
 "replace", Default: 'set'}
 
-\item{label}{If TRUE, update default text family for geom_text, geom_sf_text,
-geom_label, and geom_sf_label. If FALSE, update default text family for
-geoms to match current theme. Default: TRUE}
+\item{geom}{If TRUE, update text family for geom_text, geom_sf_text,
+geom_label, and geom_sf_label to match \code{font_family}. If FALSE, make no changes to the theme. Default: TRUE}
 }
 \description{
-Set, update, or replace ggplot theme and geom text family
+Set, update, or replace text family for ggplot theme and geoms
 }
 \seealso{
 \code{\link[ggplot2]{theme}},\code{\link[ggplot2]{theme_get}},\code{\link[ggplot2]{update_geom_defaults}}

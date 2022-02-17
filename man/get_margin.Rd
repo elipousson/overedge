@@ -5,7 +5,7 @@
 \title{Get margins for a ggplot2 plot or map based on style or distance}
 \usage{
 get_margin(
-  margin = "standard",
+  margin = NULL,
   paper = NULL,
   orientation = NULL,
   dist = NULL,
@@ -16,7 +16,7 @@ get_margin(
 \arguments{
 \item{margin}{Margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on
-line length is planned but not yet implemented. Default: NULL}
+line length is planned but not yet implemented. Default: NULL (equivalent to "none")}
 
 \item{paper}{Paper, Default: 'letter'}
 
@@ -42,15 +42,15 @@ composed outside of R using a page layout application such as Adobe InDesign.
 }
 \examples{
 \dontrun{
-if(interactive()){
- get_margins("standard")
+if (interactive()) {
+  get_margins("standard")
 
- get_margins("none")
+  get_margins("none")
 
- get_margins(dist = 25, unit = "mm")
+  get_margins(dist = 25, unit = "mm")
 
- get_margins(paper = "letter", plot_width = 5.5)
- }
+  get_margins(paper = "letter", plot_width = 5.5)
+}
 }
 }
 \seealso{
