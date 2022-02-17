@@ -11,14 +11,16 @@
 #' @param unit unit to adjust location by dist or diag_ratio; defaults to "meter"
 #' @param ... Parameters passed to selected geom
 #' @inheritParams get_location_data
+#' @inheritParams ggplot2::geom_sf
 #' @return ggplot2 geom
 #' @seealso
 #'  \code{\link[ggplot2]{CoordSf}}
 #' @rdname layer_location_data
 #' @export
-#' @importFrom ggplot2 geom_sf geom_sf_text geom_sf_label
+#' @importFrom ggplot2 aes geom_sf geom_sf_text geom_sf_label
 layer_location_data <-
-  function(data = NULL,
+  function(mapping = ggplot2::aes(),
+           data = NULL,
            label,
            geom = "sf",
            location = NULL,
@@ -63,6 +65,7 @@ layer_location_data <-
     if (geom == "sf") {
       layer <- ggplot2::geom_sf(
         data = data,
+        mapping = mapping,
         ...
       )
     }
@@ -70,6 +73,7 @@ layer_location_data <-
     if (geom == "icon") {
       layer <- geom_sf_icon(
         data = data,
+        mapping = mapping,
         ...
       )
     }
@@ -77,6 +81,7 @@ layer_location_data <-
     if (geom == "text") {
       layer <- ggplot2::geom_sf_text(
         data = data,
+        mapping = mapping,
         ...
       )
     }
@@ -85,9 +90,20 @@ layer_location_data <-
     if (geom == "label") {
       layer <- ggplot2::geom_sf_label(
         data = data,
+        mapping = mapping,
         ...
       )
     }
 
     return(layer)
   }
+
+
+ggplot() +
+  layer_location_data(
+    data = mapbaltimore::neighborhoods,
+    mapping = aes(fill = name)
+  ) +
+  guides(
+    fill = "none"
+  )

@@ -5,6 +5,7 @@
 \title{Layer location data into a ggplot2 map}
 \usage{
 layer_location_data(
+  mapping = ggplot2::aes(),
   data = NULL,
   label,
   geom = "sf",
@@ -24,6 +25,11 @@ layer_location_data(
 )
 }
 \arguments{
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or
+\code{\link[ggplot2:aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply \code{mapping} if there is no plot mapping.}
+
 \item{data}{sf object including data in area. data may also be a url or file
 path. data can be the name of a data object or, if package and filetype are
 provided, a cached or external file.}
