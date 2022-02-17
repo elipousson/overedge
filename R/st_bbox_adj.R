@@ -168,21 +168,14 @@ get_asp <- function(asp = NULL,
         unit <- paper$units
       }
 
-      # Get margins and convert to numeric
-      margin <- get_margin(margin = margin, paper = paper, orientation = orientation, unit = unit)
+      # Get margins and convert to numeric (note substitute original value of paper for paper$name)
+      margin <- get_margin(margin = margin, paper = paper$name, orientation = orientation, unit = unit)
       margin <- as.numeric(margin)
 
       # Calculate width, height, and aspect ratio for text/plot/map block area
-      plot_width <- paper$width - (margin[[2]] + margin[[4]])
-      plot_height <- paper$height - (margin[[1]] + margin[[3]])
-
-      if (orientation == "portrait") {
-        asp <- plot_width / plot_height
-      } else if (orientation == "landscape") {
-        asp <- plot_height / plot_width
-      } else {
-        asp <- 1
-      }
+      block_width <- paper$width - (margin[[2]] + margin[[4]])
+      block_height <- paper$height - (margin[[1]] + margin[[3]])
+      asp <- block_width / block_height
 
     } else {
       asp <- paper$asp
