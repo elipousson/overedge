@@ -175,7 +175,15 @@ get_asp <- function(asp = NULL,
       # Calculate width, height, and aspect ratio for text/plot/map block area
       plot_width <- paper$width - (margin[[2]] + margin[[4]])
       plot_height <- paper$height - (margin[[1]] + margin[[3]])
-      asp <- plot_width / plot_height
+
+      if (orientation == "portrait") {
+        asp <- plot_width / plot_height
+      } else if (orientation == "landscape") {
+        asp <- plot_height / plot_width
+      } else {
+        asp <- 1
+      }
+
     } else {
       asp <- paper$asp
     }

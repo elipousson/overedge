@@ -97,13 +97,3 @@ layer_location_data <-
 
     return(layer)
   }
-
-
-ggplot() +
-  layer_location_data(
-    data = mapbaltimore::neighborhoods,
-    mapping = aes(fill = name)
-  ) +
-  guides(
-    fill = "none"
-  )
