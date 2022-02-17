@@ -9,8 +9,8 @@
 #'   "that")`. If `value = "all"` or if `key = "building"` the values passed to
 #'   osmdata are from `osmdata::available_tags(key)`.
 #' @param geometry geometry to output "polygons", "points", "lines",
-#'   "multilines", or "multipolygons"; if NULL return a sf object with mixed
-#'   geometry (if multiple geometry types are present). Default NULL
+#'   "multilines", or "multipolygons"; if multiple geometry are needed set
+#'   osmdata to TRUE. Default NULL
 #' @param crs coordinate reference system for output data; if NULL, the data
 #'   remains in the OSM CRS 4326. Default: NULL.
 #' @param osmdata If TRUE return a osmdata class object that includes the
@@ -40,13 +40,10 @@ get_osm_data <- function(location = NULL,
       "multipolygons"
     )
 
-  if (!is.null(geometry)) {
-    osm_geometry <-
+ osm_geometry <-
       match.arg(geometry,
-        osm_geometry,
-        several.ok = TRUE
+        osm_geometry
       )
-  }
 
   osm_crs <- 4326
 
@@ -60,36 +57,34 @@ get_osm_data <- function(location = NULL,
     crs = osm_crs
   )
 
-  if (key == "building" && is.null(value)) {
-    value <- "all"
+  if ((key == "building") && is.null(value)) {
+    value <- osm_building_tags
   }
 
   if (value == "all") {
     value <- osmdata::available_tags(key)
   }
 
-  query <- try(osmdata::opq(bbox = bbox_osm, timeout = 90), silent = TRUE)
+  query <- try(osmdata::opq(bbox = bbox_osm, timeout = 90),
+               silent = TRUE)
   data <-
     osmdata::osmdata_sf(
       osmdata::add_osm_feature(query, key = key, value = value)
     )
 
   if (!osmdata) {
-    data <- osmdata::unique_osmdata(data)
-    data <- purrr::map_dfr(
-      osm_geometry,
-      ~ data[[paste0("osm_", .x)]]
-    )
+    data <- purrr::pluck(data,
+                         var = paste0("osm_", osm_geometry))
 
     if (!is.null(crs)) {
       data <- sf::st_transform(data, crs)
     }
   } else {
+    data <- osmdata::unique_osmdata(data)
     data
   }
 
   if (getOption("osm_data_attribution", TRUE)) {
-    # transition message for 0.4-0 to 0.5-0
     usethis::ui_info("Attribution is required when you use Open Street Map data.
                      See {usethis::ui_value('https://www.openstreetmap.org/copyright')} for more information on the Open Database Licence.")
     options("osm_data_attribution" = FALSE)
