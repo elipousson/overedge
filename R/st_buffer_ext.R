@@ -1,18 +1,3 @@
-#' @importFrom sf st_bbox st_distance st_point
-#' @noRd
-st_diag_dist <- function(x) {
-  bbox <- sf::st_bbox(x)
-
-  sf::st_distance(
-    sf::st_point(
-      c(bbox[["xmin"]], bbox[["ymin"]])
-    ),
-    sf::st_point(
-      c(bbox[["xmax"]], bbox[["ymax"]])
-    )
-  )
-}
-
 #' Buffer a simple feature or bounding box object
 #'
 #' Return an sf object with a buffer based on `dist` or a proportion of the
@@ -64,7 +49,7 @@ st_buffer_ext <- function(x,
 
     if (is.null(dist) && !is.null(diag_ratio)) {
       # Use the bbox diagonal distance to make proportional buffer distance
-      dist <- st_diag_dist(x) * diag_ratio
+      dist <- sf_bbox_diagdist(sf::st_bbox(x)) * diag_ratio
     }
 
     # Get crs and rename gdal units to match options for set_units
