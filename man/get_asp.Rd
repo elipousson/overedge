@@ -19,7 +19,8 @@ character (e.g. "1:3"). If numeric, get_asp returns the same value without modif
 
 \item{paper}{Paper, Default: 'letter'}
 
-\item{orientation}{Orientation "portrait", "landscape", or "square", Default: 'portrait'}
+\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
+'portrait'}
 
 \item{margin}{margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on

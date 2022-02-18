@@ -17,8 +17,9 @@ check_esri_url <- function(x) {
 }
 
 #' @importFrom checkmate test_class
+#' @aliases check_sf_list
 #' @noRd
-check_sf_list <- function(x) {
+check_sf <- function(x) {
   if (!checkmate::test_class(x, "sf") && is.list(x)) {
     all(vapply(x, check_sf_list, TRUE))
   } else {

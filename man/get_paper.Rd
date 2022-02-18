@@ -18,17 +18,23 @@ get_paper(
 \arguments{
 \item{paper}{Paper, Default: 'letter'}
 
-\item{orientation}{Orientation "portrait", "landscape", or "square", Default: 'portrait'}
+\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
+'portrait'}
 
 \item{standard}{Size standard, "ANSI" or "ISO"}
 
-\item{series}{Size series (e.g. A), Default: NULL}
+\item{series}{size series (e.g. A), Default: NULL}
+
+\item{size}{size number (only used for "ISO" and "JIS" series). Standard,
+series, and size may all be required to return a single paper using these
+parameters.}
 
 \item{width}{width in units, Default: NULL}
 
 \item{height}{height in units, Default: NULL}
 
-\item{units}{"in" or "mm"; Default: NULL (defaults to "in" if width or height are provided.)}
+\item{units}{"in" or "mm"; Default: NULL (defaults to "in" if width or height
+are provided.)}
 }
 \value{
 Data frame with paper sizes

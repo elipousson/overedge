@@ -15,6 +15,10 @@ write_sf_ext(
 )
 }
 \arguments{
+\item{data}{sf object or a list of sf objects}
+
+\item{filename}{file name}
+
 \item{filetype}{File type to write and cache, Default: 'geojson'}
 
 \item{data_dir}{Data directory to write files, Default: NULL}
@@ -24,8 +28,6 @@ write_sf_ext(
 \item{load}{If TRUE, load sf objects to global environment; defaults to FALSE}
 
 \item{cache}{If TRUE, write sf object(s) to file in cache directory; defaults to FALSE}
-
-\item{x}{sf object or a list of sf objects}
 }
 \description{
 This function wraps \code{sf::write_sf()} and \code{list2env()} to facilitate both

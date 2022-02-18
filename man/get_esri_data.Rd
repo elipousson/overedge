@@ -56,6 +56,8 @@ TRUE,}
 location names for features}
 
 \item{locationname}{location name}
+
+\item{...}{Additional arguments passed to esri2sf::esri2df or esri2sf::esri2sf}
 }
 \description{
 Wraps the \code{\link[esri2sf]{esri2sf}} and \code{\link[esri2sf]{esri2df}}

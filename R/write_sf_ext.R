@@ -3,8 +3,9 @@
 #' This function wraps `sf::write_sf()` and `list2env()` to facilitate both
 #' saving simple feature objects and named lists of simple feature objects.
 #'
-#' @param x sf object or a list of sf objects
+#' @param data sf object or a list of sf objects
 #' @param filetype File type to write and cache, Default: 'geojson'
+#' @param filename file name
 #' @param data_dir Data directory to write files, Default: NULL
 #' @param save If TRUE, write the ; defaults to TRUE
 #' @param load If TRUE, load sf objects to global environment; defaults to FALSE

@@ -67,18 +67,18 @@ get_location_data <- function(location = NULL,
 
 
   # Check if data is in local environment
-  if ((data %in% ls(envir = .GlobalEnv)) && !(checkmate::test_class(data, "sf"))) {
+  if ((length(data) == 1) && (data %in% ls(envir = .GlobalEnv)) && !check_sf(data)) {
     if (usethis::ui_yeah("Do you want to load {data} from the global environment?")) {
       data <- eval_data(data = data)
     }
 
-    if (!(checkmate::test_class(data, "sf"))) {
+    if (!check_sf(data)) {
       usethis::ui_warn("The loaded data is not an sf object.")
     }
   }
 
   # Check if data is not an  sf object
-  if (!(checkmate::test_class(data, "sf"))) {
+  if (!(check_sf(data))) {
 
       # Check if data is a url
       if (check_url(data)) {

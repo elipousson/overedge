@@ -17,6 +17,7 @@
 #' @param locationname_col name of ArcGIS FeatureServer or MapServer column with
 #'   location names for features
 #' @param locationname location name
+#' @param ... Additional arguments passed to esri2sf::esri2df or esri2sf::esri2sf
 #' @inheritParams sf_bbox_to_lonlat_query
 #' @inheritParams st_bbox_adj
 #' @seealso

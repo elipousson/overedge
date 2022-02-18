@@ -151,12 +151,17 @@ ggsave_ext <- function(name = NULL,
 #' units. May return multiple paper sizes.
 #'
 #' @param paper Paper, Default: 'letter'
-#' @param orientation Orientation "portrait", "landscape", or "square", Default: 'portrait'
+#' @param orientation Orientation "portrait", "landscape", or "square", Default:
+#'   'portrait'
 #' @param standard Size standard, "ANSI" or "ISO"
-#' @param series Size series (e.g. A), Default: NULL
+#' @param series size series (e.g. A), Default: NULL
+#' @param size size number (only used for "ISO" and "JIS" series). Standard,
+#'   series, and size may all be required to return a single paper using these
+#'   parameters.
 #' @param width width in units, Default: NULL
 #' @param height height in units, Default: NULL
-#' @param units "in" or "mm"; Default: NULL (defaults to "in" if width or height are provided.)
+#' @param units "in" or "mm"; Default: NULL (defaults to "in" if width or height
+#'   are provided.)
 #' @return Data frame with paper sizes
 #' @examples
 #' \dontrun{
@@ -198,7 +203,7 @@ get_paper <- function(paper = "letter",
       standard == paper_standard
     )
 
-    if (!is.null(size)) {
+    if (!is.null(size) && !is.null(series)) {
       paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture"))
       paper_size <- size
 

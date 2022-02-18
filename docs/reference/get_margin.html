@@ -76,28 +76,35 @@ composed outside of R using a page layout application such as Adobe InDesign.</p
   orientation <span class="op">=</span> <span class="cn">NULL</span>,
   dist <span class="op">=</span> <span class="cn">NULL</span>,
   unit <span class="op">=</span> <span class="st">"in"</span>,
-  plot_width <span class="op">=</span> <span class="cn">NULL</span>
+  plot_width <span class="op">=</span> <span class="cn">NULL</span>,
+  header <span class="op">=</span> <span class="fl">0</span>,
+  footer <span class="op">=</span> <span class="fl">0</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>margin</dt>
-<dd><p>Margin style (options include "extrawide", "wide", "standard",
+<dd><p>margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on
 line length is planned but not yet implemented. Default: NULL (equivalent to "none")</p></dd>
 <dt>paper</dt>
 <dd><p>Paper, Default: 'letter'</p></dd>
 <dt>orientation</dt>
-<dd><p>Orientation "portrait", "landscape", or "square", Default: 'portrait'</p></dd>
+<dd><p>Orientation "portrait", "landscape", or "square", Default:
+'portrait'</p></dd>
 <dt>dist</dt>
-<dd><p>Margin distance (single value used to all sides), Default: NULL</p></dd>
+<dd><p>margin distance (single value used to all sides), Default: NULL</p></dd>
 <dt>unit</dt>
-<dd><p>Unit for margin distance, Default: 'in'</p></dd>
+<dd><p>unit for margin distance, Default: 'in'</p></dd>
 <dt>plot_width</dt>
-<dd><p>Plot or map width in units. If <code>paper</code> and <code>plot_width</code> are
+<dd><p>plot or map width in units. If <code>paper</code> and <code>plot_width</code> are
 provided, margins are half the distance between the two evenly distributed.
 This is not tested and may not work with all page sizes/orientations.</p></dd>
+<dt>header</dt>
+<dd><p>header height; defaults to 0</p></dd>
+<dt>footer</dt>
+<dd><p>footer height; defaults to 0</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

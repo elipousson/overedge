@@ -22,7 +22,8 @@ line length is planned but not yet implemented. Default: NULL (equivalent to "no
 
 \item{paper}{Paper, Default: 'letter'}
 
-\item{orientation}{Orientation "portrait", "landscape", or "square", Default: 'portrait'}
+\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
+'portrait'}
 
 \item{dist}{margin distance (single value used to all sides), Default: NULL}
 
