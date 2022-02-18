@@ -49,3 +49,23 @@
 #'}
 "paper_sizes"
 
+#' Valid distance units
+#'
+#' A subset of units supported by the units package accessible through the
+#' units::valid_udunits() function.
+#'
+#' @format A data frame with 11 rows and 11 variables:
+#' \describe{
+#'   \item{\code{symbol}}{symbols}
+#'   \item{\code{symbol_aliases}}{symbol aliases}
+#'   \item{\code{name_singular}}{singular names}
+#'   \item{\code{name_singular_aliases}}{singular name aliases}
+#'   \item{\code{name_plural}}{character plural names}
+#'   \item{\code{name_plural_aliases}}{plural name aliases}
+#'   \item{\code{def}}{short definition}
+#'   \item{\code{definition}}{definition}
+#'   \item{\code{comment}}{comment}
+#'   \item{\code{dimensionless}}{logical indicator for dimensionless units}
+#'   \item{\code{source_xml}}{source XML}
+#'}
+"valid_dist_units"

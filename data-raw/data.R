@@ -189,5 +189,23 @@ osm_building_tags <-
   stringr::str_remove(osm_building_tags, "(?<=&)[:graph:]+") |>
   stringr::str_remove("&")
 
-usethis::use_data(osm_building_tags, internal = TRUE, overwrite = TRUE)
+usethis::use_data(
+  osm_building_tags,
+  internal = TRUE,
+  overwrite = TRUE)
 
+valid_units <-
+  units::valid_udunits()
+
+units_filter_cols <- c("symbol", "symbol_aliases", "name_singular", "name_singular_aliases", "name_plural", "name_plural_aliases")
+
+valid_dist_units <-
+  valid_units |>
+  filter(
+    if_any(
+      any_of(units_filter_cols),
+      ~ (.x %in% dist_unit_options)))
+
+usethis::use_data(
+  valid_dist_units,
+  overwrite = TRUE)
