@@ -91,6 +91,8 @@ theme_margin <- function(margin = "standard",
                          dist = NULL,
                          unit = "in",
                          plot_width = NULL,
+                         header = 0,
+                         footer = 0,
                          fill = NA,
                          color = NA,
                          size = 0,
@@ -108,7 +110,9 @@ theme_margin <- function(margin = "standard",
         orientation = orientation,
         dist = dist,
         unit = unit,
-        plot_width = plot_width
+        plot_width = plot_width,
+        header = header,
+        footer = footer
       )
     )
 

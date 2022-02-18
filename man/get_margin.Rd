@@ -10,11 +10,13 @@ get_margin(
   orientation = NULL,
   dist = NULL,
   unit = "in",
-  plot_width = NULL
+  plot_width = NULL,
+  header = 0,
+  footer = 0
 )
 }
 \arguments{
-\item{margin}{Margin style (options include "extrawide", "wide", "standard",
+\item{margin}{margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on
 line length is planned but not yet implemented. Default: NULL (equivalent to "none")}
 
@@ -22,13 +24,17 @@ line length is planned but not yet implemented. Default: NULL (equivalent to "no
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default: 'portrait'}
 
-\item{dist}{Margin distance (single value used to all sides), Default: NULL}
+\item{dist}{margin distance (single value used to all sides), Default: NULL}
 
-\item{unit}{Unit for margin distance, Default: 'in'}
+\item{unit}{unit for margin distance, Default: 'in'}
 
-\item{plot_width}{Plot or map width in units. If \code{paper} and \code{plot_width} are
+\item{plot_width}{plot or map width in units. If \code{paper} and \code{plot_width} are
 provided, margins are half the distance between the two evenly distributed.
 This is not tested and may not work with all page sizes/orientations.}
+
+\item{header}{header height; defaults to 0}
+
+\item{footer}{footer height; defaults to 0}
 }
 \value{
 A ggplot2::margin() element intended for use with

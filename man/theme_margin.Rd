@@ -11,6 +11,8 @@ theme_margin(
   dist = NULL,
   unit = "in",
   plot_width = NULL,
+  header = 0,
+  footer = 0,
   fill = NA,
   color = NA,
   size = 0,

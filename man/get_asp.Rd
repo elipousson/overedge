@@ -21,11 +21,11 @@ character (e.g. "1:3"). If numeric, get_asp returns the same value without modif
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default: 'portrait'}
 
-\item{margin}{Margin style (options include "extrawide", "wide", "standard",
+\item{margin}{margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on
 line length is planned but not yet implemented. Default: NULL (equivalent to "none")}
 
-\item{unit}{Unit for margin distance, Default: 'in'}
+\item{unit}{unit for margin distance, Default: 'in'}
 
 \item{block_asp}{If TRUE, get aspect ratio of the map/plot area (not including the margins); defaults to FALSE.}
 }

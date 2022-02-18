@@ -256,14 +256,16 @@ get_paper <- function(paper = "letter",
 #' useful when adapting a gglpot2 map or plot to a print document format that is
 #' composed outside of R using a page layout application such as Adobe InDesign.
 #'
-#' @param margin Margin style (options include "extrawide", "wide", "standard",
+#' @param margin margin style (options include "extrawide", "wide", "standard",
 #'   "narrow", "none"), Additional "auto" option to generate margin based on
 #'   line length is planned but not yet implemented. Default: NULL (equivalent to "none")
-#' @param dist Margin distance (single value used to all sides), Default: NULL
-#' @param unit Unit for margin distance, Default: 'in'
-#' @param plot_width Plot or map width in units. If `paper` and `plot_width` are
+#' @param dist margin distance (single value used to all sides), Default: NULL
+#' @param unit unit for margin distance, Default: 'in'
+#' @param plot_width plot or map width in units. If `paper` and `plot_width` are
 #'   provided, margins are half the distance between the two evenly distributed.
 #'   This is not tested and may not work with all page sizes/orientations.
+#' @param header header height; defaults to 0
+#' @param footer footer height; defaults to 0
 #' @inheritParams get_paper
 #' @return A ggplot2::margin() element intended for use with
 #'   ggplot2::element_rect() and the plot.background theme element.
@@ -289,10 +291,12 @@ get_margin <- function(margin = NULL,
                        orientation = NULL,
                        dist = NULL,
                        unit = "in",
-                       plot_width = NULL) {
+                       plot_width = NULL,
+                       header = 0,
+                       footer = 0) {
 
   margin <- match.arg(margin, c("none", "narrow", "standard", "extrawide", "wide"))
-  unit <- match.arg(unit, c("mm", "in"))
+  unit <- match.arg(unit, c("in", "mm", "cm", "npc", "picas", "pc", "pt", "lines", "char", "native"))
 
   if (!is.null(paper) && !is.null(plot_width)) {
     paper <- get_paper(paper = paper, orientation = orientation)
@@ -303,11 +307,11 @@ get_margin <- function(margin = NULL,
     if (is.character(margin) && (margin != "auto")) {
       if (unit == "in") {
         margin <- switch(margin,
-          "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = "in"),
-          "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = "in"),
-          "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = "in"),
-          "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = "in"),
-          "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = "in")
+          "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = unit),
+          "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = unit),
+          "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = unit),
+          "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = unit),
+          "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
         )
       } else if (unit == "mm") {
         margin <- switch(margin,
@@ -330,6 +334,8 @@ get_margin <- function(margin = NULL,
       margin <- ggplot2::margin(t = dist[[1]], r = dist[[2]], b = dist[[3]], l = dist[[4]], unit = unit)
     }
   }
+
+  margin <- margin + grid::unit(x = c(header, 0, 0, footer), unit = unit)
 
   return(margin)
 }
