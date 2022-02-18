@@ -1,4 +1,4 @@
-#' Work with simple feature bounding boxes
+#' Measure, transform, and convert bounding boxes
 #'
 #' Simple bounding box functions that you can use to:
 #'
@@ -15,9 +15,8 @@
 #' @param coords query column with lon/lat coordinates
 #' @param crs coordinate reference system to use for query; default 4326
 #' @param lonlat Default TRUE. If FALSE, coords is assumed to be lat/lon order instead of lon/lat.
-#' @name sf_bbox_misc
-#' @export
 #' @md
+#' @name sf_bbox_misc
 NULL
 
 #' @aliases sf_bbox_asp

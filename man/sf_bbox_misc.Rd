@@ -10,7 +10,7 @@
 \alias{sf_bbox_to_sf}
 \alias{sf_bbox_to_wkt}
 \alias{sf_bbox_to_lonlat_query}
-\title{Work with simple feature bounding boxes}
+\title{Measure, transform, and convert bounding boxes}
 \usage{
 sf_bbox_asp(bbox)
 

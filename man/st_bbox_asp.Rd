@@ -16,9 +16,6 @@ character (e.g. "1:3"). If numeric, get_asp returns the same value without modif
 \code{bbox} object
 }
 \description{
-Get bbox from sf or bbox object adjusted to match an aspect ratio
-}
-\details{
 Takes an area as an  \code{sf} or \code{bbox} object and returns a bounding
 box that matches the aspect ratio provided to \code{asp} and contains the
 area or bounding box provided. Common aspect ratios include "1:1" (1), "4:6"

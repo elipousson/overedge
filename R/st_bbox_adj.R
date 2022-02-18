@@ -57,8 +57,6 @@ st_bbox_adj <- function(x = NULL,
 
 #' Get bounding box adjusted to match aspect ratio
 #'
-#' Get bbox from sf or bbox object adjusted to match an aspect ratio
-#'
 #' Takes an area as an  \code{sf} or \code{bbox} object and returns a bounding
 #' box that matches the aspect ratio provided to \code{asp} and contains the
 #' area or bounding box provided. Common aspect ratios include "1:1" (1), "4:6"
@@ -120,7 +118,7 @@ st_bbox_asp <- function(x = NULL,
 }
 
 
-#' Get aspect ratio from string or for paper or page block
+#' Get aspect ratio from string or based on specific paper and margins
 #'
 #'
 #' @param asp Aspect ratio of width to height as a numeric value (e.g. 0.33) or

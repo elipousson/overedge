@@ -32,3 +32,5 @@ reference:
   contents:
   - '`map_icons`'
   - '`paper_sizes`'
+  - '`valid_dist_units`'
+

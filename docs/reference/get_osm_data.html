@@ -106,8 +106,8 @@ character (e.g. "1:3"). If numeric, get_asp returns the same value without modif
 remains in the OSM CRS 4326. Default: NULL.</p></dd>
 <dt>geometry</dt>
 <dd><p>geometry to output "polygons", "points", "lines",
-"multilines", or "multipolygons"; if NULL return a sf object with mixed
-geometry (if multiple geometry types are present). Default NULL</p></dd>
+"multilines", or "multipolygons"; if multiple geometry are needed set
+osmdata to TRUE. Default NULL</p></dd>
 <dt>osmdata</dt>
 <dd><p>If TRUE return a osmdata class object that includes the
 overpass API call, metadata including timestamp and version numbers, and

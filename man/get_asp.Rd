@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_bbox_adj.R
 \name{get_asp}
 \alias{get_asp}
-\title{Get aspect ratio from string or for paper or page block}
+\title{Get aspect ratio from string or based on specific paper and margins}
 \usage{
 get_asp(
   asp = NULL,
@@ -33,7 +33,7 @@ line length is planned but not yet implemented. Default: NULL (equivalent to "no
 OUTPUT_DESCRIPTION
 }
 \description{
-Get aspect ratio from string or for paper or page block
+Get aspect ratio from string or based on specific paper and margins
 }
 \details{
 DETAILS
