@@ -4,27 +4,18 @@
 \alias{df_to_sf}
 \title{Convert data frame with coordinates to simple feature object}
 \usage{
-df_to_sf(
-  x,
-  coords = c("LONGITUD", "LATITUDE"),
-  into = NULL,
-  sep = ",",
-  lonlat = TRUE,
-  crs = 4326
-)
+df_to_sf(x, crs = 4326, coords = c("lon", "lat"), into = NULL, sep = ",")
 }
 \arguments{
 \item{x}{data frame with lat/lon coordinates in 1 combined or 2 separated columns}
+
+\item{crs}{coordinate reference system for returned sf object, Default: 4326}
 
 \item{coords}{character string with names of longitude and latitude column or columns, Default: c('LONGITUD', 'LATITUDE')}
 
 \item{into}{If coords is a single column name with both longitude and latitude, \code{into} is used as the names of the new columns that coords is separated into. Passed to tidyr::separate().}
 
 \item{sep}{If coords is a single column name with both longitude and latitude, \code{sep} is used as the separator between coordinate values. Passed to tidyr::separate().}
-
-\item{lonlat}{If coords are ordered as latitude, longitude order or if into is latitude, longitude order, set to FALSE. Default TRUE.}
-
-\item{crs}{coordinate reference system for returned sf object, Default: 4326}
 }
 \value{
 sf object
@@ -52,5 +43,4 @@ if (interactive()) {
 \seealso{
 \code{\link[ggspatial]{df_spatial}},
 \code{\link[sf]{st_as_sf}}
-\code{\link[stats19]{format_sf}}
 }

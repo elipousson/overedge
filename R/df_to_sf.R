@@ -3,7 +3,6 @@
 #' @param coords character string with names of longitude and latitude column or columns, Default: c('LONGITUD', 'LATITUDE')
 #' @param into If coords is a single column name with both longitude and latitude, `into` is used as the names of the new columns that coords is separated into. Passed to tidyr::separate().
 #' @param sep If coords is a single column name with both longitude and latitude, `sep` is used as the separator between coordinate values. Passed to tidyr::separate().
-#' @param lonlat If coords are ordered as latitude, longitude order or if into is latitude, longitude order, set to FALSE. Default TRUE.
 #' @param crs coordinate reference system for returned sf object, Default: 4326
 #' @return sf object
 #' @details DETAILS
@@ -23,7 +22,6 @@
 #' @seealso
 #'  \code{\link[ggspatial]{df_spatial}},
 #'  \code{\link[sf]{st_as_sf}}
-#'  \code{\link[stats19]{format_sf}}
 #' @rdname df_to_sf
 #' @export
 #' @importFrom tidyr separate
@@ -33,11 +31,10 @@
 #' @importFrom usethis ui_info
 #' @importFrom sf st_transform st_as_sf
 df_to_sf <- function(x,
-                     coords = c("LONGITUD", "LATITUDE"),
+                     crs = 4326,
+                     coords = c("lon", "lat"),
                      into = NULL,
-                     sep = ",",
-                     lonlat = TRUE,
-                     crs = 4326) {
+                     sep = ",") {
 
   if ((length(coords) == 1) && !is.null(into) && (length(into) == 2)) {
     x <-
@@ -55,13 +52,13 @@ df_to_sf <- function(x,
     coords <- into
   }
 
-  if (lonlat) {
-    longitude <- coords[[1]]
-    latitude <- coords[[2]]
-  } else {
-    latitude <- coords[[1]]
-    longitude <- coords[[2]]
+  # FIXME: This automatic reversal needs to be documented
+  if (grepl("lat|Y|y", coords[1])) {
+    coords <- rev(coords)
   }
+
+  longitude <- coords[[1]]
+  latitude <- coords[[2]]
 
   # Check that lat/lon are numeric
   if (!is.numeric(x[[longitude]])) {
@@ -71,9 +68,10 @@ df_to_sf <- function(x,
 
   # Check for missing coordinates
   missing_coords <- is.na(x[[longitude]] | x[[latitude]])
+  num_missing_coords <- sum(missing_coords)
 
-  if (sum(missing_coords) > 0) {
-    usethis::ui_info("{sum(missing_coords)} rows removed for missing coordinates.")
+  if (num_missing_coords > 0) {
+    usethis::ui_info("{num_missing_coords} rows removed for missing coordinates.")
     # Exclude rows with missing coordinates
     x <- x[!missing_coords, ]
   }

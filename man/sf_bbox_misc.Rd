@@ -3,6 +3,7 @@
 \name{sf_bbox_misc}
 \alias{sf_bbox_misc}
 \alias{sf_bbox_asp}
+\alias{sf_bbox_dist}
 \alias{sf_bbox_xdist}
 \alias{sf_bbox_ydist}
 \alias{sf_bbox_diagdist}
@@ -13,6 +14,8 @@
 \title{Measure, transform, and convert bounding boxes}
 \usage{
 sf_bbox_asp(bbox)
+
+sf_bbox_dist(bbox, from, to)
 
 sf_bbox_xdist(bbox)
 
@@ -26,21 +29,17 @@ sf_bbox_to_sf(bbox)
 
 sf_bbox_to_wkt(bbox)
 
-sf_bbox_to_lonlat_query(
-  bbox,
-  coords = c("longitude", "latitude"),
-  crs = 4326,
-  lonlat = TRUE
-)
+sf_bbox_to_lonlat_query(bbox, coords = c("longitude", "latitude"), crs = 4326)
 }
 \arguments{
 \item{bbox}{bbox object}
 
+\item{from, to}{xy pairs (e.g. c("xmax", "ymax) defining points to measure
+distance from and to.}
+
 \item{crs}{coordinate reference system to use for query; default 4326}
 
-\item{coords}{query column with lon/lat coordinates}
-
-\item{lonlat}{Default TRUE. If FALSE, coords is assumed to be lat/lon order instead of lon/lat.}
+\item{coords}{query column names with coordinates. e,g, c("X", "Y") or c("lat", "lon")}
 }
 \value{
 sf object
@@ -50,14 +49,14 @@ Simple bounding box functions that you can use to:
 }
 \details{
 \itemize{
-\item Measure distances (sf_bbox_xdist, sf_bbox_ydist, and sf_bbox_diagdist)
+\item Measure distances (sf_bbox_dist, sf_bbox_xdist, sf_bbox_ydist, and sf_bbox_diagdist)
 \item Get an aspect ratio (sf_bbox_asp)
 \item Transform the coordinate reference system (sf_bbox_transform)
 \item Convert a bounding box to a SQL style query (sf_bbox_to_lonlat_query), well
 known text (sf_bbox_to_wkt), or a simple feature object (sf_bbox_to_sf)
 }
 
-The only function with additional functions is sf_bbox_to_lonlat_query. All
+The only functions with additional parameters are sf_bbox_to_lonlat_query and sf_bbox_dist. All
 other functions only take a bbox parameter.
 }
 \seealso{

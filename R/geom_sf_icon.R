@@ -1,5 +1,6 @@
-#' @title Draw SVG icons for a simple feature object
-#' @description Use the \code{\link[ggsvg]{geom_point_svg()}} function to plot
+#' Draw SVG icons for a simple feature object
+#'
+#' Use the \code{\link[ggsvg]{geom_point_svg()}} function to plot
 #'   icons using the centroids from the input simple feature object to set the
 #'   icon location.
 #' @param data sf object. If the geometry type for data is POINT, the object is
@@ -57,15 +58,8 @@ geom_sf_icon <- function(data = NULL,
                          svg = NULL,
                          color = "black",
                          ...) {
-  geometry_type <- as.character(sf::st_geometry_type(data, by_geometry = FALSE))
 
-  if (geometry_type != "POINT") {
-    usethis::ui_warn("Converting data from {geometry_type} to POINT with `sf::st_centroid()`.")
-    data <-
-      suppressWarnings(sf::st_centroid(data))
-  }
-
-  coord_df <- st_coordinates_df(data)
+  data <- sf_to_df(x = data, coords = c("lon", "lat"), keep_all = TRUE)
 
   if ((iconname_col %in% names(data)) && is.null(icon)) {
     icon_options <- dplyr::rename(map_icons, svg_url = url, {{ iconname_col }} := name)
@@ -85,15 +79,9 @@ geom_sf_icon <- function(data = NULL,
         by = {{ iconname_col }}
       )
 
-    data <-
-      dplyr::bind_cols(
-        data,
-        coord_df
-      )
-
     ggsvg::geom_point_svg(
       data = data,
-      ggplot2::aes(x = X, y = Y, svg = svg_url),
+      ggplot2::aes(x = lon, y = lat, svg = svg_url),
       ...
     )
   } else if (!is.null(icon)) {
@@ -109,8 +97,8 @@ geom_sf_icon <- function(data = NULL,
 
     if (nrow(icon) == 1) {
       ggsvg::geom_point_svg(
-        data = coord_df,
-        ggplot2::aes(x = X, y = Y),
+        data = data,
+        ggplot2::aes(x = lon, y = lat),
         svg = icon$url,
         color = color,
         defaults = list(color = "black"),
@@ -122,8 +110,8 @@ geom_sf_icon <- function(data = NULL,
     }
   } else if (!is.null(svg)) {
     ggsvg::geom_point_svg(
-      data = coord_df,
-      ggplot2::aes(x = X, y = Y),
+      data = data,
+      ggplot2::aes(x = lon, y = lat),
       svg = svg,
       color = color,
       ...

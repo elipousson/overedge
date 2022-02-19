@@ -7,12 +7,12 @@
 st_bearing(x, dir = FALSE, crs = 4326)
 }
 \arguments{
-\item{x}{object of class sf}
+\item{x}{sf object}
 
 \item{dir}{logical; If FALSE, return the absolute (positive) bearing value.
 If TRUE, return negative and positive bearing values. Default: FALSE.}
 
-\item{crs}{Coordinate reference system passed to sf::st_coordinates() (must
+\item{crs}{coordinate reference system passed to sf::st_coordinates() (must
 be geographic not projected). Default: 4326}
 }
 \description{
@@ -20,21 +20,21 @@ Get bearing of a simple feature object with LINESTRING geometry
 }
 \examples{
 \dontrun{
-if(interactive()){
- library(ggplot2)
+if (interactive()) {
+  library(ggplot2)
 
- nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
- nc_pts <- sf::st_centroid(nc)
- nc_line <-
-   sf::st_as_sf(
-     sf::st_cast(sf::st_union(c(nc_pts[1,]$geometry, nc_pts[30,]$geometry)), "LINESTRING")
-     )
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc_pts <- sf::st_centroid(nc)
+  nc_line <-
+    sf::st_as_sf(
+      sf::st_cast(sf::st_union(c(nc_pts[1, ]$geometry, nc_pts[30, ]$geometry)), "LINESTRING")
+    )
 
- ggplot() +
-   geom_sf(data = nc) +
-   geom_sf(data = nc_pts) +
-   geom_sf(data = st_bearing(nc_line), aes(color = bearing))
- }
+  ggplot() +
+    geom_sf(data = nc) +
+    geom_sf(data = nc_pts) +
+    geom_sf(data = st_bearing(nc_line), aes(color = bearing))
+}
 }
 }
 \seealso{
