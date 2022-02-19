@@ -1,4 +1,4 @@
-#' Convert simple feature object to data frame
+#' Convert simple feature object to data frame with coordinates or data frame to simple feature
 #'
 #' Helper function to convert a simple feature object to data frame by dropping
 #' geometry, converting geometry to well known text, or (if the geometry type is
@@ -6,16 +6,23 @@
 #' object is provided, sf_to_sfc provides coordinates but the "drop" geometry
 #' option is not supported.
 #'
-#' @param x sf or sfc object
+#' @param x sf or sfc object or a data frame with lat/lon coordinates in a
+#'   single column or two separated columns
 #' @param crs coordinate reference system, Default: 4326
 #' @param geometry type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'
-#' @param coords coordinate columns used if geometry is 'centroid' or 'point';
-#'   Default: c("lon", "lat")
+#' @param coords coordinate columns for input dataframe or output sf object (if
+#'   geometry is 'centroid' or 'point') Default: c("lon", "lat")
 #' @param keep_all If FALSE, drop all columns other than those named in coords,
 #'   Default: TRUE
-#' @return a data frame with geometry dropped or converted to wkt or coordinates
-#'   for the centroid or point on surface
+#' @param into If coords is a single column name with both longitude and
+#'   latitude, `into` is used as the names of the new columns that coords is
+#'   separated into. Passed to \code{\link[tidyr]{separate}}
+#' @param sep If coords is a single column name with both longitude and
+#'   latitude, `sep` is used as the separator between coordinate values. Passed
+#'   to \code{\link[tidyr]{separate}}
+#' @return sf_to_df returns a data frame with geometry dropped or converted to wkt or coordinates
+#'   for the centroid or point on surface; df_to_sf returns a simple feature object with POINT geometry
 #' @seealso
 #'  \code{\link[sf]{st_coordinates}}
 #' @rdname sf_to_df
@@ -85,3 +92,91 @@ sf_to_df <- function(x,
 
   return(as.data.frame(x))
 }
+
+#' @rdname sf_to_df
+#' @name df_to_sf
+#' @examples
+#' \dontrun{
+#' if (interactive()) {
+#'   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+#'   nc_df <- ggspatial::df_spatial(nc)
+#'
+#'   df_to_sf(nc_df, coords = c("x", "y"))
+#'
+#'   nc_df$xy <- paste(nc_df$x, nc_df$y, sep = ",")
+#'
+#'   df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
+#' }
+#' }
+#' @seealso
+#'  \code{\link[ggspatial]{df_spatial}}
+#'  \code{\link[sf]{st_as_sf}}
+#' @export
+#' @importFrom tidyr separate
+#' @importFrom tidyselect all_of
+#' @importFrom dplyr mutate across
+#' @importFrom readr parse_number
+#' @importFrom usethis ui_info
+#' @importFrom sf st_transform st_as_sf
+df_to_sf <- function(x,
+                     crs = 4326,
+                     coords = c("lon", "lat"),
+                     into = NULL,
+                     sep = ",") {
+
+  if ((length(coords) == 1) && !is.null(into) && (length(into) == 2)) {
+    x <-
+      tidyr::separate(x, col = tidyselect::all_of(coords), into = into, sep = sep)
+
+    x <-
+      dplyr::mutate(
+        x,
+        dplyr::across(
+          .cols = tidyselect::all_of(into),
+          ~ readr::parse_number(.x)
+        )
+      )
+
+    coords <- into
+  }
+
+  # FIXME: This automatic reversal needs to be documented
+  if (grepl("lat|Y|y", coords[1])) {
+    coords <- rev(coords)
+  }
+
+  longitude <- coords[[1]]
+  latitude <- coords[[2]]
+
+  # Check that lat/lon are numeric
+  if (!is.numeric(x[[longitude]])) {
+    x[[longitude]] <- as.double(x[[longitude]])
+    x[[latitude]] <- as.double(x[[latitude]])
+  }
+
+  # Check for missing coordinates
+  missing_coords <- is.na(x[[longitude]] | x[[latitude]])
+  num_missing_coords <- sum(missing_coords)
+
+  if (num_missing_coords > 0) {
+    usethis::ui_info("{num_missing_coords} rows removed for missing coordinates.")
+    # Exclude rows with missing coordinates
+    x <- x[!missing_coords, ]
+  }
+
+  x <-
+    sf::st_transform(
+      sf::st_as_sf(
+        x,
+        coords = c(longitude, latitude),
+        agr = "constant",
+        crs = 4326,
+        stringsAsFactors = FALSE,
+        remove = FALSE
+      ),
+      crs
+    )
+
+  return(x)
+}
+

@@ -44,12 +44,12 @@ theme_legend(
 pulled from current set theme which is helpful for resetting all text
 families to the theme.}
 
-\item{color}{color for text elements (passed to ggplot2::element_text by
-theme_text), plot.background (passed to ggplot2::element_rect() by
+\item{color}{color for text elements (passed to \code{\link[ggplot2]{element_text}} by
+theme_text), plot.background (passed to \code{\link[ggplot2]{element_rect}} by
 theme_margin). Default: NA}
 
-\item{geom_text}{If TRUE, update text family for geom_text, geom_sf_text,
-geom_label, and geom_sf_label to match \code{font_family} and color. If FALSE,
+\item{geom_text}{If TRUE, update text family for \code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_sf_text}},
+\code{\link[ggplot2]{geom_label}}, and \code{\link[ggplot2]{geom_sf_label}} to match \code{font_family} and color. If FALSE,
 make no changes to the theme. Default: TRUE}
 
 \item{method}{ggplot2 function to use in changing text "set", "update", or
@@ -75,7 +75,7 @@ This is not tested and may not work with all page sizes/orientations.}
 
 \item{footer}{footer height; defaults to 0}
 
-\item{fill}{fill for plot.background passed to ggplot2::element_rect(),
+\item{fill}{fill for plot.background passed to \code{\link[ggplot2]{element_rect}}
 Default: NA}
 
 \item{size}{size number (only used for "ISO" and "JIS" series). Standard,

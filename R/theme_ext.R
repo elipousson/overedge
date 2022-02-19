@@ -21,13 +21,13 @@ theme_method <- function(x, method = NULL) {
 #' @param font_family Font family, Default: 'Helvetica' If NULL, font_family is
 #'   pulled from current set theme which is helpful for resetting all text
 #'   families to the theme.
-#' @param geom_text If TRUE, update text family for geom_text, geom_sf_text,
-#'   geom_label, and geom_sf_label to match `font_family` and color. If FALSE,
+#' @param geom_text If TRUE, update text family for \code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_sf_text}},
+#'   \code{\link[ggplot2]{geom_label}}, and \code{\link[ggplot2]{geom_sf_label}} to match `font_family` and color. If FALSE,
 #'   make no changes to the theme. Default: TRUE
-#' @param fill fill for plot.background passed to ggplot2::element_rect(),
+#' @param fill fill for plot.background passed to \code{\link[ggplot2]{element_rect}}
 #'   Default: NA
-#' @param color color for text elements (passed to ggplot2::element_text by
-#'   theme_text), plot.background (passed to ggplot2::element_rect() by
+#' @param color color for text elements (passed to \code{\link[ggplot2]{element_text}} by
+#'   theme_text), plot.background (passed to \code{\link[ggplot2]{element_rect}} by
 #'   theme_margin). Default: NA
 #' @param position position type or a a two-element numeric vector
 #' @param margin margin distance, a margin style supported by get_margins or a

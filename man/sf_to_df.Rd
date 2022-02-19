@@ -2,7 +2,8 @@
 % Please edit documentation in R/sf_to_df.R
 \name{sf_to_df}
 \alias{sf_to_df}
-\title{Convert simple feature object to data frame}
+\alias{df_to_sf}
+\title{Convert simple feature object to data frame with coordinates or data frame to simple feature}
 \usage{
 sf_to_df(
   x,
@@ -11,24 +12,35 @@ sf_to_df(
   geometry = "centroid",
   keep_all = TRUE
 )
+
+df_to_sf(x, crs = 4326, coords = c("lon", "lat"), into = NULL, sep = ",")
 }
 \arguments{
-\item{x}{sf or sfc object}
+\item{x}{sf or sfc object or a data frame with lat/lon coordinates in a
+single column or two separated columns}
 
 \item{crs}{coordinate reference system, Default: 4326}
 
-\item{coords}{coordinate columns used if geometry is 'centroid' or 'point';
-Default: c("lon", "lat")}
+\item{coords}{coordinate columns for input dataframe or output sf object (if
+geometry is 'centroid' or 'point') Default: c("lon", "lat")}
 
 \item{geometry}{type of geometry to include in data frame. options include
 "drop", "wkt", "centroid", "point", Default: 'centroid'}
 
 \item{keep_all}{If FALSE, drop all columns other than those named in coords,
 Default: TRUE}
+
+\item{into}{If coords is a single column name with both longitude and
+latitude, \code{into} is used as the names of the new columns that coords is
+separated into. Passed to \code{\link[tidyr]{separate}}}
+
+\item{sep}{If coords is a single column name with both longitude and
+latitude, \code{sep} is used as the separator between coordinate values. Passed
+to \code{\link[tidyr]{separate}}}
 }
 \value{
-a data frame with geometry dropped or converted to wkt or coordinates
-for the centroid or point on surface
+sf_to_df returns a data frame with geometry dropped or converted to wkt or coordinates
+for the centroid or point on surface; df_to_sf returns a simple feature object with POINT geometry
 }
 \description{
 Helper function to convert a simple feature object to data frame by dropping
@@ -37,6 +49,26 @@ not POINT) getting coordinates for a centroid or point on surface. If an sfc
 object is provided, sf_to_sfc provides coordinates but the "drop" geometry
 option is not supported.
 }
+\details{
+df_to_sf supports a
+}
+\examples{
+\dontrun{
+if (interactive()) {
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+  nc_df <- ggspatial::df_spatial(nc)
+
+  df_to_sf(nc_df, coords = c("x", "y"))
+
+  nc_df$xy <- paste(nc_df$x, nc_df$y, sep = ",")
+
+  df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
+}
+}
+}
 \seealso{
 \code{\link[sf]{st_coordinates}}
+
+\code{\link[ggspatial]{df_spatial}}
+\code{\link[sf]{st_as_sf}}
 }
