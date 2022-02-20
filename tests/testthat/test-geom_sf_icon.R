@@ -4,10 +4,10 @@ test_that("geom_sf_icon works", {
   nc_icon <- nc
   nc_icon$icon <- rep(c("1", "2", "3", "4"), nrow(nc) / 4)
 
-  expect_warning(
+  checkmate::expect_class(
     ggplot() +
       geom_sf_icon(data = nc_icon, size = 5),
-    "Converting data from"
+    "gg"
   )
 
   nc_pts <- suppressWarnings(sf::st_centroid(nc))

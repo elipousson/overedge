@@ -1,5 +1,5 @@
 test_that("sf_to_df works", {
-  nc <- st_read(system.file("shape/nc.shp", package = "sf"))
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
 
   checkmate::expect_class(
     sf_to_df(x = nc, coords = c("lon", "lat")),
