@@ -249,7 +249,7 @@ make_filename <- function(name = NULL,
       str_prefix(prefix = c(prefix, label),
                  string = name,
                  postfix = postfix,
-                 clean_string = TRUE)
+                 clean = TRUE)
 
     if (!is.null(filetype)) {
       filetype <- paste0(".", filetype)
