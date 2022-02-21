@@ -29,7 +29,6 @@ Imports:
     rlang,
     sf,
     stringr,
-    tibble,
     tidygeocoder,
     tidyr,
     tidyselect,
