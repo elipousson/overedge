@@ -12,8 +12,6 @@
 #' @param where string for where condition. Default is 1=1 for all rows.
 #' @param where where query string passed to esri2sf, Default: NULL
 #' @param coords_col coordinate columns, e.g. c("longitude", "latitude")
-#' @param lonlat If FALSE, assume coords_col is in lat/lon order; defaults to
-#'   TRUE,
 #' @param locationname_col name of ArcGIS FeatureServer or MapServer column with
 #'   location names for features
 #' @param locationname location name
@@ -36,7 +34,6 @@ get_esri_data <- function(location = NULL,
                           crs = NULL,
                           where = NULL,
                           coords_col = NULL,
-                          lonlat = TRUE,
                           locationname_col = NULL,
                           locationname,
                           ...) {
@@ -54,7 +51,7 @@ get_esri_data <- function(location = NULL,
       # Get Table (no geometry) by filtering coordinate columns with bbox
       where <- c(
         where,
-        sf_bbox_to_lonlat_query(bbox = bbox, coords = coords_col, lonlat = lonlat)
+        sf_bbox_to_lonlat_query(bbox = bbox, coords = coords_col)
       )
       data <- esri2sf::esri2df(
         url = url,

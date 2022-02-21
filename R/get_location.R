@@ -84,7 +84,6 @@ get_location <- function(type,
                          ...) {
   stopifnot(
     check_sf(type) || is.character(type),
-    vapply(c(name, id), is.null, TRUE) || vapply(c(name, name_col, id, id_col), is.character, TRUE) || vapply(c(id, name_col, id_col), is.numeric, TRUE),
     is.character(location) || is.null(location) || check_sf(location),
     is.character(label) || is.null(label),
     is.list(index) || is.null(index),

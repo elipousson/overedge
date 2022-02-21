@@ -98,25 +98,25 @@ test_that("get_location works", {
       locationname_col = "NAME",
       locationname = "Chesapeake and Ohio Canal National Historic Park"
     ),
-    "No location is provided"
+    "Returning all locations of this type."
   )
 
   # Get mapbaltimore
-  get_with_type_and_package <- get_location(
-    type = "neighborhoods",
-    name = "Harwood",
-    package = "mapbaltimore"
-  )
+  checkmate::expect_class(
+    get_location(
+      type = "neighborhoods",
+      name = "Harwood",
+      package = "mapbaltimore"
+    ),
+    "sf")
 
-  checkmate::expect_class(get_with_type_and_package, "sf")
-
-  expect_warning(
+  expect_error(
     get_location(
       type = "neighborhoods",
       name = "Harwood",
       package = "mapbaltimore",
       index = "This index is not a list."
     ),
-    "index must be a list or NULL"
+    "is.list(index) || is.null(index) is not TRUE"
   )
 })

@@ -7,7 +7,6 @@ test_that("st_bearing works", {
       sf::st_cast(sf::st_union(c(nc_pts[1, ]$geometry, nc_pts[30, ]$geometry)), "LINESTRING")
     )
 
-
   lines <-
     get_osm_data(
       location = get_location(

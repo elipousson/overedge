@@ -14,7 +14,6 @@ get_esri_data(
   crs = NULL,
   where = NULL,
   coords_col = NULL,
-  lonlat = TRUE,
   locationname_col = NULL,
   locationname,
   ...
@@ -49,9 +48,6 @@ without modification.}
 \item{where}{where query string passed to esri2sf, Default: NULL}
 
 \item{coords_col}{coordinate columns, e.g. c("longitude", "latitude")}
-
-\item{lonlat}{If FALSE, assume coords_col is in lat/lon order; defaults to
-TRUE,}
 
 \item{locationname_col}{name of ArcGIS FeatureServer or MapServer column with
 location names for features}
