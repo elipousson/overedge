@@ -18,13 +18,15 @@ get_osm_data(
 )
 }
 \arguments{
-\item{location}{sf, sfc, or bbox object}
+\item{location}{A \code{sf}, \code{sfc}, or \code{bbox} object.}
 
-\item{key}{feature key for overpass API query.}
+\item{key}{Feature key for overpass API query.}
 
-\item{value}{value of feature key; can be negated with an initial exclamation
-mark, \code{value = "!this"}, and can also be a vector, \code{value = c ("this", "that")}. If \code{value = "all"} or if \code{key = "building"} the values passed to
-osmdata are from \code{osmdata::available_tags(key)}.}
+\item{value}{Value of the feature key; can be negated with an initial
+exclamation mark, \code{value = "!this"}, and can also be a vector, \code{value = c("this", "that")}.
+If \code{value = "all"} or if \code{key = "building"} the values passed to the
+osmdata package are from
+\code{\link[osmdata]{available_tags()}}.}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -40,18 +42,24 @@ instead of "kilometer") are also supported. Units are passed to
 "meter"}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3"). If numeric, get_asp returns the same value without modification.}
+character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
+without modification.}
 
-\item{crs}{coordinate reference system for output data; if NULL, the data
-remains in the OSM CRS 4326. Default: NULL.}
+\item{crs}{Coordinate reference system for output data; if NULL, the data
+remains in the Open Street Map coordinate reference system 4326. Default:
+\code{NULL}.}
 
-\item{geometry}{geometry to output "polygons", "points", "lines",
-"multilines", or "multipolygons"; if multiple geometry are needed set
-osmdata to TRUE. Default NULL}
+\item{geometry}{Geometry type to output ("polygons", "points", "lines",
+"multilines", or "multipolygons"); if multiple geometry types are needed
+set osmdata to \code{TRUE.} Default \code{NULL}.}
 
-\item{osmdata}{If TRUE return a osmdata class object that includes the
+\item{osmdata}{If \code{TRUE} return a \code{osmdata} class object that includes the
 overpass API call, metadata including timestamp and version numbers, and
-all available geometry types; defaults to FALSE.}
+all available geometry types; defaults to \code{FALSE}.}
+}
+\value{
+A simple feature object with features using selected geometry type or
+an \code{osmdata} object with features from all geometry types.
 }
 \description{
 Wraps \code{osmdata} functions.

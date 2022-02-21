@@ -1,33 +1,35 @@
-#' Convert simple feature object to data frame with coordinates or data frame to simple feature
+#' Convert simple feature object to data frame with coordinates or data frame to
+#' simple feature
 #'
 #' Helper function to convert a simple feature object to data frame by dropping
 #' geometry, converting geometry to well known text, or (if the geometry type is
 #' not POINT) getting coordinates for a centroid or point on surface. If an sfc
-#' object is provided, sf_to_sfc provides coordinates but the "drop" geometry
-#' option is not supported.
+#' object is provided, [sf_to_sfc()] provides coordinates but the "drop"
+#' geometry option is not supported.
 #'
-#' @param x sf or sfc object or a data frame with lat/lon coordinates in a
+#' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
 #'   single column or two separated columns
-#' @param crs coordinate reference system, Default: 4326
-#' @param geometry type of geometry to include in data frame. options include
+#' @param crs cCordinate reference system, Default: 4326
+#' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'
-#' @param coords coordinate columns for input dataframe or output sf object (if
+#' @param coords Coordinate columns for input dataframe or output sf object (if
 #'   geometry is 'centroid' or 'point') Default: c("lon", "lat")
-#' @param keep_all If FALSE, drop all columns other than those named in coords,
-#'   Default: TRUE
+#' @param keep_all If `FALSE`, drop all columns other than those named in
+#'   coords, Default: `TRUE`
 #' @param into If coords is a single column name with both longitude and
 #'   latitude, `into` is used as the names of the new columns that coords is
 #'   separated into. Passed to \code{\link[tidyr]{separate}}
 #' @param sep If coords is a single column name with both longitude and
 #'   latitude, `sep` is used as the separator between coordinate values. Passed
 #'   to \code{\link[tidyr]{separate}}
-#' @return sf_to_df returns a data frame with geometry dropped or converted to wkt or coordinates
-#'   for the centroid or point on surface; df_to_sf returns a simple feature object with POINT geometry
-#' @seealso
-#'  \code{\link[sf]{st_coordinates}}
+#' @return `sf_to_df()` returns a data frame with geometry dropped or converted
+#'   to wkt or coordinates for the centroid or point on surface; `df_to_sf()`
+#'   returns a simple feature object with POINT geometry
+#' @seealso \code{\link[sf]{st_coordinates}}
 #' @rdname sf_to_df
 #' @export
-#' @importFrom sf st_crs st_transform st_as_text st_as_sfc st_geometry_type st_centroid st_point_on_surface st_coordinates st_drop_geometry
+#' @importFrom sf st_crs st_transform st_as_text st_as_sfc st_geometry_type
+#'   st_centroid st_point_on_surface st_coordinates st_drop_geometry
 #' @importFrom dplyr bind_cols select
 #' @importFrom tidyselect all_of
 sf_to_df <- function(x,
@@ -124,9 +126,18 @@ df_to_sf <- function(x,
                      into = NULL,
                      sep = ",") {
 
-  if ((length(coords) == 1) && !is.null(into) && (length(into) == 2)) {
+  if ((length(coords) == 1) && (length(into) == 2)) {
+    if (is.null(into)) {
+      into <- c("lon", "lat")
+    }
+
     x <-
-      tidyr::separate(x, col = tidyselect::all_of(coords), into = into, sep = sep)
+      tidyr::separate(
+        x,
+        col = tidyselect::all_of(coords),
+        into = into,
+        sep = sep
+        )
 
     x <-
       dplyr::mutate(
@@ -149,7 +160,7 @@ df_to_sf <- function(x,
   latitude <- coords[[2]]
 
   # Check that lat/lon are numeric
-  if (!is.numeric(x[[longitude]])) {
+  if (!is.numeric(x[[longitude]]) | !is.numeric(x[[latitude]])) {
     x[[longitude]] <- as.double(x[[longitude]])
     x[[latitude]] <- as.double(x[[latitude]])
   }
@@ -159,7 +170,7 @@ df_to_sf <- function(x,
   num_missing_coords <- sum(missing_coords)
 
   if (num_missing_coords > 0) {
-    usethis::ui_info("{num_missing_coords} rows removed for missing coordinates.")
+    usethis::ui_info("Removing {num_missing_coords} rows with missing coordinates.")
     # Exclude rows with missing coordinates
     x <- x[!missing_coords, ]
   }
@@ -179,4 +190,3 @@ df_to_sf <- function(x,
 
   return(x)
 }
-

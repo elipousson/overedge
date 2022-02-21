@@ -1,10 +1,12 @@
 #' Get bearing of a simple feature object with LINESTRING geometry
 #'
-#' @param x sf object
-#' @param dir logical; If FALSE, return the absolute (positive) bearing value.
-#'   If TRUE, return negative and positive bearing values. Default: FALSE.
-#' @param crs coordinate reference system passed to sf::st_coordinates() (must
-#'   be geographic not projected). Default: 4326
+#' @param x A `sf` object.
+#' @param dir Logical indicator whether to include direction in bearing; If
+#'   `FALSE`, return the absolute (positive) bearing value. If `TRUE`, return
+#'   negative and positive bearing values. Default: `FALSE`.
+#' @param crs Coordinate reference system passed to
+#'   \code{\link[sf]{st_coordinates()}} (must be geographic not projected).
+#'   Default: 4326.
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -14,7 +16,9 @@
 #'   nc_pts <- sf::st_centroid(nc)
 #'   nc_line <-
 #'     sf::st_as_sf(
-#'       sf::st_cast(sf::st_union(c(nc_pts[1, ]$geometry, nc_pts[30, ]$geometry)), "LINESTRING")
+#'       sf::st_cast(
+#'         sf::st_union(c(nc_pts[1, ]$geometry, nc_pts[30, ]$geometry)),
+#'         "LINESTRING")
 #'     )
 #'
 #'   ggplot() +
@@ -37,7 +41,7 @@ st_bearing <- function(x, dir = FALSE, crs = 4326) {
 
   x_bearing <-
     vapply(
-      c(1:length(start$lon)),
+      seq_len(length(start$lon)),
       function(x) {
         geosphere::bearing(p1 = start[x, ], p2 = end[x, ])
       }, 1.0

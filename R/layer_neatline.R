@@ -1,25 +1,29 @@
-#' Set map limits to sf or bbox object with optional adjustments and panel border
+#' Set map limits to sf or bbox object with optional adjustments and panel
+#' border
 #'
 #' Set limits for a map to the bounding box of an x using
-#' \code{\link[sf]{coord_sf}}. Optionally, adjust the x size by applying a
+#' \code{\link[ggplot2]{coord_sf}}. Optionally, adjust the x size by applying a
 #' buffer and/or adjust the aspect ratio of the limiting bounding box to match a
 #' set aspect ratio.
 #'
 #' @inheritParams st_bbox_adj
-#' @param unit buffer units; defaults to meter.
-#' @param data sf or bbox class object
+#' @param unit Buffer units; defaults to meter.
+#' @param data `sf` or `bbox` class object
 #' @param crs Coordinate reference system to use for
-#'   \code{\link[sf]{coord_sf}}.
-#' @param expand Default FALSE. If TRUE, use scale_y_continuous and
-#'   scale_x_continuous to expand map extent to provided parameters.
-#' @param size size of panel border, Default: 1
-#' @param color color of panel border, Default: 'black'
-#' @param linetype line type of panel border, Default: 'solid'
-#' @param hide_grid logical. If TRUE, hide major grid lines. Default: TRUE
-#' @param label_axes label_axes passed to \code{\link[sf]{coord_sf}}, Default:
-#'   '----' which hides axes labels.
-#' @param ... Additional parameters to pass to \code{\link[sf]{coord_sf}}.
-#' @return \code{ggplot2::coord_sf()} function with xlim and ylim parameters
+#'   \code{\link[ggplot2]{coord_sf}}.
+#' @param expand Default `FALSE.` If `TRUE`, the function adds
+#'   \code{\link[ggplot2]{scale_y_continuous}} and
+#'   \code{\link[ggplot2]{scale_x_continuous}} to expand the map extent to
+#'   provided parameters.
+#' @param size Size of panel border, Default: 1
+#' @param color Color of panel border, Default: 'black'
+#' @param linetype Line type of panel border, Default: 'solid'
+#' @param hide_grid If `TRUE`, hide major grid lines. Default: `TRUE`
+#' @param label_axes A description of which axes to label passed to
+#'   \code{\link[ggplot2]{coord_sf}}; defaults to '----' which hides axes
+#'   labels.
+#' @param ... Additional parameters to pass to \code{\link[ggplot2]{coord_sf}}.
+#' @return \code{\link[ggplot2]{coord_sf}} function with xlim and ylim parameters
 #' @examples
 #' \dontrun{
 #' if (interactive()) {

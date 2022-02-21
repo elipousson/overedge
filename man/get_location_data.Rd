@@ -41,7 +41,8 @@ instead of "kilometer") are also supported. Units are passed to
 "meter"}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3"). If numeric, get_asp returns the same value without modification.}
+character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
+without modification.}
 
 \item{data}{sf object including data in area. data may also be a url or file
 path. data can be the name of a data object or, if package and filetype are

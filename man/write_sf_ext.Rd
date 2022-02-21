@@ -6,32 +6,55 @@
 \usage{
 write_sf_ext(
   data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
   filename = NULL,
   filetype = "geojson",
-  data_dir = NULL,
-  save = FALSE,
-  load = TRUE,
-  cache = FALSE
+  path = NULL,
+  cache = FALSE,
+  overwrite = FALSE
 )
 }
 \arguments{
 \item{data}{sf object or a list of sf objects}
 
+\item{name}{Name to make file name converted to snake case with
+\code{\link[janitor]{make_clean_case}}, e.g. "Residential zoning map"
+becomes "residential_zoning_map"}
+
+\item{label}{Label to combine with name converted to snake case with
+\code{\link[janitor]{make_clean_case}}. The label is designed to identify
+the area or other shared characteristics across multiple data files, maps,
+or plots.}
+
+\item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
+date/time prefix; defaults to \code{NULL}.}
+
+\item{postfix}{File name postfix; defaults to \code{NULL}.}
+
 \item{filename}{file name}
 
 \item{filetype}{File type to write and cache, Default: 'geojson'}
 
-\item{data_dir}{Data directory to write files, Default: NULL}
-
-\item{save}{If TRUE, write the ; defaults to TRUE}
-
-\item{load}{If TRUE, load sf objects to global environment; defaults to FALSE}
+\item{path}{Path to file or data directory.}
 
 \item{cache}{If TRUE, write sf object(s) to file in cache directory; defaults to FALSE}
+
+\item{data_dir}{Data directory to write files, Default: NULL}
+
+\item{write}{If TRUE, write the object with write_sf or readr write_csv (after converting to df with sf_to_df); defaults to TRUE}
+
+\item{load}{If TRUE, load sf objects to global environment; defaults to FALSE}
 }
 \description{
-This function wraps \code{sf::write_sf()} and \code{list2env()} to facilitate both
-saving simple feature objects and named lists of simple feature objects.
+This function supports a range of options for both simple feature objects and named lists of simple feature objects.
+}
+\details{
+\itemize{
+\item If load is TRUE, named lists can be loaded
+}
 }
 \seealso{
 \code{\link[sf]{st_write}}

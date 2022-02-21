@@ -7,13 +7,15 @@
 st_bearing(x, dir = FALSE, crs = 4326)
 }
 \arguments{
-\item{x}{sf object}
+\item{x}{A \code{sf} object.}
 
-\item{dir}{logical; If FALSE, return the absolute (positive) bearing value.
-If TRUE, return negative and positive bearing values. Default: FALSE.}
+\item{dir}{Logical indicator whether to include direction in bearing; If
+\code{FALSE}, return the absolute (positive) bearing value. If \code{TRUE}, return
+negative and positive bearing values. Default: \code{FALSE}.}
 
-\item{crs}{coordinate reference system passed to sf::st_coordinates() (must
-be geographic not projected). Default: 4326}
+\item{crs}{Coordinate reference system passed to
+\code{\link[sf]{st_coordinates()}} (must be geographic not projected).
+Default: 4326.}
 }
 \description{
 Get bearing of a simple feature object with LINESTRING geometry
@@ -27,7 +29,9 @@ if (interactive()) {
   nc_pts <- sf::st_centroid(nc)
   nc_line <-
     sf::st_as_sf(
-      sf::st_cast(sf::st_union(c(nc_pts[1, ]$geometry, nc_pts[30, ]$geometry)), "LINESTRING")
+      sf::st_cast(
+        sf::st_union(c(nc_pts[1, ]$geometry, nc_pts[30, ]$geometry)),
+        "LINESTRING")
     )
 
   ggplot() +

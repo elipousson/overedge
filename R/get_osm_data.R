@@ -2,25 +2,30 @@
 #'
 #' Wraps \code{osmdata} functions.
 #'
-#' @param location sf, sfc, or bbox object
-#' @param key feature key for overpass API query.
-#' @param value value of feature key; can be negated with an initial exclamation
-#'   mark, `value = "!this"`, and can also be a vector, `value = c ("this",
-#'   "that")`. If `value = "all"` or if `key = "building"` the values passed to
-#'   osmdata are from `osmdata::available_tags(key)`.
-#' @param geometry geometry to output "polygons", "points", "lines",
-#'   "multilines", or "multipolygons"; if multiple geometry are needed set
-#'   osmdata to TRUE. Default NULL
-#' @param crs coordinate reference system for output data; if NULL, the data
-#'   remains in the OSM CRS 4326. Default: NULL.
-#' @param osmdata If TRUE return a osmdata class object that includes the
+#' @param location A `sf`, `sfc`, or `bbox` object.
+#' @param key Feature key for overpass API query.
+#' @param value Value of the feature key; can be negated with an initial
+#'   exclamation mark, `value = "!this"`, and can also be a vector, `value = c("this", "that")`.
+#'   If `value = "all"` or if `key = "building"` the values passed to the
+#'   osmdata package are from
+#'   \code{\link[osmdata]{available_tags()}}.
+#' @param geometry Geometry type to output ("polygons", "points", "lines",
+#'   "multilines", or "multipolygons"); if multiple geometry types are needed
+#'   set osmdata to `TRUE.` Default `NULL`.
+#' @param crs Coordinate reference system for output data; if NULL, the data
+#'   remains in the Open Street Map coordinate reference system 4326. Default:
+#'   `NULL`.
+#' @param osmdata If `TRUE` return a `osmdata` class object that includes the
 #'   overpass API call, metadata including timestamp and version numbers, and
-#'   all available geometry types; defaults to FALSE.
+#'   all available geometry types; defaults to `FALSE`.
 #' @inheritParams st_bbox_adj
+#' @return A simple feature object with features using selected geometry type or
+#'   an `osmdata` object with features from all geometry types.
 #' @export
-#' @importFrom sf st_as_sfc st_as_sf st_transform st_crop st_intersection
-#' @importFrom osmdata opq add_osm_feature osmdata_sf
+#' @importFrom osmdata available_tags opq osmdata_sf add_osm_feature unique_osmdata
 #' @importFrom purrr pluck
+#' @importFrom sf st_transform
+#' @importFrom usethis ui_info
 get_osm_data <- function(location = NULL,
                          key,
                          value = NULL,
@@ -73,8 +78,10 @@ get_osm_data <- function(location = NULL,
     )
 
   if (!osmdata) {
-    data <- purrr::pluck(data,
-                         var = paste0("osm_", osm_geometry))
+    data <-
+      purrr::pluck(
+        data,
+        var = paste0("osm_", osm_geometry))
 
     if (!is.null(crs)) {
       data <- sf::st_transform(data, crs)
@@ -84,10 +91,10 @@ get_osm_data <- function(location = NULL,
     data
   }
 
-  if (getOption("osm_data_attribution", TRUE)) {
+  if (getOption("overedge.osm_attribution", TRUE)) {
     usethis::ui_info("Attribution is required when you use Open Street Map data.
                      See {usethis::ui_value('https://www.openstreetmap.org/copyright')} for more information on the Open Database Licence.")
-    options("osm_data_attribution" = FALSE)
+    options("overedge.osm_attribution" = FALSE)
   }
 
   return(data)

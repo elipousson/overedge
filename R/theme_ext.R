@@ -1,62 +1,47 @@
-#' @noRd
-#' @importFrom ggplot2 theme_set theme_update theme_replace
-theme_method <- function(x, method = NULL) {
-  method <- match.arg(method, c("set", "update", "replace"))
-
-  switch(method,
-    "set" = ggplot2::theme_set(
-      x
-    ),
-    "update" = ggplot2::theme_update(
-      x
-    ),
-    "replace" = ggplot2::theme_replace(
-      x
-    )
-  )
-}
-
 #' Modify the text, margins, or legend for a ggplot theme
 #'
-#' @param font_family Font family, Default: 'Helvetica' If NULL, font_family is
-#'   pulled from current set theme which is helpful for resetting all text
+#' Helper functions for modifying a ggplot theme.
+#'
+#' @param font_family Font family, Default: 'Helvetica' If `NULL`, font_family
+#'   is pulled from current set theme which is helpful for resetting all text
 #'   families to the theme.
-#' @param geom_text If TRUE, update text family for \code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_sf_text}},
-#'   \code{\link[ggplot2]{geom_label}}, and \code{\link[ggplot2]{geom_sf_label}} to match `font_family` and color. If FALSE,
-#'   make no changes to the theme. Default: TRUE
-#' @param fill fill for plot.background passed to \code{\link[ggplot2]{element_rect}}
-#'   Default: NA
-#' @param color color for text elements (passed to \code{\link[ggplot2]{element_text}} by
-#'   theme_text), plot.background (passed to \code{\link[ggplot2]{element_rect}} by
-#'   theme_margin). Default: NA
-#' @param position position type or a a two-element numeric vector
-#' @param margin margin distance, a margin style supported by get_margins or a
-#'   margin object, Default: 10
-#' @param unit margin units, Default: 'pt'
-#' @param inset If TRUE and position is "topleft", "bottomleft", "topright", or
-#'   "bottomright", place the legend in an inset position. Default: TRUE
-#' @param bgcolor fill color for legend background, Default: 'white'
-#' @param justification If NULL, justification is set to "center", Default: NULL
-#' @param method ggplot2 function to use in changing text "set", "update", or
-#'   "replace", Default: 'set'
+#' @param geom_text If `TRUE`, update text family for
+#'   \code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_sf_text}},
+#'   \code{\link[ggplot2]{geom_label}}, and \code{\link[ggplot2]{geom_sf_label}}
+#'   to match `font_family` and color. If `FALSE`, make no changes to the theme.
+#'   Default: `TRUE`.
+#' @param fill Fill for `plot.background` theme element passed to
+#'   \code{\link[ggplot2]{element_rect}} Default: `NA`.
+#' @param color Color for text elements (passed to
+#'   \code{\link[ggplot2]{element_text}} by theme_text), `plot.background`
+#'   (passed to \code{\link[ggplot2]{element_rect}} by theme_margin). Default:
+#'   `NA`.
+#' @param position Legend position (“left”,“top”, “right”, “bottom”) or a
+#'   two-element numeric vector to set position using Normalized Parent
+#'   Coordinates ("npc").
+#' @param margin Margin distance, a margin style supported by [get_margins()] or
+#'   a margin object; defaults to 10.
+#' @param unit Legend margin units; defaults to 'pt'.
+#' @param inset If `TRUE` and position is "topleft", "bottomleft", "topright",
+#'   or "bottomright", place the legend in an inset position; defaults to
+#'   `TRUE`.
+#' @param bgcolor Fill color for legend background; defaults to 'white'.
+#' @param justification If `NULL`, justification is set to "center"; defaults to
+#'   `NULL`.
+#' @param method Method with name of the ggplot2 geom function to use for
+#'   modifying theme ("set", "update", or "replace"); defaults to `NULL`.
 #' @inheritParams get_paper
 #' @inheritParams get_margin
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   theme_margin(paper = "letter")
-#'
-#'   theme_margin(margin = "narrow", paper = "letter")
-#' }
-#' }
-#' @seealso
-#'  \code{\link[ggplot2]{theme}},\code{\link[ggplot2]{margin}},\code{\link[ggplot2]{theme_get}},\code{\link[ggplot2]{update_geom_defaults}
-#' @name theme_ext
-NULL
-
 #' @rdname theme_ext
-#' @name theme_text
+#' @seealso
+#'  - \code{\link[ggplot2]{theme}}
+#'  - \code{\link[ggplot2]{margin}}
+#'  - \code{\link[ggplot2]{theme_get}}
+#'  - \code{\link[ggplot2]{update_geom_defaults}
 #' @export
+#'
+#' @md
+#'
 #' @importFrom ggplot2 theme element_text theme_set theme_update theme_replace
 #'   update_geom_defaults
 theme_text <- function(font_family = NULL,
@@ -79,7 +64,6 @@ theme_text <- function(font_family = NULL,
       legend.title = ggplot2::element_text(family = font_family, color = color)
     )
 
-
   if (!is.null(method)) {
     theme_method(text_theme, method = method)
 
@@ -99,7 +83,7 @@ theme_text <- function(font_family = NULL,
 }
 
 #' @rdname theme_ext
-#' @name theme_margin
+#' @aliases theme_margin
 #' @export
 #' @importFrom ggplot2 theme element_rect
 #' @importFrom grid unit
@@ -142,7 +126,7 @@ theme_margin <- function(margin = "standard",
 }
 
 #' @rdname theme_ext
-#' @name theme_legend
+#' @aliases theme_legend
 #' @export
 #' @importFrom ggplot2 element_blank element_rect theme
 #' @importFrom grid unit
@@ -178,7 +162,6 @@ theme_legend <- function(position,
     ))
   }
 
-
   if (inset) {
     if (grepl("top", position)) {
       y_position <- 0.95
@@ -191,7 +174,6 @@ theme_legend <- function(position,
     if (grepl("left", position)) {
       x_position <- 0.05
       x_justification <- "left"
-      box_just <- "left"
     } else if (grepl("right", position)) {
       x_position <- 0.95
       x_justification <- "right"
@@ -209,7 +191,6 @@ theme_legend <- function(position,
     legend.margin = margin,
     legend.background = bg
   )
-
 
   if (!is.null(method)) {
     theme_method(legend_theme, method = method)

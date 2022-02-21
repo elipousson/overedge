@@ -15,29 +15,28 @@ get_asp(
 }
 \arguments{
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3"). If numeric, get_asp returns the same value without modification.}
+character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
+without modification.}
 
 \item{paper}{Paper, Default: 'letter'}
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
 'portrait'}
 
-\item{margin}{margin style (options include "extrawide", "wide", "standard",
+\item{margin}{Margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on
-line length is planned but not yet implemented. Default: NULL (equivalent to "none")}
+line length is planned but not yet implemented. Default: \code{NULL} (equivalent to "none").}
 
-\item{unit}{unit for margin distance, Default: 'in'}
+\item{unit}{Unit for margin distance, Default: 'in'.}
 
-\item{block_asp}{If TRUE, get aspect ratio of the map/plot area (not including the margins); defaults to FALSE.}
+\item{block_asp}{If \code{TRUE}, get aspect ratio of the map/plot area (not
+including the margins); defaults to \code{FALSE}.}
 }
 \value{
-OUTPUT_DESCRIPTION
+A numeric aspect ratio.
 }
 \description{
 Get aspect ratio from string or based on specific paper and margins
-}
-\details{
-DETAILS
 }
 \examples{
 \dontrun{

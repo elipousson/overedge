@@ -5,52 +5,61 @@
 \title{Save a ggplot and update file EXIF metadata}
 \usage{
 ggsave_ext(
+  plot = last_plot(),
   name = NULL,
   label = NULL,
-  plot = last_plot(),
+  prefix = NULL,
+  postfix = NULL,
   filename = NULL,
-  path = NULL,
   device = "png",
+  filetype = NULL,
+  path = NULL,
   paper = NULL,
   orientation = "portrait",
-  scale = 1,
   width,
   height,
   units = "in",
+  scale = 1,
   dpi = 300,
-  bg = NULL,
+  bgcolor = NULL,
   exif = FALSE,
   title = NULL,
-  author,
+  author = NULL,
   args = NULL,
-  prefix = "date",
   ...
 )
 }
 \arguments{
-\item{name}{name of plot, used to create filename (if filename is not
-provided)}
-
-\item{label}{label is appended to filename as a prefix; defaults to NULL}
-
 \item{plot}{Plot to save, defaults to last plot displayed.}
 
-\item{filename}{File name to create on disk.}
+\item{name}{Plot name, used to create filename (if filename is \code{NULL}) using
+\code{\link[=make_filename]{make_filename()}}}
 
-\item{path}{Path of the directory to save plot to: \code{path} and \code{filename}
-are combined to create the fully qualified file name. Defaults to the
-working directory.}
+\item{label}{Label to combine with name converted to snake case with
+\code{\link[janitor]{make_clean_case}}. The label is designed to identify
+the area or other shared characteristics across multiple data files, maps,
+or plots.}
+
+\item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
+date/time prefix; defaults to \code{NULL}.}
+
+\item{postfix}{File name postfix; defaults to \code{NULL}.}
+
+\item{filename}{File name; if file name is \code{NULL}, name and file type are both
+required.}
 
 \item{device}{Device to use. Can either be a device function
 (e.g. \link{png}), or one of "eps", "ps", "tex" (pictex),
 "pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).}
 
-\item{paper}{paper matching name from \code{paper_sizes} (e.g. "letter"). Not case
-sensitive}
+\item{filetype}{File type or extension.}
 
-\item{orientation}{"portrait", "landscape", or "square"}
+\item{path}{Path to file or data directory.}
 
-\item{scale}{Multiplicative scaling factor.}
+\item{paper}{Paper matching name from \code{paper_sizes} (e.g. "letter"). Not case
+sensitive.}
+
+\item{orientation}{Page orientation ("portrait", "landscape", or "square").}
 
 \item{width}{Plot size in \code{units} ("in", "cm", "mm", or "px").
 If not supplied, uses the size of current graphics device.}
@@ -61,30 +70,29 @@ If not supplied, uses the size of current graphics device.}
 \item{units}{Plot size in \code{units} ("in", "cm", "mm", or "px").
 If not supplied, uses the size of current graphics device.}
 
+\item{scale}{Multiplicative scaling factor.}
+
 \item{dpi}{Plot resolution. Also accepts a string input: "retina" (320),
 "print" (300), or "screen" (72). Applies only to raster output types.}
 
-\item{bg}{Background colour. If \code{NULL}, uses the \code{plot.background} fill value
-from the plot theme.}
+\item{bgcolor}{Background color to optionally override \code{plot.background}
+theme element.}
 
-\item{exif}{If TRUE, edit exif metadata for exported file using the exifr
-package, Default: FALSE}
+\item{exif}{If \code{TRUE}, the EXIF metadata for the exported file is updated
+with the exifr package; defaults to \code{FALSE}.}
 
-\item{title}{title of plot or map, added to exif metadata, Default: NULL}
+\item{title}{Title of plot or map, added to EXIF metadata, Default: \code{NULL}.}
 
-\item{author}{author of plot or map, added to exif metadata,}
+\item{author}{Author of plot or map, added to EXIF metadata, Default: \code{NULL}.}
 
-\item{args}{args passed to exiftoolr, If args is not NULL, title and author
-are ignored, Default: NULL}
+\item{args}{Alternate arguments passed to \code{\link[exifr]{exiftool_call}}.
+If args is not \code{NULL}, title and author are ignored; defaults to \code{NULL}.}
 
-\item{prefix}{If "date", the date from \code{Sys.Date()} is appended to filename
-as a prefix (before label). If "time", \code{Sys.time()} is appended.}
-
-\item{...}{additional parameters passed to \code{\link[ggplot2]{ggsave}}}
+\item{...}{Additional parameters passed to \code{\link[ggplot2]{ggsave}}}
 }
 \description{
 Save a plot or map then update the EXIF metadata for the title, author, and
-create data. \code{ggsave_ext()} also supports creating a file name based on a
+create data. \code{\link[=ggsave_ext]{ggsave_ext()}} also supports creating a file name based on a
 sentence case name with spaces (e.g. "Baltimore city map") and appending a
 label (e.g. "baltcity") as a prefix to the output file name.
 }
@@ -111,5 +119,6 @@ if (interactive()) {
 }
 }
 \seealso{
+\code{\link[ggplot2]{ggsave}}
 \code{\link[exifr]{exiftool_call}}
 }

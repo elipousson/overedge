@@ -1,26 +1,27 @@
 #' Save a ggplot and update file EXIF metadata
 #'
 #' Save a plot or map then update the EXIF metadata for the title, author, and
-#' create data. `ggsave_ext()` also supports creating a file name based on a
+#' create data. [ggsave_ext()] also supports creating a file name based on a
 #' sentence case name with spaces (e.g. "Baltimore city map") and appending a
 #' label (e.g. "baltcity") as a prefix to the output file name.
 #'
-#' @param name name of plot, used to create filename (if filename is not
-#'   provided)
-#' @param label label is appended to filename as a prefix; defaults to NULL
-#' @param prefix If "date", the date from `Sys.Date()` is appended to filename
-#'   as a prefix (before label). If "time", `Sys.time()` is appended.
-#' @param paper paper matching name from `paper_sizes` (e.g. "letter"). Not case
-#'   sensitive
-#' @param orientation "portrait", "landscape", or "square"
-#' @param exif If TRUE, edit exif metadata for exported file using the exifr
-#'   package, Default: FALSE
-#' @param title title of plot or map, added to exif metadata, Default: NULL
-#' @param author author of plot or map, added to exif metadata,
-#' @param args args passed to exiftoolr, If args is not NULL, title and author
-#'   are ignored, Default: NULL
-#' @param ... additional parameters passed to \code{\link[ggplot2]{ggsave}}
+#' @param name Plot name, used to create filename (if filename is `NULL`) using
+#'   [make_filename()]
+#' @inheritParams make_filename
+#' @param title Title of plot or map, added to EXIF metadata, Default: `NULL`.
+#' @param author Author of plot or map, added to EXIF metadata, Default: `NULL`.
+#' @param paper Paper matching name from `paper_sizes` (e.g. "letter"). Not case
+#'   sensitive.
+#' @param orientation Page orientation ("portrait", "landscape", or "square").
+#' @param bgcolor Background color to optionally override `plot.background`
+#'   theme element.
+#' @param exif If `TRUE`, the EXIF metadata for the exported file is updated
+#'   with the exifr package; defaults to `FALSE`.
+#' @param args Alternate arguments passed to \code{\link[exifr]{exiftool_call}}.
+#'   If args is not `NULL`, title and author are ignored; defaults to `NULL`.
+#' @param ... Additional parameters passed to \code{\link[ggplot2]{ggsave}}
 #' @inheritParams ggplot2::ggsave
+#' @inheritParams make_filename
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -43,42 +44,35 @@
 #' }
 #' }
 #' @seealso
+#'  \code{\link[ggplot2]{ggsave}}
 #'  \code{\link[exifr]{exiftool_call}}
 #' @rdname ggsave_ext
 #' @export
-#' @importFrom checkmate check_character
-#' @importFrom glue glue
 #' @importFrom ggplot2 ggsave
-#' @importFrom usethis ui_stop
-#' @importFrom janitor make_clean_names
+#' @importFrom glue glue
 #' @importFrom exifr exiftool_call
-ggsave_ext <- function(name = NULL,
+ggsave_ext <- function(plot = last_plot(),
+                       name = NULL,
                        label = NULL,
-                       plot = last_plot(),
+                       prefix = NULL,
+                       postfix = NULL,
                        filename = NULL,
-                       path = NULL,
                        device = "png",
+                       filetype = NULL,
+                       path = NULL,
                        paper = NULL,
                        orientation = "portrait",
-                       scale = 1,
                        width,
                        height,
                        units = "in",
+                       scale = 1,
                        dpi = 300,
-                       bg = NULL,
+                       bgcolor = NULL,
                        exif = FALSE,
                        title = NULL,
-                       author,
+                       author = NULL,
                        args = NULL,
-                       prefix = "date",
                        ...) {
-  if (!any(sapply(c(name, device), is.null))) {
-    checkmate::check_character(name)
-    filename <- glue::glue("{janitor::make_clean_names(name)}.{device}")
-  } else if (is.null(filename)) {
-    usethis::ui_stop("If filename is NULL, both a name and device must be provided.")
-  }
-
   if (!is.null(paper)) {
     paper <- get_paper(paper = paper, orientation = orientation)
     width <- paper$width
@@ -86,24 +80,24 @@ ggsave_ext <- function(name = NULL,
     units <- paper$units
   }
 
-  if (prefix == "date") {
-    prefix <- gsub("^x", "", janitor::make_clean_names(Sys.Date(), sep_out = "-"))
-  } else if (prefix == "time") {
-    prefix <- gsub("^x", "", janitor::make_clean_names(Sys.time(), sep_out = "-"))
-  } else {
-    prefix <- NULL
+  stopifnot(
+    is.numeric(width) && is.numeric(height)
+  )
+
+  if (is.null(filetype)) {
+    filetype <- device
   }
 
-  if (!is.null(label)) {
-    label <- janitor::make_clean_names(label)
-  }
-
-  filename <- paste0(c(prefix, label, filename), collapse = "_")
-
-  if (!is.null(path)) {
-    checkmate::check_directory_exists(path)
-    filename <- file.path(path, filename)
-  }
+  filename <-
+    make_filename(
+      name = name,
+      label = label,
+      filename = filename,
+      filetype = filetype,
+      path = path,
+      prefix = prefix,
+      postfix = postfix
+    )
 
   ggplot2::ggsave(
     filename = filename,
@@ -114,25 +108,36 @@ ggsave_ext <- function(name = NULL,
     height = height,
     units = units,
     dpi = dpi,
-    bg = bg,
+    bg = bgcolor,
     ...
   )
 
   if (exif) {
     check_package_exists("exifr")
 
-    if (!is.null(title) & is.null(args)) {
+    if (is.null(args)) {
       title <- glue::glue(title)
+
+      if (device == "png") {
+        create_date <-
+          paste0("-CreationTime=now ")
+      } else {
+        create_date <-
+          paste0(
+            "-CreateDate=now ",
+            "-ModifyDate=now "
+          )
+      }
 
       exifr::exiftool_call(
         args = glue::glue(
           "-Author='{author}' ",
           "-Title='{title}' ",
-          # FIXME: CreateDate works for PDFs but not PNGs
-          "-CreateDate='", format(Sys.time(), "%Y:%m:%d %H:%M:%S"), "' ",
+          "{create_date}",
           "-overwrite_original"
         ),
-        fnames = filename
+        fnames = filename,
+        quiet = TRUE
       )
     } else if (!is.null(args)) {
       exifr::exiftool_call(
@@ -146,7 +151,7 @@ ggsave_ext <- function(name = NULL,
 
 #' Get paper sizes
 #'
-#' Use the "paper" parameter (matching name from `paper_sizes`), standard
+#' Use the "paper" parameter (matching name from [paper_sizes]), standard
 #' (optionally including both series and size) parameter, or width, height and
 #' units. May return multiple paper sizes.
 #'
@@ -154,15 +159,15 @@ ggsave_ext <- function(name = NULL,
 #' @param orientation Orientation "portrait", "landscape", or "square", Default:
 #'   'portrait'
 #' @param standard Size standard, "ANSI" or "ISO"
-#' @param series size series (e.g. A), Default: NULL
-#' @param size size number (only used for "ISO" and "JIS" series). Standard,
+#' @param series Size series (e.g. A), Default: `NULL`
+#' @param size Size number (only used for "ISO" and "JIS" series). Standard,
 #'   series, and size may all be required to return a single paper using these
 #'   parameters.
-#' @param width width in units, Default: NULL
-#' @param height height in units, Default: NULL
-#' @param units "in" or "mm"; Default: NULL (defaults to "in" if width or height
-#'   are provided.)
-#' @return Data frame with paper sizes
+#' @param width Width in units, Default: `NULL`
+#' @param height Height in units, Default: `NULL`
+#' @param units Paper size units, either "in" or "mm"; defaults to `NULL` (using
+#'   "in" if width or height are provided).
+#' @return Data frame with one or more paper sizes.
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -176,7 +181,6 @@ ggsave_ext <- function(name = NULL,
 #' @rdname get_paper
 #' @export
 #' @importFrom dplyr filter rename
-#' @importFrom checkmate check_number
 get_paper <- function(paper = "letter",
                       orientation = "portrait",
                       standard = NULL,
@@ -248,7 +252,11 @@ get_paper <- function(paper = "letter",
         asp = asp_landscape
       )
   } else if (orientation == "square") {
-    checkmate::check_number(paper$asp_portrait, lower = 1, upper = 1)
+    paper <-
+      dplyr::rename(
+        paper,
+        asp = asp_portrait
+      )
   }
 
   return(paper)
@@ -256,34 +264,35 @@ get_paper <- function(paper = "letter",
 
 #' Get margins for a ggplot2 plot or map based on style or distance
 #'
-#' This function works in combination with the `get_paper()` function to make it
+#' This function works in combination with the [get_paper()] function to make it
 #' easier to position a map on a page before saving to file. This is primarily
-#' useful when adapting a gglpot2 map or plot to a print document format that is
-#' composed outside of R using a page layout application such as Adobe InDesign.
+#' useful when using a map or plot created with ggplot2 as part of a print
+#' document format that is composed outside of R using a page layout application
+#' such as Adobe InDesign.
 #'
-#' @param margin margin style (options include "extrawide", "wide", "standard",
+#' @param margin Margin style (options include "extrawide", "wide", "standard",
 #'   "narrow", "none"), Additional "auto" option to generate margin based on
-#'   line length is planned but not yet implemented. Default: NULL (equivalent to "none")
-#' @param dist margin distance (single value used to all sides), Default: NULL
-#' @param unit unit for margin distance, Default: 'in'
-#' @param plot_width plot or map width in units. If `paper` and `plot_width` are
+#'   line length is planned but not yet implemented. Default: `NULL` (equivalent to "none").
+#' @param dist Margin distance (single value used to all sides), Default: `NULL`
+#' @param unit Unit for margin distance, Default: 'in'.
+#' @param plot_width Plot or map width in units. If `paper` and `plot_width` are
 #'   provided, margins are half the distance between the two evenly distributed.
 #'   This is not tested and may not work with all page sizes/orientations.
-#' @param header header height; defaults to 0
-#' @param footer footer height; defaults to 0
+#' @param header Header height in units; defaults to 0.
+#' @param footer Footer height in units; defaults to 0.
 #' @inheritParams get_paper
-#' @return A ggplot2::margin() element intended for use with
-#'   ggplot2::element_rect() and the plot.background theme element.
+#' @return A \code{\link[ggplot2]{margin}} element intended for use with
+#'   \code{\link[ggplot2]{element_rect}} and the `plot.background` theme element.
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
-#'   get_margins("standard")
+#'   get_margin("standard")
 #'
-#'   get_margins("none")
+#'   get_margin("none")
 #'
-#'   get_margins(dist = 25, unit = "mm")
+#'   get_margin(dist = 25, unit = "mm")
 #'
-#'   get_margins(paper = "letter", plot_width = 5.5)
+#'   get_margin(paper = "letter", plot_width = 5.5)
 #' }
 #' }
 #' @seealso
@@ -291,6 +300,7 @@ get_paper <- function(paper = "letter",
 #' @rdname get_margin
 #' @export
 #' @importFrom ggplot2 margin
+#' @importFrom grid unit
 get_margin <- function(margin = NULL,
                        paper = NULL,
                        orientation = NULL,
@@ -299,7 +309,6 @@ get_margin <- function(margin = NULL,
                        plot_width = NULL,
                        header = 0,
                        footer = 0) {
-
   margin <- match.arg(margin, c("none", "narrow", "standard", "extrawide", "wide"))
   unit <- match.arg(unit, c("in", "mm", "cm", "npc", "picas", "pc", "pt", "lines", "char", "native"))
 

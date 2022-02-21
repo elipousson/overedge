@@ -1,28 +1,34 @@
 #' Get location of specified type
 #'
 #' Filter by name or id or use a spatial filter based on an sf object or
-#' geocoded street address. Optionally you can use an index function to match
-#' the type to a predefined group of data sets.
+#' geocoded street address. Optionally you can use an index list to match the
+#' type to a named list of URLs or sf objects.
 #'
-#' @param type sf object with type of location to return, e.g. list of
-#'   neighborhoods. Type is a set of features to select from or a character
-#'   string references a set of features and can be passed to
-#'   \code{get_location_data}.
-#' @param name location name to return
-#' @param id location id to return. id is coerced to character or numeric to
+#' @param type Type of location to return. Type can be an sf object, e.g. a data
+#'   frame with multiple neighborhoods or a character string that can be passed
+#'   to \code{get_location_data}. If index is provided, character can also be a
+#'   character string to match the name of a list.
+#' @param name Location name to return.
+#' @param id Location id to return. id is coerced to character or numeric to
 #'   match the class of the id_col for type.
 #' @param location address or sf object passed to \code{\link[sf]{st_filter}}.
-#'   If location is an address, the string is geocoded using
-#'   \code{\link[tidygeocoder]{geo}}) and then also used as a spatial filter.
-#' @param label optional label added to "label" column; must be a length 1 or match the rows in the output location. If `union = TRUE`,
-#'   using label is recommended. Default: NULL
-#' @param name_col Column name in type with name values, Default: 'name' Required if name provided.
-#' @param id_col Column name in type with id values, Default: 'id'. Required if id is provided.
-#' @param index Optional list used to match type to data, Default: NULL
-#' @param union If TRUE and location, union location geometry with
-#'   \code{\link[sf]{st_union}} and combine names Default: FALSE
-#' @param ... Additional parameters passed to \code{get_location_data} if type is character and index is NULL
-#' @return A sf object (subset from type data)
+#'   Any valid address or addresses are geocoded with
+#'   \code{\link[tidygeocoder]{geo}}), converted to a simple feature object, and
+#'   then used as a spatial filter.
+#' @param label Label optionally added to "label" column; must be a length 1 or
+#'   match the number of rows returned based on the other parameters. If `union = TRUE`,
+#'   using label is recommended. Default: `NULL`
+#' @param name_col Column name in type with name values, Default: 'name'
+#'   Required if name provided.
+#' @param id_col Column name in type with id values, Default: 'id'. Required if
+#'   id is provided.
+#' @param index Optional list used to match type to data, Default: `NULL`
+#' @param union If `TRUE`, the location geometry is unioned with
+#'   \code{\link[sf]{st_union}} and the names are combined into a single value.
+#'   Default: `FALSE`.
+#' @param ... Additional parameters passed to \code{get_location_data} if type
+#'   is character and index is `NULL`.
+#' @return A simple feature object from data provided to type.
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -62,12 +68,10 @@
 #' }
 #' @rdname get_location
 #' @export
-#' @importFrom usethis ui_warn
-#' @importFrom checkmate check_class
 #' @importFrom sf st_crs st_filter st_as_sf st_union
 #' @importFrom tidygeocoder geo
 #' @importFrom knitr combine_words
-#' @importFrom tibble tibble
+#' @importFrom usethis ui_warn
 get_location <- function(type,
                          name = NULL,
                          id = NULL,
@@ -78,22 +82,22 @@ get_location <- function(type,
                          index = NULL,
                          union = FALSE,
                          ...) {
-  if (is.character(type)) {
-    if (is.list(index)) {
-      # Return data from index list if provided
-      type <- index[[type]]
-    } else if (!is.null(index)) {
-      usethis::ui_warn("index must be a list or NULL. The index provided cannot be used.")
-    }
+  stopifnot(
+    check_sf(type) || is.character(type),
+    vapply(c(name, id), is.null, TRUE) || vapply(c(name, name_col, id, id_col), is.character, TRUE) || vapply(c(id, name_col, id_col), is.numeric, TRUE),
+    is.character(location) || is.null(location) || check_sf(location),
+    is.character(label) || is.null(label),
+    is.list(index) || is.null(index),
+    is.logical(union)
+  )
 
+  if (is.character(type) && is.list(index)) {
+    # Return data from index list if provided
+    type <- index[[type]]
+  } else if (is.character(type)) {
     # If type is a string
-    if (!("sf" %in% class(type))) {
-      # Return data if type is a file path, url, or package data
-      type <- get_location_data(data = type, ...)
-    }
-  } else {
-    # If type is not a string it must be an sf object
-    checkmate::check_class(type, "sf")
+    # Return data if type is a file path, url, or package data
+    type <- get_location_data(data = type, ...)
   }
 
   type_crs <- sf::st_crs(type)
@@ -115,30 +119,31 @@ get_location <- function(type,
     # Check if location if it is a character (assume it is an address)
     if (is.character(location)) {
       # Geocode the address
-      # TODO: Figure out how to support multiple addresses
       location <- tidygeocoder::geo(
         address = location,
-        lat = "lat",
         long = "lon",
-        mode = "single"
+        lat = "lat"
       )
       # Convert single address df to sf
       location <- df_to_sf(location, coords = c("lon", "lat"), crs = type_crs)
     }
 
     # Filter sf
-    if (checkmate::test_class(location, "sf")) {
-        location <- sf::st_filter(type, location)
+    if (check_sf(location)) {
+      location <- sf::st_filter(type, location)
     }
   }
 
   if (union && (nrow(location) > 1)) {
-    location <- sf::st_as_sf(
-      tibble::tibble(
-        "name" = as.character(knitr::combine_words(words = location[[name_col]])),
-        "geometry" = sf::st_union(location)
+    location <-
+      sf::st_as_sf(
+        data.frame(
+          "name" = as.character(
+            knitr::combine_words(words = location[[name_col]])
+          ),
+          "geometry" = sf::st_union(location)
+        )
       )
-    )
   }
 
   if (!is.null(label)) {
@@ -148,7 +153,7 @@ get_location <- function(type,
   if (!is.null(location)) {
     return(location)
   } else {
-    usethis::ui_warn("No location is provided. Returning all types.")
+    usethis::ui_warn("Returning all locations of this type.")
     return(type)
   }
 }

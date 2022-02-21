@@ -16,9 +16,8 @@ geom_sf_icon(
 )
 }
 \arguments{
-\item{data}{sf object. If the geometry type for data is POINT, the object is
-used as is. If not, the object is converted to POINT using
-\code{\link[sf]{st_centroid()}}.}
+\item{data}{A \code{sf} object. Any objects with polygon geometry are converted to
+points using \code{\link[sf]{st_centroid()}}.}
 
 \item{iconname_col}{The column name in the input data to use as the icon
 name. If the name matches multiple icons, the first match from \code{map_icons}
@@ -39,9 +38,9 @@ Optional but may be required to differentiate icons with duplicate names.}
 parameter for \code{ggsvg::geom_point_svg()}.  If \code{icon} is provided, \code{svg} is
 not used.}
 
-\item{color}{SVG color passed to ggsvg::geom_point_svg(). default color is set to "black".}
+\item{color}{SVG color passed to \code{ggsvg::geom_point_svg()}. default color is set to "black".}
 
-\item{...}{Additional parameters to ggsvg::geom_point_svg()}
+\item{...}{Additional parameters to \code{ggsvg::geom_point_svg()}.}
 }
 \description{
 Use the \code{\link[ggsvg]{geom_point_svg()}} function to plot

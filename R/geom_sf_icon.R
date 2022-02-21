@@ -3,9 +3,9 @@
 #' Use the \code{\link[ggsvg]{geom_point_svg()}} function to plot
 #'   icons using the centroids from the input simple feature object to set the
 #'   icon location.
-#' @param data sf object. If the geometry type for data is POINT, the object is
-#'   used as is. If not, the object is converted to POINT using
-#'   \code{\link[sf]{st_centroid()}}.
+#'
+#' @param data A `sf` object. Any objects with polygon geometry are converted to
+#'   points using \code{\link[sf]{st_centroid()}}.
 #' @param iconname_col The column name in the input data to use as the icon
 #'   name. If the name matches multiple icons, the first match from `map_icons`
 #'   is used. You may provide a px or source value to select a different match
@@ -20,8 +20,8 @@
 #' @param svg Optional. Custom file path or URL with SVG to pass to `svg`
 #'   parameter for `ggsvg::geom_point_svg()`.  If `icon` is provided, `svg` is
 #'   not used.
-#' @param color SVG color passed to ggsvg::geom_point_svg(). default color is set to "black".
-#' @param ... Additional parameters to ggsvg::geom_point_svg()
+#' @param color SVG color passed to `ggsvg::geom_point_svg()`. default color is set to "black".
+#' @param ... Additional parameters to `ggsvg::geom_point_svg()`.
 #' @examples
 #' \dontrun{
 #' if (interactive()) {

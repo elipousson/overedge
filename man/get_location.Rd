@@ -18,41 +18,47 @@ get_location(
 )
 }
 \arguments{
-\item{type}{sf object with type of location to return, e.g. list of
-neighborhoods. Type is a set of features to select from or a character
-string references a set of features and can be passed to
-\code{get_location_data}.}
+\item{type}{Type of location to return. Type can be an sf object, e.g. a data
+frame with multiple neighborhoods or a character string that can be passed
+to \code{get_location_data}. If index is provided, character can also be a
+character string to match the name of a list.}
 
-\item{name}{location name to return}
+\item{name}{Location name to return.}
 
-\item{id}{location id to return. id is coerced to character or numeric to
+\item{id}{Location id to return. id is coerced to character or numeric to
 match the class of the id_col for type.}
 
 \item{location}{address or sf object passed to \code{\link[sf]{st_filter}}.
-If location is an address, the string is geocoded using
-\code{\link[tidygeocoder]{geo}}) and then also used as a spatial filter.}
+Any valid address or addresses are geocoded with
+\code{\link[tidygeocoder]{geo}}), converted to a simple feature object, and
+then used as a spatial filter.}
 
-\item{label}{optional label added to "label" column; must be a length 1 or match the rows in the output location. If \code{union = TRUE},
-using label is recommended. Default: NULL}
+\item{label}{Label optionally added to "label" column; must be a length 1 or
+match the number of rows returned based on the other parameters. If \code{union = TRUE},
+using label is recommended. Default: \code{NULL}}
 
-\item{name_col}{Column name in type with name values, Default: 'name' Required if name provided.}
+\item{name_col}{Column name in type with name values, Default: 'name'
+Required if name provided.}
 
-\item{id_col}{Column name in type with id values, Default: 'id'. Required if id is provided.}
+\item{id_col}{Column name in type with id values, Default: 'id'. Required if
+id is provided.}
 
-\item{index}{Optional list used to match type to data, Default: NULL}
+\item{index}{Optional list used to match type to data, Default: \code{NULL}}
 
-\item{union}{If TRUE and location, union location geometry with
-\code{\link[sf]{st_union}} and combine names Default: FALSE}
+\item{union}{If \code{TRUE}, the location geometry is unioned with
+\code{\link[sf]{st_union}} and the names are combined into a single value.
+Default: \code{FALSE}.}
 
-\item{...}{Additional parameters passed to \code{get_location_data} if type is character and index is NULL}
+\item{...}{Additional parameters passed to \code{get_location_data} if type
+is character and index is \code{NULL}.}
 }
 \value{
-A sf object (subset from type data)
+A simple feature object from data provided to type.
 }
 \description{
 Filter by name or id or use a spatial filter based on an sf object or
-geocoded street address. Optionally you can use an index function to match
-the type to a predefined group of data sets.
+geocoded street address. Optionally you can use an index list to match the
+type to a named list of URLs or sf objects.
 }
 \examples{
 \dontrun{

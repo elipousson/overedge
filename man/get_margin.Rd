@@ -16,47 +16,48 @@ get_margin(
 )
 }
 \arguments{
-\item{margin}{margin style (options include "extrawide", "wide", "standard",
+\item{margin}{Margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on
-line length is planned but not yet implemented. Default: NULL (equivalent to "none")}
+line length is planned but not yet implemented. Default: \code{NULL} (equivalent to "none").}
 
 \item{paper}{Paper, Default: 'letter'}
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
 'portrait'}
 
-\item{dist}{margin distance (single value used to all sides), Default: NULL}
+\item{dist}{Margin distance (single value used to all sides), Default: \code{NULL}}
 
-\item{unit}{unit for margin distance, Default: 'in'}
+\item{unit}{Unit for margin distance, Default: 'in'.}
 
-\item{plot_width}{plot or map width in units. If \code{paper} and \code{plot_width} are
+\item{plot_width}{Plot or map width in units. If \code{paper} and \code{plot_width} are
 provided, margins are half the distance between the two evenly distributed.
 This is not tested and may not work with all page sizes/orientations.}
 
-\item{header}{header height; defaults to 0}
+\item{header}{Header height in units; defaults to 0.}
 
-\item{footer}{footer height; defaults to 0}
+\item{footer}{Footer height in units; defaults to 0.}
 }
 \value{
-A ggplot2::margin() element intended for use with
-ggplot2::element_rect() and the plot.background theme element.
+A \code{\link[ggplot2]{margin}} element intended for use with
+\code{\link[ggplot2]{element_rect}} and the \code{plot.background} theme element.
 }
 \description{
-This function works in combination with the \code{get_paper()} function to make it
+This function works in combination with the \code{\link[=get_paper]{get_paper()}} function to make it
 easier to position a map on a page before saving to file. This is primarily
-useful when adapting a gglpot2 map or plot to a print document format that is
-composed outside of R using a page layout application such as Adobe InDesign.
+useful when using a map or plot created with ggplot2 as part of a print
+document format that is composed outside of R using a page layout application
+such as Adobe InDesign.
 }
 \examples{
 \dontrun{
 if (interactive()) {
-  get_margins("standard")
+  get_margin("standard")
 
-  get_margins("none")
+  get_margin("none")
 
-  get_margins(dist = 25, unit = "mm")
+  get_margin(dist = 25, unit = "mm")
 
-  get_margins(paper = "letter", plot_width = 5.5)
+  get_margin(paper = "letter", plot_width = 5.5)
 }
 }
 }

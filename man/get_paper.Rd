@@ -23,24 +23,24 @@ get_paper(
 
 \item{standard}{Size standard, "ANSI" or "ISO"}
 
-\item{series}{size series (e.g. A), Default: NULL}
+\item{series}{Size series (e.g. A), Default: \code{NULL}}
 
-\item{size}{size number (only used for "ISO" and "JIS" series). Standard,
+\item{size}{Size number (only used for "ISO" and "JIS" series). Standard,
 series, and size may all be required to return a single paper using these
 parameters.}
 
-\item{width}{width in units, Default: NULL}
+\item{width}{Width in units, Default: \code{NULL}}
 
-\item{height}{height in units, Default: NULL}
+\item{height}{Height in units, Default: \code{NULL}}
 
-\item{units}{"in" or "mm"; Default: NULL (defaults to "in" if width or height
-are provided.)}
+\item{units}{Paper size units, either "in" or "mm"; defaults to \code{NULL} (using
+"in" if width or height are provided).}
 }
 \value{
-Data frame with paper sizes
+Data frame with one or more paper sizes.
 }
 \description{
-Use the "paper" parameter (matching name from \code{paper_sizes}), standard
+Use the "paper" parameter (matching name from \link{paper_sizes}), standard
 (optionally including both series and size) parameter, or width, height and
 units. May return multiple paper sizes.
 }

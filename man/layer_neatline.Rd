@@ -3,7 +3,8 @@
 \name{layer_neatline}
 \alias{layer_neatline}
 \alias{set_map_limits}
-\title{Set map limits to sf or bbox object with optional adjustments and panel border}
+\title{Set map limits to sf or bbox object with optional adjustments and panel
+border}
 \usage{
 layer_neatline(
   data = NULL,
@@ -22,7 +23,7 @@ layer_neatline(
 )
 }
 \arguments{
-\item{data}{sf or bbox class object}
+\item{data}{\code{sf} or \code{bbox} class object}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -31,36 +32,40 @@ buffer distance. e.g. if the diagonal distance is 3000 meters and the
 "diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
 provided.}
 
-\item{unit}{buffer units; defaults to meter.}
+\item{unit}{Buffer units; defaults to meter.}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3"). If numeric, get_asp returns the same value without modification.}
+character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
+without modification.}
 
 \item{crs}{Coordinate reference system to use for
-\code{\link[sf]{coord_sf}}.}
+\code{\link[ggplot2]{coord_sf}}.}
 
-\item{color}{color of panel border, Default: 'black'}
+\item{color}{Color of panel border, Default: 'black'}
 
-\item{size}{size of panel border, Default: 1}
+\item{size}{Size of panel border, Default: 1}
 
-\item{linetype}{line type of panel border, Default: 'solid'}
+\item{linetype}{Line type of panel border, Default: 'solid'}
 
-\item{expand}{Default FALSE. If TRUE, use scale_y_continuous and
-scale_x_continuous to expand map extent to provided parameters.}
+\item{expand}{Default \code{FALSE.} If \code{TRUE}, the function adds
+\code{\link[ggplot2]{scale_y_continuous}} and
+\code{\link[ggplot2]{scale_x_continuous}} to expand the map extent to
+provided parameters.}
 
-\item{hide_grid}{logical. If TRUE, hide major grid lines. Default: TRUE}
+\item{hide_grid}{If \code{TRUE}, hide major grid lines. Default: \code{TRUE}}
 
-\item{label_axes}{label_axes passed to \code{\link[sf]{coord_sf}}, Default:
-'----' which hides axes labels.}
+\item{label_axes}{A description of which axes to label passed to
+\code{\link[ggplot2]{coord_sf}}; defaults to '----' which hides axes
+labels.}
 
-\item{...}{Additional parameters to pass to \code{\link[sf]{coord_sf}}.}
+\item{...}{Additional parameters to pass to \code{\link[ggplot2]{coord_sf}}.}
 }
 \value{
-\code{ggplot2::coord_sf()} function with xlim and ylim parameters
+\code{\link[ggplot2]{coord_sf}} function with xlim and ylim parameters
 }
 \description{
 Set limits for a map to the bounding box of an x using
-\code{\link[sf]{coord_sf}}. Optionally, adjust the x size by applying a
+\code{\link[ggplot2]{coord_sf}}. Optionally, adjust the x size by applying a
 buffer and/or adjust the aspect ratio of the limiting bounding box to match a
 set aspect ratio.
 }
