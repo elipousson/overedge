@@ -14,7 +14,9 @@ set aspect ratio."><!-- Inform modern browsers that this page supports both dark
       "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/5/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
     );
   }
-</script><title>Set map limits to sf or bbox object with optional adjustments and panel border — layer_neatline • overedge</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Set map limits to sf or bbox object with optional adjustments and panel border — layer_neatline"><meta property="og:description" content="Set limits for a map to the bounding box of an x using
+</script><title>Set map limits to sf or bbox object with optional adjustments and panel
+border — layer_neatline • overedge</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Set map limits to sf or bbox object with optional adjustments and panel
+border — layer_neatline"><meta property="og:description" content="Set limits for a map to the bounding box of an x using
 coord_sf. Optionally, adjust the x size by applying a
 buffer and/or adjust the aspect ratio of the limiting bounding box to match a
 set aspect ratio."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -56,14 +58,15 @@ set aspect ratio."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aja
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Set map limits to sf or bbox object with optional adjustments and panel border</h1>
+      <img src="" class="logo" alt=""><h1>Set map limits to sf or bbox object with optional adjustments and panel
+border</h1>
       
       <div class="d-none name"><code>layer_neatline.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
     <p>Set limits for a map to the bounding box of an x using
-<code>coord_sf</code>. Optionally, adjust the x size by applying a
+<code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></code>. Optionally, adjust the x size by applying a
 buffer and/or adjust the aspect ratio of the limiting bounding box to match a
 set aspect ratio.</p>
     </div>
@@ -90,7 +93,7 @@ set aspect ratio.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>sf or bbox class object</p></dd>
+<dd><p><code>sf</code> or <code>bbox</code> class object</p></dd>
 <dt>dist</dt>
 <dd><p>buffer distance in units. Optional.</p></dd>
 <dt>diag_ratio</dt>
@@ -99,33 +102,37 @@ buffer distance. e.g. if the diagonal distance is 3000 meters and the
 "diag_ratio = 0.1"  a 300 meter will be used. Ignored when <code>dist</code> is
 provided.</p></dd>
 <dt>unit</dt>
-<dd><p>buffer units; defaults to meter.</p></dd>
+<dd><p>Buffer units; defaults to meter.</p></dd>
 <dt>asp</dt>
 <dd><p>Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3"). If numeric, get_asp returns the same value without modification.</p></dd>
+character (e.g. "1:3"). If numeric, <code><a href="get_asp.html">get_asp()</a></code> returns the same value
+without modification.</p></dd>
 <dt>crs</dt>
 <dd><p>Coordinate reference system to use for
-<code>coord_sf</code>.</p></dd>
+<code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></code>.</p></dd>
 <dt>color</dt>
-<dd><p>color of panel border, Default: 'black'</p></dd>
+<dd><p>Color of panel border, Default: 'black'</p></dd>
 <dt>size</dt>
-<dd><p>size of panel border, Default: 1</p></dd>
+<dd><p>Size of panel border, Default: 1</p></dd>
 <dt>linetype</dt>
-<dd><p>line type of panel border, Default: 'solid'</p></dd>
+<dd><p>Line type of panel border, Default: 'solid'</p></dd>
 <dt>expand</dt>
-<dd><p>Default FALSE. If TRUE, use scale_y_continuous and
-scale_x_continuous to expand map extent to provided parameters.</p></dd>
+<dd><p>Default <code>FALSE.</code> If <code>TRUE</code>, the function adds
+<code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></code> and
+<code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></code> to expand the map extent to
+provided parameters.</p></dd>
 <dt>hide_grid</dt>
-<dd><p>logical. If TRUE, hide major grid lines. Default: TRUE</p></dd>
+<dd><p>If <code>TRUE</code>, hide major grid lines. Default: <code>TRUE</code></p></dd>
 <dt>label_axes</dt>
-<dd><p>label_axes passed to <code>coord_sf</code>, Default:
-'----' which hides axes labels.</p></dd>
+<dd><p>A description of which axes to label passed to
+<code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></code>; defaults to '----' which hides axes
+labels.</p></dd>
 <dt>...</dt>
-<dd><p>Additional parameters to pass to <code>coord_sf</code>.</p></dd>
+<dd><p>Additional parameters to pass to <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::coord_sf()</a></code> function with xlim and ylim parameters</p>
+    <p><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></code> function with xlim and ylim parameters</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

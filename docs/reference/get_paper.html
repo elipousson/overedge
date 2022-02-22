@@ -60,7 +60,7 @@ units. May return multiple paper sizes.'><!-- mathjax --><script src="https://cd
     </div>
 
     <div class="ref-description section level2">
-    <p>Use the "paper" parameter (matching name from <code>paper_sizes</code>), standard
+    <p>Use the "paper" parameter (matching name from <a href="paper_sizes.html">paper_sizes</a>), standard
 (optionally including both series and size) parameter, or width, height and
 units. May return multiple paper sizes.</p>
     </div>
@@ -89,22 +89,22 @@ units. May return multiple paper sizes.</p>
 <dt>standard</dt>
 <dd><p>Size standard, "ANSI" or "ISO"</p></dd>
 <dt>series</dt>
-<dd><p>size series (e.g. A), Default: NULL</p></dd>
+<dd><p>Size series (e.g. A), Default: <code>NULL</code></p></dd>
 <dt>size</dt>
-<dd><p>size number (only used for "ISO" and "JIS" series). Standard,
+<dd><p>Size number (only used for "ISO" and "JIS" series). Standard,
 series, and size may all be required to return a single paper using these
 parameters.</p></dd>
 <dt>width</dt>
-<dd><p>width in units, Default: NULL</p></dd>
+<dd><p>Width in units, Default: <code>NULL</code></p></dd>
 <dt>height</dt>
-<dd><p>height in units, Default: NULL</p></dd>
+<dd><p>Height in units, Default: <code>NULL</code></p></dd>
 <dt>units</dt>
-<dd><p>"in" or "mm"; Default: NULL (defaults to "in" if width or height
-are provided.)</p></dd>
+<dd><p>Paper size units, either "in" or "mm"; defaults to <code>NULL</code> (using
+"in" if width or height are provided).</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Data frame with paper sizes</p>
+    <p>Data frame with one or more paper sizes.</p>
     </div>
 
     <div class="section level2">

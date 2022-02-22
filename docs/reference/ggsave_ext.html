@@ -71,55 +71,64 @@ label (e.g. "baltcity") as a prefix to the output file name.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ggsave_ext</span><span class="op">(</span>
+  plot <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/last_plot.html" class="external-link">last_plot</a></span><span class="op">(</span><span class="op">)</span>,
   name <span class="op">=</span> <span class="cn">NULL</span>,
   label <span class="op">=</span> <span class="cn">NULL</span>,
-  plot <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/last_plot.html" class="external-link">last_plot</a></span><span class="op">(</span><span class="op">)</span>,
+  prefix <span class="op">=</span> <span class="cn">NULL</span>,
+  postfix <span class="op">=</span> <span class="cn">NULL</span>,
   filename <span class="op">=</span> <span class="cn">NULL</span>,
-  path <span class="op">=</span> <span class="cn">NULL</span>,
   device <span class="op">=</span> <span class="st">"png"</span>,
+  filetype <span class="op">=</span> <span class="cn">NULL</span>,
+  path <span class="op">=</span> <span class="cn">NULL</span>,
   paper <span class="op">=</span> <span class="cn">NULL</span>,
   orientation <span class="op">=</span> <span class="st">"portrait"</span>,
-  scale <span class="op">=</span> <span class="fl">1</span>,
   <span class="va">width</span>,
   <span class="va">height</span>,
   units <span class="op">=</span> <span class="st">"in"</span>,
+  scale <span class="op">=</span> <span class="fl">1</span>,
   dpi <span class="op">=</span> <span class="fl">300</span>,
-  bg <span class="op">=</span> <span class="cn">NULL</span>,
+  bgcolor <span class="op">=</span> <span class="cn">NULL</span>,
   exif <span class="op">=</span> <span class="cn">FALSE</span>,
   title <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">author</span>,
+  author <span class="op">=</span> <span class="cn">NULL</span>,
   args <span class="op">=</span> <span class="cn">NULL</span>,
-  prefix <span class="op">=</span> <span class="st">"date"</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>name</dt>
-<dd><p>name of plot, used to create filename (if filename is not
-provided)</p></dd>
-<dt>label</dt>
-<dd><p>label is appended to filename as a prefix; defaults to NULL</p></dd>
-<dt>plot</dt>
+    <dl><dt>plot</dt>
 <dd><p>Plot to save, defaults to last plot displayed.</p></dd>
+<dt>name</dt>
+<dd><p>Plot name, used to create filename (if filename is <code>NULL</code>) using
+<code><a href="make_filename.html">make_filename()</a></code></p></dd>
+<dt>label</dt>
+<dd><p>Label to combine with name converted to snake case with
+<code>make_clean_case</code>. The label is designed to identify
+the area or other shared characteristics across multiple data files, maps,
+or plots.</p></dd>
+<dt>prefix</dt>
+<dd><p>File name prefix. "date" adds a date prefix, "time" adds a
+date/time prefix; defaults to <code>NULL</code>.</p></dd>
+<dt>postfix</dt>
+<dd><p>File name postfix; defaults to <code>NULL</code>.</p></dd>
 <dt>filename</dt>
-<dd><p>File name to create on disk.</p></dd>
-<dt>path</dt>
-<dd><p>Path of the directory to save plot to: <code>path</code> and <code>filename</code>
-are combined to create the fully qualified file name. Defaults to the
-working directory.</p></dd>
+<dd><p>File name; if file name is <code>NULL</code>, name and file type are both
+required.</p></dd>
 <dt>device</dt>
 <dd><p>Device to use. Can either be a device function
 (e.g. <a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a>), or one of "eps", "ps", "tex" (pictex),
 "pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).</p></dd>
+<dt>filetype</dt>
+<dd><p>File type or extension.</p></dd>
+<dt>path</dt>
+<dd><p>Path to file or data directory.</p></dd>
 <dt>paper</dt>
-<dd><p>paper matching name from <code>paper_sizes</code> (e.g. "letter"). Not case
-sensitive</p></dd>
+<dd><p>Paper matching name from <code>paper_sizes</code> (e.g. "letter"). Not case
+sensitive.</p></dd>
 <dt>orientation</dt>
-<dd><p>"portrait", "landscape", or "square"</p></dd>
-<dt>scale</dt>
-<dd><p>Multiplicative scaling factor.</p></dd>
+<dd><p>Page orientation ("portrait", "landscape", or "square").</p></dd>
 <dt>width</dt>
 <dd><p>Plot size in <code>units</code> ("in", "cm", "mm", or "px").
 If not supplied, uses the size of current graphics device.</p></dd>
@@ -129,31 +138,31 @@ If not supplied, uses the size of current graphics device.</p></dd>
 <dt>units</dt>
 <dd><p>Plot size in <code>units</code> ("in", "cm", "mm", or "px").
 If not supplied, uses the size of current graphics device.</p></dd>
+<dt>scale</dt>
+<dd><p>Multiplicative scaling factor.</p></dd>
 <dt>dpi</dt>
 <dd><p>Plot resolution. Also accepts a string input: "retina" (320),
 "print" (300), or "screen" (72). Applies only to raster output types.</p></dd>
-<dt>bg</dt>
-<dd><p>Background colour. If <code>NULL</code>, uses the <code>plot.background</code> fill value
-from the plot theme.</p></dd>
+<dt>bgcolor</dt>
+<dd><p>Background color to optionally override <code>plot.background</code>
+theme element.</p></dd>
 <dt>exif</dt>
-<dd><p>If TRUE, edit exif metadata for exported file using the exifr
-package, Default: FALSE</p></dd>
+<dd><p>If <code>TRUE</code>, the EXIF metadata for the exported file is updated
+with the exifr package; defaults to <code>FALSE</code>.</p></dd>
 <dt>title</dt>
-<dd><p>title of plot or map, added to exif metadata, Default: NULL</p></dd>
+<dd><p>Title of plot or map, added to EXIF metadata, Default: <code>NULL</code>.</p></dd>
 <dt>author</dt>
-<dd><p>author of plot or map, added to exif metadata,</p></dd>
+<dd><p>Author of plot or map, added to EXIF metadata, Default: <code>NULL</code>.</p></dd>
 <dt>args</dt>
-<dd><p>args passed to exiftoolr, If args is not NULL, title and author
-are ignored, Default: NULL</p></dd>
-<dt>prefix</dt>
-<dd><p>If "date", the date from <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date()</a></code> is appended to filename
-as a prefix (before label). If "time", <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time()</a></code> is appended.</p></dd>
+<dd><p>Alternate arguments passed to <code><a href="https://rdrr.io/pkg/exifr/man/exiftool_call.html" class="external-link">exiftool_call</a></code>.
+If args is not <code>NULL</code>, title and author are ignored; defaults to <code>NULL</code>.</p></dd>
 <dt>...</dt>
-<dd><p>additional parameters passed to <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></code></p></dd>
+<dd><p>Additional parameters passed to <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></code></p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/exifr/man/exiftool_call.html" class="external-link">exiftool_call</a></code></p></div>
+    <div class="dont-index"><p><code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></code>
+<code><a href="https://rdrr.io/pkg/exifr/man/exiftool_call.html" class="external-link">exiftool_call</a></code></p></div>
     </div>
 
     <div class="section level2">

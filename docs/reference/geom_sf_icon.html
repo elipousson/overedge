@@ -82,9 +82,8 @@ icon location.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>sf object. If the geometry type for data is POINT, the object is
-used as is. If not, the object is converted to POINT using
-<code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid()</a></code>.</p></dd>
+<dd><p>A <code>sf</code> object. Any objects with polygon geometry are converted to
+points using <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid()</a></code>.</p></dd>
 <dt>iconname_col</dt>
 <dd><p>The column name in the input data to use as the icon
 name. If the name matches multiple icons, the first match from <code>map_icons</code>
@@ -105,9 +104,9 @@ Optional but may be required to differentiate icons with duplicate names.</p></d
 parameter for <code><a href="https://rdrr.io/pkg/ggsvg/man/geom_point_svg.html" class="external-link">ggsvg::geom_point_svg()</a></code>.  If <code>icon</code> is provided, <code>svg</code> is
 not used.</p></dd>
 <dt>color</dt>
-<dd><p>SVG color passed to ggsvg::geom_point_svg(). default color is set to "black".</p></dd>
+<dd><p>SVG color passed to <code><a href="https://rdrr.io/pkg/ggsvg/man/geom_point_svg.html" class="external-link">ggsvg::geom_point_svg()</a></code>. default color is set to "black".</p></dd>
 <dt>...</dt>
-<dd><p>Additional parameters to ggsvg::geom_point_svg()</p></dd>
+<dd><p>Additional parameters to <code><a href="https://rdrr.io/pkg/ggsvg/man/geom_point_svg.html" class="external-link">ggsvg::geom_point_svg()</a></code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -28,6 +28,7 @@ reference:
   - '`get_margin`'
   - '`theme_margin`'
   - '`theme_text`'
+  - '`make_filename`'
 - title: Reference data used by functions
   contents:
   - '`map_icons`'

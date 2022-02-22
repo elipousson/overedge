@@ -2,7 +2,8 @@
 % Please edit documentation in R/write_sf_ext.R
 \name{write_sf_ext}
 \alias{write_sf_ext}
-\title{Save simple features to files, cache features, or load features to the environment}
+\alias{write_sf_cache}
+\title{Write or cache simple feature object to a file}
 \usage{
 write_sf_ext(
   data,
@@ -16,9 +17,21 @@ write_sf_ext(
   cache = FALSE,
   overwrite = FALSE
 )
+
+write_sf_cache(
+  data = NULL,
+  data_dir = NULL,
+  overwrite = FALSE,
+  name = NULL,
+  label = NULL,
+  filetype = NULL,
+  filename = NULL,
+  prefix = NULL,
+  postfix = NULL
+)
 }
 \arguments{
-\item{data}{sf object or a list of sf objects}
+\item{data}{\code{sf} data to cache.}
 
 \item{name}{Name to make file name converted to snake case with
 \code{\link[janitor]{make_clean_case}}, e.g. "Residential zoning map"
@@ -34,26 +47,37 @@ date/time prefix; defaults to \code{NULL}.}
 
 \item{postfix}{File name postfix; defaults to \code{NULL}.}
 
-\item{filename}{file name}
+\item{filename}{File name to use for cached file. Defaults to name of data.
+If the data is an \code{sf} object make sure to include the file type, e.g.
+"data.gpkg", supported by \code{sf::write_sf()}. All other data is written to
+rda with \code{readr::write_rds()}.}
 
-\item{filetype}{File type to write and cache, Default: 'geojson'}
+\item{filetype}{File type to write and cache, Default: 'geojson'.}
 
 \item{path}{Path to file or data directory.}
 
-\item{cache}{If TRUE, write sf object(s) to file in cache directory; defaults to FALSE}
+\item{cache}{If \code{TRUE}, write \code{sf} object to file in cache directory; defaults to \code{FALSE}.}
 
-\item{data_dir}{Data directory to write files, Default: NULL}
+\item{overwrite}{Logical. Default \code{FALSE}. If \code{TRUE}, overwrite any existing
+cached files that use the same file name.}
 
-\item{write}{If TRUE, write the object with write_sf or readr write_csv (after converting to df with sf_to_df); defaults to TRUE}
-
-\item{load}{If TRUE, load sf objects to global environment; defaults to FALSE}
+\item{data_dir}{cache data directory, defaults to
+\code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL}
 }
 \description{
-This function supports a range of options for both simple feature objects and named lists of simple feature objects.
+write_sf_ext and write_sf_cache wrap the sf::write_sf() function to provide
+some additional options including consistent file naming with
+\code{\link[=make_filename]{make_filename()}} and additional options including:
+
+Cache data to \code{rappdirs::user_cache_dir("overedge")} or other data directory.
 }
 \details{
 \itemize{
-\item If load is TRUE, named lists can be loaded
+\item Checks that directory exists before attempting to write the file.
+\item If filetype is CSV or the filename ends in ".csv" the file is converted to
+a dataframe using \code{\link[=df_to_sf]{df_to_sf()}}
+\item If cache is \code{TRUE} use write_sf_cache to cache file as well as writing a
+copy to the path provided.
 }
 }
 \seealso{

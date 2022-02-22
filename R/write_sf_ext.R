@@ -1,22 +1,24 @@
-#' Save simple features to files, cache features, or load features to the environment
+#' Write or cache simple feature object to a file
 #'
-#' This function supports a range of options for both simple feature objects and named lists of simple feature objects.
+#' write_sf_ext and write_sf_cache wrap the sf::write_sf() function to provide
+#' some additional options including consistent file naming with
+#' [make_filename()] and additional options including:
 #'
-#' - If load is TRUE, named lists can be loaded
+#' - Checks that directory exists before attempting to write the file.
+#' - If filetype is CSV or the filename ends in ".csv" the file is converted to
+#' a dataframe using [df_to_sf()]
+#' - If cache is `TRUE` use write_sf_cache to cache file as well as writing a
+#' copy to the path provided.
 #'
-#'
-#' @param data sf object or a list of sf objects
-#' @param filetype File type to write and cache, Default: 'geojson'
-#' @param filename file name
-#' @param data_dir Data directory to write files, Default: NULL
-#' @param write If TRUE, write the object with write_sf or readr write_csv (after converting to df with sf_to_df); defaults to TRUE
-#' @param load If TRUE, load sf objects to global environment; defaults to FALSE
-#' @param cache If TRUE, write sf object(s) to file in cache directory; defaults to FALSE
+#' @param data `sf` object to write.
+#' @param filetype File type to write and cache, Default: 'geojson'.
+#' @param cache If `TRUE`, write `sf` object to file in cache directory; defaults to `FALSE`.
 #' @inheritParams make_filename
+#' @inheritParams write_sf_cache
 #' @seealso
 #'  \code{\link[sf]{st_write}}
-#' @rdname write_sf_ext
 #' @export
+#' @md
 #' @importFrom purrr discard walk
 #' @importFrom sf write_sf
 #' @importFrom glue glue
@@ -32,74 +34,44 @@ write_sf_ext <- function(data,
                          overwrite = FALSE) {
 
   # If data is sf object, write or cache it
-  if (check_sf(data)) {
-    filename <-
-      make_filename(
-        name = name,
-        label = label,
-        filetype = filetype,
-        filename = filename,
-        path = path,
-        prefix = prefix,
-        postfix = postfix
-      )
+  filename <-
+    make_filename(
+      name = name,
+      label = label,
+      filetype = filetype,
+      filename = filename,
+      path = path,
+      prefix = prefix,
+      postfix = postfix
+    )
 
-    if (write) {
-      if ((filetype == "csv") | grepl(".csv$", filename)) {
-        readr::write_csv(
-          x = sf_to_df(data),
-          file = filename
+
+  if ((filetype == "csv") | grepl(".csv$", filename)) {
+    readr::write_csv(
+      x = sf_to_df(data),
+      file = filename
+    )
+  } else {
+    sf::write_sf(
+      obj = data,
+      dsn = filename
+    )
+  }
+
+  if (cache) {
+    if (!is.null(path)) {
+      filename <-
+        sub(
+          pattern = paste0("^", file.path(path, "")),
+          replacement = "",
+          x = filename
         )
-      } else {
-        sf::write_sf(
-          obj = data,
-          dsn = filename
-        )
-      }
     }
 
-    if (cache) {
-      if (!is.null(path)) {
-        filename <-
-          sub(
-            pattern = paste0("^", file.path(path, "")),
-            replacement = "",
-            x = filename
-          )
-      }
-
-      cache_sf(
-        data = data,
-        filename = filename,
-        overwrite = overwrite
-      )
-    }
-  } else if (check_sf_list(data)) {
-    data <-
-      purrr::discard(
-        data,
-        ~ nrow(.x) == 0
-      )
-
-    if (load) {
-      list2env(
-        x = data,
-        envir = globalenv()
-      )
-    }
-
-    purrr::walk(
-      data,
-      ~ write_sf_ext(
-        data = .x,
-        name = names(.x),
-        filetype = filetype,
-        prefix = prefix,
-        postfix = postfix,
-        data_dir = data_dir,
-        write = write,
-        cache = cache
-      )
+    write_sf_cache(
+      data = data,
+      filename = filename,
+      overwrite = overwrite
     )
   }
 }
@@ -109,21 +81,22 @@ write_sf_ext <- function(data,
 #'
 #' Cache data to `rappdirs::user_cache_dir("overedge")` or other data directory.
 #'
-#' @param data Data to cache.
+#' @param data `sf` data to cache.
 #' @param filename File name to use for cached file. Defaults to name of data.
-#'   If the data is an sf object make sure to include the file type, e.g.
+#'   If the data is an `sf` object make sure to include the file type, e.g.
 #'   "data.gpkg", supported by `sf::write_sf()`. All other data is written to
 #'   rda with `readr::write_rds()`.
 #' @param data_dir cache data directory, defaults to
 #'   \code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL
-#' @param overwrite Logical. Default FALSE. If TRUE, overwrite any existing
+#' @param overwrite Logical. Default `FALSE`. If `TRUE`, overwrite any existing
 #'   cached files that use the same file name.
-#' @inheritParams make_filename
+#' @rdname write_sf_ext
+#' @name write_sf_cache
 #' @export
 #' @importFrom usethis ui_yeah ui_done ui_stop
 #' @importFrom sf write_sf
 #' @importFrom readr write_rds
-cache_sf <- function(data = NULL,
+write_sf_cache <- function(data = NULL,
                      data_dir = NULL,
                      overwrite = FALSE,
                      name = NULL,
@@ -197,18 +170,6 @@ cache_sf <- function(data = NULL,
   }
 }
 
-
-#' @param data named list of sf objects
-#' @noRd
-load_sf_list <- function(data) {
-  if (check_sf_list(data)) {
-    list2env(
-      x = data,
-      envir = globalenv()
-    )
-  }
-}
-
 #' Make file name and path with optional label, prefix, or postfix
 #'
 #' A helper function to create consistent file names for plots created with
@@ -230,8 +191,7 @@ load_sf_list <- function(data) {
 #' @param postfix File name postfix; defaults to `NULL`.
 #' @export
 #' @importFrom checkmate check_directory_exists
-#' @importFrom glue glue
-#' @importFrom janitor make_clean_names
+#' @importFrom usethis ui_yeah ui_done ui_stop
 make_filename <- function(name = NULL,
                           label = NULL,
                           filetype = NULL,
@@ -260,7 +220,16 @@ make_filename <- function(name = NULL,
   }
 
   if (!is.null(path)) {
-    checkmate::check_directory_exists(path)
+    if(!(checkmate::check_directory_exists(path))) {
+      if(usethis::ui_yeah("The directory {usethis::ui_path(path)} does not exist.
+                       Do you want to create a new directory at this location?")) {
+        dir.create(path)
+        usethis::ui_done("Directory created at {usethis::ui_path(path)}")
+      } else {
+        usethis::ui_stop("Please provide a different directory for {usethis::ui_value(filename)}.")
+      }
+    }
+
     filename <- file.path(path, filename)
   }
 
@@ -289,7 +258,7 @@ str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", 
       prefix <- gsub("^x", "", janitor::make_clean_names(Sys.Date(), sep_out = "-"))
     } else if ("time" %in% prefix) {
       prefix <- gsub("^x", "", janitor::make_clean_names(Sys.time(), sep_out = "-"))
-    } else if (is.character(prefix) && clean) {
+    } else if (!is.null(prefix) && clean) {
       prefix <- janitor::make_clean_names(prefix)
     }
   }
@@ -318,6 +287,7 @@ str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", 
 #' @noRd
 #' @importFrom rappdirs user_cache_dir
 #' @importFrom checkmate test_directory_exists
+#' @importFrom usethis ui_yeah ui_done
 data_dir <- function(path = NULL) {
   if (is.null(path)) {
     path <- rappdirs::user_cache_dir("overedge")
