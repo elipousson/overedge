@@ -16,6 +16,9 @@
 #' @param crs coordinate reference system to use for query; default 4326
 #' @param from,to xy pairs (e.g. c("xmax", "ymax) defining points to measure
 #'   distance from and to.
+#' @param orientation If `TRUE`, sf_bbox_asp returns a suggested orientation
+#'   based on aspect ratio (< 0.9 "portrait"; > 1.1 "landscape"; else "square");
+#'   defaults to `FALSE`.
 #' @md
 #' @name sf_bbox_misc
 NULL
@@ -23,11 +26,22 @@ NULL
 #' @aliases sf_bbox_asp
 #' @rdname sf_bbox_misc
 #' @export
-sf_bbox_asp <- function(bbox) {
+sf_bbox_asp <- function(bbox, orientation = FALSE) {
   xdist <- sf_bbox_xdist(bbox) # Get width
   ydist <- sf_bbox_ydist(bbox) # Get height
   bbox_asp <- xdist / ydist # Get width to height aspect ratio for bbox
-  return(bbox_asp)
+  if (!orientation) {
+    return(bbox_asp)
+  } else {
+    if (bbox_asp > 1.1) {
+      bbox_orientation <- "landscape"
+    } else if (bbox_asp < 0.9) {
+      bbox_orientation <- "portrait"
+    } else {
+      bbox_orientation <- "square"
+    }
+    return(bbox_orientation)
+  }
 }
 
 #' @aliases sf_bbox_dist

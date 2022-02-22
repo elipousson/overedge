@@ -13,7 +13,7 @@
 \alias{sf_bbox_to_lonlat_query}
 \title{Measure, transform, and convert bounding boxes}
 \usage{
-sf_bbox_asp(bbox)
+sf_bbox_asp(bbox, orientation = FALSE)
 
 sf_bbox_dist(bbox, from, to)
 
@@ -33,6 +33,10 @@ sf_bbox_to_lonlat_query(bbox, coords = c("longitude", "latitude"), crs = 4326)
 }
 \arguments{
 \item{bbox}{bbox object}
+
+\item{orientation}{If \code{TRUE}, sf_bbox_asp returns a suggested orientation
+based on aspect ratio (< 0.9 "portrait"; > 1.1 "landscape"; else "square");
+defaults to \code{FALSE}.}
 
 \item{from, to}{xy pairs (e.g. c("xmax", "ymax) defining points to measure
 distance from and to.}
