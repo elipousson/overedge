@@ -1,17 +1,27 @@
-#' Write or cache simple feature object to a file
+#' Write or cache a simple feature object to a file
 #'
-#' write_sf_ext and write_sf_cache wrap the sf::write_sf() function to provide
-#' some additional options including consistent file naming with
-#' [make_filename()] and additional options including:
+#' @description
+#' The write_sf_ext and write_sf_cache helper functions wrap the
+#' \code{\link[sf]{write_sf}} function to provide some additional options
+#' including consistent file naming with [make_filename()] and features
+#' including:
 #'
-#' - Checks that directory exists before attempting to write the file.
-#' - If filetype is CSV or the filename ends in ".csv" the file is converted to
-#' a dataframe using [df_to_sf()]
-#' - If cache is `TRUE` use write_sf_cache to cache file as well as writing a
-#' copy to the path provided.
+#' - If the data is not an sf object, optionally save as an RDS file.
+#' - If filetype is CSV or the filename ends in ".csv" the file is automatically
+#' converted to a dataframe using [df_to_sf()]
+#' - If cache is `TRUE` use write_sf_cache to cache file after writing a copy to
+#' the path provided.
 #'
 #' @param data `sf` object to write.
-#' @param filetype File type to write and cache, Default: 'geojson'.
+#' @param filename File name to use. If filename is provided and the data is an
+#'   `sf` object make sure to include the file type, e.g. "data.gpkg" or
+#'   "data.csv". Objects that are not simple features are written to RDS with
+#'   `readr::write_rds()`.
+#' @param data_dir cache data directory, defaults to
+#'   \code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL. (only used for write_sf_cache; default is used when cache = TRUE for write_sf_ext)
+#' @param overwrite Logical. Default `FALSE`. If `TRUE`, overwrite any existing
+#'   cached files that use the same file name.
+#' @param filetype File type to write and cache, Default: 'geojson' for `write_sf_ext()`
 #' @param cache If `TRUE`, write `sf` object to file in cache directory; defaults to `FALSE`.
 #' @inheritParams make_filename
 #' @inheritParams write_sf_cache
@@ -40,34 +50,16 @@ write_sf_ext <- function(data,
       label = label,
       filetype = filetype,
       filename = filename,
-      path = path,
+      path = NULL,
       prefix = prefix,
       postfix = postfix
     )
 
+  path <- file.path(path, filename)
 
-  if ((filetype == "csv") | grepl(".csv$", filename)) {
-    readr::write_csv(
-      x = sf_to_df(data),
-      file = filename
-    )
-  } else {
-    sf::write_sf(
-      obj = data,
-      dsn = filename
-    )
-  }
+  write_sf_types(data = data, path = path, filetype = filetype)
 
   if (cache) {
-    if (!is.null(path)) {
-      filename <-
-        sub(
-          pattern = paste0("^", file.path(path, "")),
-          replacement = "",
-          x = filename
-        )
-    }
-
     write_sf_cache(
       data = data,
       filename = filename,
@@ -76,36 +68,21 @@ write_sf_ext <- function(data,
   }
 }
 
-
-#' Cache simple feature data
-#'
-#' Cache data to `rappdirs::user_cache_dir("overedge")` or other data directory.
-#'
-#' @param data `sf` data to cache.
-#' @param filename File name to use for cached file. Defaults to name of data.
-#'   If the data is an `sf` object make sure to include the file type, e.g.
-#'   "data.gpkg", supported by `sf::write_sf()`. All other data is written to
-#'   rda with `readr::write_rds()`.
-#' @param data_dir cache data directory, defaults to
-#'   \code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL
-#' @param overwrite Logical. Default `FALSE`. If `TRUE`, overwrite any existing
-#'   cached files that use the same file name.
 #' @rdname write_sf_ext
 #' @name write_sf_cache
 #' @export
 #' @importFrom usethis ui_yeah ui_done ui_stop
 #' @importFrom sf write_sf
 #' @importFrom readr write_rds
-write_sf_cache <- function(data = NULL,
-                     data_dir = NULL,
-                     overwrite = FALSE,
-                     name = NULL,
-                     label = NULL,
-                     filetype = NULL,
-                     filename = NULL,
-                     prefix = NULL,
-                     postfix = NULL) {
-
+write_sf_cache <- function(data,
+                           data_dir = NULL,
+                           overwrite = FALSE,
+                           name = NULL,
+                           label = NULL,
+                           filetype = NULL,
+                           filename = NULL,
+                           prefix = NULL,
+                           postfix = NULL) {
   data_dir <- overedge_data_dir(data_dir)
 
   filename <-
@@ -117,9 +94,9 @@ write_sf_cache <- function(data = NULL,
       prefix = prefix,
       postfix = postfix,
       path = NULL
-      )
+    )
 
-  data_path <- file.path(data_dir, filename)
+  data_dir_path <- file.path(data_dir, filename)
 
   if (filename %in% list.files(data_dir)) {
     if (!overwrite) {
@@ -131,42 +108,63 @@ write_sf_cache <- function(data = NULL,
 
     if (overwrite) {
       usethis::ui_done("Removing existing cached data.")
-      file.remove(data_path)
+      file.remove(data_dir_path)
     } else {
       usethis::ui_stop("{usethis::ui_path(filename)} was not overwritten.")
     }
   }
 
+  write_sf_types(data = date, path = data_dir_path, filetype = filetype)
+}
+
+#' @noRd
+#' @importFrom usethis ui_done ui_yeah
+#' @importFrom readr write_csv write_rds
+#' @importFrom sf write_sf
+write_sf_types <- function(data, path, filetype = NULL) {
   if (check_sf(data)) {
-    usethis::ui_done("Writing {usethis::ui_path(data_path)}")
+    usethis::ui_done("Writing {usethis::ui_path(path)}")
 
-    sf::write_sf(
-      obj = data,
-      dsn = data_path
-    )
-  } else {
-    cache_rds <- usethis::ui_yeah(
-      "This data is not a simple feature object.
-      Do you want to cache the file as an RDS file?"
-    )
-
-    if (!is.null(filetype)) {
-      data_path <-
-        sub(
-          pattern = paste0(".", filetype, "$"),
-          replacement = "",
-          x = data_path
-        )
-    }
-
-    usethis::ui_done("Writing {usethis::ui_path(data_path)}")
-
-    if (cache_rds) {
-      readr::write_rds(
-        x = data,
-        file = data_path
+    if (grepl(".csv$", path) | (!is.null(filetype) && (filetype == "csv"))) {
+      readr::write_csv(
+        x = sf_to_df(data),
+        file = path
+      )
+    } else {
+      sf::write_sf(
+        obj = data,
+        dsn = path
       )
     }
+  } else if (
+    usethis::ui_yeah(
+      "This data is not a simple feature object.
+      Do you want to save the file as an RDS file?"
+    )
+  ) {
+
+    # Remove file extension from path
+    if (!is.null(filetype)) {
+      path <-
+        sub(
+          pattern = paste0("\\.", filetype, "$"),
+          replacement = "",
+          x = path
+        )
+    } else {
+      path <-
+        sub(
+          pattern = paste0("\\.[:alpha:]+$"),
+          replacement = "",
+          x = path
+        )
+    }
+    usethis::ui_done("Writing {usethis::ui_path(path)}")
+
+    readr::write_rds(
+      x = data,
+      file = path
+    )
   }
 }
 
@@ -204,12 +202,13 @@ make_filename <- function(name = NULL,
   )
 
   if (is.null(filename)) {
-
     filename <-
-      str_prefix(prefix = c(prefix, label),
-                 string = name,
-                 postfix = postfix,
-                 clean = TRUE)
+      str_prefix(
+        prefix = c(prefix, label),
+        string = name,
+        postfix = postfix,
+        clean = TRUE
+      )
 
     if (!is.null(filetype)) {
       filetype <- paste0(".", filetype)
@@ -220,8 +219,8 @@ make_filename <- function(name = NULL,
   }
 
   if (!is.null(path)) {
-    if(!(checkmate::check_directory_exists(path))) {
-      if(usethis::ui_yeah("The directory {usethis::ui_path(path)} does not exist.
+    if (!(checkmate::check_directory_exists(path))) {
+      if (usethis::ui_yeah("The directory {usethis::ui_path(path)} does not exist.
                        Do you want to create a new directory at this location?")) {
         dir.create(path)
         usethis::ui_done("Directory created at {usethis::ui_path(path)}")
@@ -252,7 +251,6 @@ make_filename <- function(name = NULL,
 #' @noRd
 #' @importFrom janitor make_clean_names
 str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", clean = TRUE) {
-
   if (!is.null(prefix)) {
     if ("date" %in% prefix) {
       prefix <- gsub("^x", "", janitor::make_clean_names(Sys.Date(), sep_out = "-"))

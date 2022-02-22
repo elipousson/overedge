@@ -5,11 +5,22 @@
 #' MapServer), or the data name and associated package. Optionally provide a bounding box
 #' to filter data.
 #'
+#' @param path file path; used by read_sf_path only
+#' @param url url for spatial data file or for ArcGIS FeatureServer or MapServer
+#'   to access with [get_esri_data()]; used by read_sf_url only
+#' @param data character; name of data; used by read_sf_package only
+#' @param package character; package name; used by read_sf_package only
+#' @param filetype file type supported by \code{\link[sf]{read_sf}}., Default:
+#'   'gpkg'; used by read_sf_package only and required only if the data is in
+#'   the package cache directory or extdata system files.
 #' @param bbox bbox object; Default: NULL. If bbox is provided, read_sf only
 #'   returns features intersecting the bounding box.
-#' @param path file path
 #' @param ... additional parameters passed to \code{\link[sf]{read_sf}}
 #' @rdname read_sf_ext
+#' @details read_sf_package looks for three types of package data:
+#'   = Data loaded with the package
+#'   - External data in the `extdata` system files folder.
+#'   - Cached data in the cache directory returned by \code{\link[rappdirs]{user_cache_dir}}
 #' @export
 #' @importFrom checkmate check_file_exists
 #' @importFrom sf read_sf
@@ -37,7 +48,6 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 }
 
 #' @rdname read_sf_ext
-#' @param url url for spatial data file or for ArcGIS FeatureServer or MapServer to access with get_esri_data()
 #' @aliases read_sf_url
 #' @export
 #' @importFrom sf read_sf
@@ -65,19 +75,10 @@ read_sf_url <- function(url, bbox = NULL, ...) {
   return(data)
 }
 
-#' @param data character; name of data.
-#' @param package character; package name
-#' @param filetype file type supported by  \code{\link[sf]{read_sf}}., Default: 'gpkg'.
-#'   Required only if the data is in the cache directory or extdata system
-#'   files.
-#' @return sf object
-#' @details This function looks for three types of package data:
-#'   = Data loaded with the package
-#'   - External data in the `extdata` system files folder.
-#'   - Cached data in the cache directory returned by \code{\link[rappdirs]{user_cache_dir}}
 #' @rdname read_sf_ext
 #' @aliases read_sf_package
 #' @export
+#' @md
 #' @importFrom checkmate test_directory_exists
 #' @importFrom rappdirs user_cache_dir
 #' @importFrom usethis ui_warn ui_yeah

@@ -13,25 +13,23 @@ read_sf_url(url, bbox = NULL, ...)
 read_sf_package(data, bbox = NULL, package, filetype = "gpkg", ...)
 }
 \arguments{
-\item{path}{file path}
+\item{path}{file path; used by read_sf_path only}
 
 \item{bbox}{bbox object; Default: NULL. If bbox is provided, read_sf only
 returns features intersecting the bounding box.}
 
 \item{...}{additional parameters passed to \code{\link[sf]{read_sf}}}
 
-\item{url}{url for spatial data file or for ArcGIS FeatureServer or MapServer to access with get_esri_data()}
+\item{url}{url for spatial data file or for ArcGIS FeatureServer or MapServer
+to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by read_sf_url only}
 
-\item{data}{character; name of data.}
+\item{data}{character; name of data; used by read_sf_package only}
 
-\item{package}{character; package name}
+\item{package}{character; package name; used by read_sf_package only}
 
-\item{filetype}{file type supported by  \code{\link[sf]{read_sf}}., Default: 'gpkg'.
-Required only if the data is in the cache directory or extdata system
-files.}
-}
-\value{
-sf object
+\item{filetype}{file type supported by \code{\link[sf]{read_sf}}., Default:
+'gpkg'; used by read_sf_package only and required only if the data is in
+the package cache directory or extdata system files.}
 }
 \description{
 An extended version of \code{\link[sf]{read_sf}} that support reading spatial
@@ -40,7 +38,7 @@ MapServer), or the data name and associated package. Optionally provide a boundi
 to filter data.
 }
 \details{
-This function looks for three types of package data:
+read_sf_package looks for three types of package data:
 = Data loaded with the package
 \itemize{
 \item External data in the \code{extdata} system files folder.

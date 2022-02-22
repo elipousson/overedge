@@ -80,30 +80,27 @@ to filter data.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>path</dt>
-<dd><p>file path</p></dd>
+<dd><p>file path; used by read_sf_path only</p></dd>
 <dt>bbox</dt>
 <dd><p>bbox object; Default: NULL. If bbox is provided, read_sf only
 returns features intersecting the bounding box.</p></dd>
 <dt>...</dt>
 <dd><p>additional parameters passed to <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></code></p></dd>
 <dt>url</dt>
-<dd><p>url for spatial data file or for ArcGIS FeatureServer or MapServer to access with get_esri_data()</p></dd>
+<dd><p>url for spatial data file or for ArcGIS FeatureServer or MapServer
+to access with <code><a href="get_esri_data.html">get_esri_data()</a></code>; used by read_sf_url only</p></dd>
 <dt>data</dt>
-<dd><p>character; name of data.</p></dd>
+<dd><p>character; name of data; used by read_sf_package only</p></dd>
 <dt>package</dt>
-<dd><p>character; package name</p></dd>
+<dd><p>character; package name; used by read_sf_package only</p></dd>
 <dt>filetype</dt>
-<dd><p>file type supported by  <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></code>., Default: 'gpkg'.
-Required only if the data is in the cache directory or extdata system
-files.</p></dd>
+<dd><p>file type supported by <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></code>., Default:
+'gpkg'; used by read_sf_package only and required only if the data is in
+the package cache directory or extdata system files.</p></dd>
 </dl></div>
     <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>sf object</p>
-    </div>
-    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function looks for three types of package data:
+    <p>read_sf_package looks for three types of package data:
 = Data loaded with the package</p><ul><li><p>External data in the <code>extdata</code> system files folder.</p></li>
 <li><p>Cached data in the cache directory returned by <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">user_cache_dir</a></code></p></li>
 </ul></div>
