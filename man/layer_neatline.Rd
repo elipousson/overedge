@@ -14,6 +14,7 @@ layer_neatline(
   asp = NULL,
   crs = NULL,
   color = "black",
+  bgcolor = "white",
   size = 1,
   linetype = "solid",
   expand = FALSE,
@@ -42,6 +43,8 @@ without modification.}
 \code{\link[ggplot2]{coord_sf}}.}
 
 \item{color}{Color of panel border, Default: 'black'}
+
+\item{bgcolor}{Fill color of panel background; defaults to "white". If "none", panel background is set to ggplot2::element_blank()}
 
 \item{size}{Size of panel border, Default: 1}
 

@@ -17,6 +17,7 @@
 #'   provided parameters.
 #' @param size Size of panel border, Default: 1
 #' @param color Color of panel border, Default: 'black'
+#' @param bgcolor Fill color of panel background; defaults to "white". If "none", panel background is set to ggplot2::element_blank()
 #' @param linetype Line type of panel border, Default: 'solid'
 #' @param hide_grid If `TRUE`, hide major grid lines. Default: `TRUE`
 #' @param label_axes A description of which axes to label passed to
@@ -39,7 +40,7 @@
 #'  \code{\link[ggplot2]{CoordSf}},\code{\link[ggplot2]{scale_continuous}}
 #' @aliases set_map_limits
 #' @export
-#' @importFrom ggplot2 coord_sf scale_y_continuous scale_x_continuous theme element_rect
+#' @importFrom ggplot2 coord_sf scale_y_continuous scale_x_continuous theme element_rect element_blank
 layer_neatline <- function(data = NULL,
                            dist = NULL,
                            diag_ratio = NULL,
@@ -47,6 +48,7 @@ layer_neatline <- function(data = NULL,
                            asp = NULL,
                            crs = NULL,
                            color = "black",
+                           bgcolor = "white",
                            size = 1,
                            linetype = "solid",
                            expand = FALSE,
@@ -105,10 +107,20 @@ layer_neatline <- function(data = NULL,
     )
   }
 
+  if (bgcolor == "none") {
+    panel_background <- ggplot2::element_blank()
+  } else {
+    panel_background <- ggplot2::element_rect(fill = bgcolor)
+  }
+
+  panel_border <- ggplot2::element_rect(color = color, size = size, linetype = linetype, fill = NA)
+
+
   neatline <- list(
     neatline,
     ggplot2::theme(
-      panel.border = ggplot2::element_rect(color = color, size = size, linetype = linetype, fill = NA)
+      panel.border = panel_border,
+      panel.background = panel_background
     )
   )
 
