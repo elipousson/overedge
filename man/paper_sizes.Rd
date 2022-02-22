@@ -3,7 +3,7 @@
 \docType{data}
 \name{paper_sizes}
 \alias{paper_sizes}
-\title{Common paper sizes}
+\title{Standard paper and image sizes}
 \format{
 A data frame with 85 rows and 9 variables:
 \describe{
@@ -11,20 +11,22 @@ A data frame with 85 rows and 9 variables:
 \item{\code{series}}{Series}
 \item{\code{standard}}{Standard}
 \item{\code{size}}{Size in series}
-\item{\code{units}}{Units ("in" or "mm") for dimensions}
+\item{\code{units}}{Units ("in", "mm", or "px") for dimensions}
 \item{\code{width}}{Width in units}
 \item{\code{height}}{Height in units}
 \item{\code{asp_portrait}}{Aspect ratio (portrait)}
 \item{\code{asp_landscape}}{Aspect ratio (landscape)}
 \item{\code{asp_text}}{Aspect ratio ("width:height")}
+\item{\code{type}}{Type (paper, postcard, print, or social)}
 }
 }
 \usage{
 paper_sizes
 }
 \description{
-Reference table of common paper sizes used for \code{get_paper()} and
-\code{ggsave_ext()} functions. Derived from
-\href{https://github.com/visioguy/PaperSizes/}{visioguy/PaperSizes} repo.
+Reference table of standard paper, postcard, photo print, and social media image
+sizes, for \code{get_paper()} and \code{ggsave_ext()} functions. Derived from
+\href{https://github.com/visioguy/PaperSizes/}{visioguy/PaperSizes} repo, \href{https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html}{Adobe UK guide to photo sizes}
+and other sources.
 }
 \keyword{datasets}

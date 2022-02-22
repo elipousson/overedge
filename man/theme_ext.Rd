@@ -60,10 +60,10 @@ modifying theme ("set", "update", or "replace"); defaults to \code{NULL}.}
 \item{margin}{Margin distance, a margin style supported by \code{\link[=get_margins]{get_margins()}} or
 a margin object; defaults to 10.}
 
-\item{paper}{Paper, Default: 'letter'}
+\item{paper}{Paper, Default: 'letter'.}
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
-'portrait'}
+'portrait'.}
 
 \item{dist}{Margin distance (single value used to all sides), Default: \code{NULL}}
 
@@ -81,8 +81,8 @@ This is not tested and may not work with all page sizes/orientations.}
 \code{\link[ggplot2]{element_rect}} Default: \code{NA}.}
 
 \item{size}{Size number (only used for "ISO" and "JIS" series). Standard,
-series, and size may all be required to return a single paper using these
-parameters.}
+series, and size may all be required to return a single paper when using
+these parameters.}
 
 \item{position}{Legend position (“left”,“top”, “right”, “bottom”) or a
 two-element numeric vector to set position using Normalized Parent

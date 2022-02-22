@@ -149,25 +149,26 @@ ggsave_ext <- function(plot = last_plot(),
 }
 
 
-#' Get paper sizes
+#' Get standard paper and image sizes
 #'
 #' Use the "paper" parameter (matching name from [paper_sizes]), standard
-#' (optionally including both series and size) parameter, or width, height and
-#' units. May return multiple paper sizes.
+#' (optionally including series and size) parameter, or width, height and
+#' units. May return multiple paper sizes depending on parameters.
 #'
-#' @param paper Paper, Default: 'letter'
+#' @param paper Paper, Default: 'letter'.
 #' @param orientation Orientation "portrait", "landscape", or "square", Default:
-#'   'portrait'
-#' @param standard Size standard, "ANSI" or "ISO"
+#'   'portrait'.
+#' @param standard Size standard, "ANSI", "ISO", "British Imperial", "JIS",
+#'   "USPS", "Facebook", "Instagram", or "Twitter".
 #' @param series Size series (e.g. A), Default: `NULL`
 #' @param size Size number (only used for "ISO" and "JIS" series). Standard,
-#'   series, and size may all be required to return a single paper using these
-#'   parameters.
-#' @param width Width in units, Default: `NULL`
-#' @param height Height in units, Default: `NULL`
-#' @param units Paper size units, either "in" or "mm"; defaults to `NULL` (using
-#'   "in" if width or height are provided).
-#' @return Data frame with one or more paper sizes.
+#'   series, and size may all be required to return a single paper when using
+#'   these parameters.
+#' @param width Width in units, Default: `NULL`.
+#' @param height Height in units, Default: `NULL`.
+#' @param units Paper size units, either "in", "mm", or "px"; defaults to `NULL`
+#'   (using "in" if width or height are provided).
+#' @return Data frame with one or more paper/image sizes.
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -198,38 +199,52 @@ get_paper <- function(paper = "letter",
   if (!is.null(paper)) {
     paper <- dplyr::filter(
       paper_sizes,
-      tolower(name) == tolower(paper)
+      tolower(name) %in% tolower(paper)
     )
   } else if (!is.null(standard)) {
-    paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS"))
+    paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"))
     paper <- dplyr::filter(
       paper_sizes,
-      standard == paper_standard
+      standard %in% paper_standard
     )
 
-    if (!is.null(size) && !is.null(series)) {
-      paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture"))
-      paper_size <- size
+    if (!is.null(series)) {
+      paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"))
 
       paper <- dplyr::filter(
         paper,
-        size == paper_size,
-        series == paper_series
+        series %in% paper_series
       )
+
+      if (!is.null(size)) {
+        paper_size <- size
+
+        paper <- dplyr::filter(
+          paper,
+          size %in% paper_size
+        )
+      }
     }
   } else if (!is.null(width)) {
     paper_width <- width
-    paper_height <- height
 
-    units <- match.arg(units, c("in", "mm"))
+    units <- match.arg(units, c("in", "mm", "px"))
     paper_units <- units
 
     paper <- dplyr::filter(
       paper_sizes,
-      width == paper_width,
-      height == paper_height,
-      units == paper_units
+      width %in% paper_width,
+      units %in% paper_units
     )
+
+    if (!is.null(height)) {
+      paper_height <- height
+
+      paper <- dplyr::filter(
+        paper_sizes,
+        height %in% paper_height
+      )
+    }
   }
 
   # Save width and height before checking orientation

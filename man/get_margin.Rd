@@ -20,10 +20,10 @@ get_margin(
 "narrow", "none"), Additional "auto" option to generate margin based on
 line length is planned but not yet implemented. Default: \code{NULL} (equivalent to "none").}
 
-\item{paper}{Paper, Default: 'letter'}
+\item{paper}{Paper, Default: 'letter'.}
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
-'portrait'}
+'portrait'.}
 
 \item{dist}{Margin distance (single value used to all sides), Default: \code{NULL}}
 

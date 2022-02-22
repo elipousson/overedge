@@ -18,10 +18,10 @@ get_asp(
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
-\item{paper}{Paper, Default: 'letter'}
+\item{paper}{Paper, Default: 'letter'.}
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
-'portrait'}
+'portrait'.}
 
 \item{margin}{Margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on

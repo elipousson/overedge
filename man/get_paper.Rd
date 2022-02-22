@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggsave_ext.R
 \name{get_paper}
 \alias{get_paper}
-\title{Get paper sizes}
+\title{Get standard paper and image sizes}
 \usage{
 get_paper(
   paper = "letter",
@@ -16,33 +16,34 @@ get_paper(
 )
 }
 \arguments{
-\item{paper}{Paper, Default: 'letter'}
+\item{paper}{Paper, Default: 'letter'.}
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
-'portrait'}
+'portrait'.}
 
-\item{standard}{Size standard, "ANSI" or "ISO"}
+\item{standard}{Size standard, "ANSI", "ISO", "British Imperial", "JIS",
+"USPS", "Facebook", "Instagram", or "Twitter".}
 
 \item{series}{Size series (e.g. A), Default: \code{NULL}}
 
 \item{size}{Size number (only used for "ISO" and "JIS" series). Standard,
-series, and size may all be required to return a single paper using these
-parameters.}
+series, and size may all be required to return a single paper when using
+these parameters.}
 
-\item{width}{Width in units, Default: \code{NULL}}
+\item{width}{Width in units, Default: \code{NULL}.}
 
-\item{height}{Height in units, Default: \code{NULL}}
+\item{height}{Height in units, Default: \code{NULL}.}
 
-\item{units}{Paper size units, either "in" or "mm"; defaults to \code{NULL} (using
-"in" if width or height are provided).}
+\item{units}{Paper size units, either "in", "mm", or "px"; defaults to \code{NULL}
+(using "in" if width or height are provided).}
 }
 \value{
-Data frame with one or more paper sizes.
+Data frame with one or more paper/image sizes.
 }
 \description{
 Use the "paper" parameter (matching name from \link{paper_sizes}), standard
-(optionally including both series and size) parameter, or width, height and
-units. May return multiple paper sizes.
+(optionally including series and size) parameter, or width, height and
+units. May return multiple paper sizes depending on parameters.
 }
 \examples{
 \dontrun{
