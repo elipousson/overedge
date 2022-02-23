@@ -1,3 +1,5 @@
+#' Check if a string is a URL
+#'
 #' @noRd
 check_url <- function(x) {
   grepl(
@@ -5,17 +7,43 @@ check_url <- function(x) {
     x
   )
 }
-
+#' Check if a string is an ArcGIS MapServer or FeatureServer URL
+#'
 #' @noRd
 check_esri_url <- function(x) {
   grepl("/MapServer|/FeatureServer", x)
 }
 
 #' @noRd
-check_sf <- function(x) {
-  "sf" %in% class(x)
+check_class <- function(x, check = NULL) {
+  any(check %in% class(x))
 }
 
+#' Check if an object is sf (or sf, sfc, or bbox) class
+#'
+#' @param x An object to check if it a `sf` class object or not.
+#' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
+#'   not; defaults to `FALSE`.
+#' @noRd
+check_sf <- function(x, ext = FALSE) {
+  if (!ext) {
+    check_class(x, "sf")
+  } else {
+    check_class(x, c("sf", "sfc", "bbox"))
+  }
+}
+
+#' Check if an object is bbox class
+#'
+#' @param x An object to check if it a `bbox` class object or not.
+#' @noRd
+check_bbox <- function(x) {
+  check_class(x, "bbox")
+}
+
+
+#' Check if object is a named list of sf class objects
+#' @param x An object to check if it a named list of `sf` class objects or not.
 #' @noRd
 check_sf_list <- function(x) {
   is_sf_list <- is.list(x) && all(vapply(x, check_sf, TRUE))
@@ -23,10 +51,23 @@ check_sf_list <- function(x) {
   is_sf_list && is_named
 }
 
+#' Check if sf objects share the same coordinate reference system
+#'
+#' @param x An `sf`, `sfc`, or `bbox` object, or a character or numeric object
+#'   supported by \code{\link[sf]{st_crs}}
+#' @param y An object object to compare to x. The same object classes are
+#'   supported.
+#' @param transform If `TRUE`, transform y to match CRS of x and return Y. If
+#'   `FALSE`, return logical indicator of whether x and y have the same crs;
+#'   defaults to `FALSE`.
 #' @noRd
-check_bbox <- function(x) {
-  "bbox" %in% class(x)
+check_sf_same_crs <- function(x, y) {
+  return(sf::st_crs(x) == sf::st_crs(y))
 }
+
+#' Check if package exists and prompt to install if not
+#'
+#' @param package Name of a package.
 #' @importFrom checkmate test_directory_exists
 #' @importFrom usethis ui_warn ui_yeah
 #' @noRd
@@ -40,7 +81,7 @@ check_package_exists <- function(package) {
 }
 
 #' @noRd
-eval_data <- function(data, package = NULL, label = NULL) {
+eval_data <- function(data, package = NULL) {
   data <- paste0(collapse = "::", c(package, data))
   eval(parse(text = data))
 }

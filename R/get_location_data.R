@@ -65,7 +65,6 @@ get_location_data <- function(location = NULL,
     bbox <- NULL
   }
 
-
   # Check if data is in local environment
   if ((length(data) == 1) && (data %in% ls(envir = .GlobalEnv)) && !check_sf(data)) {
     if (usethis::ui_yeah("Do you want to load {data} from the global environment?")) {
@@ -80,40 +79,42 @@ get_location_data <- function(location = NULL,
   # Check if data is not an  sf object
   if (!(check_sf(data))) {
 
-      # Check if data is a url
-      if (check_url(data)) {
-        url <- data
-        # Check if data is a path to an existing file
-      } else if (checkmate::test_file_exists(x = data)) {
-        path <- data
-      }
-
-      # Call the appropriate read_sf function
-      if (!is.null(path)) {
-        data <- read_sf_path(path = path, bbox = bbox, ...)
-      } else if (!is.null(url)) {
-        data <- read_sf_url(url = url, bbox = bbox, ...)
-      } else if (!is.null(package)) {
-        data <- read_sf_package(data = data, bbox = bbox, package = package, filetype = filetype, ...)
-      }
+    # Check if data is a url
+    if (check_url(data)) {
+      url <- data
+      # Check if data is a path to an existing file
+    } else if (checkmate::test_file_exists(x = data)) {
+      path <- data
     }
 
-  if (is.null(from_crs)) {
-    from_crs <- sf::st_crs(data)
+    # Call the appropriate read_sf function
+    if (!is.null(path)) {
+      data <- read_sf_path(path = path, bbox = bbox, ...)
+    } else if (!is.null(url)) {
+      data <- read_sf_url(url = url, bbox = bbox, ...)
+    } else if (!is.null(package)) {
+      data <- read_sf_package(data = data, bbox = bbox, package = package, filetype = filetype, ...)
+    }
   }
 
   if (!is.null(bbox)) {
-    if (crop && !trim) {
-      data <- suppressWarnings(sf::st_crop(data, bbox))
-    } else if (trim) {
-      if (sf::st_crs(from_crs) != sf::st_crs(location)) {
-        location <- sf::st_transform(location, from_crs)
-      }
+    if (trim) {
 
+      # If trim, match location crs to data
+      location <- st_transform_ext(x = location, crs = data)
       data <- suppressWarnings(sf::st_intersection(data, location))
     } else {
-      bbox_sf <- sf_bbox_to_sf(bbox)
-      data <- sf::st_filter(data, bbox_sf)
+      # Otherwise, match bbox crs to data
+      bbox <- st_transform_ext(x = bbox, crs = data)
+
+      if (crop) {
+        data <- suppressWarnings(sf::st_crop(data, bbox))
+      } else {
+
+        # If no cropping, filter with bbox
+        bbox_sf <- sf_bbox_to_sf(bbox)
+        data <- sf::st_filter(data, bbox_sf)
+      }
     }
   }
 

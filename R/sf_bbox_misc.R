@@ -100,7 +100,7 @@ sf_bbox_diagdist <- function(bbox) {
 #' @export
 #' @importFrom sf st_crs st_transform st_bbox
 sf_bbox_transform <- function(bbox, crs) {
-  if(sf::st_crs(bbox) != sf::st_crs(crs)) {
+  if(!check_sf_same_crs(bbox, crs)) {
     bbox_sf <- sf::st_transform(sf_bbox_to_sf(bbox), crs)
     bbox <- sf::st_bbox(bbox_sf)
   }
