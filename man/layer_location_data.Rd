@@ -21,6 +21,7 @@ layer_location_data(
   trim = FALSE,
   from_crs = NULL,
   crs = NULL,
+  label_col = "name",
   ...
 )
 }
@@ -51,7 +52,8 @@ buffer distance. e.g. if the diagonal distance is 3000 meters and the
 "diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
 provided.}
 
-\item{unit}{unit to adjust location by dist or diag_ratio; defaults to "meter"}
+\item{unit}{unit to adjust location by dist or diag_ratio; defaults to
+"meter"}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
@@ -76,6 +78,9 @@ Default FALSE.}
 \item{from_crs}{coordinate reference system of the data.}
 
 \item{crs}{coordinate reference system to return}
+
+\item{label_col}{Column name or id for a column with the text or labels to
+pass to \link{ggrepel} functions.}
 
 \item{...}{Parameters passed to selected geom}
 }

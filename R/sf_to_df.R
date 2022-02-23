@@ -56,7 +56,7 @@ sf_to_df <- function(x,
       if (geometry == "centroid") {
         x <- suppressWarnings(sf::st_centroid(x))
       } else if (geometry == "point") {
-        x <- suppressWarnings(sf::st_point_on_surface(x))
+        x <- suppressMessages(sf::st_point_on_surface(x))
       }
     }
 

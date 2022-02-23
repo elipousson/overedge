@@ -11,7 +11,7 @@
 #' @param name Location name to return.
 #' @param id Location id to return. id is coerced to character or numeric to
 #'   match the class of the id_col for type.
-#' @param location address or sf object passed to \code{\link[sf]{st_filter}}.
+#' @param location An address or `sf` or `bbox` object passed to \code{\link[sf]{st_filter}}.
 #'   Any valid address or addresses are geocoded with
 #'   \code{\link[tidygeocoder]{geo}}), converted to a simple feature object, and
 #'   then used as a spatial filter.
@@ -84,8 +84,7 @@ get_location <- function(type,
                          ...) {
   stopifnot(
     check_sf(type) || is.character(type),
-    is.character(location) || is.null(location) || check_sf(location),
-    is.character(label) || is.null(label),
+    is.character(location) || is.null(location) || check_sf(location, ext = TRUE),
     is.list(index) || is.null(index),
     is.logical(union)
   )
@@ -128,7 +127,12 @@ get_location <- function(type,
     }
 
     # Filter sf
-    if (check_sf(location)) {
+    if (check_sf(location, ext = TRUE)) {
+
+      if(check_bbox(location)) {
+        location <- sf_bbox_to_sf(location)
+      }
+
       location <- sf::st_filter(type, location)
     }
   }

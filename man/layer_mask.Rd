@@ -20,7 +20,7 @@ layer_mask(
 )
 }
 \arguments{
-\item{data}{sf, sfc, or bbox object. If dist, diag_ratio, and/or asp are provided, data is adjusted to set the boundaries of the mask. If data is not provided, \code{mask} is required.}
+\item{data}{\code{sf}, \code{sfc}, or \code{bbox} object. If dist, diag_ratio, and/or asp are provided, data is adjusted to set the boundaries of the mask. If data is not provided, \code{mask} is required.}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -43,13 +43,13 @@ without modification.}
 
 \item{fill}{mask fill color; defaults to "white"}
 
-\item{color}{mask edge color; defaults to NA}
+\item{color}{mask edge color; defaults to \code{NA}}
 
 \item{alpha}{mask alpha/transparency; defaults to 0.5}
 
-\item{mask}{\code{bbox} object to define the edge of the mask.
+\item{mask}{A \code{sf} or \code{bbox} object to define the edge of the mask.
 \code{diag_ratio}, \code{dist}, and \code{asp} parameters are ignored if a
-\code{mask} is provided. defaults to NULL}
+\code{mask} is provided. defaults to \code{NULL}}
 
 \item{neatline}{If TRUE, add \code{layer_neatline} with \code{expand = TRUE}; defaults to FALSE.}
 
@@ -59,5 +59,5 @@ without modification.}
 \code{\link[ggplot2]{geom_sf}} function.
 }
 \description{
-Returns a mask for an area or areas as an  \code{sf} object.
+Returns a mask for an area or areas as a simple feature object.
 }

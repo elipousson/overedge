@@ -19,9 +19,7 @@
 #'   "meter"
 #' @param ... additional parameters passed to  \code{\link[sf]{st_buffer}}.
 #' @export
-#' @importFrom checkmate test_class
-#' @importFrom sf st_is_longlat st_crs st_transform st_buffer
-#' @importFrom crsuggest suggest_top_crs
+#' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer
 #' @importFrom units set_units
 st_buffer_ext <- function(x,
                           dist = NULL,
@@ -31,7 +29,7 @@ st_buffer_ext <- function(x,
 
 
   # If bbox, convert to sf
-  if (checkmate::test_class(x, "bbox")) {
+  if (check_bbox(x)) {
     x <- sf_bbox_to_sf(x)
   }
 
@@ -43,8 +41,7 @@ st_buffer_ext <- function(x,
 
     if (is_lonlat) {
       lonlat_crs <- sf::st_crs(x)
-      top_crs <- suppressMessages(crsuggest::suggest_top_crs(x))
-      x <- sf::st_transform(x, top_crs)
+      x <- sf::st_transform(x, 3857)
     }
 
     if (is.null(dist) && !is.null(diag_ratio)) {

@@ -51,7 +51,7 @@ check_sf_list <- function(x) {
   is_sf_list && is_named
 }
 
-#' Check if sf objects share the same coordinate reference system
+#' Check if objects share the same coordinate reference system
 #'
 #' @param x An `sf`, `sfc`, or `bbox` object, or a character or numeric object
 #'   supported by \code{\link[sf]{st_crs}}
@@ -63,6 +63,12 @@ check_sf_list <- function(x) {
 #' @noRd
 check_sf_same_crs <- function(x, y) {
   return(sf::st_crs(x) == sf::st_crs(y))
+}
+
+#' Check if objects is a ggplot2 layer
+#' @noRd
+check_geom <- function(x) {
+  check_class(x[[1]], "Layer") && check_class(x[[1]], "gg")
 }
 
 #' Check if package exists and prompt to install if not

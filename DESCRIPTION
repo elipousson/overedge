@@ -11,17 +11,13 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     checkmate,
-    crsuggest,
     dplyr,
     esri2sf,
-    exifr,
-    geosphere,
     ggplot2,
     ggsvg,
     glue,
     janitor,
     knitr,
-    lwgeom,
     osmdata,
     purrr,
     rappdirs,
@@ -41,6 +37,11 @@ LazyData: true
 Suggests: 
     rmarkdown,
     covr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    exifr,
+    ggrepel,
+    geomtextpath,
+    geosphere,
+    lwgeom
 Config/testthat/edition: 3
 VignetteBuilder: knitr
