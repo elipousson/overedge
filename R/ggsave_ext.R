@@ -190,7 +190,7 @@ get_paper <- function(paper = "letter",
                       width = NULL,
                       height = NULL,
                       units = NULL) {
-  orientation <- match.arg(orientation, c("portrait", "landscape", "square"))
+  orientation <- match.arg(orientation, c("portrait", "landscape", "square"), several.ok = TRUE)
 
   if (!is.null(standard) | !is.null(width)) {
     paper <- NULL
@@ -202,14 +202,14 @@ get_paper <- function(paper = "letter",
       tolower(name) %in% tolower(paper)
     )
   } else if (!is.null(standard)) {
-    paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"))
+    paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
     paper <- dplyr::filter(
       paper_sizes,
       standard %in% paper_standard
     )
 
     if (!is.null(series)) {
-      paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"))
+      paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"), several.ok = TRUE)
 
       paper <- dplyr::filter(
         paper,
