@@ -28,10 +28,11 @@ character string to match the name of a list.}
 \item{id}{Location id to return. id is coerced to character or numeric to
 match the class of the id_col for type.}
 
-\item{location}{An address or \code{sf} or \code{bbox} object passed to \code{\link[sf]{st_filter}}.
-Any valid address or addresses are geocoded with
-\code{\link[tidygeocoder]{geo}}), converted to a simple feature object, and
-then used as a spatial filter.}
+\item{location}{An address, bounding box (\code{bbox}), or simple feature (\code{sf})
+object passed to \code{\link[sf]{st_filter}}. Any valid address or
+addresses are geocoded with \code{\link[tidygeocoder]{geo}}), converted to
+a simple feature object, and then used as a spatial filter. \code{bbox} objects
+are converted using \code{\link[=sf_bbox_to_sf]{sf_bbox_to_sf()}}. Multiple addresses are supported.}
 
 \item{label}{Label optionally added to "label" column; must be a length 1 or
 match the number of rows returned based on the other parameters. If \code{union = TRUE},
