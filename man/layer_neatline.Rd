@@ -44,7 +44,8 @@ without modification.}
 
 \item{color}{Color of panel border, Default: 'black'}
 
-\item{bgcolor}{Fill color of panel background; defaults to "white". If "none", panel background is set to ggplot2::element_blank()}
+\item{bgcolor}{Fill color of panel background; defaults to "white". If
+"none", panel background is set to ggplot2::element_blank()}
 
 \item{size}{Size of panel border, Default: 1}
 
@@ -64,7 +65,8 @@ labels.}
 \item{...}{Additional parameters to pass to \code{\link[ggplot2]{coord_sf}}.}
 }
 \value{
-\code{\link[ggplot2]{coord_sf}} function with xlim and ylim parameters
+\code{\link[ggplot2]{coord_sf}} function with xlim and ylim
+parameters
 }
 \description{
 Set limits for a map to the bounding box of an x using

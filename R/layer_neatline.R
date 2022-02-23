@@ -17,14 +17,16 @@
 #'   provided parameters.
 #' @param size Size of panel border, Default: 1
 #' @param color Color of panel border, Default: 'black'
-#' @param bgcolor Fill color of panel background; defaults to "white". If "none", panel background is set to ggplot2::element_blank()
+#' @param bgcolor Fill color of panel background; defaults to "white". If
+#'   "none", panel background is set to ggplot2::element_blank()
 #' @param linetype Line type of panel border, Default: 'solid'
 #' @param hide_grid If `TRUE`, hide major grid lines. Default: `TRUE`
 #' @param label_axes A description of which axes to label passed to
 #'   \code{\link[ggplot2]{coord_sf}}; defaults to '----' which hides axes
 #'   labels.
 #' @param ... Additional parameters to pass to \code{\link[ggplot2]{coord_sf}}.
-#' @return \code{\link[ggplot2]{coord_sf}} function with xlim and ylim parameters
+#' @return \code{\link[ggplot2]{coord_sf}} function with xlim and ylim
+#'   parameters
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -95,8 +97,7 @@ layer_neatline <- function(data = NULL,
   }
 
   if (label_axes == "----") {
-    neatline <- list(
-      neatline,
+    theme_axis <-
       ggplot2::theme(
         axis.title = ggplot2::element_blank(),
         axis.text = ggplot2::element_blank(),
@@ -104,6 +105,10 @@ layer_neatline <- function(data = NULL,
         axis.ticks.length = ggplot2::unit(x = 0, units = "mm"),
         axis.line = ggplot2::element_blank()
       )
+
+    neatline <- list(
+      neatline,
+      theme_axis
     )
   }
 
@@ -114,14 +119,16 @@ layer_neatline <- function(data = NULL,
   }
 
   panel_border <- ggplot2::element_rect(color = color, size = size, linetype = linetype, fill = NA)
+  theme_panel <-
+    ggplot2::theme(
+    panel.border = panel_border,
+    panel.background = panel_background
+  )
 
 
   neatline <- list(
     neatline,
-    ggplot2::theme(
-      panel.border = panel_border,
-      panel.background = panel_background
-    )
+    theme_panel
   )
 
   neatline
