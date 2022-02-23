@@ -15,6 +15,11 @@
 #'   Any valid address or addresses are geocoded with
 #'   \code{\link[tidygeocoder]{geo}}), converted to a simple feature object, and
 #'   then used as a spatial filter.
+#' @param location An address, bounding box (`bbox`), or simple feature (`sf`)
+#'   object passed to \code{\link[sf]{st_filter}}. Any valid address or
+#'   addresses are geocoded with \code{\link[tidygeocoder]{geo}}), converted to
+#'   a simple feature object, and then used as a spatial filter. `bbox` objects
+#'   are converted using [sf_bbox_to_sf()]. Multiple addresses are supported.
 #' @param label Label optionally added to "label" column; must be a length 1 or
 #'   match the number of rows returned based on the other parameters. If `union = TRUE`,
 #'   using label is recommended. Default: `NULL`
@@ -124,6 +129,10 @@ get_location <- function(type,
       )
       # Convert single address df to sf
       location <- df_to_sf(location, coords = c("lon", "lat"), crs = type_crs)
+    }
+
+    if (check_bbox(location)) {
+      location <- sf_bbox_to_sf(location)
     }
 
     # Filter sf
