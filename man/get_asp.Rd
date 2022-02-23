@@ -23,9 +23,9 @@ without modification.}
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
 'portrait'.}
 
-\item{margin}{Margin style (options include "extrawide", "wide", "standard",
-"narrow", "none"), Additional "auto" option to generate margin based on
-line length is planned but not yet implemented. Default: \code{NULL} (equivalent to "none").}
+\item{margin}{A margin style supported by \code{\link[=get_margins]{get_margins()}}, a numeric vector
+(length 1 or 4) passed to dist parameter of get_margins, or a margins
+object.}
 
 \item{unit}{Unit for margin distance, Default: 'in'.}
 
