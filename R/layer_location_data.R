@@ -42,6 +42,9 @@ layer_location_data <-
            crs = NULL,
            label_col = "name",
            ...) {
+
+    # FIXME: The use of label in this function is designed for use with batch loading
+    # but it is inconsistent with how other functions handle the "label" parameter
     if (is.character(data) && !missing(label)) {
       data <- paste0(collapse = "_", c(label, data))
     }
@@ -67,8 +70,14 @@ layer_location_data <-
 
     geom <- match.arg(
       geom,
-      c("sf", "icon", "text", "label", "textsf", "labelsf", "label_repel", "text_repel")
+      c("sf", "icon", "text", "label", "textsf", "labelsf", "text_repel", "label_repel")
     )
+
+    if (geom %in% c("textsf", "labelsf")) {
+      check_package_exists("geomtextpath")
+    } else if (geom %in% c("text_repel", "label_repel")) {
+      check_package_exists("ggrepel")
+    }
 
     layer <-
       switch(geom,
