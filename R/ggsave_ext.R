@@ -325,11 +325,14 @@ get_margin <- function(margin = NULL,
                        header = 0,
                        footer = 0) {
   margin <- match.arg(margin, c("none", "narrow", "standard", "extrawide", "wide"))
-  unit <- match.arg(unit, c("in", "mm", "cm", "npc", "picas", "pc", "pt", "lines", "char", "native"))
+  unit <- match.arg(unit, c("in", "mm", "px", "cm", "npc", "picas", "pc", "pt", "lines", "char", "native"))
 
-  if (!is.null(paper) && !is.null(plot_width)) {
+  if (!is.null(paper)) {
     paper <- get_paper(paper = paper, orientation = orientation)
-    dist <- (paper$width - plot_width) / 2
+
+    if (!is.null(plot_width)) {
+      dist <- (paper$width - plot_width) / 2
+    }
   }
 
   if (is.null(dist)) {
@@ -350,13 +353,30 @@ get_margin <- function(margin = NULL,
           "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
           "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
         )
+      } else if (unit == "px" && !is.null(paper)) {
+        px_to_npc_margins <- function(px) {
+          list(
+            "t" = 1 - (px / paper$height),
+            "r" = 1 - (px / paper$width),
+            "b" = (px / paper$height),
+            "l" = (px / paper$width)
+          )
+        }
+
+        margin <- switch(margin,
+          "extrawide" = ggplot2::margin(px_to_npc_margins(120), unit = "npc"), # 1080 / 6
+          "wide" = ggplot2::margin(px_to_npc_margins(80), unit = "npc"), # 1080 / 8
+          "standard" = ggplot2::margin(px_to_npc_margins(40), unit = "npc"), # 1080 / 12
+          "narrow" = ggplot2::margin(px_to_npc_margins(20), unit = "npc"),
+          "none" = ggplot2::margin(px_to_npc_margins(0), unit = "npc")
+        )
       }
     } else if (margin == "auto") {
       # TODO: implement margin settings that respond to font family and size and/or paper
       # e.g. LaTeX default is 1.5 in margin w/ 12pt text, 1.75 in for 11pt, 1.875 for 10pt
       # See https://practicaltypography.com/page-margins.html for more information on linelength and margins
     }
-  } else {
+  } else if (unit != "px") {
     if (length(dist) == 1) {
       margin <- ggplot2::margin(t = dist, r = dist, b = dist, l = dist, unit = unit)
     } else if (length(dist) == 4) {
@@ -364,7 +384,9 @@ get_margin <- function(margin = NULL,
     }
   }
 
-  margin <- margin + grid::unit(x = c(header, 0, 0, footer), unit = unit)
+  if (unit != "px") {
+    margin <- margin + grid::unit(x = c(header, 0, 0, footer), unit = unit)
+  }
 
   return(margin)
 }
