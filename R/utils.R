@@ -74,14 +74,21 @@ check_geom <- function(x) {
 #' Check if package exists and prompt to install if not
 #'
 #' @param package Name of a package.
+#' @param repo GitHub repository to use for the package.
 #' @importFrom checkmate test_directory_exists
 #' @importFrom usethis ui_warn ui_yeah
+#' @importFrom remotes install_github
 #' @noRd
-check_package_exists <- function(package) {
+check_package_exists <- function(package, repo = NULL) {
   if (!checkmate::test_directory_exists(find.package(package, quiet = TRUE))) {
     usethis::ui_warn("{usethis::ui_value(package)} is not installed.")
     if (usethis::ui_yeah("Do you want to try to install {package}?")) {
-      install.packages(package)
+
+      if (is.null(repo)) {
+        install.packages(package)
+      } else {
+        remotes::install_github(repo)
+      }
     }
   }
 }
