@@ -6,7 +6,7 @@
 #' buffer and/or adjust the aspect ratio of the limiting bounding box to match a
 #' set aspect ratio.
 #'
-#' @inheritParams st_bbox_adj
+#' @inheritParams st_bbox_ext
 #' @param unit Buffer units; defaults to meter.
 #' @param data `sf` or `bbox` class object
 #' @param crs Coordinate reference system to use for
@@ -59,7 +59,7 @@ layer_neatline <- function(data = NULL,
                            ...) {
 
   # Pass variables to bbox adjustment function
-  bbox <- st_bbox_adj(
+  bbox <- st_bbox_ext(
     x = data,
     dist = dist,
     diag_ratio = diag_ratio,

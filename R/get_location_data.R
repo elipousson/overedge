@@ -7,7 +7,7 @@
 #'
 #' @param location sf object. If multiple areas are provided, they are unioned
 #'   into a single sf object using \code{\link[sf]{st_union}}
-#' @inheritParams st_bbox_adj
+#' @inheritParams st_bbox_ext
 #' @param data sf object including data in area. data may also be a url or file
 #'   path. data can be the name of a data object or, if package and filetype are
 #'   provided, a cached or external file.
@@ -53,7 +53,7 @@ get_location_data <- function(location = NULL,
   if (!is.null(location)) {
     # Get adjusted bounding box using any adjustment variables provided
     bbox <-
-      st_bbox_adj(
+      st_bbox_ext(
         x = location,
         dist = dist,
         diag_ratio = diag_ratio,

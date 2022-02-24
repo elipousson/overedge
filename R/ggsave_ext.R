@@ -182,6 +182,7 @@ ggsave_ext <- function(plot = last_plot(),
 #' @rdname get_paper
 #' @export
 #' @importFrom dplyr filter rename
+#' @importFrom rlang .data
 get_paper <- function(paper = "letter",
                       orientation = "portrait",
                       standard = NULL,
@@ -199,13 +200,13 @@ get_paper <- function(paper = "letter",
   if (!is.null(paper)) {
     paper <- dplyr::filter(
       paper_sizes,
-      tolower(name) %in% tolower(paper)
+      tolower(.data$name) %in% tolower(paper)
     )
   } else if (!is.null(standard)) {
     paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
     paper <- dplyr::filter(
       paper_sizes,
-      standard %in% paper_standard
+      .data$standard %in% paper_standard
     )
 
     if (!is.null(series)) {
@@ -213,7 +214,7 @@ get_paper <- function(paper = "letter",
 
       paper <- dplyr::filter(
         paper,
-        series %in% paper_series
+        .data$series %in% paper_series
       )
 
       if (!is.null(size)) {
@@ -221,7 +222,7 @@ get_paper <- function(paper = "letter",
 
         paper <- dplyr::filter(
           paper,
-          size %in% paper_size
+          .data$size %in% paper_size
         )
       }
     }
@@ -233,8 +234,8 @@ get_paper <- function(paper = "letter",
 
     paper <- dplyr::filter(
       paper_sizes,
-      width %in% paper_width,
-      units %in% paper_units
+      .data$width %in% paper_width,
+      .data$units %in% paper_units
     )
 
     if (!is.null(height)) {
@@ -242,7 +243,7 @@ get_paper <- function(paper = "letter",
 
       paper <- dplyr::filter(
         paper_sizes,
-        height %in% paper_height
+        .data$height %in% paper_height
       )
     }
   }

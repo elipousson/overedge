@@ -32,6 +32,7 @@
 #'   st_centroid st_point_on_surface st_coordinates st_drop_geometry
 #' @importFrom dplyr bind_cols select
 #' @importFrom tidyselect all_of
+#' @importFrom rlang .data
 sf_to_df <- function(x,
                      crs = 4326,
                      coords = c("lon", "lat"),
@@ -70,8 +71,8 @@ sf_to_df <- function(x,
     x_coords <-
       dplyr::select(
         x_coords,
-        "{coords[1]}" := X,
-        "{coords[2]}" := Y
+        "{coords[1]}" := .data$X,
+        "{coords[2]}" := .data$Y
       )
   }
 

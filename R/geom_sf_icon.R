@@ -50,6 +50,7 @@
 #' @importFrom ggsvg geom_point_svg
 #' @importFrom ggplot2 aes
 #' @importFrom stringr str_detect
+#' @importFrom rlang .data
 geom_sf_icon <- function(data = NULL,
                          iconname_col = "icon",
                          icon = NULL,
@@ -65,11 +66,11 @@ geom_sf_icon <- function(data = NULL,
     icon_options <- dplyr::rename(map_icons, svg_url = url, {{ iconname_col }} := name)
 
     if (!is.null(px)) {
-      icon_options <- dplyr::filter(icon_options, px == px)
+      icon_options <- dplyr::filter(icon_options, .data$px == px)
     }
 
     if (!is.null(source)) {
-      icon_options <- dplyr::filter(icon_options, repo == source)
+      icon_options <- dplyr::filter(icon_options, .data$repo == source)
     }
 
     data <-
@@ -85,10 +86,10 @@ geom_sf_icon <- function(data = NULL,
       ...
     )
   } else if (!is.null(icon)) {
-    icon <- dplyr::filter(map_icons, name == icon)
+    icon <- dplyr::filter(map_icons, .data$name == icon)
 
     if (!is.null(px)) {
-      icon <- dplyr::filter(icon, size == px)
+      icon <- dplyr::filter(icon, .data$size == px)
     }
 
     if (!is.null(source)) {

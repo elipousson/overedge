@@ -110,6 +110,7 @@ get_location <- function(type,
     if (!is.null(name)) {
       # Filter type by name
       location <- type[type[[name_col]] %in% name, ]
+      # FIXME: Add warning or error message if provided name does not return a location
     } else if (!is.null(id)) {
       if (is.character(type[[id_col]])) {
         # Filter type by ID
@@ -117,6 +118,7 @@ get_location <- function(type,
       } else if (is.numeric(type[[id_col]])) {
         location <- type[type[[id_col]] %in% as.numeric(id), ]
       }
+      # FIXME: Add warning or error message if provided id does not return a location
     }
   } else {
     # Check if location if it is a character (assume it is an address)

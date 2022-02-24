@@ -79,7 +79,7 @@ make_basemap <-
     # label <- janitor::make_clean_names(label)
 
     basemap_bbox <-
-      st_bbox_adj(
+      st_bbox_ext(
         x = location,
         asp = asp,
         dist = dist,

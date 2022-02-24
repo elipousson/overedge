@@ -17,7 +17,7 @@
 #' @param locationname location name
 #' @param ... Additional arguments passed to esri2sf::esri2df or esri2sf::esri2sf
 #' @inheritParams sf_bbox_to_lonlat_query
-#' @inheritParams st_bbox_adj
+#' @inheritParams st_bbox_ext
 #' @seealso
 #'  \code{\link[esri2sf]{esri2sf}}
 #' @rdname get_esri_data
@@ -39,7 +39,7 @@ get_esri_data <- function(location = NULL,
                           ...) {
   if (!is.null(location)) {
     # Adjust bounding box
-    bbox <- st_bbox_adj(
+    bbox <- st_bbox_ext(
       x = location,
       dist = dist,
       diag_ratio = diag_ratio,

@@ -1,4 +1,4 @@
-#' Get bounding box buffered and adjusted to match aspect ratio
+#' Get bounding box buffered to aspect ratio
 #'
 #' Takes an area as an sf object or a bounding box and returns a bounding box
 #' that matches the provided aspect ratio and contains the area or bounding box
@@ -13,9 +13,10 @@
 #' @inheritParams st_bbox_asp
 #' @param crs Coordinate reference system of bounding box to return
 #' @return Class \code{bbox} object
+#' @aliases st_bbox_adj
 #' @export
 #' @importFrom sf st_transform st_bbox
-st_bbox_adj <- function(x = NULL,
+st_bbox_ext <- function(x = NULL,
                         dist = NULL,
                         diag_ratio = NULL,
                         asp = NULL,
@@ -24,7 +25,6 @@ st_bbox_adj <- function(x = NULL,
   if (check_bbox(x)) {
     x <- sf_bbox_to_sf(x)
   }
-
   # Get buffered area
   x <-
     st_buffer_ext(

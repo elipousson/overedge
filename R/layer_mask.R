@@ -3,7 +3,7 @@
 #' Returns a mask for an area or areas as a simple feature object.
 #'
 #' @param data `sf`, `sfc`, or `bbox` object. If dist, diag_ratio, and/or asp are provided, data is adjusted to set the boundaries of the mask. If data is not provided, `mask` is required.
-#' @inheritParams st_bbox_adj
+#' @inheritParams st_bbox_ext
 #' @param fill mask fill color; defaults to "white"
 #' @param color mask edge color; defaults to `NA`
 #' @param alpha mask alpha/transparency; defaults to 0.5
@@ -30,7 +30,7 @@ layer_mask <- function(data = NULL,
   # Check if mask is provided
   if (is.null(mask)) {
     # Get adjusted bbox
-    mask <- st_bbox_adj(
+    mask <- st_bbox_ext(
       x = data,
       dist = dist,
       diag_ratio = diag_ratio,

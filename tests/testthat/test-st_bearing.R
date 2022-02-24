@@ -19,7 +19,7 @@ test_that("st_bearing works", {
     )
 
   checkmate::expect_class(
-    st_bearing(x = line, crs = 4326),
+    suppressWarnings(st_bearing(x = line, crs = 4326)),
     "sf"
   )
 

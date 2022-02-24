@@ -60,7 +60,7 @@ nearby_neighborhoods <-
   )
 
 neighborhood_bbox <-
-  st_bbox_adj(
+  st_bbox_ext(
     x = neighborhood,
     dist = params$dist,
     diag_ratio = params$diag_ratio,

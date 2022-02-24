@@ -18,7 +18,7 @@
 #' @param osmdata If `TRUE` return a `osmdata` class object that includes the
 #'   overpass API call, metadata including timestamp and version numbers, and
 #'   all available geometry types; defaults to `FALSE`.
-#' @inheritParams st_bbox_adj
+#' @inheritParams st_bbox_ext
 #' @return A simple feature object with features using selected geometry type or
 #'   an `osmdata` object with features from all geometry types.
 #' @export
@@ -53,7 +53,7 @@ get_osm_data <- function(location = NULL,
   osm_crs <- 4326
 
   # Get adjusted bounding box if any adjustment variables provided
-  bbox_osm <- st_bbox_adj(
+  bbox_osm <- st_bbox_ext(
     x = location,
     dist = dist,
     diag_ratio = diag_ratio,
