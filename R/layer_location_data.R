@@ -7,7 +7,7 @@
 #'   string)
 #' @param geom ggplot2 geom to use, Default: 'sf'. Options include "sf"
 #'   (geom_sf), "icon" (geom_sf_icon), "text" (geom_sf_text), "label"
-#'   (geom_sf_label)
+#'   (geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".
 #' @param unit unit to adjust location by dist or diag_ratio; defaults to
 #'   "meter"
 #' @param label_col Column name or id for a column with the text or labels to

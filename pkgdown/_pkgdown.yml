@@ -9,6 +9,7 @@ reference:
   - '`get_location_data`'
   - '`get_esri_data`'
   - '`get_osm_data`'
+  - '`get_flickr_photos`'
   - starts_with("read")
   - starts_with("write")
 - title: Utility functions for simple feature objects

@@ -13,6 +13,9 @@
     <loc>/articles/get_location.html</loc>
   </url>
   <url>
+    <loc>/articles/get_remote_data.html</loc>
+  </url>
+  <url>
     <loc>/articles/ggsave_ext.html</loc>
   </url>
   <url>
@@ -35,6 +38,9 @@
   </url>
   <url>
     <loc>/reference/get_esri_data.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_flickr_photos.html</loc>
   </url>
   <url>
     <loc>/reference/get_location.html</loc>
@@ -67,6 +73,12 @@
     <loc>/reference/layer_neatline.html</loc>
   </url>
   <url>
+    <loc>/reference/layer_show_location.html</loc>
+  </url>
+  <url>
+    <loc>/reference/make_filename.html</loc>
+  </url>
+  <url>
     <loc>/reference/map_icons.html</loc>
   </url>
   <url>
@@ -79,6 +91,9 @@
     <loc>/reference/read_sf_ext.html</loc>
   </url>
   <url>
+    <loc>/reference/sf_bbox_misc.html</loc>
+  </url>
+  <url>
     <loc>/reference/sf_bbox_to_lonlat_query.html</loc>
   </url>
   <url>
@@ -88,10 +103,16 @@
     <loc>/reference/sf_bbox_to_wkt.html</loc>
   </url>
   <url>
+    <loc>/reference/sf_to_df.html</loc>
+  </url>
+  <url>
     <loc>/reference/st_bbox_adj.html</loc>
   </url>
   <url>
     <loc>/reference/st_bbox_asp.html</loc>
+  </url>
+  <url>
+    <loc>/reference/st_bbox_ext.html</loc>
   </url>
   <url>
     <loc>/reference/st_bearing.html</loc>
@@ -106,10 +127,22 @@
     <loc>/reference/st_scale_rotate.html</loc>
   </url>
   <url>
+    <loc>/reference/st_transform_ext.html</loc>
+  </url>
+  <url>
+    <loc>/reference/theme_ext.html</loc>
+  </url>
+  <url>
     <loc>/reference/theme_margin.html</loc>
   </url>
   <url>
     <loc>/reference/theme_text.html</loc>
+  </url>
+  <url>
+    <loc>/reference/valid_dist_units.html</loc>
+  </url>
+  <url>
+    <loc>/reference/write_sf_cache.html</loc>
   </url>
   <url>
     <loc>/reference/write_sf_ext.html</loc>

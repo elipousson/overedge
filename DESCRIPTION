@@ -14,6 +14,7 @@ Imports:
     dplyr,
     esri2sf,
     exifr,
+    FlickrAPI (>= 0.1.0.1),
     geomtextpath,
     geosphere,
     ggplot2,
@@ -27,6 +28,7 @@ Imports:
     purrr,
     rappdirs,
     readr,
+    remotes,
     rlang,
     sf,
     smoothr,
@@ -37,6 +39,8 @@ Imports:
     units,
     usethis,
     utils
+Remotes:
+    elipousson/FlickrAPI
 Depends: 
     R (>= 2.10)
 LazyData: true

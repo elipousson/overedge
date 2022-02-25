@@ -59,6 +59,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/get_location.html">Get locations and location data</a>
+    <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
   </div>
 </li>
@@ -165,7 +166,6 @@
 <span class="co">#&gt; old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
 <span class="co">#&gt; old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
 <span class="co">#&gt; old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
-<span class="co">#&gt; old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
 <span class="co">#&gt; Simple feature collection with 1 feature and 6 fields</span>
 <span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
 <span class="co">#&gt; Dimension:     XY</span>
@@ -196,7 +196,7 @@
 <span class="co">#&gt; <span style="color: #0000BB;">Geometry Type: </span><span style="color: #BB00BB;">esriGeometryPolygon</span></span>
 <span class="co">#&gt; <span style="color: #0000BB;">Service Coordinate Reference System: </span><span style="color: #BB00BB;">3857</span></span>
 <span class="co">#&gt; <span style="color: #0000BB;">Output Coordinate Reference System: </span><span style="color: #BB00BB;">4326</span></span>
-<span class="co">#&gt; Warning: No location is provided. Returning all types.</span>
+<span class="co">#&gt; Warning: Returning all locations of this type.</span>
 <span class="co">#&gt; Simple feature collection with 1 feature and 11 fields</span>
 <span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
 <span class="co">#&gt; Dimension:     XY</span>
@@ -266,7 +266,7 @@
 <span class="co">#&gt; Projected CRS: NAD83(HARN) / Maryland</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span>
 <span class="co">#&gt;   name                type       acres osm_id wikidata                  geometry</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494;">[acr</span>… <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [m]&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [m]&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Druid Heights       Residenti…  57.9 12792… <span style="color: #BB0000;">NA</span>       (((431569.6 181988, 4315…</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Madison Park        Residenti… 102.  12792… <span style="color: #BB0000;">NA</span>       (((432337.1 181728.9, 43…</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Sandtown-Winchester Residenti… 260.  12800… Q7416984 (((430729.9 182481.6, 43…</span>

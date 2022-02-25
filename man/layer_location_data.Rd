@@ -40,7 +40,7 @@ string)}
 
 \item{geom}{ggplot2 geom to use, Default: 'sf'. Options include "sf"
 (geom_sf), "icon" (geom_sf_icon), "text" (geom_sf_text), "label"
-(geom_sf_label)}
+(geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".}
 
 \item{location}{sf object. If multiple areas are provided, they are unioned
 into a single sf object using \code{\link[sf]{st_union}}}
