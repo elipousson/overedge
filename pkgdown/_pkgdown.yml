@@ -3,7 +3,7 @@ template:
   package: preferably
   bootstrap: 5
 reference:
-- title: Utility functions for downloading, reading, and writing spatial data
+- title: Downloading, reading, and writing spatial data
   contents:
   - '`get_location`'
   - '`get_location_data`'
@@ -12,7 +12,7 @@ reference:
   - '`get_flickr_photos`'
   - starts_with("read")
   - starts_with("write")
-- title: Utility functions for simple feature objects
+- title: Modifying simple feature and bounding box objects
   contents:
   - starts_with("st_")
   - starts_with("sf_bbox")
@@ -21,7 +21,7 @@ reference:
   contents:
   - starts_with("layer_")
   - starts_with("geom_")
-- title: Utility functions for ggplot2 themes and file export
+- title: Working with ggplot2 themes and file export
   contents:
   - '`ggsave_ext`'
   - '`get_asp`'
@@ -30,7 +30,8 @@ reference:
   - '`theme_margin`'
   - '`theme_text`'
   - '`make_filename`'
-- title: Reference data used by functions
+  - '`labs_ext`'
+- title: Reference data
   contents:
   - '`map_icons`'
   - '`paper_sizes`'

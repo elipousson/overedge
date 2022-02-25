@@ -96,136 +96,275 @@
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
 <div class="section level3">
-<h3 id="set-some-parameters">Set some parameters<a class="anchor" aria-label="anchor" href="#set-some-parameters"></a>
+<h3 id="set-parameters-for-the-map-and-location">Set parameters for the map and location<a class="anchor" aria-label="anchor" href="#set-parameters-for-the-map-and-location"></a>
 </h3>
+<p>overedge is designed to easily support a workflow where the page or image size, page margin, and map area (defined by the location along with dist and diag_ratio parameters) are used repeatly across a range of related functions map making and layout functions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">params</span> <span class="op">&lt;-</span>
+<code class="sourceCode R"><span class="co"># Set initial parameters</span>
+<span class="va">params</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    paper <span class="op">=</span> <span class="st">"letter"</span>,
+    paper <span class="op">=</span> <span class="st">"Instagram post"</span>,
     margin <span class="op">=</span> <span class="st">"narrow"</span>,
-    fontfamily <span class="op">=</span> <span class="st">"Georgia"</span>,
-    orientation <span class="op">=</span> <span class="st">"portrait"</span>,
-    neighborhood <span class="op">=</span> <span class="st">"Highlandtown"</span>,
-    dist <span class="op">=</span> <span class="cn">NULL</span>,
-    diag_ratio <span class="op">=</span> <span class="fl">1</span>
-  <span class="op">)</span>
-
-<span class="va">params</span><span class="op">$</span><span class="va">asp_block</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="../reference/get_asp.html">get_asp</a></span><span class="op">(</span>paper <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">paper</span>,
-            margin <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">margin</span>,
-            orientation <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">orientation</span>,
-            block_asp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">get_neighborhood</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">location</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/get_location.html">get_location</a></span><span class="op">(</span>
+    name <span class="op">=</span> <span class="st">"Harwood"</span>,
     type <span class="op">=</span> <span class="st">"neighborhoods"</span>,
     package <span class="op">=</span> <span class="st">"mapbaltimore"</span>,
+    source <span class="op">=</span> <span class="st">"Baltimore City"</span>,
+    dist <span class="op">=</span> <span class="cn">NULL</span>,
+    diag_ratio <span class="op">=</span> <span class="fl">0.75</span>
+  <span class="op">)</span></code></pre></div>
+<p>In this example, the location name, location type, and package with the type data are used to get an sf object for a Baltimore neighborhood.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Create wrapper function to get neighborhood</span>
+<span class="va">get_neighborhood</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">location</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="../reference/get_location.html">get_location</a></span><span class="op">(</span>
+    type <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">type</span>,
+    package <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">package</span>,
     name <span class="op">=</span> <span class="va">name</span>,
     location <span class="op">=</span> <span class="va">location</span>
-    <span class="op">)</span>
+  <span class="op">)</span>
 <span class="op">}</span>
 
-<span class="co"># Use the get_neighborhood wrapper function to pull a neighborhood</span>
-<span class="va">neighborhood</span> <span class="op">&lt;-</span>
-  <span class="fu">get_neighborhood</span><span class="op">(</span>name <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span><span class="op">)</span>
-
-<span class="va">nearby_neighborhoods</span> <span class="op">&lt;-</span>
-  <span class="fu">get_neighborhood</span><span class="op">(</span>
-    location <span class="op">=</span> <span class="va">neighborhood</span>
+<span class="co"># Use the get_neighborhood wrapper function to get the neighborhood named in param</span>
+<span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span> <span class="op">&lt;-</span>
+  <span class="fu">get_neighborhood</span><span class="op">(</span>name <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></code></pre></div>
+<p>Additional parameters can be derived based on the preliminary parameters and geometry. For example, page orientation can be based on the aspect ratio of the buffered bounding box for the named location. The aspect ratio for a location map is based on the combination of the paper, margin, and orientation. The overall bounding box for the map area requires the distance or diagonal ratio and the aspect ratio.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Get appropriate orientation based on buffer parameters</span>
+<span class="va">params</span><span class="op">$</span><span class="va">orientation</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/sf_bbox_misc.html">sf_bbox_asp</a></span><span class="op">(</span>
+    bbox <span class="op">=</span> <span class="fu"><a href="../reference/st_bbox_ext.html">st_bbox_ext</a></span><span class="op">(</span>
+      x <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span>,
+      dist <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">dist</span>,
+      diag_ratio <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">diag_ratio</span>
+    <span class="op">)</span>,
+    orientation <span class="op">=</span> <span class="cn">TRUE</span>
   <span class="op">)</span>
 
-<span class="va">neighborhood_bbox</span> <span class="op">&lt;-</span>
+<span class="co"># Get aspect ratio for content block based on paper size, margin, and orientation</span>
+<span class="va">params</span><span class="op">$</span><span class="va">block_asp</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/get_asp.html">get_asp</a></span><span class="op">(</span>
+    paper <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">paper</span>,
+    unit <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">unit</span>,
+    margin <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">margin</span>,
+    orientation <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">orientation</span>,
+    block_asp <span class="op">=</span> <span class="cn">TRUE</span>
+  <span class="op">)</span>
+
+<span class="co"># Get additional parameters based on the paper (used in later sections of this vignette)</span>
+<span class="va">params</span><span class="op">$</span><span class="va">paper_df</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/get_paper.html">get_paper</a></span><span class="op">(</span>
+    paper <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">paper</span>,
+    orientation <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">orientation</span>
+  <span class="op">)</span>
+
+<span class="va">params</span><span class="op">$</span><span class="va">asp</span> <span class="op">&lt;-</span> <span class="va">params</span><span class="op">$</span><span class="va">paper_df</span><span class="op">$</span><span class="va">asp</span>
+<span class="va">params</span><span class="op">$</span><span class="va">width</span> <span class="op">&lt;-</span> <span class="va">params</span><span class="op">$</span><span class="va">paper_df</span><span class="op">$</span><span class="va">width</span>
+<span class="va">params</span><span class="op">$</span><span class="va">height</span> <span class="op">&lt;-</span> <span class="va">params</span><span class="op">$</span><span class="va">paper_df</span><span class="op">$</span><span class="va">height</span>
+
+<span class="co"># Get map bounding box for neighborhood based on adjustment parameters</span>
+<span class="va">block_bbox</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/st_bbox_ext.html">st_bbox_ext</a></span><span class="op">(</span>
-    x <span class="op">=</span> <span class="va">neighborhood</span>,
+    x <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span>,
     dist <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">dist</span>,
     diag_ratio <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">diag_ratio</span>,
     asp <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">asp_block</span>
+  <span class="op">)</span>
+
+<span class="co"># Get nearby neighborhoods that overlap with the buffer and aspect ratio adjusted bounding box</span>
+<span class="va">nearby_neighborhoods</span> <span class="op">&lt;-</span>
+  <span class="fu">get_neighborhood</span><span class="op">(</span>
+    location <span class="op">=</span> <span class="va">block_bbox</span>
   <span class="op">)</span></code></pre></div>
+<p>A quick map is helpful for illustrating the relative size and proportion of the different simple feature objects and bounding boxes created through this process:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="st">"baltimore_city_detailed"</span>,
+    package <span class="op">=</span> <span class="st">"mapbaltimore"</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nearby_neighborhoods</span>, alpha <span class="op">=</span> <span class="fl">0.25</span>, fill <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="../reference/sf_bbox_misc.html">sf_bbox_to_sf</a></span><span class="op">(</span><span class="va">block_bbox</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.25</span>, fill <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span>, alpha <span class="op">=</span> <span class="fl">0.25</span>, fill <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/layer_neatline.html">layer_neatline</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">nearby_neighborhoods</span>
+  <span class="op">)</span></code></pre></div>
+<p><img src="ggsave_ext_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p>In this example, the objects <code>block_bbox</code> and <code>nearby_neighborhoods</code> are as separate objects but could easily be added to the list of parameters. The approach of using parameters is intended to make this code easy to reuse for a parameterized RMarkdown document.</p>
+<p>In some cases, it may be convenient to wrap an overedge function with preset parameters or use <code><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">purrr::partial()</a></code> for a similar purpose:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Use partial to create a version of layer_location_data that applies a half-mile buffer to the specified neighborhood</span>
+<span class="va">layer_half_mi_buffer</span> <span class="op">&lt;-</span> 
+  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">partial</a></span><span class="op">(</span>
+    <span class="va">layer_location_data</span>,
+    location <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span>,
+    dist <span class="op">=</span> <span class="fl">0.5</span>,
+    unit <span class="op">=</span> <span class="st">"mi"</span>,
+    diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,
+    asp <span class="op">=</span> <span class="fu"><a href="../reference/get_asp.html">get_asp</a></span><span class="op">(</span>paper <span class="op">=</span> <span class="st">"letter"</span>, orientation <span class="op">=</span> <span class="st">"landscape"</span><span class="op">)</span>
+  <span class="op">)</span></code></pre></div>
+<p>This can be helpful in reducing repetition when setting up maps but it also can get confusing so use this approach with care.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">layer_half_mi_buffer</span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">type</span>,
+    package <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">package</span>,
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">name</span><span class="op">)</span>,
+    alpha <span class="op">=</span> <span class="fl">0.75</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="ggsave_ext_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="make-a-map">Make a map<a class="anchor" aria-label="anchor" href="#make-a-map"></a>
 </h2>
-</div>
-<div class="section level2">
-<h2 id="create-a-basemap">Create a basemap<a class="anchor" aria-label="anchor" href="#create-a-basemap"></a>
-</h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="create-a-basemap-and-label-layer">Create a basemap and label layer<a class="anchor" aria-label="anchor" href="#create-a-basemap-and-label-layer"></a>
+</h3>
+<p>In order to maintain some flexibility in the map layout process, it may be helpful to set up a basemap that covers a larger area. This example illustrates how to combine street center line data, neighborhood boundaries, and labels for residential neighborhoods into a larger basemap centered on the selected neighborhood.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">basemap</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
-    location <span class="op">=</span> <span class="va">neighborhood_bbox</span>,
+    location <span class="op">=</span> <span class="va">block_bbox</span>,
     data <span class="op">=</span> <span class="st">"streets"</span>,
     package <span class="op">=</span> <span class="st">"mapbaltimore"</span>,
     color <span class="op">=</span> <span class="st">"gray40"</span>
   <span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
-    location <span class="op">=</span> <span class="va">neighborhood_bbox</span>,
-    data <span class="op">=</span> <span class="st">"neighborhoods"</span>,
-    package <span class="op">=</span> <span class="st">"mapbaltimore"</span>,
+    data <span class="op">=</span> <span class="va">nearby_neighborhoods</span>,
     mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">name</span><span class="op">)</span>,
     color <span class="op">=</span> <span class="cn">NA</span>,
     alpha <span class="op">=</span> <span class="fl">0.6</span>
   <span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_fill_discrete</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
-    location <span class="op">=</span> <span class="va">neighborhood_bbox</span>,
-    data <span class="op">=</span> <span class="st">"neighborhoods"</span>,
-    package <span class="op">=</span> <span class="st">"mapbaltimore"</span>,
-    geom <span class="op">=</span> <span class="st">"label"</span>,
-    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span>,
-    fn <span class="op">=</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">.x</span>,
-                         <span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">nearby_neighborhoods</span><span class="op">$</span><span class="va">name</span>,
-                         <span class="va">type</span> <span class="op">==</span> <span class="st">"Residential"</span><span class="op">)</span>,
-    fill <span class="op">=</span> <span class="st">"white"</span>,
-    color <span class="op">=</span> <span class="st">"black"</span>
-  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>
     fill <span class="op">=</span> <span class="st">"none"</span>
   <span class="op">)</span>
 
-<span class="va">basemap</span></code></pre></div>
-<p><img src="ggsave_ext_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
-<div class="section level3">
-<h3 id="add-a-neatline-and-margins">Add a neatline and margins<a class="anchor" aria-label="anchor" href="#add-a-neatline-and-margins"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">neighborhood_map</span> <span class="op">&lt;-</span>
+<span class="va">basemap</span>
+<span class="co">#&gt; Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Blues is 9</span>
+<span class="co">#&gt; Returning the palette you asked for with that many colors</span></code></pre></div>
+<p><img src="ggsave_ext_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><code><a href="../reference/layer_location_data.html">layer_location_data()</a></code> is a flexible wrapper function around several different types of geoms for sf objects including geoms from <a href="https://ggrepel.slowkow.com/" class="external-link">ggrepel</a> and <a href="https://allancameron.github.io/geomtextpath/" class="external-link">geomtextpath</a>. This makes it easy to create separate layers for a basemap, labels, or other features.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">label_layer</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
+    location <span class="op">=</span> <span class="va">block_bbox</span>,
+    data <span class="op">=</span> <span class="st">"neighborhoods"</span>,
+    package <span class="op">=</span> <span class="st">"mapbaltimore"</span>,
+    geom <span class="op">=</span> <span class="st">"label"</span>,
+    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span>,
+    fn <span class="op">=</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span>
+      <span class="va">.x</span>,
+      <span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">nearby_neighborhoods</span><span class="op">$</span><span class="va">name</span>,
+      <span class="va">type</span> <span class="op">==</span> <span class="st">"Residential"</span>
+    <span class="op">)</span>,
+    fill <span class="op">=</span> <span class="st">"white"</span>,
+    color <span class="op">=</span> <span class="st">"black"</span>
+  <span class="op">)</span>
+
 <span class="va">basemap</span> <span class="op">+</span>
+  <span class="va">label_layer</span>
+<span class="co">#&gt; Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Blues is 9</span>
+<span class="co">#&gt; Returning the palette you asked for with that many colors</span></code></pre></div>
+<p><img src="ggsave_ext_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="add-a-neatline-location-mask-or-location-boundary">Add a neatline, location mask, or location boundary<a class="anchor" aria-label="anchor" href="#add-a-neatline-location-mask-or-location-boundary"></a>
+</h3>
+<p>After creating any needed layers for a map, you may want to focus on a specific area and clean up the appearance of the map by removing grid lines and axis labels. The <code><a href="../reference/layer_neatline.html">layer_neatline()</a></code> function makes it easy to effectively “zoom” in to a specific area while hiding the grid lines and axis labels.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">neighborhood_map</span> <span class="op">&lt;-</span>
+  <span class="va">basemap</span> <span class="op">+</span>
   <span class="co"># Draw a neatline around the selected neighborhood</span>
   <span class="fu"><a href="../reference/layer_neatline.html">layer_neatline</a></span><span class="op">(</span>
-    data <span class="op">=</span> <span class="va">neighborhood</span>,
-    diag_ratio <span class="op">=</span> <span class="fl">0.5</span>,
-    asp <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">asp_block</span>,
+    data <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span>,
+    diag_ratio <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">diag_ratio</span>,
+    asp <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">paper_df</span><span class="op">$</span><span class="va">asp</span>,
     size <span class="op">=</span> <span class="fl">1.5</span>,
     color <span class="op">=</span> <span class="st">"gray60"</span>,
     expand <span class="op">=</span> <span class="cn">TRUE</span>
-  <span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/theme_ext.html">theme_margin</a></span><span class="op">(</span>
-    paper <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">paper</span>,
-    margin <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">margin</span>,
-    orientation <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">orientation</span>,
-    fill <span class="op">=</span> <span class="st">"white"</span>,
-    color <span class="op">=</span> <span class="cn">NA</span>
   <span class="op">)</span>
-  
-<span class="va">neighborhood_map</span></code></pre></div>
-<p><img src="ggsave_ext_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+
+<span class="va">neighborhood_map</span>
+<span class="co">#&gt; Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Blues is 9</span>
+<span class="co">#&gt; Returning the palette you asked for with that many colors</span></code></pre></div>
+<p><img src="ggsave_ext_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p>Two other functions (<code><a href="../reference/layer_mask.html">layer_mask()</a></code> and <code><a href="../reference/layer_show_location.html">layer_show_location()</a></code>) allow you to add <code><a href="../reference/layer_neatline.html">layer_neatline()</a></code> to a map along with a mask or location boundary line using the same parameters.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">basemap</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/layer_mask.html">layer_mask</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span>,
+    dist <span class="op">=</span> <span class="fl">200</span>,
+    asp <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">asp</span>,
+    neatline <span class="op">=</span> <span class="cn">TRUE</span>
+  <span class="op">)</span>
+<span class="co">#&gt; Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Blues is 9</span>
+<span class="co">#&gt; Returning the palette you asked for with that many colors</span></code></pre></div>
+<p><img src="ggsave_ext_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">letter_map</span> <span class="op">&lt;-</span>
+  <span class="va">basemap</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/layer_show_location.html">layer_show_location</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span>,
+    dist <span class="op">=</span> <span class="fl">200</span>,
+    size <span class="op">=</span> <span class="fl">1.5</span>,
+    asp <span class="op">=</span> <span class="fu"><a href="../reference/get_asp.html">get_asp</a></span><span class="op">(</span>paper <span class="op">=</span> <span class="st">"letter"</span>, margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">1</span><span class="op">)</span>, block_asp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    neatline <span class="op">=</span> <span class="cn">TRUE</span>
+  <span class="op">)</span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="add-margins">Add margins<a class="anchor" aria-label="anchor" href="#add-margins"></a>
+</h3>
+<p>The last step is to add margins. Margins can also include a header and footer to ensure there is sufficient space for a title, subtitle, and caption.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">letter_map</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/theme_ext.html">theme_margin</a></span><span class="op">(</span>
+    paper <span class="op">=</span> <span class="st">"letter"</span>,
+    margin <span class="op">=</span> <span class="st">"standard"</span>,
+    header <span class="op">=</span> <span class="fl">1</span>,
+    footer <span class="op">=</span> <span class="fl">0.5</span>,
+    fill <span class="op">=</span> <span class="st">"gray90"</span>
+  <span class="op">)</span> <span class="co"># +</span>
+<span class="co">#&gt; Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Blues is 9</span>
+<span class="co">#&gt; Returning the palette you asked for with that many colors</span></code></pre></div>
+<p><img src="ggsave_ext_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#  labs_ext(</span>
+<span class="co">#    title = "{params$name} and nearby neighborhoods",</span>
+<span class="co">#    caption = "Data courtesy {params$source}."</span>
+<span class="co">#  )</span></code></pre></div>
+<p>The resulting map appears oddly proportioned at the display size for this vignette but the units ensure the margin is appropriately sized for the paper size provided.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="export-a-map">Export a map<a class="anchor" aria-label="anchor" href="#export-a-map"></a>
+</h2>
+<p>Finally, the <code>ggsave_exif()</code> function uses the <code><a href="../reference/make_filename.html">make_filename()</a></code> function also used by <code><a href="../reference/write_sf_ext.html">write_sf_ext()</a></code> to create consistent file names that can optionally include a date or date-time prefix.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/make_filename.html">make_filename</a></span><span class="op">(</span>
+  name <span class="op">=</span> <span class="st">"Neighborhood map"</span>,
+  label <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">name</span>,
+  prefix <span class="op">=</span> <span class="st">"date"</span>
+<span class="op">)</span>
+<span class="co">#&gt; [1] "2022-02-25_neighborhood_map"</span></code></pre></div>
 <div class="section level3">
 <h3 id="save-map-with-ggsave_ext">Save map with ggsave_ext<a class="anchor" aria-label="anchor" href="#save-map-with-ggsave_ext"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>The dimensions of the exported file may be set automatically based on paper and orientation. The title and author parameter are used to update the EXIF metadata for the file after it is exported. The title and author are both evaluated with <code>glue()</code> which allow you to use the same parameters to label and title the map.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ggsave_ext.html">ggsave_ext</a></span><span class="op">(</span>
   plot <span class="op">=</span> <span class="va">neighborhood_map</span>,
   name <span class="op">=</span> <span class="st">"Neighborhood map"</span>,
   label <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span>,
-  title <span class="op">=</span> <span class="st">"Map of {params$neighborhood} and surrounding area"</span>,
+  title <span class="op">=</span> <span class="st">"Map of {params$name} and surrounding area"</span>,
   author <span class="op">=</span> <span class="st">"Eli Pousson"</span>,
   paper <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">paper</span>,
   orientation <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">orientation</span>,
-  device <span class="op">=</span> <span class="st">"pdf"</span>,
-  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
+  device <span class="op">=</span> <span class="st">"png"</span>,
+  prefix <span class="op">=</span> <span class="st">"date"</span>,
   exif <span class="op">=</span> <span class="cn">TRUE</span>,
   bg <span class="op">=</span> <span class="st">"white"</span>
 <span class="op">)</span></code></pre></div>

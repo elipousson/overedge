@@ -202,10 +202,22 @@ make_filename <- function(name = NULL,
   )
 
   if (is.null(filename)) {
+
+    if (!is.null(label)) {
+      filename <-
+        str_prefix(
+          prefix = label,
+          string = name,
+          clean = TRUE
+        )
+    } else {
+      filename <- name
+    }
+
     filename <-
       str_prefix(
-        prefix = c(prefix, label),
-        string = name,
+        prefix = prefix,
+        string = filename,
         postfix = postfix,
         clean = TRUE
       )

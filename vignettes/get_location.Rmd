@@ -2,7 +2,7 @@
 title: "Get locations and location data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{get_location}
+  %\VignetteIndexEntry{Get locations and location data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(overedge)
+library(ggplot2)
 ```
 
 # Get location
@@ -71,12 +72,11 @@ If your location data is from another package, you can use the package parameter
 # NOTE: install nycgeo from GitHub not CRAN
 # remotes::install_github("mfherman/nycgeo")
 get_nyc_borough <- function(name = NULL, id = NULL, type = "simple") {
-  
   data <- "borough_sf"
   if (type == "simple") {
     data <- paste(data, type, sep = "_")
   }
-  
+
   package <- "nycgeo"
 
   get_location(
@@ -95,7 +95,7 @@ get_nyc_borough("Manhattan")
 If your location data is sourced from an ArcGIS MapServer or FeatureServer, you can use the `locationname` and `locationname_col` parameters from the underlying `get_esri_data()` function. This avoids the need to download the full dataset every time.
 
 ```{r get_location_esri}
-# get_anc looks up the Advisory Neighborhoood 
+# get_anc looks up the Advisory Neighborhood Council
 # Data from Open Data DC https://opendata.dc.gov/datasets/fcfbf29074e549d8aff9b9c708179291
 
 get_anc <- function(name) {
@@ -138,18 +138,18 @@ You can also combine multiple approaches to create a look-up function that retur
 lookup_school_neighborhoods <- function(school_name) {
   school <-
     get_location(
-    type = "bcps_es_zones_SY2021",
-    package = "bcpss",
-    name = school_name,
-    name_col = "program_name_short"
-  )
-  
+      type = "bcps_es_zones_SY2021",
+      package = "bcpss",
+      name = school_name,
+      name_col = "program_name_short"
+    )
+
   school_neighborhoods <- get_location(
     type = "neighborhoods",
     package = "mapbaltimore",
     location = school
   )
-  
+
   return(school_neighborhoods)
 }
 
@@ -163,3 +163,125 @@ As noted in the previous section, `get_location()` is largely built around `get_
 While the data parameter supports all of the options for the type parameter described in the prior section, `get_location_data()` also supports named parameters for path or url.
 
 Note: This vignette is a work in progress with additional details to be added soon. 
+
+```{r}
+params <- list(
+  type = "council_districts",
+  id = 12,
+  dist = 0.125,
+  diag_ratio = NULL,
+  unit = "mi",
+  package = "mapbaltimore",
+  layers = c("streets", "neighborhoods", "trees")
+)
+
+district <-
+  get_location(
+    type = params$type,
+    package = params$package,
+    id = params$id
+  )
+```
+
+
+# Selecting a page size
+
+You can use the get_paper function to look up one or more common paper sizes or standard image sizes:
+
+```{r}
+paper_options <- get_paper(standard = c("Twitter", "Instagram"))
+knitr::kable(paper_options)
+```
+
+You can also use the geometry of any specified location to set the orientation of the page or the suggested aspect ratio using the `sf_bbox_asp` function:
+
+```{r}
+sf_bbox_asp(sf::st_bbox(district))
+
+sf_bbox_asp((sf::st_bbox(district)), orientation = TRUE)
+```
+
+Based on this information, it looks like this map way work well as an Instagram post.
+
+```{r}
+params$paper <- "Instagram post"
+
+# Get a paper by name 
+paper <- 
+  get_paper(
+    paper = params$paper
+  )
+
+# Move width, height, aspect ratio (asp), and units (for map) into params
+params$width <- paper$width
+params$height <- paper$height
+params$asp <- paper$asp
+# NOTE: px units are not fully supported by all functions
+# NOTE: units supports map-scale options ("in") rather than the unit parameter used by st_buffer_ext
+params$units <- paper$units
+```
+
+There is one additional consideration in setting the aspect ratio for the map area: the aspect ratio of the content block after marings have been applied. While this is less significant for a Instagram post where full bleed images are appropriate, an example below shows how to get the aspect ratio of a plot, text, or map block after margins have been added to a page. The "px" units associated with the Instagram post paper cannot currently be used with the header and footer option so I passed "npc" units to manually set the margin rather than using the preset options.
+
+```{r}
+get_asp(
+  paper = "letter",
+  block_asp = FALSE)
+
+get_asp(
+  paper = "letter",
+  margin = c(1, 1, 1.5, 1),
+  block_asp = TRUE)
+```
+
+Finally, the final selections can be used to create a bounding box that reduces the need to pass these same variables to all similar functions. This can also works as a way of effectively saving different "zoom levels" for a map based on different buffer units.
+
+```{r}
+# This information 
+district_bbox <-
+  st_bbox_ext(
+    x = district,
+    dist = params$dist,
+    diag_ratio = params$diag_ratio,
+    asp = params$asp
+  )
+```
+
+
+```{r}
+district_trees <-
+  get_location_data(
+    location = district_bbox,
+    data = "trees",
+    package = "mapbaltimore",
+    filetype = "gpkg"
+  )
+
+gt::gt(dplyr::slice_head(district_trees, n = 10))
+```
+
+```{r}
+ggplot() +
+  layer_location_data(
+    aes(color = condition),
+    size = 0.3,
+    alpha = 0.4,
+    data = district_trees
+  ) +
+  layer_mask(
+    data = district,
+    dist = 100,
+    color = "gray70",
+    neatline = TRUE
+  ) +
+  theme_legend(
+    position = "bottomleft"
+  ) +
+  theme_text(
+    font_family = "Fira Code"
+  ) +
+  labs(
+    color = "Condition"
+  ) +
+  scale_color_brewer(palette = "RdYlGn")
+```

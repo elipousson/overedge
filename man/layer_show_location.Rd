@@ -21,6 +21,7 @@ layer_show_location(
   crs = NULL,
   color = "black",
   linetype = "dashed",
+  size = 2,
   fill = NA,
   dist = NULL,
   diag_ratio = NULL,
@@ -71,9 +72,11 @@ Default: \code{FALSE}.}
 
 \item{crs}{coordinate reference system to return}
 
-\item{color}{mask edge color; defaults to \code{NA}}
+\item{color}{Color for location; defaults to "black".}
 
-\item{fill}{mask fill color; defaults to "white"}
+\item{linetype}{Line type for location; defaults to "dashed".}
+
+\item{fill}{Fill for location; defaults to "NA".}
 
 \item{dist}{buffer distance in units. Optional.}
 

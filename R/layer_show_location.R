@@ -5,6 +5,9 @@
 #'
 #' @param data Data for location to show.
 #' @param label label type (e.g. "text", "label")
+#' @param color Color for location; defaults to "black".
+#' @param linetype Line type for location; defaults to "dashed".
+#' @param fill Fill for location; defaults to "NA".
 #' @param ... Additional parameters passed to get_location if data is `NULL`.
 #' @inheritParams get_location
 #' @inheritParams layer_location_data
@@ -33,6 +36,7 @@ layer_show_location <-
            crs = NULL,
            color = "black",
            linetype = "dashed",
+           size = 2,
            fill = NA,
            dist = NULL,
            diag_ratio = NULL,
@@ -64,9 +68,9 @@ layer_show_location <-
     location_layer <-
       layer_location_data(
         data = data,
-        # mapping = mapping,
         color = color,
         linetype = linetype,
+        size = size,
         fill = fill
       )
 
@@ -111,12 +115,27 @@ layer_show_location <-
       mask_layer <- NULL
     }
 
+
+    if (neatline) {
+      neatline_layer <-
+        layer_neatline(
+          data = data,
+          dist = dist,
+          diag_ratio = diag_ratio,
+          unit = unit,
+          asp = asp,
+          crs = crs
+        )
+    } else {
+      neatline_layer <- NULL
+    }
+
     location_layer <-
       list(
         location_layer,
-        mask_layer
+        mask_layer,
+        neatline_layer
       )
-
 
     return(location_layer)
   }
