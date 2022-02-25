@@ -1,4 +1,4 @@
-#' Get geotagged Flickr photos for a location
+#' Use FlickrAPI to get geotagged photos for a location
 #'
 #' Set API key using `FlickrAPI::set_flickr_api_key()` or pass to the api_key
 #' parameter. Currently relies on fork of package at <https://github.com/elipousson/FlickrAPI>

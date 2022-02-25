@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_flickr_photos.R
 \name{get_flickr_photos}
 \alias{get_flickr_photos}
-\title{Get geotagged Flickr photos for a location}
+\title{Use FlickrAPI to get geotagged photos for a location}
 \usage{
 get_flickr_photos(
   api_key = NULL,

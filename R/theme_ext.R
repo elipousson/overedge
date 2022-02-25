@@ -82,8 +82,8 @@ theme_text <- function(font_family = NULL,
   }
 }
 
+#' @name theme_margin
 #' @rdname theme_ext
-#' @aliases theme_margin
 #' @export
 #' @importFrom ggplot2 theme element_rect
 #' @importFrom grid unit
@@ -125,8 +125,8 @@ theme_margin <- function(margin = "standard",
   }
 }
 
+#' @name theme_legend
 #' @rdname theme_ext
-#' @aliases theme_legend
 #' @export
 #' @importFrom ggplot2 element_blank element_rect theme
 #' @importFrom grid unit

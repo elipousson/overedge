@@ -1,4 +1,4 @@
-#' Get Open Street Map features for a location
+#' Use osmdata to get Open Street Map data for a location
 #'
 #' Wraps \code{osmdata} functions.
 #'

@@ -30,6 +30,7 @@ Imports:
     readr,
     remotes,
     rlang,
+    RSocrata,
     sf,
     smoothr,
     stringr,

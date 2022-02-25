@@ -126,7 +126,6 @@ df_to_sf <- function(x,
                      coords = c("lon", "lat"),
                      into = NULL,
                      sep = ",") {
-
   if ((length(coords) == 1) && (length(into) == 2)) {
     if (is.null(into)) {
       into <- c("lon", "lat")
@@ -138,7 +137,7 @@ df_to_sf <- function(x,
         col = tidyselect::all_of(coords),
         into = into,
         sep = sep
-        )
+      )
 
     x <-
       dplyr::mutate(
@@ -177,17 +176,18 @@ df_to_sf <- function(x,
   }
 
   x <-
-    sf::st_transform(
-      sf::st_as_sf(
-        x,
-        coords = c(longitude, latitude),
-        agr = "constant",
-        crs = 4326,
-        stringsAsFactors = FALSE,
-        remove = FALSE
-      ),
-      crs
+    sf::st_as_sf(
+      x,
+      coords = c(longitude, latitude),
+      agr = "constant",
+      crs = 4326,
+      stringsAsFactors = FALSE,
+      remove = FALSE
     )
+
+  if (!is.null(crs)) {
+    x <- sf::st_transform(x, crs)
+  }
 
   return(x)
 }

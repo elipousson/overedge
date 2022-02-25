@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_esri_data.R
 \name{get_esri_data}
 \alias{get_esri_data}
-\title{Get data from an ArcGIS FeatureServer or MapServer for a location}
+\title{Use esri2sf to get data from an ArcGIS FeatureServer or MapServer for a location}
 \usage{
 get_esri_data(
   location = NULL,
@@ -20,7 +20,7 @@ get_esri_data(
 )
 }
 \arguments{
-\item{location}{\code{sf} object. Optional. Only used if trim is TRUE.}
+\item{location}{\code{sf} object. Optional.}
 
 \item{url}{FeatureServer or MapServer url to retrieve data from. Passed to
 \code{url} parameter of \code{\link[esri2sf]{esri2sf}} or

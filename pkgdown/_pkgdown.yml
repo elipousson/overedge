@@ -9,6 +9,7 @@ reference:
   - '`get_location_data`'
   - '`get_esri_data`'
   - '`get_osm_data`'
+  - '`get_socrata_data`'
   - '`get_flickr_photos`'
   - starts_with("read")
   - starts_with("write")
@@ -17,6 +18,7 @@ reference:
   - starts_with("st_")
   - starts_with("sf_bbox")
   - '`sf_to_df`'
+  - starts_with("check")
 - title: Layers and geoms for mapping with ggplot2
   contents:
   - starts_with("layer_")

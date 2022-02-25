@@ -1,11 +1,11 @@
-#' Get data from an ArcGIS FeatureServer or MapServer for a location
+#' Use esri2sf to get data from an ArcGIS FeatureServer or MapServer for a location
 #'
 #' Wraps the \code{\link[esri2sf]{esri2sf}} and \code{\link[esri2sf]{esri2df}}
 #' function to download an ArcGIS FeatureServer or MapServer. Supports spatial
 #' filtering with bounding box based on location and filtering by location name
 #' (if location name column is provided).
 #'
-#' @param location \code{sf} object. Optional. Only used if trim is TRUE.
+#' @param location \code{sf} object. Optional.
 #' @param url FeatureServer or MapServer url to retrieve data from. Passed to
 #'   \code{url} parameter of \code{\link[esri2sf]{esri2sf}} or
 #'   \code{\link[esri2sf]{esri2df}} functions.
