@@ -8,12 +8,14 @@
 #' (1.777). The asp parameter supports both numeric values and character
 #' strings with ratios matching the format of "width:height".
 #'
+#'
 #' @param x \code{sf} to adjust
 #' @inheritParams st_buffer_ext
-#' @inheritParams st_bbox_asp
+#' @inheritParams get_asp
 #' @param crs Coordinate reference system of bounding box to return
 #' @return Class \code{bbox} object
 #' @aliases st_bbox_adj
+#' @name st_bbox_ext
 #' @export
 #' @importFrom sf st_transform st_bbox
 st_bbox_ext <- function(x = NULL,
@@ -53,19 +55,8 @@ st_bbox_ext <- function(x = NULL,
   return(bbox)
 }
 
-
-#' Get bounding box adjusted to match aspect ratio
-#'
-#' Takes an area as an  \code{sf} or \code{bbox} object and returns a bounding
-#' box that matches the aspect ratio provided to \code{asp} and contains the
-#' area or bounding box provided. Common aspect ratios include "1:1" (1), "4:6"
-#' (0.666), "8.5:11", "16:9" (1.777). The asp parameter supports both numeric
-#' values and character strings with ratios matching the format of
-#' "width:height".
-#'
-#' @param x \code{sf} or bbox object
-#' @inheritParams get_asp
-#' @return \code{bbox} object
+#' @rdname st_bbox_ext
+#' @name st_bbox_asp
 #' @export
 #' @importFrom sf st_geometry_type st_bbox
 #' @importFrom checkmate test_class
@@ -112,83 +103,4 @@ st_bbox_asp <- function(x = NULL,
   }
 
   return(bbox)
-}
-
-
-#' Get aspect ratio from string or based on specific paper and margins
-#'
-#'
-#' @param asp Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-#'   character (e.g. "1:3"). If numeric, [get_asp()] returns the same value
-#'   without modification.
-#' @param margin A margin style supported by [get_margins()], a numeric vector
-#'   (length 1 or 4) passed to dist parameter of get_margins, or a margins
-#'   object.
-#' @param block_asp If `TRUE`, return the aspect ratio of a text, map, or plot
-#'   block on the paper when using the specified margins.
-#' @inheritParams get_paper
-#' @inheritParams get_margin
-#' @param block_asp If `TRUE`, get aspect ratio of the map/plot area (not
-#'   including the margins); defaults to `FALSE`.
-#' @return A numeric aspect ratio.
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   get_asp("1:2")
-#'
-#'   get_asp(11 / 17)
-#'
-#'   get_asp(paper = "letter")
-#' }
-#' }
-#' @rdname get_asp
-#' @export
-#' @importFrom stringr str_detect str_extract
-#' @importFrom usethis ui_stop
-get_asp <- function(asp = NULL,
-                    paper = NULL,
-                    orientation = NULL,
-                    margin = NULL,
-                    unit = NULL,
-                    block_asp = FALSE) {
-  if (is.null(paper)) {
-    # Check aspect ratio
-    if (is.character(asp) && grepl(":", asp)) {
-      # If asp is provided as character string (e.g. "16:9") convert to a numeric ratio
-      asp <-
-        as.numeric(stringr::str_extract(asp, ".+(?=:)")) /
-        as.numeric(stringr::str_extract(asp, "(?<=:).+"))
-    } else if (!is.numeric(asp) && !is.null(asp)) {
-      usethis::ui_stop("{usethis::ui_value('asp')} must be numeric (e.g. 0.666) or a string representing a width to height ratio (e.g. '4:6').")
-    }
-  } else if (!is.null(paper) && is.null(asp)) {
-    # Get aspect ratio for text/plot/map block area
-    paper <- get_paper(paper = paper, orientation = orientation)
-
-    if (block_asp) {
-      if (is.null(unit)) {
-        unit <- paper$units
-      }
-
-      # Get margins and convert to numeric (note substitute original value of paper for paper$name)
-      if (is.character(margin)) {
-        margin <- get_margin(margin = margin, paper = paper$name, orientation = orientation, unit = unit)
-      } else if (is.numeric(margin)) {
-        margin <- get_margin(dist = margin, unit = unit)
-      } else if (!check_class(margin, check = "margin")) {
-        usethis::ui_stop("margin must be either a character string matching the margin options (“none”, “narrow”, “standard”, “wide”, or “extrawide”), a numeric vector that can be passed to the dist parameter of get_margins, or a margin class object.")
-      }
-
-      margin <- as.numeric(margin)
-
-      # Calculate width, height, and aspect ratio for text/plot/map block area
-      block_width <- paper$width - (margin[[2]] + margin[[4]])
-      block_height <- paper$height - (margin[[1]] + margin[[3]])
-      asp <- block_width / block_height
-    } else {
-      asp <- paper$asp
-    }
-  }
-
-  return(asp)
 }

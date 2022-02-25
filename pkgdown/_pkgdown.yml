@@ -9,8 +9,9 @@ reference:
   - '`get_location_data`'
   - '`get_esri_data`'
   - '`get_osm_data`'
-  - '`get_socrata_data`'
+  - '`get_open_data`'
   - '`get_flickr_photos`'
+  - '`get_us_counties`'
   - starts_with("read")
   - starts_with("write")
 - title: Modifying simple feature and bounding box objects
@@ -19,23 +20,23 @@ reference:
   - starts_with("sf_bbox")
   - '`sf_to_df`'
   - starts_with("check")
-- title: Layers and geoms for mapping with ggplot2
+- title: Layers and geoms for ggplot2 maps
   contents:
   - starts_with("layer_")
   - starts_with("geom_")
-- title: Working with ggplot2 themes and file export
+- title: Working with ggplot2 themes, labels, layout, and file export
   contents:
+  - '`theme_ext`'
+  - '`labs_ext`'
   - '`ggsave_ext`'
-  - '`get_asp`'
+  - '`make_filename`'
   - '`get_paper`'
   - '`get_margin`'
-  - '`theme_margin`'
-  - '`theme_text`'
-  - '`make_filename`'
-  - '`labs_ext`'
+  - '`get_asp`'
 - title: Reference data
   contents:
   - '`map_icons`'
   - '`paper_sizes`'
   - '`valid_dist_units`'
+  - '`standard_scales`'
 

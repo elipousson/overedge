@@ -3,6 +3,7 @@
 \name{st_bbox_ext}
 \alias{st_bbox_ext}
 \alias{st_bbox_adj}
+\alias{st_bbox_asp}
 \title{Get bounding box buffered to aspect ratio}
 \usage{
 st_bbox_ext(
@@ -13,6 +14,8 @@ st_bbox_ext(
   unit = NULL,
   crs = NULL
 )
+
+st_bbox_asp(x = NULL, asp = NULL)
 }
 \arguments{
 \item{x}{\code{sf} to adjust}

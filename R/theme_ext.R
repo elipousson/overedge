@@ -32,16 +32,18 @@
 #'   modifying theme ("set", "update", or "replace"); defaults to `NULL`.
 #' @inheritParams get_paper
 #' @inheritParams get_margin
-#' @rdname theme_ext
 #' @seealso
 #'  - \code{\link[ggplot2]{theme}}
 #'  - \code{\link[ggplot2]{margin}}
 #'  - \code{\link[ggplot2]{theme_get}}
-#'  - \code{\link[ggplot2]{update_geom_defaults}
-#' @export
-#'
+#'  - \code{\link[ggplot2]{update_geom_defaults}}
 #' @md
-#'
+#' @name theme_ext
+NULL
+
+#' @rdname theme_ext
+#' @name theme_text
+#' @export
 #' @importFrom ggplot2 theme element_text theme_set theme_update theme_replace
 #'   update_geom_defaults
 theme_text <- function(font_family = NULL,
@@ -82,8 +84,9 @@ theme_text <- function(font_family = NULL,
   }
 }
 
-#' @name theme_margin
+
 #' @rdname theme_ext
+#' @name theme_margin
 #' @export
 #' @importFrom ggplot2 theme element_rect
 #' @importFrom grid unit
@@ -125,8 +128,8 @@ theme_margin <- function(margin = "standard",
   }
 }
 
-#' @name theme_legend
 #' @rdname theme_ext
+#' @name theme_legend
 #' @export
 #' @importFrom ggplot2 element_blank element_rect theme
 #' @importFrom grid unit

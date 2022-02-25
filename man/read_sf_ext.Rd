@@ -18,7 +18,7 @@ read_sf_package(data, bbox = NULL, package, filetype = "gpkg", ...)
 \item{bbox}{bbox object; Default: NULL. If bbox is provided, read_sf only
 returns features intersecting the bounding box.}
 
-\item{...}{additional parameters passed to \code{\link[sf]{read_sf}}}
+\item{...}{additional parameters passed to \code{\link[sf]{read_sf}}. May include query parameter.}
 
 \item{url}{url for spatial data file or for ArcGIS FeatureServer or MapServer
 to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by read_sf_url only}

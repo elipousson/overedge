@@ -15,7 +15,7 @@
 #'   the package cache directory or extdata system files.
 #' @param bbox bbox object; Default: NULL. If bbox is provided, read_sf only
 #'   returns features intersecting the bounding box.
-#' @param ... additional parameters passed to \code{\link[sf]{read_sf}}
+#' @param ... additional parameters passed to \code{\link[sf]{read_sf}}. May include query parameter.
 #' @rdname read_sf_ext
 #' @details read_sf_package looks for three types of package data:
 #'   = Data loaded with the package

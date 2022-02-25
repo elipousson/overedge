@@ -87,14 +87,19 @@
         <dd>Use osmdata to get Open Street Map data for a location</dd>
       </dl><dl><dt>
           
-          <code><a href="get_socrata_data.html">get_socrata_data()</a></code> 
+          <code><a href="get_open_data.html">get_open_data()</a></code> <code><a href="get_open_data.html">get_socrata_data()</a></code> 
         </dt>
-        <dd>Use RSocrata to get data from a Socrata open data portal for a location</dd>
+        <dd>Get data from an open data portal (Socrata) for a location</dd>
       </dl><dl><dt>
           
           <code><a href="get_flickr_photos.html">get_flickr_photos()</a></code> 
         </dt>
         <dd>Use FlickrAPI to get geotagged photos for a location</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_us_counties.html">get_us_counties()</a></code> 
+        </dt>
+        <dd>Use USAboundariesData to get current or past U.S. county boundaries for a location</dd>
       </dl><dl><dt>
           
           <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_package()</a></code> 
@@ -118,12 +123,7 @@
 
       <dl><dt>
           
-          <code><a href="st_bbox_asp.html">st_bbox_asp()</a></code> 
-        </dt>
-        <dd>Get bounding box adjusted to match aspect ratio</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_bbox_ext.html">st_bbox_ext()</a></code> 
+          <code><a href="st_bbox_ext.html">st_bbox_ext()</a></code> <code><a href="st_bbox_ext.html">st_bbox_asp()</a></code> 
         </dt>
         <dd>Get bounding box buffered to aspect ratio</dd>
       </dl><dl><dt>
@@ -168,7 +168,7 @@ simple feature</dd>
         </dt>
         <dd>Check the class and attributes of a simple feature object</dd>
       </dl></div><div class="section level2">
-      <h2 id="layers-and-geoms-for-mapping-with-ggplot-">Layers and geoms for mapping with ggplot2<a class="anchor" aria-label="anchor" href="#layers-and-geoms-for-mapping-with-ggplot-"></a></h2>
+      <h2 id="layers-and-geoms-for-ggplot-maps">Layers and geoms for ggplot2 maps<a class="anchor" aria-label="anchor" href="#layers-and-geoms-for-ggplot-maps"></a></h2>
       
       
 
@@ -205,7 +205,7 @@ border</dd>
         </dt>
         <dd>Draw SVG icons for a simple feature object</dd>
       </dl></div><div class="section level2">
-      <h2 id="working-with-ggplot-themes-and-file-export">Working with ggplot2 themes and file export<a class="anchor" aria-label="anchor" href="#working-with-ggplot-themes-and-file-export"></a></h2>
+      <h2 id="working-with-ggplot-themes-labels-layout-and-file-export">Working with ggplot2 themes, labels, layout, and file export<a class="anchor" aria-label="anchor" href="#working-with-ggplot-themes-labels-layout-and-file-export"></a></h2>
       
       
 
@@ -217,14 +217,24 @@ border</dd>
 
       <dl><dt>
           
+          <code><a href="theme_ext.html">theme_text()</a></code> <code><a href="theme_ext.html">theme_margin()</a></code> <code><a href="theme_ext.html">theme_legend()</a></code> 
+        </dt>
+        <dd>Modify the text, margins, or legend for a ggplot theme</dd>
+      </dl><dl><dt>
+          
+          <code><a href="labs_ext.html">labs_ext()</a></code> 
+        </dt>
+        <dd>Add labels to a ggplot2 location map</dd>
+      </dl><dl><dt>
+          
           <code><a href="ggsave_ext.html">ggsave_ext()</a></code> 
         </dt>
         <dd>Save a ggplot and update file EXIF metadata</dd>
       </dl><dl><dt>
           
-          <code><a href="get_asp.html">get_asp()</a></code> 
+          <code><a href="make_filename.html">make_filename()</a></code> 
         </dt>
-        <dd>Get aspect ratio from string or based on specific paper and margins</dd>
+        <dd>Make file name and path with optional label, prefix, or postfix</dd>
       </dl><dl><dt>
           
           <code><a href="get_paper.html">get_paper()</a></code> 
@@ -237,19 +247,9 @@ border</dd>
         <dd>Get margins for a ggplot2 plot or map based on style or distance</dd>
       </dl><dl><dt>
           
-          <code><a href="theme_ext.html">theme_text()</a></code> <code><a href="theme_ext.html">theme_margin()</a></code> <code><a href="theme_ext.html">theme_legend()</a></code> 
+          <code><a href="get_asp.html">get_asp()</a></code> 
         </dt>
-        <dd>Modify the text, margins, or legend for a ggplot theme</dd>
-      </dl><dl><dt>
-          
-          <code><a href="make_filename.html">make_filename()</a></code> 
-        </dt>
-        <dd>Make file name and path with optional label, prefix, or postfix</dd>
-      </dl><dl><dt>
-          
-          <code><a href="labs_ext.html">labs_ext()</a></code> 
-        </dt>
-        <dd>Add labels to a ggplot2 location map</dd>
+        <dd>Get aspect ratio from string or based on specific paper and margins</dd>
       </dl></div><div class="section level2">
       <h2 id="reference-data">Reference data<a class="anchor" aria-label="anchor" href="#reference-data"></a></h2>
       
@@ -276,6 +276,11 @@ border</dd>
           <code><a href="valid_dist_units.html">valid_dist_units</a></code> 
         </dt>
         <dd>Valid distance units</dd>
+      </dl><dl><dt>
+          
+          <code><a href="standard_scales.html">standard_scales</a></code> 
+        </dt>
+        <dd>Standard map, architectural, and engineering scales</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
