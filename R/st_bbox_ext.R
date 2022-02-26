@@ -23,7 +23,8 @@ st_bbox_ext <- function(x = NULL,
                         diag_ratio = NULL,
                         asp = NULL,
                         unit = NULL,
-                        crs = NULL) {
+                        crs = NULL,
+                        sf = FALSE) {
   if (check_bbox(x)) {
     x <- sf_bbox_to_sf(x)
   }
@@ -52,7 +53,11 @@ st_bbox_ext <- function(x = NULL,
       sf::st_bbox(x)
   }
 
-  return(bbox)
+  if (sf) {
+    return(sf_bbox_to_sf(bbox))
+  } else {
+    return(bbox)
+  }
 }
 
 #' @rdname st_bbox_ext
@@ -95,11 +100,14 @@ st_bbox_asp <- function(x = NULL,
       y_nudge <- ((xdist / asp) - ydist) / 2
     }
 
-    # Adjust bbox
-    bbox[["xmin"]] <- bbox[["xmin"]] - x_nudge
-    bbox[["xmax"]] <- bbox[["xmax"]] + x_nudge
-    bbox[["ymin"]] <- bbox[["ymin"]] - y_nudge
-    bbox[["ymax"]] <- bbox[["ymax"]] + y_nudge
+    bbox <-
+      sf_bbox_shift(
+        bbox = bbox,
+        x_nudge = x_nudge,
+        y_nudge = y_nudge,
+        side = c("top", "bottom", "left", "right"),
+        dir = "out"
+      )
   }
 
   return(bbox)
