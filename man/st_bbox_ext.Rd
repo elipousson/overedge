@@ -12,7 +12,8 @@ st_bbox_ext(
   diag_ratio = NULL,
   asp = NULL,
   unit = NULL,
-  crs = NULL
+  crs = NULL,
+  sf = FALSE
 )
 
 st_bbox_asp(x = NULL, asp = NULL)

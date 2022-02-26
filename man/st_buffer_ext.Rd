@@ -4,7 +4,14 @@
 \alias{st_buffer_ext}
 \title{Buffer a simple feature or bounding box object}
 \usage{
-st_buffer_ext(x, dist = NULL, diag_ratio = NULL, unit = "meter", ...)
+st_buffer_ext(
+  x,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = "meter",
+  dist_limits = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{sf or bbox object.}
@@ -21,6 +28,10 @@ provided.}
 instead of "kilometer") are also supported. Units are passed to
 \code{units::set_units()} and then converted to units matching GDAL; defaults to
 "meter"}
+
+\item{dist_limits}{Numeric vector of any length (minimum and maximum values
+used as lower and upper limits on distance buffer). Units must match the
+provided units; defaults to NULL.}
 
 \item{...}{additional parameters passed to  \code{\link[sf]{st_buffer}}.}
 }

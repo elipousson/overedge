@@ -88,4 +88,11 @@ if (interactive()) {
 }
 \seealso{
 \code{\link[ggplot2]{CoordSf}},\code{\link[ggplot2]{scale_continuous}}
+
+Other layer: 
+\code{\link{layer_location_data}()},
+\code{\link{layer_mask}()},
+\code{\link{layer_scaled}()},
+\code{\link{layer_show_location}()}
 }
+\concept{layer}

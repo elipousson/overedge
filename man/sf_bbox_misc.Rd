@@ -11,17 +11,20 @@
 \alias{sf_bbox_to_sf}
 \alias{sf_bbox_to_wkt}
 \alias{sf_bbox_to_lonlat_query}
+\alias{sf_bbox_shift}
+\alias{sf_bbox_contract}
+\alias{sf_bbox_expand}
 \title{Measure, transform, and convert bounding boxes}
 \usage{
 sf_bbox_asp(bbox, orientation = FALSE)
 
-sf_bbox_dist(bbox, from, to)
+sf_bbox_dist(bbox, from, to, units = FALSE)
 
-sf_bbox_xdist(bbox)
+sf_bbox_xdist(bbox, units = FALSE)
 
-sf_bbox_ydist(bbox)
+sf_bbox_ydist(bbox, units = FALSE)
 
-sf_bbox_diagdist(bbox)
+sf_bbox_diagdist(bbox, units = FALSE)
 
 sf_bbox_transform(bbox, crs)
 
@@ -30,6 +33,18 @@ sf_bbox_to_sf(bbox)
 sf_bbox_to_wkt(bbox)
 
 sf_bbox_to_lonlat_query(bbox, coords = c("longitude", "latitude"), crs = 4326)
+
+sf_bbox_shift(
+  bbox,
+  x_nudge = 0,
+  y_nudge = 0,
+  side = c("all", "top", "bottom", "left", "right"),
+  dir = NULL
+)
+
+sf_bbox_contract(bbox, x_nudge = 0, y_nudge = 0)
+
+sf_bbox_expand(bbox, x_nudge = 0, y_nudge = 0)
 }
 \arguments{
 \item{bbox}{bbox object}
@@ -41,9 +56,22 @@ defaults to \code{FALSE}.}
 \item{from, to}{xy pairs (e.g. c("xmax", "ymax) defining points to measure
 distance from and to.}
 
+\item{units}{If \code{TRUE}, distance functions return with units. If \code{FALSE}
+(default), distance functions return numeric values.}
+
 \item{crs}{coordinate reference system to use for query; default 4326}
 
-\item{coords}{query column names with coordinates. e,g, c("X", "Y") or c("lat", "lon")}
+\item{coords}{query column names with coordinates. e,g, c("X", "Y") or
+c("lat", "lon")}
+
+\item{x_nudge, y_nudge}{Length 1 or 2 numeric vector; unitless.}
+
+\item{side}{one or more sides to shift: "top", "bottom", "left", "right", or
+"all"}
+
+\item{dir}{If "in", contract the \code{bbox} by x_nudge and y_nudge. If "out",
+expand the bbox by x_nudge and y_nudge. If dir is not \code{NULL}; absolute
+values are used for x_nudge and y_nudge. Defaults to \code{NULL}.}
 }
 \value{
 sf object
@@ -53,11 +81,12 @@ Simple bounding box functions that you can use to:
 }
 \details{
 \itemize{
-\item Measure distances (sf_bbox_dist, sf_bbox_xdist, sf_bbox_ydist, and sf_bbox_diagdist)
-\item Get an aspect ratio (sf_bbox_asp)
-\item Transform the coordinate reference system (sf_bbox_transform)
-\item Convert a bounding box to a SQL style query (sf_bbox_to_lonlat_query), well
-known text (sf_bbox_to_wkt), or a simple feature object (sf_bbox_to_sf)
+\item Measure distances (\link{sf_bbox_dist}, \link{sf_bbox_xdist}, \link{sf_bbox_ydist}, and \link{sf_bbox_diagdist})
+\item Get an aspect ratio (\link{sf_bbox_asp})
+\item Transform the coordinate reference system (\link{sf_bbox_transform})
+\item Convert a bounding box to a SQL style query (\link{sf_bbox_to_lonlat_query}), well
+known text (\link{sf_bbox_to_wkt}), or a simple feature object (\link{sf_bbox_to_sf})
+\item Shift, expand, or contract a bounding box (\link{sf_bbox_shift}, \link{sf_bbox_expand}, \link{sf_bbox_contract})
 }
 
 The only functions with additional parameters are sf_bbox_to_lonlat_query and sf_bbox_dist. All

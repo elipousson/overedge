@@ -33,6 +33,7 @@ reference:
   - '`get_paper`'
   - '`get_margin`'
   - '`get_asp`'
+  - '`get_standard_scale`'
 - title: Reference data
   contents:
   - '`map_icons`'

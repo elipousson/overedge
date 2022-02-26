@@ -109,4 +109,11 @@ Helper function to make a ggplot2 layer from data returned by
 }
 \seealso{
 \code{\link[ggplot2]{CoordSf}}
+
+Other layer: 
+\code{\link{layer_location_data}()},
+\code{\link{layer_mask}()},
+\code{\link{layer_neatline}()},
+\code{\link{layer_scaled}()}
 }
+\concept{layer}
