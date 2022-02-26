@@ -27,8 +27,9 @@
 #'   \code{\link{sf}} object. Default `FALSE`.
 #' @param coords Name(s) of column with coordinate data, Default: c("longitude",
 #'   "latitude")
-#' @param trim If area is provided, trim data to the area boundary rather than
-#'   the bounding box, Default: FALSE. area must be provided if TRUE.
+#' @param key API Key; required
+#' @param location sf or bbox obkect
+#' @param from_crs Coordinate reference system for source data.
 #' @param crs Coordinate reference system to return.
 #' @examples
 #' \dontrun{

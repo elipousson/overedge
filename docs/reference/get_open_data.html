@@ -137,6 +137,8 @@ to WHERE. <a href="https://dev.socrata.com/docs/queries/where.html" class="exter
 <dt>query</dt>
 <dd><p>SODA $query parameter. A full SoQL query string, all as one
 parameter. <a href="https://dev.socrata.com/docs/queries/query.html" class="external-link">https://dev.socrata.com/docs/queries/query.html</a></p></dd>
+<dt>location</dt>
+<dd><p>sf or bbox obkect</p></dd>
 <dt>dist</dt>
 <dd><p>buffer distance in units. Optional.</p></dd>
 <dt>diag_ratio</dt>
@@ -165,11 +167,12 @@ location names (e.g. County)</p></dd>
 <dt>geometry</dt>
 <dd><p>If <code>TRUE</code> and latitude/longitude columns available, return a
 <code>sf</code> object. Default <code>FALSE</code>.</p></dd>
+<dt>key</dt>
+<dd><p>API Key; required</p></dd>
+<dt>from_crs</dt>
+<dd><p>Coordinate reference system for source data.</p></dd>
 <dt>crs</dt>
 <dd><p>Coordinate reference system to return.</p></dd>
-<dt>trim</dt>
-<dd><p>If area is provided, trim data to the area boundary rather than
-the bounding box, Default: FALSE. area must be provided if TRUE.</p></dd>
 </dl></div>
 
     <div class="section level2">

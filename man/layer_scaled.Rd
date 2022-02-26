@@ -40,6 +40,17 @@ character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns th
 without modification.}
 
 \item{crs}{Coordinate reference system of bounding box to return}
+
+\item{scale}{Scale name}
+
+\item{series}{Map series}
+
+\item{standard}{USGS, Engineering, or Architectural}
+
+\item{paper}{Paper, Default: 'letter'.}
+
+\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
+'portrait'.}
 }
 \description{
 Uses \link{layer_neatline}, \link{standard_scales}, and \link{get_standard_scale}.

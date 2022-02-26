@@ -13,6 +13,7 @@
 #' @inheritParams st_buffer_ext
 #' @inheritParams get_asp
 #' @param crs Coordinate reference system of bounding box to return
+#' @param sf If `TRUE`, return a `sf` object; defaults to `FALSE`.
 #' @return Class \code{bbox} object
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext

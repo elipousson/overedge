@@ -13,6 +13,20 @@ get_standard_scale(
   convert = FALSE
 )
 }
+\arguments{
+\item{standard}{USGS, Engineering, or Architectural}
+
+\item{series}{Map series}
+
+\item{scale}{Scale name}
+
+\item{paper}{Paper, Default: 'letter'.}
+
+\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
+'portrait'.}
+
+\item{convert}{If \code{TRUE}, return paper with scale distances converted to actual distances based on values from selected scale; defaults to \code{FALSE}.}
+}
 \description{
 Get standard scales and convert to scale distances
 }

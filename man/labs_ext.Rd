@@ -39,6 +39,8 @@ See \link[ggplot2]{get_alt_text} for examples.}
 \item{locationname_col}{Column name holding name or identifier for distinct
 places within the simple feature collection provided to location. Not
 supported for bbox objects.}
+
+\item{source}{Data source(s). Not yet used or supported by function.}
 }
 \description{
 A helper function that converts strings to glue strings for the title,

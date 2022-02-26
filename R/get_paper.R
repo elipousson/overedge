@@ -323,6 +323,11 @@ get_asp <- function(asp = NULL,
 
 #' Get standard scales and convert to scale distances
 #' @name get_standard_scale
+#' @param standard USGS, Engineering, or Architectural
+#' @param series Map series
+#' @param scale Scale name
+#' @param convert If `TRUE`, return paper with scale distances converted to actual distances based on values from selected scale; defaults to `FALSE`.
+#' @inheritParams get_paper
 #' @export
 get_standard_scale <- function(standard = NULL,
                                series = NULL,

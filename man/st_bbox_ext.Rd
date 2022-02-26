@@ -39,6 +39,8 @@ instead of "kilometer") are also supported. Units are passed to
 "meter"}
 
 \item{crs}{Coordinate reference system of bounding box to return}
+
+\item{sf}{If \code{TRUE}, return a \code{sf} object; defaults to \code{FALSE}.}
 }
 \value{
 Class \code{bbox} object

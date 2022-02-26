@@ -8,6 +8,7 @@
 #' @param locationname_col Column name holding name or identifier for distinct
 #'   places within the simple feature collection provided to location. Not
 #'   supported for bbox objects.
+#' @param source Data source(s). Not yet used or supported by function.
 #' @export
 #' @importFrom ggplot2 labs
 labs_ext <- function(

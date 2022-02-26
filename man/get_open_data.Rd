@@ -66,6 +66,8 @@ to WHERE. \url{https://dev.socrata.com/docs/queries/where.html}}
 \item{query}{SODA $query parameter. A full SoQL query string, all as one
 parameter. \url{https://dev.socrata.com/docs/queries/query.html}}
 
+\item{location}{sf or bbox obkect}
+
 \item{dist}{buffer distance in units. Optional.}
 
 \item{diag_ratio}{ratio of diagonal distance of area's bounding box used as
@@ -94,10 +96,11 @@ location names (e.g. County)}
 \item{geometry}{If \code{TRUE} and latitude/longitude columns available, return a
 \code{\link{sf}} object. Default \code{FALSE}.}
 
-\item{crs}{Coordinate reference system to return.}
+\item{key}{API Key; required}
 
-\item{trim}{If area is provided, trim data to the area boundary rather than
-the bounding box, Default: FALSE. area must be provided if TRUE.}
+\item{from_crs}{Coordinate reference system for source data.}
+
+\item{crs}{Coordinate reference system to return.}
 }
 \description{
 get_socrata_data is get_open_data with source_type set to "socrata" (the only
