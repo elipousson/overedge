@@ -17,6 +17,9 @@
 #'   instead of "kilometer") are also supported. Units are passed to
 #'   `units::set_units()` and then converted to units matching GDAL; defaults to
 #'   "meter"
+#' @param dist_limits Numeric vector of any length (minimum and maximum values
+#'   used as lower and upper limits on distance buffer). Units must match the
+#'   provided units; defaults to NULL.
 #' @param ... additional parameters passed to  \code{\link[sf]{st_buffer}}.
 #' @export
 #' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer
@@ -25,8 +28,8 @@ st_buffer_ext <- function(x,
                           dist = NULL,
                           diag_ratio = NULL,
                           unit = "meter",
+                          dist_limits = NULL,
                           ...) {
-
 
   # If bbox, convert to sf
   if (check_bbox(x)) {
@@ -44,7 +47,10 @@ st_buffer_ext <- function(x,
       x <- sf::st_transform(x, 3857)
     }
 
-    if (is.null(dist) && !is.null(diag_ratio)) {
+    if (check_class(dist, "units")) {
+      unit <- as.character(units(dist)$numerator)
+      dist <- as.numeric(dist)
+    } else if (is.null(dist) && !is.null(diag_ratio)) {
       # Use the bbox diagonal distance to make proportional buffer distance
       dist <- sf_bbox_diagdist(sf::st_bbox(x)) * diag_ratio
     }
@@ -81,16 +87,68 @@ st_buffer_ext <- function(x,
         mode = "standard"
       )
 
+    if (!is.null(dist_limits)) {
+      dist_limits <-
+        units::set_units(
+          x = dist_limits,
+          value = unit,
+          mode = "standard"
+        )
+    }
+
     if (units_gdal == "meter") {
       dist <- units::set_units(
         x = dist,
         value = "meter"
       )
+
+      if (!is.null(dist_limits)) {
+        dist_limits <- units::set_units(
+          x = dist_limits,
+          value = "meter"
+        )
+      }
     } else if (units_gdal == "US_survey_foot") {
       dist <- units::set_units(
         x = dist,
         value = "US_survey_foot"
       )
+
+      if (!is.null(dist_limits)) {
+        dist_limits <- units::set_units(
+          x = dist_limits,
+          value = "US_survey_foot"
+        )
+      }
+    }
+
+    #   min_dist <- units::as_units(min(dist_limits), value = "US_survey_foot")
+    #    max_dist <- units::as_units(max(dist_limits), value = "US_survey_foot")
+
+    if (!is.null(dist_limits) && (length(dist_limits) >= 2) && check_class(dist_limits, "units")) {
+      min_limit <- min(dist_limits)
+      max_limit <- max(dist_limits)
+
+      check_between_dist <-
+        suppressWarnings(
+          dplyr::between(
+            dist,
+            min_limit,
+            max_limit
+          )
+        )
+
+      if (check_between_dist) {
+        usethis::ui_info("The buffer dist ({dist} {units_gdal}) is between the min/max distance limits.")
+        dist <- dist_limits[[which.min(abs(dist_limits - dist))]]
+        usethis::ui_info("Replacing with nearest distance limit ({dist} {units_gdal}).")
+      } else if (dist < min_limit) {
+        dist <- min_limit
+        usethis::ui_info("Replacing buffer dist ({num_dist} {units_gdal}) with the minimum limit ({min_limit} {units_gdal}).")
+      } else if (dist > max_limit) {
+        dist <- max_limit
+        usethis::ui_info("Replacing buffer dist ({num_dist} {units_gdal})with the maximum limit ({max_limit} {units_gdal}).")
+      }
     }
 
     x <- sf::st_buffer(x = x, dist = dist, ...)
