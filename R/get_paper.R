@@ -190,19 +190,19 @@ get_margin <- function(margin = NULL,
     if (is.character(margin) && (margin != "auto")) {
       if (unit == "in") {
         margin <- switch(margin,
-                         "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = unit),
-                         "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = unit),
-                         "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = unit),
-                         "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = unit),
-                         "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
+          "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = unit),
+          "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = unit),
+          "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = unit),
+          "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = unit),
+          "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
         )
       } else if (unit == "mm") {
         margin <- switch(margin,
-                         "extrawide" = ggplot2::margin(t = 80, r = 80, b = 80, l = 80, unit = unit),
-                         "wide" = ggplot2::margin(t = 60, r = 60, b = 60, l = 60, unit = unit),
-                         "standard" = ggplot2::margin(t = 40, r = 40, b = 40, l = 40, unit = unit),
-                         "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
-                         "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
+          "extrawide" = ggplot2::margin(t = 80, r = 80, b = 80, l = 80, unit = unit),
+          "wide" = ggplot2::margin(t = 60, r = 60, b = 60, l = 60, unit = unit),
+          "standard" = ggplot2::margin(t = 40, r = 40, b = 40, l = 40, unit = unit),
+          "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
+          "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
         )
       } else if (unit == "px" && !is.null(paper)) {
         px_to_npc_margins <- function(px) {
@@ -215,11 +215,11 @@ get_margin <- function(margin = NULL,
         }
 
         margin <- switch(margin,
-                         "extrawide" = ggplot2::margin(px_to_npc_margins(120), unit = "npc"), # 1080 / 6
-                         "wide" = ggplot2::margin(px_to_npc_margins(80), unit = "npc"), # 1080 / 8
-                         "standard" = ggplot2::margin(px_to_npc_margins(40), unit = "npc"), # 1080 / 12
-                         "narrow" = ggplot2::margin(px_to_npc_margins(20), unit = "npc"),
-                         "none" = ggplot2::margin(px_to_npc_margins(0), unit = "npc")
+          "extrawide" = ggplot2::margin(px_to_npc_margins(120), unit = "npc"), # 1080 / 6
+          "wide" = ggplot2::margin(px_to_npc_margins(80), unit = "npc"), # 1080 / 8
+          "standard" = ggplot2::margin(px_to_npc_margins(40), unit = "npc"), # 1080 / 12
+          "narrow" = ggplot2::margin(px_to_npc_margins(20), unit = "npc"),
+          "none" = ggplot2::margin(px_to_npc_margins(0), unit = "npc")
         )
       }
     } else if (margin == "auto") {
@@ -284,7 +284,7 @@ get_asp <- function(asp = NULL,
       # If asp is provided as character string (e.g. "16:9") convert to a numeric ratio
       asp <-
         as.numeric(stringr::str_extract(asp, ".+(?=:)")) /
-        as.numeric(stringr::str_extract(asp, "(?<=:).+"))
+          as.numeric(stringr::str_extract(asp, "(?<=:).+"))
     } else if (!is.numeric(asp) && !is.null(asp)) {
       usethis::ui_stop("{usethis::ui_value('asp')} must be numeric (e.g. 0.666) or a string representing a width to height ratio (e.g. '4:6').")
     }
@@ -318,4 +318,134 @@ get_asp <- function(asp = NULL,
   }
 
   return(asp)
+}
+
+
+#' Get standard scales and convert to scale distances
+#' @name get_standard_scale
+#' @export
+get_standard_scale <- function(standard = NULL,
+                               series = NULL,
+                               scale = NULL,
+                               paper = NULL,
+                               orientation = NULL,
+                               convert = FALSE) {
+
+  select_scale <- standard_scales
+
+  if (!is.null(scale)) {
+    select_scale <- dplyr::filter(select_scale, .data$scale %in% {{ scale }})
+  }
+
+  if (!is.null(standard)) {
+    standard <- match.arg(standard, c("USGS", "Engineering", "Architectural"), several.ok = TRUE)
+    select_scale <- dplyr::filter(select_scale, .data$standard %in% {{ standard }})
+  }
+
+  if (!is.null(series)) {
+    series <- match.arg(series, unique(standard_scales$series), several.ok = TRUE)
+    select_scale <- dplyr::filter(select_scale, .data$series %in% {{ series }})
+  }
+
+  if (is.null(paper) && !convert) {
+
+    return(select_scale)
+
+  } else if (!is.null(paper) && convert) {
+    paper <-
+      get_paper(paper = paper, orientation = orientation)
+
+  #  accuracy <- match.arg(accuracy, c("exact", "approximate"), several.ok = TRUE)
+
+    paper$scale <- select_scale$scale
+
+  if (paper$units == "mm") {
+
+    # Converted to cm
+    scale_width <- paper$width / 10
+    scale_height <- paper$height / 10
+    scale_units <- "cm"
+
+    # Distance of 1 cm
+    unit_actual <- select_scale$scale_cm_unit
+    unit_dist <- select_scale$scale_cm
+
+   #scale_factor <-
+  #    switch(actual_unit,
+  #      "m" = 100,
+  #      "km" = 100000,
+  #      "ft" = 30.48,
+  #      "feet" = 30.48,
+  #      "mi" = 160934
+  #    )
+  } else if (paper$units == "in") {
+
+    scale_width <- paper$width
+    scale_height <- paper$height
+    scale_units <- paper$units
+
+    unit_actual <- select_scale$scale_in_unit
+    unit_dist <- select_scale$scale_in
+
+   # scale_factor <-
+  #    switch(unit_actual,
+  #           "m" = 39.3701,
+  #           "km" = 39370.1,
+  #           "ft" = 12,
+  #           "feet" = 12,
+  #           "mi" = 63360
+  #    )
+  }
+
+  actual_width <- scale_width * unit_dist #* scale_factor
+  actual_height <- scale_height * unit_dist # * scale_factor)
+
+  if (unit_actual %in% c("ft", "feet")) {
+    actual_width <- units::set_units(
+      x = actual_width,
+      value = "feet"
+    )
+
+    actual_height <- units::set_units(
+      x = actual_height,
+      value = "feet"
+    )
+  } else if (unit_actual == "mi") {
+    actual_width <- units::set_units(
+      x = actual_width,
+      value = "mi"
+    )
+
+    actual_height <- units::set_units(
+      x = actual_height,
+      value = "mi"
+    )
+  } else if (unit_actual == "m") {
+    actual_width <- units::set_units(
+      x = actual_width,
+      value = "m"
+    )
+
+    actual_height <- units::set_units(
+      x = actual_height,
+      value = "m"
+    )
+  } else if (unit_actual == "km") {
+    actual_width <- units::set_units(
+      x = actual_width,
+      value = actual_unit
+    )
+
+    actual_height <- units::set_units(
+      x = actual_height,
+      value = "km"
+    )
+  }
+
+  paper$unit_actual <- unit_actual
+  paper$width_actual <- actual_width
+  paper$height_actual <- actual_height
+
+  return(paper)
+  }
 }
