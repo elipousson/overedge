@@ -16,6 +16,7 @@
 #' @seealso
 #'  \code{\link[ggplot2]{CoordSf}}
 #' @rdname layer_show_location
+#' @family layer
 #' @export
 #' @importFrom ggplot2 aes
 #' @importFrom smoothr smooth

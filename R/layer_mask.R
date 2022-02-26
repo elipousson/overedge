@@ -13,6 +13,7 @@
 #' @param neatline If TRUE, add \code{layer_neatline} with `expand = TRUE`; defaults to FALSE.
 #' @param ... Additional parameters to pass to \code{\link[ggplot2]{geom_sf}}
 #' @return  \code{\link[ggplot2]{geom_sf}} function.
+#' @family layer
 #' @export
 #' @importFrom sf st_transform st_difference st_union
 layer_mask <- function(data = NULL,

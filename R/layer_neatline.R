@@ -40,6 +40,7 @@
 #' }
 #' @seealso
 #'  \code{\link[ggplot2]{CoordSf}},\code{\link[ggplot2]{scale_continuous}}
+#' @family layer
 #' @aliases set_map_limits
 #' @export
 #' @importFrom ggplot2 coord_sf scale_y_continuous scale_x_continuous theme element_rect element_blank

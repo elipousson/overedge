@@ -19,6 +19,7 @@
 #' @seealso
 #'  \code{\link[ggplot2]{CoordSf}}
 #' @rdname layer_location_data
+#' @family layer
 #' @export
 #' @importFrom ggplot2 aes geom_sf geom_sf_text geom_sf_label
 #' @importFrom geomtextpath geom_textsf geom_labelsf
