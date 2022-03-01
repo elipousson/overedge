@@ -52,17 +52,20 @@ date/time prefix; defaults to \code{NULL}.}
 "data.csv". Objects that are not simple features are written to RDS with
 \code{readr::write_rds()}.}
 
-\item{filetype}{File type to write and cache, Default: 'geojson' for \code{write_sf_ext()}}
+\item{filetype}{File type to write and cache, Default: 'geojson' for
+\code{write_sf_ext()}}
 
 \item{path}{Path to file or data directory.}
 
-\item{cache}{If \code{TRUE}, write \code{sf} object to file in cache directory; defaults to \code{FALSE}.}
+\item{cache}{If \code{TRUE}, write \code{sf} object to file in cache directory;
+defaults to \code{FALSE}.}
 
 \item{overwrite}{Logical. Default \code{FALSE}. If \code{TRUE}, overwrite any existing
 cached files that use the same file name.}
 
 \item{data_dir}{cache data directory, defaults to
-\code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL. (only used for write_sf_cache; default is used when cache = TRUE for write_sf_ext)}
+\code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL. (only used
+for write_sf_cache; default is used when cache = TRUE for write_sf_ext)}
 }
 \description{
 The write_sf_ext and write_sf_cache helper functions wrap the
@@ -71,8 +74,10 @@ including consistent file naming with \code{\link[=make_filename]{make_filename(
 including:
 \itemize{
 \item If the data is not an sf object, optionally save as an RDS file.
-\item If filetype is CSV or the filename ends in ".csv" the file is automatically
-converted to a dataframe using \code{\link[=df_to_sf]{df_to_sf()}}
+\item If filetype is "csv" or the filename ends in ".csv" the file is
+automatically converted to a dataframe using \code{\link[=df_to_sf]{df_to_sf()}}; if filetype is
+"gsheet" the file is converted and turned into a new Google SHeet document
+(if a Google account is authorized with the googlesheets4 package).
 \item If cache is \code{TRUE} use write_sf_cache to cache file after writing a copy to
 the path provided.
 }

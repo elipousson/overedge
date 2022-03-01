@@ -7,8 +7,10 @@
 #' including:
 #'
 #' - If the data is not an sf object, optionally save as an RDS file.
-#' - If filetype is CSV or the filename ends in ".csv" the file is automatically
-#' converted to a dataframe using [df_to_sf()]
+#' - If filetype is "csv" or the filename ends in ".csv" the file is
+#' automatically converted to a dataframe using [df_to_sf()]; if filetype is
+#' "gsheet" the file is converted and turned into a new Google SHeet document
+#' (if a Google account is authorized with the googlesheets4 package).
 #' - If cache is `TRUE` use write_sf_cache to cache file after writing a copy to
 #' the path provided.
 #'
@@ -18,11 +20,14 @@
 #'   "data.csv". Objects that are not simple features are written to RDS with
 #'   `readr::write_rds()`.
 #' @param data_dir cache data directory, defaults to
-#'   \code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL. (only used for write_sf_cache; default is used when cache = TRUE for write_sf_ext)
+#'   \code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL. (only used
+#'   for write_sf_cache; default is used when cache = TRUE for write_sf_ext)
 #' @param overwrite Logical. Default `FALSE`. If `TRUE`, overwrite any existing
 #'   cached files that use the same file name.
-#' @param filetype File type to write and cache, Default: 'geojson' for `write_sf_ext()`
-#' @param cache If `TRUE`, write `sf` object to file in cache directory; defaults to `FALSE`.
+#' @param filetype File type to write and cache, Default: 'geojson' for
+#'   `write_sf_ext()`
+#' @param cache If `TRUE`, write `sf` object to file in cache directory;
+#'   defaults to `FALSE`.
 #' @inheritParams make_filename
 #' @inheritParams write_sf_cache
 #' @seealso
@@ -57,7 +62,12 @@ write_sf_ext <- function(data,
 
   path <- file.path(path, filename)
 
-  write_sf_types(data = data, path = path, filetype = filetype)
+  write_sf_types(
+    data = data,
+    filename = filename,
+    filetype = filetype,
+    path = path
+  )
 
   if (cache) {
     write_sf_cache(
@@ -83,7 +93,7 @@ write_sf_cache <- function(data,
                            filename = NULL,
                            prefix = NULL,
                            postfix = NULL) {
-  data_dir <- overedge_data_dir(data_dir)
+  data_dir <- data_dir(data_dir)
 
   filename <-
     make_filename(
@@ -114,13 +124,19 @@ write_sf_cache <- function(data,
     }
   }
 
-  write_sf_types(data = date, path = data_dir_path, filetype = filetype)
+  write_sf_types(
+    data = date,
+    filename = filename,
+    path = data_dir_path,
+    filetype = filetype
+  )
 }
 
 #' @noRd
 #' @importFrom usethis ui_done ui_yeah
 #' @importFrom readr write_csv write_rds
 #' @importFrom sf write_sf
+#' @importFrom googlesheets4 gs4_create write_sheet
 write_sf_types <- function(data, path, filetype = NULL) {
   if (check_sf(data)) {
     usethis::ui_done("Writing {usethis::ui_path(path)}")
@@ -129,6 +145,17 @@ write_sf_types <- function(data, path, filetype = NULL) {
       readr::write_csv(
         x = sf_to_df(data),
         file = path
+      )
+    } else if (!is.null(filetype) && (filetype == "gsheet")) {
+      sheet <-
+        googlesheets4::gs4_create(
+          name = filename # FIXME: Using the path as the name may cause issues
+        )
+
+      googlesheets4::write_sheet(
+        data = sf_to_df(data),
+        ss = sheet,
+        sheet = 1
       )
     } else {
       sf::write_sf(
@@ -159,6 +186,7 @@ write_sf_types <- function(data, path, filetype = NULL) {
           x = path
         )
     }
+
     usethis::ui_done("Writing {usethis::ui_path(path)}")
 
     readr::write_rds(
@@ -202,7 +230,6 @@ make_filename <- function(name = NULL,
   )
 
   if (is.null(filename)) {
-
     if (!is.null(label)) {
       filename <-
         str_prefix(
@@ -263,6 +290,12 @@ make_filename <- function(name = NULL,
 #' @noRd
 #' @importFrom janitor make_clean_names
 str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", clean = TRUE) {
+  stopifnot(
+    is.character(prefix) || is.null(prefix),
+    is.character(string) || is.null(string),
+    is.character(postfix) || is.null(postfix)
+  )
+
   if (!is.null(prefix)) {
     if ("date" %in% prefix) {
       prefix <- gsub("^x", "", janitor::make_clean_names(Sys.Date(), sep_out = "-"))
