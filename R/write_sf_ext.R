@@ -137,7 +137,7 @@ write_sf_cache <- function(data,
 #' @importFrom readr write_csv write_rds
 #' @importFrom sf write_sf
 #' @importFrom googlesheets4 gs4_create write_sheet
-write_sf_types <- function(data, path, filetype = NULL) {
+write_sf_types <- function(data, filename = NULL, path, filetype = NULL) {
   if (check_sf(data)) {
     usethis::ui_done("Writing {usethis::ui_path(path)}")
 

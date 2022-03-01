@@ -10,14 +10,14 @@
 #'   supported for bbox objects.
 #' @param source Data source(s). Not yet used or supported by function.
 #' @export
-#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 labs waiver
 labs_ext <- function(
-    title = waiver(),
-    subtitle = waiver(),
-    caption = waiver(),
-    tag = waiver(),
-    alt = waiver(),
-    alt_insight = waiver(),
+    title = ggplot2::waiver(),
+    subtitle = ggplot2::waiver(),
+    caption = ggplot2::waiver(),
+    tag = ggplot2::waiver(),
+    alt = ggplot2::waiver(),
+    alt_insight = ggplot2::waiver(),
     location = NULL,
     locationname_col = NULL, # Check param name
     source = NULL) {
