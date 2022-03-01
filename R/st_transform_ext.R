@@ -1,4 +1,4 @@
-#' Transform or convert coordinates of a simple feature object
+#' Transform or convert coordinates of a simple feature or bounding box object
 #'
 #' Take a `sf`, `sfc`, or `bbox` object and transform to coordinate reference
 #' system to match provided `crs` or the  CRS for the provided `y` object.
