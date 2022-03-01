@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_transform_ext.R
 \name{st_transform_ext}
 \alias{st_transform_ext}
-\title{Transform or convert coordinates of a simple feature object}
+\title{Transform or convert coordinates of a simple feature or bounding box object}
 \usage{
 st_transform_ext(x, crs = NULL)
 }

@@ -21,6 +21,7 @@ Imports:
     ggrepel,
     ggsvg,
     glue,
+    httr2,
     janitor,
     knitr,
     lwgeom,
