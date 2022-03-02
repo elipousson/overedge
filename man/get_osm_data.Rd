@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_osm_data.R
 \name{get_osm_data}
 \alias{get_osm_data}
+\alias{get_osm_boundaries}
 \title{Use osmdata to get Open Street Map data for a location}
 \usage{
 get_osm_data(
@@ -14,8 +15,12 @@ get_osm_data(
   asp = NULL,
   crs = NULL,
   geometry = NULL,
-  osmdata = FALSE
+  osmdata = FALSE,
+  enclosing = NULL,
+  timeout = 120
 )
+
+get_osm_boundaries(location, level = NULL, enclosing = "way")
 }
 \arguments{
 \item{location}{A \code{sf}, \code{sfc}, or \code{bbox} object.}
@@ -23,9 +28,8 @@ get_osm_data(
 \item{key}{Feature key for overpass API query.}
 
 \item{value}{Value of the feature key; can be negated with an initial
-exclamation mark, \code{value = "!this"}, and can also be a vector, \code{value = c("this", "that")}.
-If \code{value = "all"} or if \code{key = "building"} the values passed to the
-osmdata package are from
+exclamation mark, \code{value = "!this"}, and can also be a vector, \code{value = c("this", "that")}. If \code{value = "all"} or if \code{key = "building"} the values
+passed to the osmdata package are from a preset list extracted from
 \code{\link[osmdata]{available_tags()}}.}
 
 \item{dist}{buffer distance in units. Optional.}
@@ -55,11 +59,24 @@ set osmdata to \code{TRUE.} Default \code{NULL}.}
 \item{osmdata}{If \code{TRUE} return a \code{osmdata} class object that includes the
 overpass API call, metadata including timestamp and version numbers, and
 all available geometry types; defaults to \code{FALSE}.}
+
+\item{enclosing}{If enclosing is "relation" or "way", use the
+\code{osmdata::opq_enclosing} function to query the OSM data (instead of
+\code{add_osm_feature}). Defaults to \code{NULL}. When using enclosing, the dist,
+diag_ratio, asp, and unit parameters are ignored and the center of the
+provided location is used for the query. geometry is set automatically
+based enclosing with "relation" using "multipolygon" and "way" using
+"polygon" geometry.}
+
+\item{level}{administrative level (admin_level) of boundary to return;
+defaults to NULL. See \url{https://wiki.openstreetmap.org/wiki/Key:admin_level}
+for more information. Only used for get_osm_boundaries.}
 }
 \value{
 A simple feature object with features using selected geometry type or
 an \code{osmdata} object with features from all geometry types.
 }
 \description{
-Wraps \code{osmdata} functions.
+Wraps \code{osmdata} functions to query OSM data by adjusted bounding box or
+by enclosing ways/relations around the center of a location.
 }

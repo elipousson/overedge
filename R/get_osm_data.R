@@ -1,14 +1,16 @@
 #' Use osmdata to get Open Street Map data for a location
 #'
-#' Wraps \code{osmdata} functions.
+#' Wraps \code{osmdata} functions to query OSM data by adjusted bounding box or
+#' by enclosing ways/relations around the center of a location.
 #'
 #' @param location A `sf`, `sfc`, or `bbox` object.
 #' @param key Feature key for overpass API query.
 #' @param value Value of the feature key; can be negated with an initial
-#'   exclamation mark, `value = "!this"`, and can also be a vector, `value = c("this", "that")`.
-#'   If `value = "all"` or if `key = "building"` the values passed to the
-#'   osmdata package are from
+#'   exclamation mark, `value = "!this"`, and can also be a vector, `value =
+#'   c("this", "that")`. If `value = "all"` or if `key = "building"` the values
+#'   passed to the osmdata package are from a preset list extracted from
 #'   \code{\link[osmdata]{available_tags()}}.
+#' @inheritParams st_bbox_ext
 #' @param geometry Geometry type to output ("polygons", "points", "lines",
 #'   "multilines", or "multipolygons"); if multiple geometry types are needed
 #'   set osmdata to `TRUE.` Default `NULL`.
@@ -18,11 +20,18 @@
 #' @param osmdata If `TRUE` return a `osmdata` class object that includes the
 #'   overpass API call, metadata including timestamp and version numbers, and
 #'   all available geometry types; defaults to `FALSE`.
-#' @inheritParams st_bbox_ext
+#' @param enclosing If enclosing is "relation" or "way", use the
+#'   `osmdata::opq_enclosing` function to query the OSM data (instead of
+#'   `add_osm_feature`). Defaults to `NULL`. When using enclosing, the dist,
+#'   diag_ratio, asp, and unit parameters are ignored and the center of the
+#'   provided location is used for the query. geometry is set automatically
+#'   based enclosing with "relation" using "multipolygon" and "way" using
+#'   "polygon" geometry.
 #' @return A simple feature object with features using selected geometry type or
 #'   an `osmdata` object with features from all geometry types.
 #' @export
-#' @importFrom osmdata available_tags opq osmdata_sf add_osm_feature unique_osmdata
+#' @importFrom osmdata available_tags opq add_osm_feature opq_enclosing
+#'   opq_string osmdata_sf unique_osmdata
 #' @importFrom purrr pluck
 #' @importFrom sf st_transform
 #' @importFrom usethis ui_info
@@ -35,34 +44,9 @@ get_osm_data <- function(location = NULL,
                          asp = NULL,
                          crs = NULL,
                          geometry = NULL,
-                         osmdata = FALSE) {
-  osm_geometry <-
-    c(
-      "polygons",
-      "points",
-      "lines",
-      "multilines",
-      "multipolygons"
-    )
-
-  osm_geometry <-
-    match.arg(
-      geometry,
-      osm_geometry
-    )
-
-  osm_crs <- 4326
-
-  # Get adjusted bounding box if any adjustment variables provided
-  bbox_osm <- st_bbox_ext(
-    x = location,
-    dist = dist,
-    diag_ratio = diag_ratio,
-    unit = unit,
-    asp = asp,
-    crs = osm_crs
-  )
-
+                         osmdata = FALSE,
+                         enclosing = NULL,
+                         timeout = 120) {
   if ((key == "building") && is.null(value)) {
     value <- osm_building_tags
   }
@@ -71,12 +55,72 @@ get_osm_data <- function(location = NULL,
     value <- osmdata::available_tags(key)
   }
 
-  query <- try(osmdata::opq(bbox = bbox_osm, timeout = 90),
-    silent = TRUE
-  )
+  if (is.null(enclosing)) {
+    osm_crs <- 4326
+
+    # Get adjusted bounding box if any adjustment variables provided
+    bbox_osm <-
+      st_bbox_ext(
+        x = location,
+        dist = dist,
+        diag_ratio = diag_ratio,
+        unit = unit,
+        asp = asp,
+        crs = osm_crs
+      )
+
+    query <-
+      try(
+        osmdata::opq(bbox = bbox_osm, timeout = timeout),
+        silent = TRUE
+      )
+
+    query <-
+      osmdata::add_osm_feature(
+        opq = query,
+        key = key,
+        value = value,
+        match_case = FALSE
+      )
+  } else if (!is.null(enclosing)) {
+    enclosing <- match.arg(enclosing, c("way", "relation"))
+    coords <- sf_to_df(location)
+
+    query <-
+      try(
+        osmdata::opq_enclosing(
+          lon = coords$lon,
+          lat = coords$lat,
+          key = key,
+          value = value,
+          enclosing = enclosing,
+          timeout = timeout
+        ),
+        silent = TRUE
+      )
+
+    query <- osmdata::opq_string(opq = query)
+
+    geometry <-
+      switch(enclosing,
+        "way" = "polygon",
+        "relation" = "multipolygon"
+      )
+  }
+
   data <-
-    osmdata::osmdata_sf(
-      osmdata::add_osm_feature(query, key = key, value = value)
+    suppressMessages(osmdata::osmdata_sf(query))
+
+  osm_geometry <-
+    match.arg(
+      geometry,
+      c(
+        "polygons",
+        "points",
+        "lines",
+        "multilines",
+        "multipolygons"
+      )
     )
 
   if (!osmdata) {
@@ -91,7 +135,6 @@ get_osm_data <- function(location = NULL,
     }
   } else {
     data <- osmdata::unique_osmdata(data)
-    data
   }
 
   if (getOption("overedge.osm_attribution", TRUE)) {
@@ -101,4 +144,34 @@ get_osm_data <- function(location = NULL,
   }
 
   return(data)
+}
+
+#' @param level administrative level (admin_level) of boundary to return;
+#'   defaults to NULL. See <https://wiki.openstreetmap.org/wiki/Key:admin_level>
+#'   for more information. Only used for get_osm_boundaries.
+#' @rdname get_osm_data
+#' @name get_osm_boundaries
+#' @export
+#' @importFrom dplyr filter between
+get_osm_boundaries <- function(location,
+                               level = NULL,
+                               enclosing = "way") {
+  boundaries <-
+    get_osm_data(
+      location = location,
+      key = "boundary",
+      value = "administrative",
+      enclosing = enclosing,
+      osmdata = FALSE
+    )
+
+  if (!is.null(level)) {
+    boundaries <-
+      dplyr::filter(
+        boundaries,
+        dplyr::between(admin_level, min(level), max(level))
+      )
+  }
+
+  return(boundaries)
 }
