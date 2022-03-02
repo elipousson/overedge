@@ -63,12 +63,14 @@ get_esri_data <- function(location = NULL,
       data <- esri2sf::esri2sf(
         url = url,
         where = where, bbox = bbox, crs = crs, progress = TRUE,
-        ...)
+        ...
+      )
     }
   } else if (!is.null(locationname_col)) {
-
-    where <- c(where,
-               glue::glue("{locationname_col} = '{locationname}'"))
+    where <- c(
+      where,
+      glue::glue("{locationname_col} = '{locationname}'")
+    )
 
     meta <- esri2sf::esrimeta(url)
 
@@ -87,7 +89,6 @@ get_esri_data <- function(location = NULL,
       )
     }
   } else {
-
     if (is.null(where)) {
       where <- "1=1"
     }
@@ -97,7 +98,8 @@ get_esri_data <- function(location = NULL,
       url = url,
       where = where,
       progress = TRUE,
-      ...)
+      ...
+    )
   }
 
   if (!is.null(coords_col)) {

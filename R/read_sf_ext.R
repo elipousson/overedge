@@ -25,7 +25,6 @@
 #' @importFrom checkmate check_file_exists
 #' @importFrom sf read_sf
 read_sf_path <- function(path, bbox = NULL, ...) {
-
   checkmate::check_file_exists(path)
 
   if (!is.null(bbox)) {
@@ -84,7 +83,6 @@ read_sf_url <- function(url, bbox = NULL, ...) {
 #' @importFrom usethis ui_warn ui_yeah
 #' @importFrom utils install.packages
 read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
-
   check_package_exists(package)
 
   # Read package data

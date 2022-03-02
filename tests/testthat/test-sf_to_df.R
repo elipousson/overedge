@@ -10,5 +10,4 @@ test_that("sf_to_df works", {
     sf_to_df(x = sf::st_bbox(nc), coords = c("lon", "lat")),
     "no applicable method"
   )
-
 })

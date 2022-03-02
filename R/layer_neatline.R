@@ -122,9 +122,9 @@ layer_neatline <- function(data = NULL,
   panel_border <- ggplot2::element_rect(color = color, size = size, linetype = linetype, fill = NA)
   theme_panel <-
     ggplot2::theme(
-    panel.border = panel_border,
-    panel.background = panel_background
-  )
+      panel.border = panel_border,
+      panel.background = panel_background
+    )
 
 
   neatline <- list(

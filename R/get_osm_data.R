@@ -45,10 +45,11 @@ get_osm_data <- function(location = NULL,
       "multipolygons"
     )
 
- osm_geometry <-
-      match.arg(geometry,
-        osm_geometry
-      )
+  osm_geometry <-
+    match.arg(
+      geometry,
+      osm_geometry
+    )
 
   osm_crs <- 4326
 
@@ -71,7 +72,8 @@ get_osm_data <- function(location = NULL,
   }
 
   query <- try(osmdata::opq(bbox = bbox_osm, timeout = 90),
-               silent = TRUE)
+    silent = TRUE
+  )
   data <-
     osmdata::osmdata_sf(
       osmdata::add_osm_feature(query, key = key, value = value)
@@ -81,7 +83,8 @@ get_osm_data <- function(location = NULL,
     data <-
       purrr::pluck(
         data,
-        var = paste0("osm_", osm_geometry))
+        var = paste0("osm_", osm_geometry)
+      )
 
     if (!is.null(crs)) {
       data <- sf::st_transform(data, crs)

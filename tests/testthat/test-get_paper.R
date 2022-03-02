@@ -13,5 +13,4 @@ test_that("get_paper works", {
     nrow(get_paper(width = 11, height = 17)),
     3L
   )
-
 })

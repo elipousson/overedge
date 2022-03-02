@@ -59,7 +59,6 @@ geom_sf_icon <- function(data = NULL,
                          svg = NULL,
                          color = "black",
                          ...) {
-
   data <- sf_to_df(x = data, coords = c("lon", "lat"), keep_all = TRUE)
 
   if ((iconname_col %in% names(data)) && is.null(icon)) {

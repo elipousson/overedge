@@ -139,8 +139,7 @@ get_location <- function(type,
 
     # Filter sf
     if (check_sf(location, ext = TRUE)) {
-
-      if(check_bbox(location)) {
+      if (check_bbox(location)) {
         location <- sf_bbox_to_sf(location)
       }
 

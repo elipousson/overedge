@@ -12,7 +12,8 @@ test_that("st_bearing works", {
       location = get_location(
         type = "neighborhoods",
         package = "mapbaltimore",
-        name = "Harwood"),
+        name = "Harwood"
+      ),
       key = "highway",
       value = "tertiary",
       geometry = "lines"

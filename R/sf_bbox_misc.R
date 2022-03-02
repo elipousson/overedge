@@ -120,7 +120,7 @@ sf_bbox_diagdist <- function(bbox, units = FALSE) {
 #' @export
 #' @importFrom sf st_crs st_transform st_bbox
 sf_bbox_transform <- function(bbox, crs) {
-  if(!check_sf_same_crs(bbox, crs)) {
+  if (!check_sf_same_crs(bbox, crs)) {
     bbox_sf <- sf::st_transform(sf_bbox_to_sf(bbox), crs)
     bbox <- sf::st_bbox(bbox_sf)
   }
@@ -151,8 +151,7 @@ sf_bbox_to_wkt <- function(bbox) {
 #' @export
 #' @importFrom glue glue
 #' @importFrom sf st_transform st_bbox
-sf_bbox_to_lonlat_query <- function(bbox, coords = c("longitude",  "latitude"), crs = 4326) {
-
+sf_bbox_to_lonlat_query <- function(bbox, coords = c("longitude", "latitude"), crs = 4326) {
   bbox <- sf_bbox_transform(bbox, crs = crs)
 
   # FIXME: This automatic reversal needs to be documented
@@ -177,8 +176,8 @@ sf_bbox_shift <- function(bbox,
   if (is.character(dir)) {
     dir <-
       switch(dir,
-             "in" = c(1, -1),
-             "out" = c(-1, 1)
+        "in" = c(1, -1),
+        "out" = c(-1, 1)
       )
   } else {
     dir <- c(dir * -1, dir)
@@ -256,15 +255,13 @@ sf_bbox_shift <- function(bbox,
 sf_bbox_contract <- function(bbox,
                              x_nudge = 0,
                              y_nudge = 0) {
-
-
-  sf_bbox_shift(bbox = bbox,
-                x_nudge = x_nudge,
-                y_nudge = y_nudge,
-                side = "all",
-                dir = -1
+  sf_bbox_shift(
+    bbox = bbox,
+    x_nudge = x_nudge,
+    y_nudge = y_nudge,
+    side = "all",
+    dir = -1
   )
-
 }
 
 #' @rdname sf_bbox_misc
@@ -273,13 +270,11 @@ sf_bbox_contract <- function(bbox,
 sf_bbox_expand <- function(bbox,
                            x_nudge = 0,
                            y_nudge = 0) {
-
-  sf_bbox_shift(bbox = bbox,
-                x_nudge = x_nudge,
-                y_nudge = y_nudge,
-                side = "all",
-                dir = 1
+  sf_bbox_shift(
+    bbox = bbox,
+    x_nudge = x_nudge,
+    y_nudge = y_nudge,
+    side = "all",
+    dir = 1
   )
-
 }
-

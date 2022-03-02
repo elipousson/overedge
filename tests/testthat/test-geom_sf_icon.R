@@ -35,5 +35,4 @@ test_that("geom_sf_icon works", {
       geom_sf_icon(data = nc_pts, icon = "building"),
     "The provided parameters match more than one icon"
   )
-
 })

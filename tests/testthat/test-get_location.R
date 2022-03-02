@@ -58,7 +58,7 @@ test_that("get_location works", {
   checkmate::expect_class(
     get_location(
       type = sf::st_transform(nc, 6542),
-      location = st_buffer_ext(sf::st_transform(nc[1,], 6542), 250)
+      location = st_buffer_ext(sf::st_transform(nc[1, ], 6542), 250)
     ),
     "sf"
   )
@@ -108,7 +108,8 @@ test_that("get_location works", {
       name = "Harwood",
       package = "mapbaltimore"
     ),
-    "sf")
+    "sf"
+  )
 
   expect_error(
     get_location(

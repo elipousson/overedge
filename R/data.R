@@ -24,7 +24,7 @@
 #'   \item{\code{style}}{Icon style (Weather Underground icons only)}
 #'   \item{\code{size}}{Icon width/height (pixels)}
 #'   \item{\code{repo}}{GitHub repository for icon collection}
-#'}
+#' }
 #' @md
 "map_icons"
 
@@ -50,7 +50,7 @@
 #'   \item{\code{asp_landscape}}{Aspect ratio (landscape)}
 #'   \item{\code{asp_text}}{Aspect ratio ("width:height")}
 #'   \item{\code{type}}{Type (paper, postcard, print, or social)}
-#'}
+#' }
 "paper_sizes"
 
 #' Valid distance units
@@ -71,7 +71,7 @@
 #'   \item{\code{comment}}{comment}
 #'   \item{\code{dimensionless}}{logical indicator for dimensionless units}
 #'   \item{\code{source_xml}}{source XML}
-#'}
+#' }
 "valid_dist_units"
 
 
@@ -102,5 +102,5 @@
 #'   \item{\code{area_approx}}{Approximate actual area}
 #'   \item{\code{area_approx_unit}}{Approximate area unit}
 #'   \item{\code{series_status}}{Series status (select USGS map series are "abandoned")}
-#'}
+#' }
 "standard_scales"

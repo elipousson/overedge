@@ -1,5 +1,4 @@
 test_that("st_transform_ext works", {
-
   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
 
   # Transform crs as expected
@@ -20,5 +19,4 @@ test_that("st_transform_ext works", {
   expect_error(
     st_transform_ext(x = "A")
   )
-
 })

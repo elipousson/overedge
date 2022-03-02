@@ -67,9 +67,9 @@ get_us_counties <- function(location = NULL,
     location_counties <-
       read_sf_package(
         data = gsub("_lores", "_hires", data),
-        package = package#,
+        package = package # ,
         # FIXME: add a query that can be passed to read_sf that returns a subset of the data
-      #  query = ""
+        #  query = ""
         # TODO: check if bbox can work with data that may be in RDS format; not shapefile, gpkg, or geojson
       )
   }
