@@ -322,20 +322,16 @@ get_asp <- function(asp = NULL,
 
 
 #' Get standard scales and convert to scale distances
+#'
 #' @name get_standard_scale
+#' @param scale Scale name
 #' @param standard USGS, Engineering, or Architectural
 #' @param series Map series
-#' @param scale Scale name
-#' @param convert If `TRUE`, return paper with scale distances converted to actual distances based on values from selected scale; defaults to `FALSE`.
-#' @inheritParams get_paper
 #' @export
-get_standard_scale <- function(standard = NULL,
-                               series = NULL,
-                               scale = NULL,
-                               paper = NULL,
-                               orientation = NULL,
-                               convert = FALSE) {
-
+#' @importFrom dplyr filter
+get_standard_scale <- function(scale = NULL,
+                               standard = NULL,
+                               series = NULL) {
   select_scale <- standard_scales
 
   if (!is.null(scale)) {
@@ -352,105 +348,84 @@ get_standard_scale <- function(standard = NULL,
     select_scale <- dplyr::filter(select_scale, .data$series %in% {{ series }})
   }
 
-  if (is.null(paper) && !convert) {
+  return(select_scale)
+}
 
-    return(select_scale)
-
-  } else if (!is.null(paper) && convert) {
-    paper <-
-      get_paper(paper = paper, orientation = orientation)
-
-  #  accuracy <- match.arg(accuracy, c("exact", "approximate"), several.ok = TRUE)
-
-    paper$scale <- select_scale$scale
-
-  if (paper$units == "mm") {
-
-    # Converted to cm
-    scale_width <- paper$width / 10
-    scale_height <- paper$height / 10
-    scale_units <- "cm"
-
-    # Distance of 1 cm
-    unit_actual <- select_scale$scale_cm_unit
-    unit_dist <- select_scale$scale_cm
-
-   #scale_factor <-
-  #    switch(actual_unit,
-  #      "m" = 100,
-  #      "km" = 100000,
-  #      "ft" = 30.48,
-  #      "feet" = 30.48,
-  #      "mi" = 160934
-  #    )
-  } else if (paper$units == "in") {
-
-    scale_width <- paper$width
-    scale_height <- paper$height
-    scale_units <- paper$units
-
-    unit_actual <- select_scale$scale_in_unit
-    unit_dist <- select_scale$scale_in
-
-   # scale_factor <-
-  #    switch(unit_actual,
-  #           "m" = 39.3701,
-  #           "km" = 39370.1,
-  #           "ft" = 12,
-  #           "feet" = 12,
-  #           "mi" = 63360
-  #    )
+#' Convert distance from scale to actual units
+#'
+#' Convert distance from scale to actual units based on named `standard_scales`
+#'
+#' @param dist distance to convert. If paper is provided, paper width and height
+#'   are used as dist.
+#' @inheritParams get_paper
+#' @inheritParams get_standard_scale
+#' @param scale_unit "mm" (converted to cm by dividing by 10), "cm", "px"
+#'   (converted to inches by dividing by dpi), or "in".
+#' @param actual_unit any unit supported by convert_dist_units
+#' @param dpi dots per square inch (used as conversion factor for "px" to "in")
+#' @return dist values converted from scale_unit to actual_unit based on
+#'   scale_factor or information from standard_scales object. If paper is
+#'   provided, return a data frame with converted distances as actual_width and
+#'   actual_height
+#' @export
+convert_dist_scale <- function(dist = NULL,
+                               paper = NULL,
+                               orientation = NULL,
+                               scale = NULL,
+                               scale_unit = "in",
+                               scale_factor = NULL,
+                               actual_unit = NULL,
+                               dpi = 120) {
+  if (!is.null(scale)) {
+    scale <- get_standard_scale(scale = scale)
   }
 
-  actual_width <- scale_width * unit_dist #* scale_factor
-  actual_height <- scale_height * unit_dist # * scale_factor)
+  if (!is.null(paper) && is.null(dist)) {
+    paper <- get_paper(paper = paper, orientation = orientation)
+    dist <- c(paper$width, paper$height)
+    scale_unit <- paper$units
+  }
 
-  if (unit_actual %in% c("ft", "feet")) {
-    actual_width <- units::set_units(
-      x = actual_width,
-      value = "feet"
-    )
-
-    actual_height <- units::set_units(
-      x = actual_height,
-      value = "feet"
-    )
-  } else if (unit_actual == "mi") {
-    actual_width <- units::set_units(
-      x = actual_width,
-      value = "mi"
+  dist <-
+    switch(scale_unit,
+      "mm" = dist / 10,
+      "cm" = dist,
+      # FIXME: Double-check how this handles px
+      "px" = dist / dpi,
+      "in" = dist
     )
 
-    actual_height <- units::set_units(
-      x = actual_height,
-      value = "mi"
-    )
-  } else if (unit_actual == "m") {
-    actual_width <- units::set_units(
-      x = actual_width,
-      value = "m"
-    )
+  if (scale_unit %in% c("mm", "cm")) {
+    scale_unit <- "cm"
+  } else if (scale_unit %in% c("px", "in")) {
+    scale_unit <- "in"
+  }
 
-    actual_height <- units::set_units(
-      x = actual_height,
-      value = "m"
-    )
-  } else if (unit_actual == "km") {
-    actual_width <- units::set_units(
-      x = actual_width,
-      value = actual_unit
-    )
+  if (is.data.frame(scale)) {
+    actual_unit <-
+      scale[[paste0("scale_", scale_unit, "_unit")]]
 
-    actual_height <- units::set_units(
-      x = actual_height,
-      value = "km"
+    scale_factor <-
+      scale[[paste0("scale_", scale_unit)]]
+  } else {
+    stopifnot(
+      is.numeric(scale_factor),
+      !is.null(actual_unit)
     )
   }
 
-  paper$unit_actual <- unit_actual
-  paper$width_actual <- actual_width
-  paper$height_actual <- actual_height
+  dist <- convert_dist_units(
+    dist = dist * scale_factor,
+    # FIXME: This is a bit awkward in order to hijack
+    to_unit = actual_unit
+  )
 
-  return(paper)
+  if (!is.null(paper)) {
+    paper$actual_width <- dist[[1]]
+    paper$actual_height <- dist[[2]]
+    paper$scale <- scale$scale
+    return(paper)
+  } else {
+    return(dist)
   }
 }

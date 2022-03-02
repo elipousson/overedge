@@ -2,8 +2,7 @@
 #'
 #' Return an sf object with a buffer based on `dist` or a proportion of the
 #' diagonal distance defined by `diag_ratio`. If x uses geographic coordinates,
-#' the coordinate reference system is transformed into the crs returned by
-#' \code{\link[crsuggest]{suggest_top_crs}} and then transformed back into the
+#' the coordinate reference system is transformed into EPSG:3857 and then transformed back into the
 #' original CRS after the buffer has been applied.
 #'
 #' @param x sf or bbox object.
@@ -14,9 +13,8 @@
 #'   provided.
 #' @param unit Units for buffer. Supported options include "meter", "foot",
 #'   "kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
-#'   instead of "kilometer") are also supported. Units are passed to
-#'   `units::set_units()` and then converted to units matching GDAL; defaults to
-#'   "meter"
+#'   instead of "kilometer") are also supported. Distance in units is converted
+#'   to units matching GDAL units for x; defaults to "meter"
 #' @param dist_limits Numeric vector of any length (minimum and maximum values
 #'   used as lower and upper limits on distance buffer). Units must match the
 #'   provided units; defaults to NULL.
@@ -47,83 +45,26 @@ st_buffer_ext <- function(x,
       x <- sf::st_transform(x, 3857)
     }
 
-    if (check_class(dist, "units")) {
-      unit <- as.character(units(dist)$numerator)
-      dist <- as.numeric(dist)
-    } else if (is.null(dist) && !is.null(diag_ratio)) {
-      # Use the bbox diagonal distance to make proportional buffer distance
-      dist <- sf_bbox_diagdist(sf::st_bbox(x)) * diag_ratio
-    }
-
     # Get crs and rename gdal units to match options for set_units
     crs <- sf::st_crs(x)
 
-    if (!is.null(unit)) {
-      unit <- gsub(" ", "_", unit)
+    if (check_class(dist, "units")) {
+      if (is.null(unit)) {
+        unit <- as.character(units(dist)$numerator)
+      }
+      dist <- as.numeric(dist)
+    } else if (is.null(dist) && !is.null(diag_ratio)) {
+      # Use the bbox diagonal distance to make proportional buffer distance
+      dist <- sf_bbox_diagdist(sf::st_bbox(x), units = FALSE) * diag_ratio
     }
 
-    units_gdal <-
-      switch(crs$units_gdal,
-        "US survey foot" = "US_survey_foot",
-        "metre" = "meter",
-        "meter" = "meter"
-      )
-
-    unit_options <-
-      unique(
-        c(
-          units_gdal, "m", "metre", "meter", "meters", "km", "kilometer", "kilometers",
-          "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile"
-        )
-      )
-
-    # Match parameter units to permitted options
-    unit <- match.arg(unit, unit_options)
-
     dist <-
-      units::set_units(
-        x = dist,
-        value = unit,
-        mode = "standard"
-      )
+      convert_dist_units(dist = dist, from_unit = unit, to_unit = crs$units_gdal)
 
     if (!is.null(dist_limits)) {
       dist_limits <-
-        units::set_units(
-          x = dist_limits,
-          value = unit,
-          mode = "standard"
-        )
+        convert_dist_units(dist = dist_limits, from_unit = unit, to_unit = crs$units_gdal)
     }
-
-    if (units_gdal == "meter") {
-      dist <- units::set_units(
-        x = dist,
-        value = "meter"
-      )
-
-      if (!is.null(dist_limits)) {
-        dist_limits <- units::set_units(
-          x = dist_limits,
-          value = "meter"
-        )
-      }
-    } else if (units_gdal == "US_survey_foot") {
-      dist <- units::set_units(
-        x = dist,
-        value = "US_survey_foot"
-      )
-
-      if (!is.null(dist_limits)) {
-        dist_limits <- units::set_units(
-          x = dist_limits,
-          value = "US_survey_foot"
-        )
-      }
-    }
-
-    #   min_dist <- units::as_units(min(dist_limits), value = "US_survey_foot")
-    #    max_dist <- units::as_units(max(dist_limits), value = "US_survey_foot")
 
     if (!is.null(dist_limits) && (length(dist_limits) >= 2) && check_class(dist_limits, "units")) {
       min_limit <- min(dist_limits)
@@ -159,4 +100,56 @@ st_buffer_ext <- function(x,
   }
 
   return(x)
+}
+
+#' Convert distances between different units
+#'
+#'
+#' @param dist Numeric or units
+#' @param from_unit Existing unit for dist, Default: NULL. If dist is a units object, the numerator is used as from_unit
+#' @param to_unit Unit to convert distance to, Default: 'meter'
+#' @return OUTPUT_DESCRIPTION
+#' @rdname convert_dist_units
+#' @export
+#' @importFrom units set_units
+convert_dist_units <- function(dist,
+                               from_unit = NULL,
+                               to_unit = "meter") {
+  dist_is_units <- check_class(dist, "units")
+
+  stopifnot(
+    is.numeric(dist) || dist_is_units
+  )
+
+  if (dist_is_units) {
+    from_unit <- as.character(units(dist)$numerator)
+  }
+
+  if (!is.null(from_unit)) {
+    from_unit <- match.arg(from_unit, dist_unit_options)
+
+    if (!dist_is_units) {
+      from_unit <- gsub(" ", "_", from_unit)
+      dist <-
+        units::set_units(
+          x = dist,
+          value = from_unit,
+          mode = "standard"
+        )
+    }
+  }
+
+  if (!is.null(to_unit)) {
+    to_unit <- gsub(" ", "_", to_unit)
+    to_unit <- match.arg(to_unit, dist_unit_options)
+
+    dist <-
+      units::set_units(
+        x = dist,
+        value = to_unit,
+        mode = "standard"
+      )
+  }
+
+  return(dist)
 }

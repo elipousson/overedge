@@ -1,8 +1,8 @@
 #' Create a ggplot2 layer scaled to a paper and orientation for a location
 #'
-#' Uses [layer_neatline], [standard_scales], and [get_standard_scale].
+#' Uses [layer_neatline], [standard_scales], and [convert_dist_scale].
 #'
-#' @inheritParams get_standard_scale
+#' @inheritParams convert_dist_scale
 #' @inheritParams st_bbox_ext
 #' @inheritParams layer_neatline
 #' @family layer
@@ -17,22 +17,21 @@ layer_scaled <-
            asp = NULL,
            crs = NULL,
            scale = NULL,
-           series = NULL,
-           standard = NULL,
            paper = NULL,
            orientation = NULL,
            clip = FALSE) {
 
     # Get paper with actual width, height, and units
     scaled_paper <-
-      get_standard_scale(
+      convert_dist_scale(
         paper = paper,
         orientation = orientation,
-        series = series,
-        standard = standard,
-        scale = scale,
-        convert = TRUE
+        scale = scale
       )
+
+    stopifnot(
+      nrow(scaled_paper) == 1
+    )
 
     if (is.null(asp)) {
       asp <- scaled_paper$asp

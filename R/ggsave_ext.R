@@ -48,10 +48,10 @@
 #'  \code{\link[exifr]{exiftool_call}}
 #' @rdname ggsave_ext
 #' @export
-#' @importFrom ggplot2 ggsave
+#' @importFrom ggplot2 ggsave last_plot
 #' @importFrom glue glue
 #' @importFrom exifr exiftool_call
-ggsave_ext <- function(plot = last_plot(),
+ggsave_ext <- function(plot = ggplot2::last_plot(),
                        name = NULL,
                        label = NULL,
                        prefix = NULL,
