@@ -75,7 +75,7 @@
 negative and positive bearing values. Default: <code>FALSE</code>.</p></dd>
 <dt>crs</dt>
 <dd><p>Coordinate reference system passed to
-<code><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates()</a></code> (must be geographic not projected).
+<code>st_coordinates()</code> (must be geographic not projected).
 Default: 4326.</p></dd>
 </dl></div>
     <div class="section level2">
@@ -96,7 +96,8 @@ Default: 4326.</p></dd>
 <span class="r-in">    <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span></span>
 <span class="r-in">      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html" class="external-link">st_cast</a></span><span class="op">(</span></span>
 <span class="r-in">        <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">nc_pts</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">$</span><span class="va">geometry</span>, <span class="va">nc_pts</span><span class="op">[</span><span class="fl">30</span>, <span class="op">]</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">        <span class="st">"LINESTRING"</span><span class="op">)</span></span>
+<span class="r-in">        <span class="st">"LINESTRING"</span></span>
+<span class="r-in">      <span class="op">)</span></span>
 <span class="r-in">    <span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>

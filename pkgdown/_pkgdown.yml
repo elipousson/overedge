@@ -31,14 +31,17 @@ reference:
   - '`labs_ext`'
   - '`ggsave_ext`'
   - '`make_filename`'
+- title: Additional utility functions and reference data
+  contents:
+  - '`map_icons`'
+  - '`valid_dist_units`'
+  - '`convert_dist_units`'
+  - '`standard_scales`'
+  - '`get_standard_scale`'
+  - '`convert_dist_scale`'
+  - '`paper_sizes`'
   - '`get_paper`'
   - '`get_margin`'
   - '`get_asp`'
-  - '`get_standard_scale`'
-- title: Reference data
-  contents:
-  - '`map_icons`'
-  - '`paper_sizes`'
-  - '`valid_dist_units`'
-  - '`standard_scales`'
+
 

@@ -4,8 +4,10 @@ write_sf function to provide some additional options
 including consistent file naming with make_filename() and features
 including:
 If the data is not an sf object, optionally save as an RDS file.
-If filetype is CSV or the filename ends in ".csv" the file is automatically
-converted to a dataframe using df_to_sf()
+If filetype is "csv" or the filename ends in ".csv" the file is
+automatically converted to a dataframe using df_to_sf(); if filetype is
+"gsheet" the file is converted and turned into a new Google SHeet document
+(if a Google account is authorized with the googlesheets4 package).
 If cache is TRUE use write_sf_cache to cache file after writing a copy to
 the path provided.
 
@@ -26,8 +28,10 @@ write_sf function to provide some additional options
 including consistent file naming with make_filename() and features
 including:
 If the data is not an sf object, optionally save as an RDS file.
-If filetype is CSV or the filename ends in ".csv" the file is automatically
-converted to a dataframe using df_to_sf()
+If filetype is "csv" or the filename ends in ".csv" the file is
+automatically converted to a dataframe using df_to_sf(); if filetype is
+"gsheet" the file is converted and turned into a new Google SHeet document
+(if a Google account is authorized with the googlesheets4 package).
 If cache is TRUE use write_sf_cache to cache file after writing a copy to
 the path provided.
 
@@ -81,8 +85,10 @@ the path provided.
 <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">write_sf</a></code> function to provide some additional options
 including consistent file naming with <code><a href="make_filename.html">make_filename()</a></code> and features
 including:</p><ul><li><p>If the data is not an sf object, optionally save as an RDS file.</p></li>
-<li><p>If filetype is CSV or the filename ends in ".csv" the file is automatically
-converted to a dataframe using <code><a href="sf_to_df.html">df_to_sf()</a></code></p></li>
+<li><p>If filetype is "csv" or the filename ends in ".csv" the file is
+automatically converted to a dataframe using <code><a href="sf_to_df.html">df_to_sf()</a></code>; if filetype is
+"gsheet" the file is converted and turned into a new Google SHeet document
+(if a Google account is authorized with the googlesheets4 package).</p></li>
 <li><p>If cache is <code>TRUE</code> use write_sf_cache to cache file after writing a copy to
 the path provided.</p></li>
 </ul></div>
@@ -139,17 +145,20 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 "data.csv". Objects that are not simple features are written to RDS with
 <code><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">readr::write_rds()</a></code>.</p></dd>
 <dt>filetype</dt>
-<dd><p>File type to write and cache, Default: 'geojson' for <code>write_sf_ext()</code></p></dd>
+<dd><p>File type to write and cache, Default: 'geojson' for
+<code>write_sf_ext()</code></p></dd>
 <dt>path</dt>
 <dd><p>Path to file or data directory.</p></dd>
 <dt>cache</dt>
-<dd><p>If <code>TRUE</code>, write <code>sf</code> object to file in cache directory; defaults to <code>FALSE</code>.</p></dd>
+<dd><p>If <code>TRUE</code>, write <code>sf</code> object to file in cache directory;
+defaults to <code>FALSE</code>.</p></dd>
 <dt>overwrite</dt>
 <dd><p>Logical. Default <code>FALSE</code>. If <code>TRUE</code>, overwrite any existing
 cached files that use the same file name.</p></dd>
 <dt>data_dir</dt>
 <dd><p>cache data directory, defaults to
-<code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">user_cache_dir</a></code> when data_dir is NULL. (only used for write_sf_cache; default is used when cache = TRUE for write_sf_ext)</p></dd>
+<code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">user_cache_dir</a></code> when data_dir is NULL. (only used
+for write_sf_cache; default is used when cache = TRUE for write_sf_ext)</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
