@@ -4,28 +4,14 @@
 \alias{get_standard_scale}
 \title{Get standard scales and convert to scale distances}
 \usage{
-get_standard_scale(
-  standard = NULL,
-  series = NULL,
-  scale = NULL,
-  paper = NULL,
-  orientation = NULL,
-  convert = FALSE
-)
+get_standard_scale(scale = NULL, standard = NULL, series = NULL)
 }
 \arguments{
+\item{scale}{Scale name}
+
 \item{standard}{USGS, Engineering, or Architectural}
 
 \item{series}{Map series}
-
-\item{scale}{Scale name}
-
-\item{paper}{Paper, Default: 'letter'.}
-
-\item{orientation}{Orientation "portrait", "landscape", or "square", Default:
-'portrait'.}
-
-\item{convert}{If \code{TRUE}, return paper with scale distances converted to actual distances based on values from selected scale; defaults to \code{FALSE}.}
 }
 \description{
 Get standard scales and convert to scale distances

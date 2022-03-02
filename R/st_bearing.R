@@ -18,7 +18,8 @@
 #'     sf::st_as_sf(
 #'       sf::st_cast(
 #'         sf::st_union(c(nc_pts[1, ]$geometry, nc_pts[30, ]$geometry)),
-#'         "LINESTRING")
+#'         "LINESTRING"
+#'       )
 #'     )
 #'
 #'   ggplot() +

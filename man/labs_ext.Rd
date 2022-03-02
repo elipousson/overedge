@@ -5,12 +5,12 @@
 \title{Add labels to a ggplot2 location map}
 \usage{
 labs_ext(
-  title = waiver(),
-  subtitle = waiver(),
-  caption = waiver(),
-  tag = waiver(),
-  alt = waiver(),
-  alt_insight = waiver(),
+  title = ggplot2::waiver(),
+  subtitle = ggplot2::waiver(),
+  caption = ggplot2::waiver(),
+  tag = ggplot2::waiver(),
+  alt = ggplot2::waiver(),
+  alt_insight = ggplot2::waiver(),
   location = NULL,
   locationname_col = NULL,
   source = NULL

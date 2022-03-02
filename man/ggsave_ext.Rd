@@ -5,7 +5,7 @@
 \title{Save a ggplot and update file EXIF metadata}
 \usage{
 ggsave_ext(
-  plot = last_plot(),
+  plot = ggplot2::last_plot(),
   name = NULL,
   label = NULL,
   prefix = NULL,

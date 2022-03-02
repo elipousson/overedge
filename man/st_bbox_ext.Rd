@@ -34,9 +34,8 @@ without modification.}
 
 \item{unit}{Units for buffer. Supported options include "meter", "foot",
 "kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
-instead of "kilometer") are also supported. Units are passed to
-\code{units::set_units()} and then converted to units matching GDAL; defaults to
-"meter"}
+instead of "kilometer") are also supported. Distance in units is converted
+to units matching GDAL units for x; defaults to "meter"}
 
 \item{crs}{Coordinate reference system of bounding box to return}
 

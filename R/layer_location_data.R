@@ -82,55 +82,55 @@ layer_location_data <-
 
     layer <-
       switch(geom,
-      "sf" = ggplot2::geom_sf(
-        mapping = mapping,
-        data = data,
-        ...
-      ),
-      "icon" = geom_sf_icon(
-        mapping = mapping,
-        data = data,
-        ...
-      ),
-      "text" = ggplot2::geom_sf_text(
-        mapping = mapping,
-        data = data,
-        ...
-      ),
-      "label" = ggplot2::geom_sf_label(
-        mapping = mapping,
-        data = data,
-        ...
-      ),
-      "labelsf" = geomtextpath::geom_textsf(
-        mapping = mapping,
-        data = data,
-        ...
-      ),
-      "textsf" = geomtextpath::geom_labelsf(
-        mapping = mapping,
-        data = data,
-        ...
-      ),
-      "text_repel" = ggrepel::geom_text_repel(
-        mapping = ggplot2::aes(
-          label = .data[[label_col]],
-          geometry = .data[[attributes(data)$sf_column]]
+        "sf" = ggplot2::geom_sf(
+          mapping = mapping,
+          data = data,
+          ...
         ),
-        data = data,
-        stat = "sf_coordinates",
-        ...
-      ),
-      "label_repel" = ggrepel::geom_label_repel(
-        data = data,
-        mapping = ggplot2::aes(
-          label = .data[[label_col]],
-          geometry = .data[[attributes(data)$sf_column]]
+        "icon" = geom_sf_icon(
+          mapping = mapping,
+          data = data,
+          ...
         ),
-        stat = "sf_coordinates",
-        ...
+        "text" = ggplot2::geom_sf_text(
+          mapping = mapping,
+          data = data,
+          ...
+        ),
+        "label" = ggplot2::geom_sf_label(
+          mapping = mapping,
+          data = data,
+          ...
+        ),
+        "labelsf" = geomtextpath::geom_textsf(
+          mapping = mapping,
+          data = data,
+          ...
+        ),
+        "textsf" = geomtextpath::geom_labelsf(
+          mapping = mapping,
+          data = data,
+          ...
+        ),
+        "text_repel" = ggrepel::geom_text_repel(
+          mapping = ggplot2::aes(
+            label = .data[[label_col]],
+            geometry = .data[[attributes(data)$sf_column]]
+          ),
+          data = data,
+          stat = "sf_coordinates",
+          ...
+        ),
+        "label_repel" = ggrepel::geom_label_repel(
+          data = data,
+          mapping = ggplot2::aes(
+            label = .data[[label_col]],
+            geometry = .data[[attributes(data)$sf_column]]
+          ),
+          stat = "sf_coordinates",
+          ...
+        )
       )
-    )
 
     return(layer)
   }

@@ -36,9 +36,8 @@ provided.}
 
 \item{unit}{Units for buffer. Supported options include "meter", "foot",
 "kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
-instead of "kilometer") are also supported. Units are passed to
-\code{units::set_units()} and then converted to units matching GDAL; defaults to
-"meter"}
+instead of "kilometer") are also supported. Distance in units is converted
+to units matching GDAL units for x; defaults to "meter"}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
