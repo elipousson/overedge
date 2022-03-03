@@ -31,7 +31,7 @@
 #' }
 #' @rdname get_paper
 #' @export
-#' @importFrom dplyr filter rename
+#' @importFrom dplyr filter rename select mutate
 #' @importFrom rlang .data
 get_paper <- function(paper = "letter",
                       orientation = "portrait",
@@ -107,7 +107,8 @@ get_paper <- function(paper = "letter",
       dplyr::rename(
         paper,
         asp = asp_portrait
-      )
+      ) |>
+      dplyr::select(-asp_landscape)
   } else if (orientation == "landscape") {
     paper$width <- height
     paper$height <- width
@@ -116,14 +117,21 @@ get_paper <- function(paper = "letter",
       dplyr::rename(
         paper,
         asp = asp_landscape
-      )
+      ) |>
+      dplyr::select(-asp_portrait)
   } else if (orientation == "square") {
     paper <-
       dplyr::rename(
         paper,
         asp = asp_portrait
-      )
+      ) |>
+      dplyr::select(-asp_landscape)
   }
+
+  paper <- paper |>
+    dplyr::mutate(
+      orientation = orientation
+    )
 
   return(paper)
 }
