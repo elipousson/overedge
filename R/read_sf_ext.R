@@ -2,8 +2,9 @@
 #'
 #' An extended version of \code{\link[sf]{read_sf}} that support reading spatial
 #' data based on a file path, url (for spatial data or ArcGIS FeatureServer or
-#' MapServer), or the data name and associated package. Optionally provide a bounding box
-#' to filter data.
+#' MapServer, or a Google Sheet with coordinate columns), or the data name and
+#' associated package. Optionally provide a bounding box to filter data (not
+#' supported for all data types).
 #'
 #' @param path file path; used by read_sf_path only
 #' @param url url for spatial data file or for ArcGIS FeatureServer or MapServer
@@ -62,6 +63,21 @@ read_sf_url <- function(url, bbox = NULL, ...) {
       url = url,
       ...
     )
+  } else if (check_gsheet_url(url)) {
+    data <- googlesheets4::read_sheet(ss = url, ...)
+
+    # FIXME: Some version fo this should be added to the df_to_sf function
+    if ("long" %in% names(data)) {
+      coords <- c("long", "lat")
+    } else if ("longitude" %in% names(data)) {
+      coords <- c("longitude", "latitude")
+    } else if ("Y" %in% names(data)) {
+      coords <- c("Y", "X")
+    } else {
+      coords <- c("lon", "lat")
+    }
+
+    data <- df_to_sf(data, coords = coords)
   } else {
     # TODO: Check if it is possible to use a WKT filter
     # when reading data from a url (e.g. a hosted GeoJSON file)
@@ -107,6 +123,89 @@ read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) 
 
   # Read data from path
   data <- read_sf_path(path = path, bbox = bbox, ...)
+
+  return(data)
+}
+
+
+#' Read EXIF data from images and create an simple feature object
+#'
+#' Read EXIF data from folder of images.
+#'
+#' @param path path to folder of one or more files with EXIF location metadata
+#' @param bbox bounding box to crop sf file (excluding images with location data outside the bounding box)
+#' @param filetype file extension or file type; defaults to "jpg"
+#' @param sort variable to sort by. Currently supports "lon" (default), "lat", or "filename"
+#' @param ... Additional EXIF tags to pass to exiftoolr::exif_read
+#' @noRd
+#' @importFrom checkmate check_directory_exists
+#' @importFrom purrr map_dfr
+#' @importFrom fs dir_ls
+#' @importFrom exifr read_exif
+#' @importFrom dplyr rename arrange mutate row_number
+read_sf_exif <- function(path = NULL, bbox = NULL, filetype = "jpg", sort = "lon", ...) {
+
+  check_package_exists("exiftoolr")
+  checkmate::check_directory_exists(path)
+
+  #  "DateCreated",
+  #  "Title",
+  exif_tags <-
+    c(
+      "SourceFile",
+      "GPSImgDirection",
+      "GPSLatitude",
+      "GPSLongitude"
+    )
+
+  # FIXME: Could filetype be inferred from the files at the path?
+  exif_data <-
+    purrr::map_dfr(
+      fs::dir_ls(
+        path = path,
+        glob = paste0("*.", filetype)
+      ),
+      ~ exifr::read_exif(
+        .x,
+        tags = c(
+          # FIXME: The default fields likely vary by filetype and could be set based on that
+          # NOTE: Are there other tags that should be included by default?
+          exif_tags,
+          ...
+        )
+      )
+    ) |>
+    suppressMessages()
+
+  exif_data <- exif_data |>
+    # Rename variables
+    dplyr::rename(
+      # FIXME: Swap out manual rename for janitor::make_clean_names + an across function to strip out the GPS prefix
+      #      title = Title,
+      lat = GPSLatitude,
+      lon = GPSLongitude,
+      img_dir = GPSImgDirection,
+      #  date_created = DateCreated,
+      filename = SourceFile
+    ) |>
+    # Sort by longitude
+    # FIXME: Add a check for whether they should be ordered and numbered (and what they should be ordered by)
+    dplyr::arrange({{ sort }}) |>
+    dplyr::mutate(
+      # Number the images
+      id = dplyr::row_number()
+    )
+
+  data <- df_to_sf(exif_data)
+
+  if (!is.null(bbox)) {
+    data <-
+      get_location_data(
+        location = bbox,
+        data = data,
+        from_crs = 4326
+      )
+  }
 
   return(data)
 }

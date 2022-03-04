@@ -34,8 +34,9 @@ the package cache directory or extdata system files.}
 \description{
 An extended version of \code{\link[sf]{read_sf}} that support reading spatial
 data based on a file path, url (for spatial data or ArcGIS FeatureServer or
-MapServer), or the data name and associated package. Optionally provide a bounding box
-to filter data.
+MapServer, or a Google Sheet with coordinate columns), or the data name and
+associated package. Optionally provide a bounding box to filter data (not
+supported for all data types).
 }
 \details{
 read_sf_package looks for three types of package data:

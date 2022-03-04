@@ -60,7 +60,11 @@ write_sf_ext <- function(data,
       postfix = postfix
     )
 
-  path <- file.path(path, filename)
+  if (is.null(path)) {
+    path <- filename
+  } else {
+    path <- file.path(path, filename)
+  }
 
   write_sf_types(
     data = data,

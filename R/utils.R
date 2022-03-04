@@ -14,6 +14,16 @@ check_esri_url <- function(x) {
   grepl("/MapServer|/FeatureServer", x)
 }
 
+#' Check if a string is a Google Sheets URL
+#'
+#' @noRd
+check_gsheet_url <- function(x) {
+  grepl(
+    "^https://docs.google.com/spreadsheets/",
+    x
+  )
+}
+
 #' Check if objects is a ggplot2 layer
 #' @noRd
 check_geom <- function(x) {
