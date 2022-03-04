@@ -17,6 +17,7 @@ get_osm_data(
   geometry = NULL,
   osmdata = FALSE,
   enclosing = NULL,
+  nodes_only = FALSE,
   timeout = 120
 )
 
@@ -68,6 +69,16 @@ provided location is used for the query. geometry is set automatically
 based enclosing with "relation" using "multipolygon" and "way" using
 "polygon" geometry.}
 
+\item{nodes_only}{If \code{TRUE}, query OSM nodes only. Some OSM structures such
+as \code{place = "city"} or \code{highway = "traffic_signals"} are represented by
+nodes only. Queries are built by default to return all nodes, ways, and
+relation, but this can be very inefficient for node-only queries.
+Setting this value to \code{TRUE} for such cases makes queries more
+efficient, with data returned in the \code{osm_points} list item.}
+
+\item{timeout}{It may be necessary to increase this value for large queries,
+because the server may time out before all data are delivered.}
+
 \item{level}{administrative level (admin_level) of boundary to return;
 defaults to NULL. See \url{https://wiki.openstreetmap.org/wiki/Key:admin_level}
 for more information. Only used for get_osm_boundaries.}
@@ -78,5 +89,6 @@ an \code{osmdata} object with features from all geometry types.
 }
 \description{
 Wraps \code{osmdata} functions to query OSM data by adjusted bounding box or
-by enclosing ways/relations around the center of a location.
+by enclosing ways/relations around the center of a location. timeout and
+nodes_only parameters are not fully supported currently.
 }

@@ -1,7 +1,8 @@
 #' Use osmdata to get Open Street Map data for a location
 #'
 #' Wraps \code{osmdata} functions to query OSM data by adjusted bounding box or
-#' by enclosing ways/relations around the center of a location.
+#' by enclosing ways/relations around the center of a location. timeout and
+#' nodes_only parameters are not fully supported currently.
 #'
 #' @param location A `sf`, `sfc`, or `bbox` object.
 #' @param key Feature key for overpass API query.
@@ -27,6 +28,7 @@
 #'   provided location is used for the query. geometry is set automatically
 #'   based enclosing with "relation" using "multipolygon" and "way" using
 #'   "polygon" geometry.
+#' @inheritParams osmdata::opq
 #' @return A simple feature object with features using selected geometry type or
 #'   an `osmdata` object with features from all geometry types.
 #' @export
@@ -46,6 +48,7 @@ get_osm_data <- function(location = NULL,
                          geometry = NULL,
                          osmdata = FALSE,
                          enclosing = NULL,
+                         nodes_only = FALSE,
                          timeout = 120) {
   if ((key == "building") && is.null(value)) {
     value <- osm_building_tags
@@ -69,11 +72,21 @@ get_osm_data <- function(location = NULL,
         crs = osm_crs
       )
 
-    query <-
-      try(
-        osmdata::opq(bbox = bbox_osm, timeout = timeout),
-        silent = TRUE
-      )
+    bbox_osm <- sf_bbox_to_sf(bbox_osm)
+
+    if (nodes_only) {
+      query <-
+        osmdata::opq(
+          bbox = bbox_osm,
+          nodes_only = nodes_only
+        )
+    } else {
+      query <-
+        try(
+          osmdata::opq(bbox = bbox_osm),
+          silent = TRUE
+        )
+    }
 
     query <-
       osmdata::add_osm_feature(
@@ -93,8 +106,7 @@ get_osm_data <- function(location = NULL,
           lat = coords$lat,
           key = key,
           value = value,
-          enclosing = enclosing,
-          timeout = timeout
+          enclosing = enclosing
         ),
         silent = TRUE
       )

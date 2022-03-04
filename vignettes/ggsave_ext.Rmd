@@ -293,7 +293,7 @@ The dimensions of the exported file may be set automatically based on paper and 
 ggsave_ext(
   plot = neighborhood_map,
   name = "Neighborhood map",
-  label = params$neighborhood,
+  label = params$name,
   title = "Map of {params$name} and surrounding area",
   author = "Eli Pousson",
   paper = params$paper,

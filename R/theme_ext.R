@@ -163,35 +163,41 @@ theme_legend <- function(position,
       "left", "right", "bottom", "top",
       "topleft", "bottomleft", "topright", "bottomright", "none"
     ))
+
+    if (position == "none") {
+      hide_legend <- TRUE
+    } else {
+      hide_legend <- FALSE
+    }
   }
 
-  if (inset && position != "none") {
-    if (grepl("top", position)) {
-      y_position <- 0.95
-      y_justification <- "top"
-    } else if (grepl("bottom", position)) {
-      y_position <- 0.05
-      y_justification <- "bottom"
-    }
-
-    if (grepl("left", position)) {
-      x_position <- 0.05
-      x_justification <- "left"
-    } else if (grepl("right", position)) {
-      x_position <- 0.95
-      x_justification <- "right"
-    }
-
-    position <- grid::unit(c(x_position, y_position), unit = "npc")
-    justification <- c(x_justification, y_justification)
-  } else if (is.null(justification)) {
-    justification <- "center"
-  }
-
-  if (position == "none") {
+  if (hide_legend) {
     legend_theme <-
-      ggplot2::theme(legend.position = position)
+      ggplot2::theme(legend.position = "none")
   } else {
+    if (inset) {
+      if (grepl("top", position)) {
+        y_position <- 0.95
+        y_justification <- "top"
+      } else if (grepl("bottom", position)) {
+        y_position <- 0.05
+        y_justification <- "bottom"
+      }
+
+      if (grepl("left", position)) {
+        x_position <- 0.05
+        x_justification <- "left"
+      } else if (grepl("right", position)) {
+        x_position <- 0.95
+        x_justification <- "right"
+      }
+
+      position <- grid::unit(c(x_position, y_position), unit = "npc")
+      justification <- c(x_justification, y_justification)
+    } else if (is.null(justification)) {
+      justification <- "center"
+    }
+
     legend_theme <-
       ggplot2::theme(
         legend.position = position,
