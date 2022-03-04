@@ -19,9 +19,9 @@ check_class <- function(x, check = NULL) {
 #' @md
 check_sf <- function(x, ext = FALSE) {
   if (!ext) {
-    check_class(x, "sf")
+    check_class(x, check = "sf")
   } else {
-    check_class(x, c("sf", "sfc", "bbox"))
+    check_class(x, check = c("sf", "sfc", "bbox"))
   }
 }
 

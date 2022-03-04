@@ -55,7 +55,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="downloading-reading-and-writing-spatial-data">Downloading, reading, and writing spatial data<a class="anchor" aria-label="anchor" href="#downloading-reading-and-writing-spatial-data"></a></h2>
+      <h2 id="reading-and-writing-spatial-data">Reading and writing spatial data<a class="anchor" aria-label="anchor" href="#reading-and-writing-spatial-data"></a></h2>
       
       
 
@@ -76,6 +76,32 @@
         </dt>
         <dd>Get data for a location</dd>
       </dl><dl><dt>
+          
+          <code><a href="get_us_counties.html">get_us_counties()</a></code> 
+        </dt>
+        <dd>Use USAboundariesData to get current or past U.S. county boundaries for a location</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_package()</a></code> 
+        </dt>
+        <dd>Read spatial data in a bounding box to a simple feature object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="write_sf_ext.html">write_sf_ext()</a></code> <code><a href="write_sf_ext.html">write_sf_cache()</a></code> 
+        </dt>
+        <dd>Write or cache a simple feature object to a file</dd>
+      </dl></div><div class="section level2">
+      <h2 id="downloading-spatial-data-from-apis">Downloading spatial data from APIs<a class="anchor" aria-label="anchor" href="#downloading-spatial-data-from-apis"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="get_esri_data.html">get_esri_data()</a></code> 
         </dt>
@@ -100,23 +126,8 @@
           <code><a href="get_flickr_photos.html">get_flickr_photos()</a></code> 
         </dt>
         <dd>Use FlickrAPI to get geotagged photos for a location</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_us_counties.html">get_us_counties()</a></code> 
-        </dt>
-        <dd>Use USAboundariesData to get current or past U.S. county boundaries for a location</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_package()</a></code> 
-        </dt>
-        <dd>Read spatial data in a bounding box to a simple feature object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="write_sf_ext.html">write_sf_ext()</a></code> <code><a href="write_sf_ext.html">write_sf_cache()</a></code> 
-        </dt>
-        <dd>Write or cache a simple feature object to a file</dd>
       </dl></div><div class="section level2">
-      <h2 id="modifying-simple-feature-and-bounding-box-objects">Modifying simple feature and bounding box objects<a class="anchor" aria-label="anchor" href="#modifying-simple-feature-and-bounding-box-objects"></a></h2>
+      <h2 id="working-with-simple-feature-and-bounding-box-objects">Working with simple feature and bounding box objects<a class="anchor" aria-label="anchor" href="#working-with-simple-feature-and-bounding-box-objects"></a></h2>
       
       
 
@@ -153,11 +164,6 @@
         <dd>Transform or convert coordinates of a simple feature or bounding box object</dd>
       </dl><dl><dt>
           
-          <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_expand()</a></code> 
-        </dt>
-        <dd>Measure, transform, and convert bounding boxes</dd>
-      </dl><dl><dt>
-          
           <code><a href="sf_to_df.html">sf_to_df()</a></code> <code><a href="sf_to_df.html">df_to_sf()</a></code> 
         </dt>
         <dd>Convert simple feature object to data frame with coordinates or data frame to
@@ -167,6 +173,11 @@ simple feature</dd>
           <code><a href="check_sf.html">check_sf()</a></code> <code><a href="check_sf.html">check_bbox()</a></code> <code><a href="check_sf.html">check_sf_list()</a></code> <code><a href="check_sf.html">check_sf_same_crs()</a></code> 
         </dt>
         <dd>Check the class and attributes of a simple feature object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_expand()</a></code> 
+        </dt>
+        <dd>Measure, transform, and convert bounding boxes</dd>
       </dl></div><div class="section level2">
       <h2 id="layers-and-geoms-for-ggplot-maps">Layers and geoms for ggplot2 maps<a class="anchor" aria-label="anchor" href="#layers-and-geoms-for-ggplot-maps"></a></h2>
       
@@ -210,7 +221,7 @@ border</dd>
         </dt>
         <dd>Draw SVG icons for a simple feature object</dd>
       </dl></div><div class="section level2">
-      <h2 id="working-with-ggplot-themes-labels-layout-and-file-export">Working with ggplot2 themes, labels, layout, and file export<a class="anchor" aria-label="anchor" href="#working-with-ggplot-themes-labels-layout-and-file-export"></a></h2>
+      <h2 id="working-with-ggplot-themes-labels-and-file-export">Working with ggplot2 themes, labels, and file export<a class="anchor" aria-label="anchor" href="#working-with-ggplot-themes-labels-and-file-export"></a></h2>
       
       
 
@@ -241,7 +252,7 @@ border</dd>
         </dt>
         <dd>Make file name and path with optional label, prefix, or postfix</dd>
       </dl></div><div class="section level2">
-      <h2 id="additional-utility-functions-and-reference-data">Additional utility functions and reference data<a class="anchor" aria-label="anchor" href="#additional-utility-functions-and-reference-data"></a></h2>
+      <h2 id="utility-functions-and-reference-data">Utility functions and reference data<a class="anchor" aria-label="anchor" href="#utility-functions-and-reference-data"></a></h2>
       
       
 

@@ -3,35 +3,37 @@ template:
   package: preferably
   bootstrap: 5
 reference:
-- title: Downloading, reading, and writing spatial data
+- title: Reading and writing spatial data
   contents:
   - '`get_location`'
   - '`get_location_data`'
+  - '`get_us_counties`'
+  - starts_with("read")
+  - starts_with("write")
+- title: Downloading spatial data from APIs
+  contents:
   - '`get_esri_data`'
   - '`get_osm_data`'
   - '`get_wiki_data`'
   - '`get_open_data`'
   - '`get_flickr_photos`'
-  - '`get_us_counties`'
-  - starts_with("read")
-  - starts_with("write")
-- title: Modifying simple feature and bounding box objects
+- title: Working with simple feature and bounding box objects
   contents:
   - starts_with("st_")
-  - starts_with("sf_bbox")
   - '`sf_to_df`'
   - starts_with("check")
+  - starts_with("sf_bbox")
 - title: Layers and geoms for ggplot2 maps
   contents:
   - starts_with("layer_")
   - starts_with("geom_")
-- title: Working with ggplot2 themes, labels, layout, and file export
+- title: Working with ggplot2 themes, labels, and file export
   contents:
   - '`theme_ext`'
   - '`labs_ext`'
   - '`ggsave_ext`'
   - '`make_filename`'
-- title: Additional utility functions and reference data
+- title: Utility functions and reference data
   contents:
   - '`map_icons`'
   - '`valid_dist_units`'

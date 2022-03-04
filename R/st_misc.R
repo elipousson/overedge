@@ -69,11 +69,11 @@ st_center <- function(x,
     x <- sf_bbox_to_sf(x)
   }
 
-  crs <- sf::st_crs(x)
-  geom <- sf::st_geometry(x)
-  centroid <- suppressWarnings(sf::st_centroid(geom, ...))
-
   if (ext) {
+    crs <- sf::st_crs(x)
+    geom <- sf::st_geometry(x)
+    centroid <- suppressWarnings(sf::st_centroid(geom, ...))
+
     return(
       list(
         "sf" = sf::st_sf(centroid),

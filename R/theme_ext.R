@@ -165,7 +165,7 @@ theme_legend <- function(position,
     ))
   }
 
-  if (inset) {
+  if (inset && position != "none") {
     if (grepl("top", position)) {
       y_position <- 0.95
       y_justification <- "top"
