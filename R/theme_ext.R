@@ -160,8 +160,8 @@ theme_legend <- function(position,
 
   if (!is.numeric(position)) {
     position <- match.arg(position, c(
-      "none", "left", "right", "bottom", "top",
-      "topleft", "bottomleft", "topright", "bottomright"
+      "left", "right", "bottom", "top",
+      "topleft", "bottomleft", "topright", "bottomright", "none"
     ))
   }
 
@@ -188,12 +188,18 @@ theme_legend <- function(position,
     justification <- "center"
   }
 
-  legend_theme <- ggplot2::theme(
-    legend.position = position,
-    legend.justification = justification,
-    legend.margin = margin,
-    legend.background = bg
-  )
+  if (position == "none") {
+    legend_theme <-
+      ggplot2::theme(legend.position = position)
+  } else {
+    legend_theme <-
+      ggplot2::theme(
+        legend.position = position,
+        legend.justification = justification,
+        legend.margin = margin,
+        legend.background = bg
+      )
+  }
 
   if (!is.null(method)) {
     theme_method(legend_theme, method = method)
