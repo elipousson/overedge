@@ -54,7 +54,7 @@ match the class of the id_col for type.}
 object passed to \code{\link[sf]{st_filter}}. Any valid address or
 addresses are geocoded with \code{\link[tidygeocoder]{geo}}), converted to
 a simple feature object, and then used as a spatial filter. \code{bbox} objects
-are converted using \code{\link[=sf_bbox_to_sf]{sf_bbox_to_sf()}}. Multiple addresses are supported.}
+are converted using \code{\link[overedge:sf_bbox_misc]{sf_bbox_to_sf()}}. Multiple addresses are supported.}
 
 \item{name_col}{Column name in type with name values, Default: 'name'
 Required if name provided.}
@@ -89,7 +89,7 @@ provided.}
 "meter"}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
+character (e.g. "1:3"). If numeric, \code{\link[overedge:get_asp]{get_asp()}} returns the same value
 without modification.}
 
 \item{mask}{A \code{sf} or \code{bbox} object to define the edge of the mask.
@@ -98,7 +98,7 @@ without modification.}
 
 \item{neatline}{If TRUE, add \code{layer_neatline} with \code{expand = TRUE}; defaults to FALSE.}
 
-\item{...}{Additional parameters passed to get_location if data is \code{NULL}.}
+\item{...}{Additional parameters passed to get_location if data is `NULL`.}
 }
 \value{
 list of ggplot2 geoms
