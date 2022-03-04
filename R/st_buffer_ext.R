@@ -5,6 +5,11 @@
 #' the coordinate reference system is transformed into EPSG:3857 and then transformed back into the
 #' original CRS after the buffer has been applied.
 #'
+#' st_edge is a variation on st_buffer_ext where dist or diag_ratio is used to
+#' define the width of the edge to return either outside the existing geometry
+#' (for positive dist values) or inside the existing geometry (for negative dist
+#' values).
+#'
 #' @param x sf or bbox object.
 #' @param dist buffer distance in units. Optional.
 #' @param diag_ratio ratio of diagonal distance of area's bounding box used as
@@ -152,4 +157,29 @@ convert_dist_units <- function(dist,
   }
 
   return(dist)
+}
+
+#' @rdname st_buffer_ext
+#' @name st_edge
+#' @importFrom sf st_difference
+st_edge <- function(x,
+                    dist = NULL,
+                    diag_ratio = NULL,
+                    unit = "meter",
+                    ...) {
+
+  # If bbox, convert to sf
+  if (check_bbox(x)) {
+    x <- sf_bbox_to_sf(x)
+  }
+
+  x_dist <- st_buffer_ext(x, dist = dist, diag_ratio = diag_ratio, unit = unit,  ...)
+
+  if (dist > 0) {
+    x <- suppressWarnings(sf::st_difference(x_dist, x))
+  } else if (dist < 0) {
+    x <- suppressWarnings(sf::st_difference(x, x_dist))
+  }
+
+  return(x)
 }

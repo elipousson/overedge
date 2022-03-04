@@ -2,6 +2,7 @@
 % Please edit documentation in R/st_buffer_ext.R
 \name{st_buffer_ext}
 \alias{st_buffer_ext}
+\alias{st_edge}
 \title{Buffer a simple feature or bounding box object}
 \usage{
 st_buffer_ext(
@@ -12,6 +13,8 @@ st_buffer_ext(
   dist_limits = NULL,
   ...
 )
+
+st_edge(x, dist = NULL, diag_ratio = NULL, unit = "meter", ...)
 }
 \arguments{
 \item{x}{sf or bbox object.}
@@ -39,4 +42,10 @@ Return an sf object with a buffer based on \code{dist} or a proportion of the
 diagonal distance defined by \code{diag_ratio}. If x uses geographic coordinates,
 the coordinate reference system is transformed into EPSG:3857 and then transformed back into the
 original CRS after the buffer has been applied.
+}
+\details{
+st_edge is a variation on st_buffer_ext where dist or diag_ratio is used to
+define the width of the edge to return either outside the existing geometry
+(for positive dist values) or inside the existing geometry (for negative dist
+values).
 }

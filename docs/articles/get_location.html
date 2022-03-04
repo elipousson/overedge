@@ -227,7 +227,7 @@
 
 <span class="fu">lookup_tract</span><span class="op">(</span><span class="st">"100 Holliday St, Baltimore, MD 21202"</span><span class="op">)</span>
 <span class="co">#&gt; Passing 1 address to the Nominatim single address geocoder</span>
-<span class="co">#&gt; Query completed in: 1.1 seconds</span>
+<span class="co">#&gt; Query completed in: 1 seconds</span>
 <span class="co">#&gt; Simple feature collection with 1 feature and 8 fields</span>
 <span class="co">#&gt; Geometry type: POLYGON</span>
 <span class="co">#&gt; Dimension:     XY</span>
@@ -266,7 +266,7 @@
 <span class="co">#&gt; Projected CRS: NAD83(HARN) / Maryland</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span>
 <span class="co">#&gt;   name                type       acres osm_id wikidata                  geometry</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494;">[acr</span>… <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [m]&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [m]&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Druid Heights       Residenti…  57.9 12792… <span style="color: #BB0000;">NA</span>       (((431569.6 181988, 4315…</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Madison Park        Residenti… 102.  12792… <span style="color: #BB0000;">NA</span>       (((432337.1 181728.9, 43…</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Sandtown-Winchester Residenti… 260.  12800… Q7416984 (((430729.9 182481.6, 43…</span>
@@ -315,9 +315,9 @@
 <col width="5%">
 <col width="6%">
 <col width="8%">
-<col width="12%">
 <col width="9%">
 <col width="6%">
+<col width="11%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">name</th>
@@ -328,9 +328,9 @@
 <th align="right">width</th>
 <th align="right">height</th>
 <th align="right">asp</th>
-<th align="right">asp_landscape</th>
 <th align="left">asp_text</th>
 <th align="left">type</th>
+<th align="left">orientation</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -342,9 +342,9 @@
 <td align="right">1080</td>
 <td align="right">1080</td>
 <td align="right">1.000000</td>
-<td align="right">1.0000000</td>
 <td align="left">1080:1080</td>
 <td align="left">social</td>
+<td align="left">portrait</td>
 </tr>
 <tr class="even">
 <td align="left">Instagram story</td>
@@ -355,9 +355,9 @@
 <td align="right">1080</td>
 <td align="right">1920</td>
 <td align="right">0.562500</td>
-<td align="right">1.7777778</td>
 <td align="left">1080:1920</td>
 <td align="left">social</td>
+<td align="left">portrait</td>
 </tr>
 <tr class="odd">
 <td align="left">Twitter single image post</td>
@@ -368,9 +368,9 @@
 <td align="right">1200</td>
 <td align="right">675</td>
 <td align="right">1.777778</td>
-<td align="right">0.5625000</td>
 <td align="left">1200:675</td>
 <td align="left">social</td>
+<td align="left">portrait</td>
 </tr>
 <tr class="even">
 <td align="left">Twitter multiple image post</td>
@@ -381,9 +381,9 @@
 <td align="right">700</td>
 <td align="right">800</td>
 <td align="right">0.875000</td>
-<td align="right">1.1428571</td>
 <td align="left">700:800</td>
 <td align="left">social</td>
+<td align="left">portrait</td>
 </tr>
 <tr class="odd">
 <td align="left">Twitter image and link post</td>
@@ -394,9 +394,9 @@
 <td align="right">1200</td>
 <td align="right">628</td>
 <td align="right">1.910828</td>
-<td align="right">0.5233333</td>
 <td align="left">1200:628</td>
 <td align="left">social</td>
+<td align="left">portrait</td>
 </tr>
 <tr class="even">
 <td align="left">Twitter cover photo</td>
@@ -407,9 +407,9 @@
 <td align="right">1500</td>
 <td align="right">500</td>
 <td align="right">3.000000</td>
-<td align="right">0.3333333</td>
 <td align="left">1500:500</td>
 <td align="left">social</td>
+<td align="left">portrait</td>
 </tr>
 </tbody>
 </table>
@@ -469,12 +469,12 @@
   <span class="op">)</span>
 
 <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span><span class="va">district_trees</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="fvapbwfeom" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ikfliunsux" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#fvapbwfeom .gt_table {
+#ikfliunsux .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -499,7 +499,7 @@
   border-left-color: #D3D3D3;
 }
 
-#fvapbwfeom .gt_heading {
+#ikfliunsux .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -511,7 +511,7 @@
   border-right-color: #D3D3D3;
 }
 
-#fvapbwfeom .gt_title {
+#ikfliunsux .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -521,7 +521,7 @@
   border-bottom-width: 0;
 }
 
-#fvapbwfeom .gt_subtitle {
+#ikfliunsux .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -531,13 +531,13 @@
   border-top-width: 0;
 }
 
-#fvapbwfeom .gt_bottom_border {
+#ikfliunsux .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fvapbwfeom .gt_col_headings {
+#ikfliunsux .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -552,7 +552,7 @@
   border-right-color: #D3D3D3;
 }
 
-#fvapbwfeom .gt_col_heading {
+#ikfliunsux .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -572,7 +572,7 @@
   overflow-x: hidden;
 }
 
-#fvapbwfeom .gt_column_spanner_outer {
+#ikfliunsux .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -584,15 +584,15 @@
   padding-right: 4px;
 }
 
-#fvapbwfeom .gt_column_spanner_outer:first-child {
+#ikfliunsux .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fvapbwfeom .gt_column_spanner_outer:last-child {
+#ikfliunsux .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fvapbwfeom .gt_column_spanner {
+#ikfliunsux .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -604,7 +604,7 @@
   width: 100%;
 }
 
-#fvapbwfeom .gt_group_heading {
+#ikfliunsux .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -626,7 +626,7 @@
   vertical-align: middle;
 }
 
-#fvapbwfeom .gt_empty_group_heading {
+#ikfliunsux .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -641,15 +641,15 @@
   vertical-align: middle;
 }
 
-#fvapbwfeom .gt_from_md > :first-child {
+#ikfliunsux .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fvapbwfeom .gt_from_md > :last-child {
+#ikfliunsux .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fvapbwfeom .gt_row {
+#ikfliunsux .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -668,7 +668,7 @@
   overflow-x: hidden;
 }
 
-#fvapbwfeom .gt_stub {
+#ikfliunsux .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -680,7 +680,7 @@
   padding-left: 12px;
 }
 
-#fvapbwfeom .gt_summary_row {
+#ikfliunsux .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -690,7 +690,7 @@
   padding-right: 5px;
 }
 
-#fvapbwfeom .gt_first_summary_row {
+#ikfliunsux .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -700,7 +700,7 @@
   border-top-color: #D3D3D3;
 }
 
-#fvapbwfeom .gt_grand_summary_row {
+#ikfliunsux .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -710,7 +710,7 @@
   padding-right: 5px;
 }
 
-#fvapbwfeom .gt_first_grand_summary_row {
+#ikfliunsux .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -720,11 +720,11 @@
   border-top-color: #D3D3D3;
 }
 
-#fvapbwfeom .gt_striped {
+#ikfliunsux .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fvapbwfeom .gt_table_body {
+#ikfliunsux .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -733,7 +733,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#fvapbwfeom .gt_footnotes {
+#ikfliunsux .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -747,13 +747,13 @@
   border-right-color: #D3D3D3;
 }
 
-#fvapbwfeom .gt_footnote {
+#ikfliunsux .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#fvapbwfeom .gt_sourcenotes {
+#ikfliunsux .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -767,41 +767,41 @@
   border-right-color: #D3D3D3;
 }
 
-#fvapbwfeom .gt_sourcenote {
+#ikfliunsux .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#fvapbwfeom .gt_left {
+#ikfliunsux .gt_left {
   text-align: left;
 }
 
-#fvapbwfeom .gt_center {
+#ikfliunsux .gt_center {
   text-align: center;
 }
 
-#fvapbwfeom .gt_right {
+#ikfliunsux .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fvapbwfeom .gt_font_normal {
+#ikfliunsux .gt_font_normal {
   font-weight: normal;
 }
 
-#fvapbwfeom .gt_font_bold {
+#ikfliunsux .gt_font_bold {
   font-weight: bold;
 }
 
-#fvapbwfeom .gt_font_italic {
+#ikfliunsux .gt_font_italic {
   font-style: italic;
 }
 
-#fvapbwfeom .gt_super {
+#ikfliunsux .gt_super {
   font-size: 65%;
 }
 
-#fvapbwfeom .gt_footnote_marks {
+#ikfliunsux .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
