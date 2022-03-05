@@ -56,7 +56,7 @@ nc <- st_read(system.file("shape/nc.shp", package = "sf"))
 #> Dimension:     XY
 #> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #> Geodetic CRS:  NAD27
-nc <- st_transform(nc, 2264)
+nc <- st_transform(nc, 3857)
 theme_set(theme_void())
 
 nc_map <-
@@ -148,6 +148,7 @@ nc_map +
 ```
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+
 `layer_neatline()` can also be used to focus on a specific area of a map
 with the option to apply a buffer as a distance or ratio of the diagonal
 distance for the input data. The `label_axes` and `hide_grid` paramters
@@ -166,3 +167,5 @@ nc_map +
     hide_grid = FALSE
   )
 ```
+
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
