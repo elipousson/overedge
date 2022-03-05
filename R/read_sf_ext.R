@@ -195,7 +195,7 @@ read_sf_exif <- function(path = NULL,
       lat = gps_latitude,
       lon = gps_longitude,
       img_dir = gps_img_direction,
-      filename = SourceFile
+      filename = source_file
     ) |>
     dplyr::arrange({{ sort }})
 
