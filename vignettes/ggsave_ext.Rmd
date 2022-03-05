@@ -229,7 +229,8 @@ neighborhood_map <-
 neighborhood_map
 ```
 
-Two other functions (`layer_mask()` and `layer_show_location()`) allow you to add `layer_neatline()` to a map along with a mask or location boundary line using the same parameters.  
+The `layer_mask()` function also allow you to add `layer_neatline()` to a map along with a mask using the same parameters.
+
 ```{r}
 basemap +
   layer_mask(

@@ -29,7 +29,9 @@ remotes::install_github("elipousson/overedge")
 
 ## Examples
 
-`overedge` currently provides just a few functions.
+`overedge` currently provides a variety of functions for accessing
+spatial data, modifying simple feature or bounding box objects, and
+creating or formatting maps with ggplot2.
 
 ### Make icon maps with sf objects and ggplot2
 
@@ -43,12 +45,11 @@ icons in `map_icons`.
 library(overedge)
 library(ggplot2)
 library(sf)
-#> Warning: package 'sf' was built under R version 4.1.1
-#> Linking to GEOS 3.9.1, GDAL 3.2.3, PROJ 7.2.1; sf_use_s2() is TRUE
+#> Linking to GEOS 3.9.1, GDAL 3.4.0, PROJ 8.1.1; sf_use_s2() is TRUE
 
-nc <- st_read(system.file("shape/nc.shp", package="sf"))
+nc <- st_read(system.file("shape/nc.shp", package = "sf"))
 #> Reading layer `nc' from data source 
-#>   `/Library/Frameworks/R.framework/Versions/4.1-arm64/Resources/library/sf/shape/nc.shp' 
+#>   `/Library/Frameworks/R.framework/Versions/4.1/Resources/library/sf/shape/nc.shp' 
 #>   using driver `ESRI Shapefile'
 #> Simple feature collection with 100 features and 14 fields
 #> Geometry type: MULTIPOLYGON
@@ -64,7 +65,6 @@ nc_map <-
 
 nc_map +
   geom_sf_icon(data = nc, icon = "point-start", size = 8)
-#> Warning: Converting data from MULTIPOLYGON to POINT with `sf::st_centroid()`.
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
@@ -72,11 +72,10 @@ nc_map +
 You can also use an `icon` column from the provided sf object.
 
 ``` r
-nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc)/4)
+nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc) / 4)
 
 nc_map +
   geom_sf_icon(data = nc, size = 5)
-#> Warning: Converting data from MULTIPOLYGON to POINT with `sf::st_centroid()`.
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
@@ -141,9 +140,11 @@ ratio.
 
 ``` r
 nc_map +
-  layer_neatline(data = nc,
-                 asp = "6:4",
-                 color = "gray60", size = 2, linetype = "dashed")
+  layer_neatline(
+    data = nc,
+    asp = "6:4",
+    color = "gray60", size = 2, linetype = "dashed"
+  )
 ```
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
@@ -156,10 +157,12 @@ will not override a set ggplot theme.
 theme_set(theme_minimal())
 
 nc_map +
-  layer_neatline(data = nc[1,],
-                 diag_ratio = 0.5, asp = 1,
-                 color = "black",
-                 label_axes = "--EN", hide_grid = FALSE)
+  layer_neatline(
+    data = nc[1, ],
+    diag_ratio = 0.5,
+    asp = 1,
+    color = "black",
+    label_axes = "--EN",
+    hide_grid = FALSE
+  )
 ```
-
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />

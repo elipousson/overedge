@@ -12,6 +12,7 @@ geom_sf_icon(
   source = NULL,
   svg = NULL,
   color = "black",
+  crs = NULL,
   ...
 )
 }
@@ -25,7 +26,7 @@ is used. You may provide a px or source value to select a different match
 if needed but, in that case, all icons must use the same px or source
 value. Note that the icon column should not be mapped with \code{aes()}.}
 
-\item{icon}{Icon name. Default NULL. If \code{icon} is provided, \code{iconname_col} is
+\item{icon}{Icon name. Default \code{NULL}. If \code{icon} is provided, \code{iconname_col} is
 not used.}
 
 \item{px}{Icon size in pixels. See \code{map_icons$px} for supported options.
@@ -39,6 +40,8 @@ parameter for \code{ggsvg::geom_point_svg()}.  If \code{icon} is provided, \code
 not used.}
 
 \item{color}{SVG color passed to \code{ggsvg::geom_point_svg()}. default color is set to "black".}
+
+\item{crs}{Coordinate reference system; defaults to \code{NULL}.}
 
 \item{...}{Additional parameters to \code{ggsvg::geom_point_svg()}.}
 }

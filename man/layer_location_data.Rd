@@ -97,7 +97,6 @@ Helper function to make a ggplot2 layer from data returned by
 Other layer: 
 \code{\link{layer_mask}()},
 \code{\link{layer_neatline}()},
-\code{\link{layer_scaled}()},
-\code{\link{layer_show_location}()}
+\code{\link{layer_scaled}()}
 }
 \concept{layer}

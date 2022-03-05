@@ -231,14 +231,14 @@ usethis::use_data(
 dist_unit_options <-
   c(
     "arc_degree", "arc_minute", "arc_second", "cm", "m", "metre", "meter", "meters", "km", "kilometer", "kilometers",
-    "inch", "in", "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile"
+    "inch", "in", "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile", "radian"
   )
 
 add_metric_units <-
   tibble::tribble(
     ~symbol, ~symbol_aliases, ~name_singular, ~name_singular_aliases, ~name_plural, ~name_plural_aliases, ~def, ~definition, ~comment, ~dimensionless, ~source_xml,
-    "km", NA, "kilometer", "kilometre", "kilometers", "kilometres", "m * 1000", "length equivalent to 1000 meters", NA, FALSE, NA,
-    "cm", NA, "centimeter", "centimetre", "centimeters", "centimetres", "m/100", "length equivalent to 0.01 meter", NA, FALSE, NA
+    "km", "", "kilometer", "kilometre", "kilometers", "kilometres", "m * 1000", "length equivalent to 1000 meters", NA, FALSE, NA,
+    "cm", "", "centimeter", "centimetre", "centimeters", "centimetres", "m/100", "length equivalent to 0.01 meter", NA, FALSE, NA
   )
 
 

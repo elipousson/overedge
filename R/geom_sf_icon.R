@@ -11,7 +11,7 @@
 #'   is used. You may provide a px or source value to select a different match
 #'   if needed but, in that case, all icons must use the same px or source
 #'   value. Note that the icon column should not be mapped with `aes()`.
-#' @param icon Icon name. Default NULL. If `icon` is provided, `iconname_col` is
+#' @param icon Icon name. Default `NULL`. If `icon` is provided, `iconname_col` is
 #'   not used.
 #' @param px Icon size in pixels. See `map_icons$px` for supported options.
 #'   Optional but may be necessary to differentiate icons with duplicate names.
@@ -21,6 +21,7 @@
 #'   parameter for `ggsvg::geom_point_svg()`.  If `icon` is provided, `svg` is
 #'   not used.
 #' @param color SVG color passed to `ggsvg::geom_point_svg()`. default color is set to "black".
+#' @param crs Coordinate reference system; defaults to `NULL`.
 #' @param ... Additional parameters to `ggsvg::geom_point_svg()`.
 #' @examples
 #' \dontrun{
@@ -58,8 +59,12 @@ geom_sf_icon <- function(data = NULL,
                          source = NULL,
                          svg = NULL,
                          color = "black",
+                         crs = NULL,
                          ...) {
-  data <- sf_to_df(x = data, coords = c("lon", "lat"), keep_all = TRUE)
+
+  if (check_sf(data)) {
+    data <- sf_to_df(x = data, coords = c("lon", "lat"), keep_all = TRUE, crs = crs)
+  }
 
   if ((iconname_col %in% names(data)) && is.null(icon)) {
     icon_options <- dplyr::rename(map_icons, svg_url = url, {{ iconname_col }} := name)
