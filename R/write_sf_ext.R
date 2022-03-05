@@ -219,6 +219,7 @@ write_sf_types <- function(data, filename = NULL, path, filetype = NULL) {
 #' @param prefix File name prefix. "date" adds a date prefix, "time" adds a
 #'   date/time prefix; defaults to `NULL`.
 #' @param postfix File name postfix; defaults to `NULL`.
+#' @family read_write
 #' @export
 #' @importFrom checkmate check_directory_exists
 #' @importFrom usethis ui_yeah ui_done ui_stop

@@ -38,7 +38,9 @@ layer_show_location(
 default), it is combined with the default mapping at the top level of the
 plot. You must supply \code{mapping} if there is no plot mapping.}
 
-\item{data}{Data for location to show.}
+\item{data}{sf object including data in area. data may also be a url or file
+path. data can be the name of a data object or, if package and filetype are
+provided, a cached or external file.}
 
 \item{type}{Type of location to return. Type can be an sf object, e.g. a data
 frame with multiple neighborhoods or a character string that can be passed
@@ -54,7 +56,7 @@ match the class of the id_col for type.}
 object passed to \code{\link[sf]{st_filter}}. Any valid address or
 addresses are geocoded with \code{\link[tidygeocoder]{geo}}), converted to
 a simple feature object, and then used as a spatial filter. \code{bbox} objects
-are converted using \code{\link[overedge:sf_bbox_misc]{sf_bbox_to_sf()}}. Multiple addresses are supported.}
+are converted using \code{\link[=sf_bbox_to_sf]{sf_bbox_to_sf()}}. Multiple addresses are supported.}
 
 \item{name_col}{Column name in type with name values, Default: 'name'
 Required if name provided.}
@@ -64,7 +66,9 @@ id is provided.}
 
 \item{index}{Optional list used to match type to data, Default: \code{NULL}}
 
-\item{label}{label type (e.g. "text", "label")}
+\item{label}{Label optionally added to "label" column; must be a length 1 or
+match the number of rows returned based on the other parameters. If \code{union = TRUE},
+using label is recommended. Default: \code{NULL}}
 
 \item{union}{If \code{TRUE}, the location geometry is unioned with
 \code{\link[sf]{st_union}} and the names are combined into a single value.
@@ -72,11 +76,9 @@ Default: \code{FALSE}.}
 
 \item{crs}{coordinate reference system to return}
 
-\item{color}{Color for location; defaults to "black".}
+\item{color}{mask edge color; defaults to \code{NA}}
 
-\item{linetype}{Line type for location; defaults to "dashed".}
-
-\item{fill}{Fill for location; defaults to "NA".}
+\item{fill}{mask fill color; defaults to "white"}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -89,7 +91,7 @@ provided.}
 "meter"}
 
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
-character (e.g. "1:3"). If numeric, \code{\link[overedge:get_asp]{get_asp()}} returns the same value
+character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
 \item{mask}{A \code{sf} or \code{bbox} object to define the edge of the mask.
@@ -98,14 +100,15 @@ without modification.}
 
 \item{neatline}{If TRUE, add \code{layer_neatline} with \code{expand = TRUE}; defaults to FALSE.}
 
-\item{...}{Additional parameters passed to get_location if data is `NULL`.}
+\item{...}{Additional parameters passed to \code{get_location_data} if type
+is character and index is \code{NULL}.}
 }
 \value{
 list of ggplot2 geoms
 }
 \description{
 Helper function to make a ggplot2 layer from data returned by
-\code{get_location}
+\code{get_location}. See \code{birdseyeview::layer_show_location} for documentation.
 }
 \seealso{
 \code{\link[ggplot2]{CoordSf}}

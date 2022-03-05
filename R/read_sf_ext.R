@@ -22,6 +22,7 @@
 #'   = Data loaded with the package
 #'   - External data in the `extdata` system files folder.
 #'   - Cached data in the cache directory returned by \code{\link[rappdirs]{user_cache_dir}}
+#' @family read_write
 #' @export
 #' @importFrom checkmate check_file_exists
 #' @importFrom sf read_sf
@@ -128,82 +129,86 @@ read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) 
 }
 
 
-#' Read EXIF data from images and create an simple feature object
+#' Read EXIF location data from images to a simple feature object
 #'
 #' Read EXIF data from folder of images.
 #'
 #' @param path path to folder of one or more files with EXIF location metadata
-#' @param bbox bounding box to crop sf file (excluding images with location data outside the bounding box)
+#' @param bbox bounding box to crop sf file (excluding images with location data
+#'   outside the bounding box)
 #' @param filetype file extension or file type; defaults to "jpg"
-#' @param sort variable to sort by. Currently supports "lon" (default), "lat", or "filename"
+#' @param sort variable to sort by. Currently supports "lon" (default), "lat",
+#'   or "filename"
+#' @param crs Coordinate reference system to
 #' @param ... Additional EXIF tags to pass to exiftoolr::exif_read
-#' @noRd
+#' @family read_write
+#' @export
 #' @importFrom checkmate check_directory_exists
 #' @importFrom purrr map_dfr
 #' @importFrom fs dir_ls
 #' @importFrom exifr read_exif
 #' @importFrom dplyr rename arrange mutate row_number
-read_sf_exif <- function(path = NULL, bbox = NULL, filetype = "jpg", sort = "lon", ...) {
-
+read_sf_exif <- function(path = NULL,
+                         bbox = NULL,
+                         filetype = "jpg",
+                         sort = "lon",
+                         ...) {
   check_package_exists("exiftoolr")
   checkmate::check_directory_exists(path)
 
-  #  "DateCreated",
-  #  "Title",
-  exif_tags <-
+  tags <-
     c(
       "SourceFile",
       "GPSImgDirection",
       "GPSLatitude",
-      "GPSLongitude"
+      "GPSLongitude",
+      "ImageDescription",
+      "ImageWidth",
+      "ImageHeight",
+      "Orientation"
     )
 
   # FIXME: Could filetype be inferred from the files at the path?
-  exif_data <-
-    purrr::map_dfr(
-      fs::dir_ls(
-        path = path,
-        glob = paste0("*.", filetype)
-      ),
-      ~ exifr::read_exif(
-        .x,
-        tags = c(
-          # FIXME: The default fields likely vary by filetype and could be set based on that
-          # NOTE: Are there other tags that should be included by default?
-          exif_tags,
-          ...
+  data <-
+    suppressMessages(
+      purrr::map_dfr(
+        fs::dir_ls(
+          path = path,
+          glob = paste0("*.", filetype)
+        ),
+        ~ exifr::read_exif(
+          .x,
+          tags = c(
+            # FIXME: The default fields likely vary by filetype and could be set based on that
+            # NOTE: Are there other tags that should be included by default?
+            tags,
+            ...
+          )
         )
       )
-    ) |>
-    suppressMessages()
-
-  exif_data <- exif_data |>
-    # Rename variables
-    dplyr::rename(
-      # FIXME: Swap out manual rename for janitor::make_clean_names + an across function to strip out the GPS prefix
-      #      title = Title,
-      lat = GPSLatitude,
-      lon = GPSLongitude,
-      img_dir = GPSImgDirection,
-      #  date_created = DateCreated,
-      filename = SourceFile
-    ) |>
-    # Sort by longitude
-    # FIXME: Add a check for whether they should be ordered and numbered (and what they should be ordered by)
-    dplyr::arrange({{ sort }}) |>
-    dplyr::mutate(
-      # Number the images
-      id = dplyr::row_number()
     )
 
-  data <- df_to_sf(exif_data)
+  data <- data |>
+    janitor::clean_names("snake") |>
+    # Rename variables
+    dplyr::rename(
+      lat = gps_latitude,
+      lon = gps_longitude,
+      img_dir = gps_img_direction,
+      filename = SourceFile
+    ) |>
+    dplyr::arrange({{ sort }})
+
+  exif_crs <- 4326
+  data <- df_to_sf(data, crs = exif_crs)
+
 
   if (!is.null(bbox)) {
     data <-
       get_location_data(
         location = bbox,
         data = data,
-        from_crs = 4326
+        from_crs = exif_crs
       )
   }
 

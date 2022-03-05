@@ -46,3 +46,9 @@ read_sf_package looks for three types of package data:
 \item Cached data in the cache directory returned by \code{\link[rappdirs]{user_cache_dir}}
 }
 }
+\seealso{
+Other read_write: 
+\code{\link{make_filename}()},
+\code{\link{read_sf_exif}()}
+}
+\concept{read_write}

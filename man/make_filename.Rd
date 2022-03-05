@@ -40,3 +40,9 @@ date/time prefix; defaults to \code{NULL}.}
 A helper function to create consistent file names for plots created with
 \code{\link[=ggsave_ext]{ggsave_ext()}} or data files exported with \code{\link[=write_sf_ext]{write_sf_ext()}}.
 }
+\seealso{
+Other read_write: 
+\code{\link{read_sf_exif}()},
+\code{\link{read_sf_path}()}
+}
+\concept{read_write}
