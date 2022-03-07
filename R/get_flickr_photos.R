@@ -145,9 +145,9 @@ get_flickr_photos <- function(api_key = NULL,
     photos <-
       dplyr::rename(
         photos,
-        image_url = {{ img_url }},
-        image_width = {{ img_width }},
-        image_height = {{ img_height }}
+        image_url = {{ image_url }},
+        image_width = {{ image_width }},
+        image_height = {{ image_height }}
       )
 
     if (!is.null(orientation)) {
@@ -162,8 +162,8 @@ get_flickr_photos <- function(api_key = NULL,
         dplyr::mutate(
           photos,
           img_orientation = dplyr::case_when(
-            (img_width / img_height) > 1 ~ "landscape",
-            (img_width / img_height) < 1 ~ "portrait",
+            (image_width / image_height) > 1 ~ "landscape",
+            (image_width / image_height) < 1 ~ "portrait",
             TRUE ~ "square"
           )
         )
