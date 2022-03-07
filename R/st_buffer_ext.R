@@ -173,7 +173,7 @@ st_edge <- function(x,
     x <- sf_bbox_to_sf(x)
   }
 
-  x_dist <- st_buffer_ext(x, dist = dist, diag_ratio = diag_ratio, unit = unit,  ...)
+  x_dist <- st_buffer_ext(x, dist = dist, diag_ratio = diag_ratio, unit = unit, ...)
 
   if (dist > 0) {
     x <- suppressWarnings(sf::st_difference(x_dist, x))
