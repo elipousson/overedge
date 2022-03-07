@@ -111,19 +111,32 @@ st_inscribed_square <- function(x, rotate = 0) {
 #' @param check If "POINT", check if geometry type is POINT. Same for all
 #'   available geometry types; Default: NULL
 #' @param by_geometry Passed to sf::st_geometry_type; defaults to FALSE
+#' @param any If TRUE, check if any of the geometry types passed to check are
+#'   included; defaults to FALSE, checking if all of the geometry types provided
+#'   to check are found.
 #' @returns Returns vector with all geometry types; gives warning if object uses
 #'   multiple types.
 #' @export
 #' @importFrom sf st_geometry_type
 #' @importFrom usethis ui_warn
-st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE) {
+st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE, any = FALSE) {
   geom_type <- sf::st_geometry_type(x, by_geometry = by_geometry)
 
-  if (!is.null(check)) {
+  if (is.null(check) && !ext) {
+    if (length(geom_type) > 1) {
+      usethis::ui_warn("The sf object provded contains multiple geometry types: {geom_type}")
+    }
+
+    return(geom_type)
+  } else if (!is.null(check)) {
     geom_type <- unique(geom_type)
 
-    return(all(check %in% geom_type))
-  } else if (ext) {
+    if (any) {
+      check_type <- all(check %in% geom_type)
+    } else {
+      check_type <- any(check %in% geom_type)
+    }
+  } else {
     check_type <-
       list(
         POINTS = grepl("POINT$", geom_type),
@@ -131,14 +144,8 @@ st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE) {
         LINESTRINGS = grepl("STRING$", geom_type),
         # FIXME: This is only a partial set of geometry types
         TYPES = geom_type
-        )
-
-    return(check_type)
-  } else {
-    if (length(geom_type) > 1) {
-      usethis::ui_warn("The sf object provded contains multiple geometry types: {geom_type}")
-    }
-
-    geom_type
+      )
   }
+
+  return(check_type)
 }

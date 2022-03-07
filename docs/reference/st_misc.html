@@ -68,7 +68,7 @@
 
 <span class="fu">st_inscribed_square</span><span class="op">(</span><span class="va">x</span>, rotate <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 
-<span class="fu">st_geom_type</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="cn">TRUE</span>, check <span class="op">=</span> <span class="cn">NULL</span>, by_geometry <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="fu">st_geom_type</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="cn">TRUE</span>, check <span class="op">=</span> <span class="cn">NULL</span>, by_geometry <span class="op">=</span> <span class="cn">FALSE</span>, any <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -89,6 +89,10 @@ POLYGONS, LINESTRING, and the returned types.</p></dd>
 available geometry types; Default: NULL</p></dd>
 <dt>by_geometry</dt>
 <dd><p>Passed to sf::st_geometry_type; defaults to FALSE</p></dd>
+<dt>any</dt>
+<dd><p>If TRUE, check if any of the geometry types passed to check are
+included; defaults to FALSE, checking if all of the geometry types provided
+to check are found.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
