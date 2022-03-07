@@ -84,7 +84,7 @@ get_flickr_photos <- function(api_key = NULL,
       match.arg(
         sort,
         c(
-          paste0(c("date-posted", "date-taken", "interestingness"), collapse = dir),
+          paste0(c("date-posted", "date-taken", "interestingness"), dir),
           "relevance"
         )
       )
@@ -138,16 +138,16 @@ get_flickr_photos <- function(api_key = NULL,
   }
 
   if (length(img_size) == 1) {
-    img_url <- paste0("url_", img_size)
-    img_height <- paste0("height_", img_size)
-    img_width <- paste0("width_", img_size)
+    image_url <- paste0("url_", img_size)
+    image_height <- paste0("height_", img_size)
+    image_width <- paste0("width_", img_size)
 
     photos <-
       dplyr::rename(
         photos,
-        img_url = {{ img_url }},
-        img_width = {{ img_width }},
-        img_height = {{ img_height }}
+        image_url = {{ img_url }},
+        image_width = {{ img_width }},
+        image_height = {{ img_height }}
       )
 
     if (!is.null(orientation)) {
