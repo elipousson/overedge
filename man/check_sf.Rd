@@ -2,18 +2,27 @@
 % Please edit documentation in R/check_sf.R
 \name{check_sf}
 \alias{check_sf}
+\alias{check_sfc}
 \alias{check_bbox}
 \alias{check_sf_list}
 \alias{check_sf_same_crs}
+\alias{check_raster}
+\alias{check_sp}
 \title{Check the class and attributes of a simple feature object}
 \usage{
 check_sf(x, ext = FALSE)
+
+check_sfc(x)
 
 check_bbox(x)
 
 check_sf_list(x)
 
 check_sf_same_crs(x, y)
+
+check_raster(x)
+
+check_sp(x)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}

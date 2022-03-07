@@ -66,7 +66,9 @@
 
 <span class="fu">st_center</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">st_inscribed_square</span><span class="op">(</span><span class="va">x</span>, rotate <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<span class="fu">st_inscribed_square</span><span class="op">(</span><span class="va">x</span>, rotate <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+
+<span class="fu">st_geom_type</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="cn">TRUE</span>, check <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,11 +80,19 @@
 <dt>rotate</dt>
 <dd><p>numeric; degrees to rotate (-360 to 360), Default: 0</p></dd>
 <dt>ext</dt>
-<dd><p>If <code>TRUE</code>, st_center returns a list of sf, sfc, crs, and geom
-objects; defaults TRUE. If <code>FALSE</code>, return an sf object.</p></dd>
+<dd><p>For st_geom_type, if ext TRUE and check is NULL, return a list with checks for POINTS,
+POLYGONS, LINESTRING, and the returned types.</p></dd>
 <dt>...</dt>
 <dd><p>Additional parameters passed to <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_centroid()</a></code> by st_center</p></dd>
+<dt>check</dt>
+<dd><p>If "POINT", check if geometry type is POINT. Same for all
+available geometry types; Default: NULL</p></dd>
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>Returns vector with all geometry types; gives warning if object uses
+multiple types.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     

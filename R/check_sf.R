@@ -25,6 +25,12 @@ check_sf <- function(x, ext = FALSE) {
   }
 }
 
+#' @name check_sfc
+#' @rdname check_sf
+check_sfc <- function(x) {
+  check_class(x, check = "sfc")
+}
+
 #' @name check_bbox
 #' @rdname check_sf
 check_bbox <- function(x) {
@@ -44,4 +50,16 @@ check_sf_list <- function(x) {
 #' @importFrom sf st_crs
 check_sf_same_crs <- function(x, y) {
   return(sf::st_crs(x) == sf::st_crs(y))
+}
+
+#' @name check_raster
+#' @rdname check_sf
+check_raster <- function(x) {
+  check_class(x, "RasterLayer")
+}
+
+#' @name check_sp
+#' @rdname check_sf
+check_sp <- function(x) {
+  any(grepl("Spatial", class(location)))
 }

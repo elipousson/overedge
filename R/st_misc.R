@@ -108,3 +108,39 @@ st_inscribed_square <- function(x, rotate = 0) {
   x <- sf::st_set_geometry(x, geom)
   x <- st_scale_rotate(x, rotate = (rotate + 45))
 }
+
+
+#' @rdname st_misc
+#' @name st_geom_type
+#' @param ext For st_geom_type, if ext TRUE and check is NULL, return a list with checks for POINTS,
+#'   POLYGONS, LINESTRING, and the returned types.
+#' @param check If "POINT", check if geometry type is POINT. Same for all
+#'   available geometry types; Default: NULL
+#' @returns Returns vector with all geometry types; gives warning if object uses
+#'   multiple types.
+#' @export
+#' @importFrom sf st_geometry_type
+#' @importFrom usethis ui_warn
+st_geom_type <- function(x, ext = TRUE, check = NULL) {
+  geom_type <- unique(sf::st_geometry_type(location))
+
+  if (!is.null(check)) {
+    return(check %in% geom_type)
+  } else if (ext) {
+    check_type <-
+      list(
+        POINTS = geom_type %in% c("POINT", "MULTIPOINT"),
+        POLYGONS = geom_type %in% c("POLYGON", "MULTIPOLYGON"),
+        LINESTRINGS = geom_type %in% c("LINESTRING", "MULTILINESTRING"),
+        TYPE = geom_type
+      )
+
+    return(check_type)
+  } else {
+    if (length(geom_type) > 1) {
+      usethis::ui_warn("The sf object provded contains multiple geometry types: {geom_type}")
+    }
+
+    geom_type
+  }
+}

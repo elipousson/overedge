@@ -5,6 +5,7 @@
 \alias{st_scale_rotate}
 \alias{st_center}
 \alias{st_inscribed_square}
+\alias{st_geom_type}
 \title{Modify the geometry of a simple feature or bounding box object}
 \usage{
 st_scale_rotate(x, scale = 1, rotate = 0)
@@ -12,6 +13,8 @@ st_scale_rotate(x, scale = 1, rotate = 0)
 st_center(x, ext = TRUE, ...)
 
 st_inscribed_square(x, rotate = 0)
+
+st_geom_type(x, ext = TRUE, check = NULL)
 }
 \arguments{
 \item{x}{A sf or bbox object}
@@ -20,10 +23,17 @@ st_inscribed_square(x, rotate = 0)
 
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
 
-\item{ext}{If \code{TRUE}, st_center returns a list of sf, sfc, crs, and geom
-objects; defaults TRUE. If \code{FALSE}, return an sf object.}
+\item{ext}{For st_geom_type, if ext TRUE and check is NULL, return a list with checks for POINTS,
+POLYGONS, LINESTRING, and the returned types.}
 
 \item{...}{Additional parameters passed to \code{sf::st_centroid()} by st_center}
+
+\item{check}{If "POINT", check if geometry type is POINT. Same for all
+available geometry types; Default: NULL}
+}
+\value{
+Returns vector with all geometry types; gives warning if object uses
+multiple types.
 }
 \description{
 Support both bbox and sf objects as inputs.
