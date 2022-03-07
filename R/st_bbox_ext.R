@@ -18,7 +18,7 @@
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext
 #' @export
-#' @importFrom sf st_transform st_bbox
+#' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf st_transform
 st_bbox_ext <- function(x = NULL,
                         dist = NULL,
                         diag_ratio = NULL,
@@ -26,9 +26,18 @@ st_bbox_ext <- function(x = NULL,
                         unit = NULL,
                         crs = NULL,
                         sf = FALSE) {
+
+  # Convert objects to sf if needed
   if (check_bbox(x)) {
     x <- sf_bbox_to_sf(x)
+  } else if (check_sfc(x)) {
+    x <- sf::st_sf(x)
+  } else if (check_raster(x)) {
+    x <- sf::st_as_sfc(sf::st_bbox(x))
+  } else if (check_spatial(x)) {
+    x <- sf::st_as_sf(x)
   }
+
   # Get buffered area
   x <-
     st_buffer_ext(
@@ -68,11 +77,9 @@ st_bbox_ext <- function(x = NULL,
 #' @importFrom checkmate test_class
 st_bbox_asp <- function(x = NULL,
                         asp = NULL) {
-  geom_type <- sf::st_geometry_type(x, by_geometry = FALSE)
-
   if (check_bbox(x)) {
     bbox <- x
-  } else if (grepl("^POINT", geom_type)) {
+  } else if (st_geom_type(x, check = "POINT")) {
     x <- st_buffer_ext(x, dist = 1)
     bbox <- sf::st_bbox(x)
   } else {

@@ -14,7 +14,7 @@ st_center(x, ext = TRUE, ...)
 
 st_inscribed_square(x, rotate = 0)
 
-st_geom_type(x, ext = TRUE, check = NULL)
+st_geom_type(x, ext = TRUE, check = NULL, by_geometry = FALSE)
 }
 \arguments{
 \item{x}{A sf or bbox object}
@@ -30,6 +30,8 @@ POLYGONS, LINESTRING, and the returned types.}
 
 \item{check}{If "POINT", check if geometry type is POINT. Same for all
 available geometry types; Default: NULL}
+
+\item{by_geometry}{Passed to sf::st_geometry_type; defaults to FALSE}
 }
 \value{
 Returns vector with all geometry types; gives warning if object uses

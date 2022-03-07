@@ -116,24 +116,28 @@ st_inscribed_square <- function(x, rotate = 0) {
 #'   POLYGONS, LINESTRING, and the returned types.
 #' @param check If "POINT", check if geometry type is POINT. Same for all
 #'   available geometry types; Default: NULL
+#' @param by_geometry Passed to sf::st_geometry_type; defaults to FALSE
 #' @returns Returns vector with all geometry types; gives warning if object uses
 #'   multiple types.
 #' @export
 #' @importFrom sf st_geometry_type
 #' @importFrom usethis ui_warn
-st_geom_type <- function(x, ext = TRUE, check = NULL) {
-  geom_type <- unique(sf::st_geometry_type(location))
+st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE) {
+  geom_type <- sf::st_geometry_type(x, by_geometry = by_geometry)
 
   if (!is.null(check)) {
-    return(check %in% geom_type)
+    geom_type <- unique(geom_type)
+
+    return(all(check %in% geom_type))
   } else if (ext) {
     check_type <-
       list(
-        POINTS = geom_type %in% c("POINT", "MULTIPOINT"),
-        POLYGONS = geom_type %in% c("POLYGON", "MULTIPOLYGON"),
-        LINESTRINGS = geom_type %in% c("LINESTRING", "MULTILINESTRING"),
-        TYPE = geom_type
-      )
+        POINTS = grepl("POINT$", geom_type),
+        POLYGONS = grepl("POLYGON$", geom_type),
+        LINESTRINGS = grepl("STRING$", geom_type),
+        # FIXME: This is only a partial set of geometry types
+        TYPES = geom_type
+        )
 
     return(check_type)
   } else {
