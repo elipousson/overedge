@@ -111,15 +111,12 @@ st_inscribed_square <- function(x, rotate = 0) {
 #' @param check If "POINT", check if geometry type is POINT. Same for all
 #'   available geometry types; Default: NULL
 #' @param by_geometry Passed to sf::st_geometry_type; defaults to FALSE
-#' @param any If TRUE, check if any of the geometry types passed to check are
-#'   included; defaults to FALSE, checking if all of the geometry types provided
-#'   to check are found.
 #' @returns Returns vector with all geometry types; gives warning if object uses
 #'   multiple types.
 #' @export
 #' @importFrom sf st_geometry_type
 #' @importFrom usethis ui_warn
-st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE, any = FALSE) {
+st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE) {
   geom_type <- sf::st_geometry_type(x, by_geometry = by_geometry)
 
   if (is.null(check) && !ext) {
@@ -131,11 +128,8 @@ st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE, any =
   } else if (!is.null(check)) {
     geom_type <- unique(geom_type)
 
-    if (any) {
-      check_type <- all(check %in% geom_type)
-    } else {
-      check_type <- any(check %in% geom_type)
-    }
+   check_type <- (check %in% geom_type)
+
   } else {
     check_type <-
       list(
