@@ -35,9 +35,7 @@ st_buffer_ext <- function(x,
                           ...) {
 
   # If bbox, convert to sf
-  if (check_bbox(x)) {
-    x <- sf_bbox_to_sf(x)
-  }
+  x <- check_to_sf(x)
 
   # If dist is NULL and diag_ratio is NULL return x (with bbox converted to sf if no buffer applied)
   if (!is.null(dist) | !is.null(diag_ratio)) {
@@ -169,9 +167,7 @@ st_edge <- function(x,
                     ...) {
 
   # If bbox, convert to sf
-  if (check_bbox(x)) {
-    x <- sf_bbox_to_sf(x)
-  }
+  x <- check_to_sf(x)
 
   x_dist <- st_buffer_ext(x, dist = dist, diag_ratio = diag_ratio, unit = unit, ...)
 

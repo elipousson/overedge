@@ -77,7 +77,7 @@ Even non-spatial Tables can be filtered to a location if the table includes lati
 
 To get data from Open Street Map, you may need to refer to the [OSM Wiki](https://wiki.openstreetmap.org) for more information about keys and tags such as [tourism](https://wiki.openstreetmap.org/wiki/Key:tourism) and [artwork](https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dartwork).
 
-```{r}
+```{r, eval=FALSE}
 osm_artwork <-
   get_osm_data(
     location = location,

@@ -38,9 +38,7 @@ NULL
 #' @export
 #' @importFrom sf st_geometry st_crs
 st_scale_rotate <- function(x, scale = 1, rotate = 0) {
-  if (check_bbox(x)) {
-    x <- sf_bbox_to_sf(x)
-  }
+  x <- check_to_sf(x)
 
   # rotate function (see here: https://r-spatial.github.io/sf/articles/sf3.html#affine-transformations
   rot <- function(a) matrix(c(cos(a), sin(a), -sin(a), cos(a)), 2, 2)
@@ -65,9 +63,7 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
 st_center <- function(x,
                       ext = TRUE,
                       ...) {
-  if (check_bbox(x)) {
-    x <- sf_bbox_to_sf(x)
-  }
+  x <- check_to_sf(x)
 
   if (ext) {
     crs <- sf::st_crs(x)
@@ -94,9 +90,7 @@ st_center <- function(x,
 #' @importFrom usethis ui_stop
 #' @importFrom purrr discard
 st_inscribed_square <- function(x, rotate = 0) {
-  if (check_bbox(x)) {
-    x <- sf_bbox_to_sf(x)
-  }
+  x <- check_to_sf(x)
 
   if (sf::st_is_longlat(x)) {
     usethis::ui_stop("st_inscribed_square does not work for data using geographic coordinates.

@@ -263,10 +263,10 @@ gt::gt(dplyr::slice_head(district_trees, n = 10))
 ```{r}
 ggplot() +
   layer_location_data(
-    aes(color = condition),
+    data = district_trees,
+    mapping = aes(color = condition),
     size = 0.3,
-    alpha = 0.4,
-    data = district_trees
+    alpha = 0.4
   ) +
   layer_mask(
     data = district,

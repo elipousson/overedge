@@ -29,9 +29,7 @@ st_clip <- function(x,
                     diag_ratio = NULL) {
 
   # If bbox, convert to sf
-  if (check_bbox(x)) {
-    x <- sf_bbox_to_sf(x)
-  }
+  x <- check_to_sf(x)
 
   crs <- sf::st_crs(x)
   center <- sf_to_df(st_center(x, ext = FALSE), crs = crs)

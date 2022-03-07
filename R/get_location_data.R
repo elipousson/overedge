@@ -110,7 +110,6 @@ get_location_data <- function(location = NULL,
       if (crop) {
         data <- suppressWarnings(sf::st_crop(data, bbox))
       } else {
-
         # If no cropping, filter with bbox
         bbox_sf <- sf_bbox_to_sf(bbox)
         data <- sf::st_filter(data, bbox_sf)

@@ -5,6 +5,8 @@
 \alias{check_sfc}
 \alias{check_bbox}
 \alias{check_sf_list}
+\alias{check_to_sf}
+\alias{check_to_bbox}
 \alias{check_sf_same_crs}
 \alias{check_raster}
 \alias{check_sp}
@@ -17,6 +19,10 @@ check_sfc(x)
 check_bbox(x)
 
 check_sf_list(x)
+
+check_to_sf(x)
+
+check_to_bbox(x, crs = 4326)
 
 check_sf_same_crs(x, y)
 

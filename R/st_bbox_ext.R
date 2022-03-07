@@ -9,7 +9,9 @@
 #' strings with ratios matching the format of "width:height".
 #'
 #'
-#' @param x \code{sf} to adjust
+#' @param x An object sf, bbox, sfc, raster, or sp object or a data frame that
+#'   can be converted to an sf object. st_bbox_asp also supports vectors in the
+#'   same format as a bbox object.
 #' @inheritParams st_buffer_ext
 #' @inheritParams get_asp
 #' @param crs Coordinate reference system of bounding box to return
@@ -27,16 +29,7 @@ st_bbox_ext <- function(x = NULL,
                         crs = NULL,
                         sf = FALSE) {
 
-  # Convert objects to sf if needed
-  if (check_bbox(x)) {
-    x <- sf_bbox_to_sf(x)
-  } else if (check_sfc(x)) {
-    x <- sf::st_sf(x)
-  } else if (check_raster(x)) {
-    x <- sf::st_as_sfc(sf::st_bbox(x))
-  } else if (check_spatial(x)) {
-    x <- sf::st_as_sf(x)
-  }
+  x <- check_to_sf(x)
 
   # Get buffered area
   x <-
@@ -73,18 +66,10 @@ st_bbox_ext <- function(x = NULL,
 #' @rdname st_bbox_ext
 #' @name st_bbox_asp
 #' @export
-#' @importFrom sf st_geometry_type st_bbox
-#' @importFrom checkmate test_class
 st_bbox_asp <- function(x = NULL,
                         asp = NULL) {
-  if (check_bbox(x)) {
-    bbox <- x
-  } else if (st_geom_type(x, check = "POINT")) {
-    x <- st_buffer_ext(x, dist = 1)
-    bbox <- sf::st_bbox(x)
-  } else {
-    bbox <- sf::st_bbox(x)
-  }
+
+  bbox <- check_to_bbox(x)
 
   # Get adjusted aspect ratio
   asp <- get_asp(asp = asp)

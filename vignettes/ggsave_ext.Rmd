@@ -244,7 +244,7 @@ basemap +
 ```{r}
 letter_map <-
   basemap +
-  layer_show_location(
+  birdseyeview::layer_show_location(
     data = params$neighborhood,
     dist = 200,
     size = 1.5,

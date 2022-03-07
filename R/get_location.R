@@ -133,15 +133,9 @@ get_location <- function(type,
       location <- df_to_sf(location, coords = c("lon", "lat"), crs = type_crs)
     }
 
-    if (check_bbox(location)) {
-      location <- sf_bbox_to_sf(location)
-    }
-
     # Filter sf
     if (check_sf(location, ext = TRUE)) {
-      if (check_bbox(location)) {
-        location <- sf_bbox_to_sf(location)
-      }
+      location <- check_to_sf(location)
 
       location <- sf::st_filter(type, location)
     }

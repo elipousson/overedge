@@ -40,7 +40,8 @@ Imports:
     tidyselect,
     units,
     usethis,
-    utils
+    utils,
+    fs
 Remotes:
     elipousson/FlickrAPI
 Depends: 

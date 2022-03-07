@@ -45,6 +45,61 @@ check_sf_list <- function(x) {
   is_sf_list && is_named
 }
 
+#' @name check_to_sf
+#' @rdname  check_sf
+#' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf
+check_to_sf <- function(x) {
+  # Convert objects to sf if needed
+  if (check_sf(x)) {
+    return(x)
+  } else {
+    if (check_bbox(x)) {
+      x <- sf_bbox_to_sf(x)
+    } else if (check_sfc(x)) {
+      x <- sf::st_sf(x)
+    } else if (check_raster(x)) {
+      x <- sf::st_as_sfc(sf::st_bbox(x))
+    } else if (check_spatial(x)) {
+      x <- sf::st_as_sf(x)
+    } else if (is.data.frame(x)) {
+      x <- df_to_sf(x)
+    }
+    return(x)
+  }
+}
+
+#' @name check_to_bbox
+#' @rdname  check_sf
+#' @importFrom sf st_crs
+check_to_bbox <- function(x, crs = 4326) {
+  # Convert objects to sf if needed
+  if (check_bbox(x)) {
+    return(x)
+  } else {
+    if (check_sf(x, ext = TRUE)) {
+      if (st_geom_type(x, check = "POINT")) {
+        x <- st_buffer_ext(x, dist = 1)
+      }
+
+      x <- sf::st_bbox(x)
+    } else if (check_raster(x)) {
+      x <- sf::st_bbox(x)
+    } else if (check_spatial(x)) {
+      x <- sf::st_bbox(sf::st_as_sf(x))
+    } else if (length(x) == 4) {
+      x <- sf::st_bbox(c(
+        xmin = x[1], ymin = x[2],
+        xmax = x[3], ymax = x[4]
+      ),
+      crs = crs
+      )
+    }
+
+    return(x)
+  }
+}
+
+
 #' @name check_sf_same_crs
 #' @rdname  check_sf
 #' @importFrom sf st_crs

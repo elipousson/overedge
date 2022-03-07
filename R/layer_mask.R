@@ -41,22 +41,18 @@ layer_mask <- function(data = NULL,
     )
   }
 
-  if (check_bbox(mask)) {
-    mask <- sf_bbox_to_sf(mask)
-  }
+  mask <- check_to_bbox(mask)
 
   if (!is.null(data)) {
-    if (check_bbox(data)) {
-      data <- sf_bbox_to_sf(data)
-    }
 
+    data <- check_to_sf(data)
     data <- st_transform_ext(data, crs)
 
     if (nrow(data) > 1) {
       data <- sf::st_union(data)
     }
 
-    mask <- suppressWarnings(sf::st_difference(mask, data))
+    mask <- suppressWarnings(sf::st_difference(sf_bbox_to_sf(mask), data))
   }
 
   mask_layer <-

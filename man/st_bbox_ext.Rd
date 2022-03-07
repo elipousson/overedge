@@ -19,7 +19,9 @@ st_bbox_ext(
 st_bbox_asp(x = NULL, asp = NULL)
 }
 \arguments{
-\item{x}{\code{sf} to adjust}
+\item{x}{An object sf, bbox, sfc, raster, or sp object or a data frame that
+can be converted to an sf object. st_bbox_asp also supports vectors in the
+same format as a bbox object.}
 
 \item{dist}{buffer distance in units. Optional.}
 
