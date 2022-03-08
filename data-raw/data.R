@@ -224,7 +224,6 @@ osm_building_tags <-
 
 usethis::use_data(
   osm_building_tags,
-  internal = TRUE,
   overwrite = TRUE
 )
 
