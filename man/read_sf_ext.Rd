@@ -8,7 +8,7 @@
 \usage{
 read_sf_path(path, bbox = NULL, ...)
 
-read_sf_url(url, bbox = NULL, ...)
+read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
 read_sf_package(data, bbox = NULL, package, filetype = "gpkg", ...)
 }
@@ -18,10 +18,14 @@ read_sf_package(data, bbox = NULL, package, filetype = "gpkg", ...)
 \item{bbox}{bbox object; Default: NULL. If bbox is provided, read_sf only
 returns features intersecting the bounding box.}
 
-\item{...}{additional parameters passed to \code{\link[sf]{read_sf}}. May include query parameter.}
+\item{...}{additional parameters passed to \code{\link[sf]{read_sf}}. May
+include query parameter.}
 
 \item{url}{url for spatial data file or for ArcGIS FeatureServer or MapServer
 to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by read_sf_url only}
+
+\item{coords}{Character vector with coordinate values; used for read_sf_url
+if the url is a Google Sheet}
 
 \item{data}{character; name of data; used by read_sf_package only}
 

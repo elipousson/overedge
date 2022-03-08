@@ -3,6 +3,7 @@
 \name{sf_to_df}
 \alias{sf_to_df}
 \alias{df_to_sf}
+\alias{check_coords}
 \title{Convert simple feature object to data frame with coordinates or data frame to
 simple feature}
 \usage{
@@ -14,7 +15,16 @@ sf_to_df(
   keep_all = TRUE
 )
 
-df_to_sf(x, crs = 4326, coords = c("lon", "lat"), into = NULL, sep = ",")
+df_to_sf(
+  x,
+  crs = 4326,
+  coords = c("lon", "lat"),
+  into = NULL,
+  sep = ",",
+  rev = TRUE
+)
+
+check_coords(data = NULL, coords = NULL, rev = FALSE)
 }
 \arguments{
 \item{x}{A \code{sf} or \code{sfc} object or a data frame with lat/lon coordinates in a
@@ -38,6 +48,8 @@ separated into. Passed to \code{\link[tidyr]{separate}}}
 \item{sep}{If coords is a single column name with both longitude and
 latitude, \code{sep} is used as the separator between coordinate values. Passed
 to \code{\link[tidyr]{separate}}}
+
+\item{rev}{If TRUE, reverse c("lat", "lon") coords to c("lon", "lat"). check_coords only.}
 }
 \value{
 \code{sf_to_df()} returns a data frame with geometry dropped or converted
@@ -48,8 +60,9 @@ returns a simple feature object with POINT geometry
 Helper function to convert a simple feature object to data frame by dropping
 geometry, converting geometry to well known text, or (if the geometry type is
 not POINT) getting coordinates for a centroid or point on surface. If an sfc
-object is provided, \code{\link[=sf_to_sfc]{sf_to_sfc()}} provides coordinates but the "drop"
-geometry option is not supported.
+object is provided,the "drop" geometry option is not supported. check_coords
+is a helper function used by df_to_sf to suggest the appropriate coordinate
+column names based on the column names in the provided data frame.
 }
 \examples{
 \dontrun{

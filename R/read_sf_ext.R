@@ -16,7 +16,10 @@
 #'   the package cache directory or extdata system files.
 #' @param bbox bbox object; Default: NULL. If bbox is provided, read_sf only
 #'   returns features intersecting the bounding box.
-#' @param ... additional parameters passed to \code{\link[sf]{read_sf}}. May include query parameter.
+#' @param coords Character vector with coordinate values; used for read_sf_url
+#'   if the url is a Google Sheet
+#' @param ... additional parameters passed to \code{\link[sf]{read_sf}}. May
+#'   include query parameter.
 #' @rdname read_sf_ext
 #' @details read_sf_package looks for three types of package data:
 #'   = Data loaded with the package
@@ -52,7 +55,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 #' @aliases read_sf_url
 #' @export
 #' @importFrom sf read_sf
-read_sf_url <- function(url, bbox = NULL, ...) {
+read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 
   # Check url
   check_url(url)
@@ -67,16 +70,7 @@ read_sf_url <- function(url, bbox = NULL, ...) {
   } else if (check_gsheet_url(url)) {
     data <- googlesheets4::read_sheet(ss = url, ...)
 
-    # FIXME: Some version fo this should be added to the df_to_sf function
-    if ("long" %in% names(data)) {
-      coords <- c("long", "lat")
-    } else if ("longitude" %in% names(data)) {
-      coords <- c("longitude", "latitude")
-    } else if ("Y" %in% names(data)) {
-      coords <- c("Y", "X")
-    } else {
-      coords <- c("lon", "lat")
-    }
+    coords <- check_coords(data = data, coords = coords)
 
     data <- df_to_sf(data, coords = coords)
   } else {

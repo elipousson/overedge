@@ -4,8 +4,9 @@
 #' Helper function to convert a simple feature object to data frame by dropping
 #' geometry, converting geometry to well known text, or (if the geometry type is
 #' not POINT) getting coordinates for a centroid or point on surface. If an sfc
-#' object is provided, [sf_to_sfc()] provides coordinates but the "drop"
-#' geometry option is not supported.
+#' object is provided,the "drop" geometry option is not supported. check_coords
+#' is a helper function used by df_to_sf to suggest the appropriate coordinate
+#' column names based on the column names in the provided data frame.
 #'
 #' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
 #'   single column or two separated columns
@@ -38,9 +39,8 @@ sf_to_df <- function(x,
                      coords = c("lon", "lat"),
                      geometry = "centroid",
                      keep_all = TRUE) {
-  if (!is.null(crs) && (sf::st_crs(crs) != sf::st_crs(x))) {
-    x <- sf::st_transform(x, crs)
-  }
+
+  x <- st_transform_ext(x, crs = crs)
 
   geometry <- match.arg(geometry, c("drop", "wkt", "centroid", "point"))
   x_coords <- NULL
@@ -83,7 +83,7 @@ sf_to_df <- function(x,
         sf::st_drop_geometry(x),
         x_coords
       )
-  } else {
+  } else if (check_sfc(x)) {
     # Returning coordinates for sfc object
     x <- x_coords
     keep_all <- TRUE
@@ -125,11 +125,10 @@ df_to_sf <- function(x,
                      crs = 4326,
                      coords = c("lon", "lat"),
                      into = NULL,
-                     sep = ",") {
+                     sep = ",",
+                     rev = TRUE) {
   if ((length(coords) == 1) && (length(into) == 2)) {
-    if (is.null(into)) {
-      into <- c("lon", "lat")
-    }
+    into <- check_coords(data = NULL, coords = into)
 
     x <-
       tidyr::separate(
@@ -149,24 +148,21 @@ df_to_sf <- function(x,
       )
 
     coords <- into
+  } else {
+    coords <- check_coords(data = x, coords = coords, rev = rev)
   }
 
-  # FIXME: This automatic reversal needs to be documented
-  if (grepl("lat|Y|y", coords[1])) {
-    coords <- rev(coords)
-  }
-
-  longitude <- coords[[1]]
-  latitude <- coords[[2]]
+  lon <- coords[[1]]
+  lat <- coords[[2]]
 
   # Check that lat/lon are numeric
-  if (!is.numeric(x[[longitude]]) | !is.numeric(x[[latitude]])) {
-    x[[longitude]] <- as.double(x[[longitude]])
-    x[[latitude]] <- as.double(x[[latitude]])
+  if (!is.numeric(x[[lon]]) | !is.numeric(x[[lat]])) {
+    x[[lon]] <- as.double(x[[lon]])
+    x[[lat]] <- as.double(x[[lat]])
   }
 
   # Check for missing coordinates
-  missing_coords <- is.na(x[[longitude]] | x[[latitude]])
+  missing_coords <- is.na(x[[lon]] | x[[lat]])
   num_missing_coords <- sum(missing_coords)
 
   if (num_missing_coords > 0) {
@@ -178,7 +174,7 @@ df_to_sf <- function(x,
   x <-
     sf::st_as_sf(
       x,
-      coords = c(longitude, latitude),
+      coords = c(lon, lat),
       agr = "constant",
       crs = 4326,
       stringsAsFactors = FALSE,
@@ -190,4 +186,47 @@ df_to_sf <- function(x,
   }
 
   return(x)
+}
+
+#' @rdname sf_to_df
+#' @name df_to_sf
+#' @param rev If TRUE, reverse c("lat", "lon") coords to c("lon", "lat"). check_coords only.
+check_coords <- function(data = NULL, coords = NULL, rev = FALSE) {
+  if (!is.null(data) && is.data.frame(data)) {
+    data_names <- tolower(names(data))
+    # FIXME: there may still be an issue with capitalization (at least with consistency)
+    if ("lon" %in% data_names) {
+      x_coords <- c("lon", "lat")
+    } else if ("long" %in% data_names) {
+      x_coords <- c("long", "lat")
+    } else if ("longitude" %in% data_names) {
+      x_coords <- c("longitude", "latitude")
+    } else if ("Y" %in% data_names) {
+      x_coords <- c("Y", "X")
+    }
+
+    if (!is.null(coords) && !is.null(x_coords) && (coords != x_coords)) {
+      usethis::ui_warn("The provided coordinates do not appear to match the data.
+                     Replacing coordinates with suggested values based on column names.")
+      coords <- x_coords
+    } else if (is.null(x_coords) && is.null(coords)) {
+      usethis::ui_warn("Appropriate coordinate column names could not be determined based on the data provided.")
+    }
+  }
+
+  if (is.null(coords)) {
+    coords <- c("lon", "lat")
+  } else {
+    stopifnot(
+      length(coords) == 2,
+      is.character(coords) || is.numeric(coords)
+    )
+  }
+
+  # FIXME: This automatic reversal needs to be documented
+  if (rev && grepl("LAT|lat|Y|y", coords[1])) {
+    coords <- rev(coords)
+  }
+
+  return(coords)
 }
