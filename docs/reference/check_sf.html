@@ -70,9 +70,9 @@
 
 <span class="fu">check_sf_list</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
 
-<span class="fu">check_to_sf</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+<span class="fu">check_to_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">check_to_bbox</span><span class="op">(</span><span class="va">x</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
+<span class="fu">check_to_bbox</span><span class="op">(</span><span class="va">x</span>, crs <span class="op">=</span> <span class="fl">4326</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="fu">check_sf_same_crs</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
 
@@ -88,6 +88,9 @@
 <dt>ext</dt>
 <dd><p>If <code>TRUE</code>, check if x is a <code>sf</code>, <code>sfc</code>, or <code>bbox</code> class object or
 not; defaults to <code>FALSE</code>. (used by check_sf)</p></dd>
+<dt>...</dt>
+<dd><p>Additional parameters passed to sf::st_bbox when calling check_to_bbox or
+passed to sf::st_sf, sf::st_as_sf, or df_to_sf for check_to_sf (depending on class of x)</p></dd>
 <dt>y</dt>
 <dd><p>An sf object or a character or numeric object supported by
 <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code> that can be compared to x. (used by

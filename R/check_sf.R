@@ -11,6 +11,8 @@ check_class <- function(x, check = NULL) {
 #'   check_sf_same_crs)
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
 #'   not; defaults to `FALSE`. (used by check_sf)
+#' @param ... Additional parameters passed to sf::st_bbox when calling check_to_bbox or
+#'   passed to sf::st_sf, sf::st_as_sf, or df_to_sf for check_to_sf (depending on class of x)
 #' @details
 #' - check_sf: check if x it a `sf` class object.
 #' - check_bbox: check if x is a `bbox` class object.
@@ -48,7 +50,7 @@ check_sf_list <- function(x) {
 #' @name check_to_sf
 #' @rdname  check_sf
 #' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf
-check_to_sf <- function(x) {
+check_to_sf <- function(x, ...) {
   # Convert objects to sf if needed
   if (check_sf(x)) {
     return(x)
@@ -56,13 +58,13 @@ check_to_sf <- function(x) {
     if (check_bbox(x)) {
       x <- sf_bbox_to_sf(x)
     } else if (check_sfc(x)) {
-      x <- sf::st_sf(x)
+      x <- sf::st_sf(x, ...)
     } else if (check_raster(x)) {
-      x <- sf::st_as_sfc(sf::st_bbox(x))
+      x <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...)
     } else if (check_spatial(x)) {
-      x <- sf::st_as_sf(x)
+      x <- sf::st_as_sf(x, ...)
     } else if (is.data.frame(x)) {
-      x <- df_to_sf(x)
+      x <- df_to_sf(x, ...)
     }
     return(x)
   }
@@ -71,7 +73,7 @@ check_to_sf <- function(x) {
 #' @name check_to_bbox
 #' @rdname  check_sf
 #' @importFrom sf st_crs
-check_to_bbox <- function(x, crs = 4326) {
+check_to_bbox <- function(x, crs = 4326, ...) {
   # Convert objects to sf if needed
   if (check_bbox(x)) {
     return(x)
@@ -81,17 +83,17 @@ check_to_bbox <- function(x, crs = 4326) {
         x <- st_buffer_ext(x, dist = 1)
       }
 
-      x <- sf::st_bbox(x)
+      x <- sf::st_bbox(x, ...)
     } else if (check_raster(x)) {
-      x <- sf::st_bbox(x)
+      x <- sf::st_bbox(x, ...)
     } else if (check_spatial(x)) {
-      x <- sf::st_bbox(sf::st_as_sf(x))
+      x <- sf::st_bbox(sf::st_as_sf(x), ...)
     } else if (length(x) == 4) {
       x <- sf::st_bbox(c(
         xmin = x[1], ymin = x[2],
         xmax = x[3], ymax = x[4]
       ),
-      crs = crs
+      crs = crs, ...
       )
     }
 
