@@ -29,69 +29,14 @@
 #' @seealso \code{\link[sf]{st_coordinates}}
 #' @rdname sf_to_df
 #' @export
-#' @importFrom sf st_crs st_transform st_as_text st_as_sfc st_geometry_type
-#'   st_centroid st_point_on_surface st_coordinates st_drop_geometry
-#' @importFrom dplyr bind_cols select
-#' @importFrom tidyselect all_of
-#' @importFrom rlang .data
 sf_to_df <- function(x,
                      crs = 4326,
                      coords = c("lon", "lat"),
                      geometry = "centroid",
                      keep_all = TRUE) {
-
   x <- st_transform_ext(x, crs = crs)
 
-  geometry <- match.arg(geometry, c("drop", "wkt", "centroid", "point"))
-  x_coords <- NULL
-
-  if (geometry == "wkt") {
-    # Convert geometry to wkt
-    x$wkt <- sf::st_as_text(sf::st_as_sfc(x))
-  } else {
-    # Convert to coordinates at centroid or as a point on surface
-    # FIXME: This approach may be an issue if a sf object has mixed geometry
-    geometry_type <- as.character(sf::st_geometry_type(x, by_geometry = FALSE))
-
-    if (geometry_type != "POINT") {
-      if (geometry == "centroid") {
-        x <- suppressWarnings(sf::st_centroid(x))
-      } else if (geometry == "point") {
-        x <- suppressMessages(sf::st_point_on_surface(x))
-      }
-    }
-
-    x_coords <- as.data.frame(sf::st_coordinates(x))
-
-    # FIXME: This automatic reversal needs to be documented
-    if (grepl("lat|Y|y", coords[1])) {
-      coords <- rev(coords)
-    }
-
-    x_coords <-
-      dplyr::select(
-        x_coords,
-        "{coords[1]}" := .data$X,
-        "{coords[2]}" := .data$Y
-      )
-  }
-
-
-  if (check_sf(x)) {
-    x <-
-      dplyr::bind_cols(
-        sf::st_drop_geometry(x),
-        x_coords
-      )
-  } else if (check_sfc(x)) {
-    # Returning coordinates for sfc object
-    x <- x_coords
-    keep_all <- TRUE
-  }
-
-  if (!keep_all) {
-    x <- dplyr::select(x, tidyselect::all_of(coords))
-  }
+  x <- st_coords(x, geometry = geometry, coords = coords, bind = TRUE, drop = TRUE)
 
   return(as.data.frame(x))
 }

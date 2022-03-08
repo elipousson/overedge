@@ -45,5 +45,6 @@ reference:
   - '`get_paper`'
   - '`get_margin`'
   - '`get_asp`'
+  - '`osm_building_tags`'
 
 

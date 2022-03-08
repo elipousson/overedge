@@ -1,0 +1,73 @@
+
+#' Get coordinates for simple feature or bounding box object
+#'
+#' An extended version of st_coords that supports binding coordinates to the
+#' object, optionally dropping the geometry, and returning wkt or a point on
+#' surface (geometyr = "surface point") instead of the centroid.
+#'
+#' @param x sf, bbox, or sfc object
+#' @param coords Column names to use for coordinates in results, Default: NULL;
+#'   which is set to c("lon", "lat") by check_coords
+#' @param geometry geometry to use for coordinates "centroid", "surface point",
+#'   or alternatively "wkt"; defaults to NULL ("centroid")
+#' @param bind If TRUE, bind the coordinates columns to the provided object x,
+#'   Default: TRUE
+#' @param drop If TRUE and x is an sf object, drop the geometry Default: TRUE
+#' @rdname st_coords
+#' @export
+#' @importFrom sf st_as_text st_as_sfc st_point_on_surface st_coordinates
+#'   st_drop_geometry
+#' @importFrom dplyr select bind_cols
+st_coords <- function(x, coords = NULL, geometry = NULL, bind = TRUE, drop = TRUE) {
+  geometry <- match.arg(geometry, c("centroid", "surface point", "wkt"))
+  x_coords <- NULL
+
+  stopifnot(
+    check_sf(x, ext = TRUE)
+  )
+
+  if (geometry == "wkt") {
+    # Convert geometry to wkt
+    x$wkt <- sf::st_as_text(sf::st_as_sfc(x))
+  } else {
+    # Convert to coordinates at centroid or as a point on surface
+    # FIXME: This approach may be an issue if a sf object has mixed geometry
+    geometry_type <- st_geom_type(x, ext = FALSE)
+
+    if (geometry_type != "POINT") {
+      if (geometry == "centroid") {
+        # FIXME: Double check that this doesn't cause issues for sfc objects
+        x <- st_center(x, ext = FALSE)
+      } else if (geometry == "surface point") {
+        x <- suppressMessages(sf::st_point_on_surface(x))
+      }
+    }
+
+    x_coords <- as.data.frame(sf::st_coordinates(x))
+    coords <- check_coords(coords = coords)
+
+    x_coords <-
+      dplyr::select(
+        x_coords,
+        "{coords[1]}" := .data$X,
+        "{coords[2]}" := .data$Y
+      )
+  }
+
+  # If x is an sfc or bind = FALSE return coordinates
+  if (!bind) {
+    if (geometry == "wkt") {
+      return(x$wkt)
+    } else {
+      return(x_coords)
+    }
+  } else {
+    x <- dplyr::bind_cols(x, x_coords)
+  }
+
+  if (drop) {
+    x <- sf::st_drop_geometry(x)
+  }
+
+  return(x)
+}
