@@ -77,6 +77,7 @@
 #' @importFrom tidygeocoder geo
 #' @importFrom knitr combine_words
 #' @importFrom usethis ui_warn
+#' @importFrom rlang list2
 get_location <- function(type,
                          name = NULL,
                          id = NULL,
@@ -101,6 +102,14 @@ get_location <- function(type,
     # If type is a string
     # Return data if type is a file path, url, or package data
     type <- get_location_data(data = type, ...)
+  }
+
+  dots <- rlang::list2(...)
+
+  if (any(c("locationname_col", "locationname") %in% names(dots))) {
+    warn <- FALSE
+  } else {
+    warn <- TRUE
   }
 
   type_crs <- sf::st_crs(type)
@@ -160,7 +169,10 @@ get_location <- function(type,
   if (!is.null(location)) {
     return(location)
   } else {
-    usethis::ui_warn("Returning all locations of this type.")
+    if (warn) {
+      usethis::ui_warn("Returning all locations of this type.")
+    }
+
     return(type)
   }
 }
