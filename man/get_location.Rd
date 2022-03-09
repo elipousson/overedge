@@ -14,6 +14,7 @@ get_location(
   id_col = "id",
   index = NULL,
   union = FALSE,
+  crs = NULL,
   ...
 )
 }
@@ -49,6 +50,10 @@ id is provided.}
 \item{union}{If \code{TRUE}, the location geometry is unioned with
 \code{\link[sf]{st_union}} and the names are combined into a single value.
 Default: \code{FALSE}.}
+
+\item{crs}{Coordinate reference system to return; defaults to NULL which
+returns data using the same coordinate reference system as the provided
+type of location.}
 
 \item{...}{Additional parameters passed to \code{get_location_data} if type
 is character and index is \code{NULL}.}

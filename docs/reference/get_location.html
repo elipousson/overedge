@@ -43,6 +43,7 @@ type to a named list of URLs or sf objects."><!-- mathjax --><script src="https:
     <a class="dropdown-item" href="../articles/get_location.html">Get locations and location data</a>
     <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
+    <a class="dropdown-item" href="../articles/working-sf-bbox-objects.html">Working with simple feature and bounding box objects</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -78,6 +79,7 @@ type to a named list of URLs or sf objects.</p>
   id_col <span class="op">=</span> <span class="st">"id"</span>,
   index <span class="op">=</span> <span class="cn">NULL</span>,
   union <span class="op">=</span> <span class="cn">FALSE</span>,
+  crs <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -102,8 +104,7 @@ a simple feature object, and then used as a spatial filter. <code>bbox</code> ob
 are converted using <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code>. Multiple addresses are supported.</p></dd>
 <dt>label</dt>
 <dd><p>Label optionally added to "label" column; must be a length 1 or
-match the number of rows returned based on the other parameters. If <code>union = TRUE</code>,
-using label is recommended. Default: <code>NULL</code></p></dd>
+match the number of rows returned based on the other parameters. If <code>union = TRUE</code>, using label is recommended. Default: <code>NULL</code></p></dd>
 <dt>name_col</dt>
 <dd><p>Column name in type with name values, Default: 'name'
 Required if name provided.</p></dd>
@@ -116,6 +117,10 @@ id is provided.</p></dd>
 <dd><p>If <code>TRUE</code>, the location geometry is unioned with
 <code><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></code> and the names are combined into a single value.
 Default: <code>FALSE</code>.</p></dd>
+<dt>crs</dt>
+<dd><p>Coordinate reference system to return; defaults to NULL which
+returns data using the same coordinate reference system as the provided
+type of location.</p></dd>
 <dt>...</dt>
 <dd><p>Additional parameters passed to <code>get_location_data</code> if type
 is character and index is <code>NULL</code>.</p></dd>

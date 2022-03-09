@@ -11,10 +11,10 @@
 #' @param name Location name to return.
 #' @param id Location id to return. id is coerced to character or numeric to
 #'   match the class of the id_col for type.
-#' @param location An address or `sf` or `bbox` object passed to \code{\link[sf]{st_filter}}.
-#'   Any valid address or addresses are geocoded with
-#'   \code{\link[tidygeocoder]{geo}}), converted to a simple feature object, and
-#'   then used as a spatial filter.
+#' @param location An address or `sf` or `bbox` object passed to
+#'   \code{\link[sf]{st_filter}}. Any valid address or addresses are geocoded
+#'   with \code{\link[tidygeocoder]{geo}}), converted to a simple feature
+#'   object, and then used as a spatial filter.
 #' @param location An address, bounding box (`bbox`), or simple feature (`sf`)
 #'   object passed to \code{\link[sf]{st_filter}}. Any valid address or
 #'   addresses are geocoded with \code{\link[tidygeocoder]{geo}}), converted to
@@ -31,6 +31,9 @@
 #' @param union If `TRUE`, the location geometry is unioned with
 #'   \code{\link[sf]{st_union}} and the names are combined into a single value.
 #'   Default: `FALSE`.
+#' @param crs Coordinate reference system to return; defaults to NULL which
+#'   returns data using the same coordinate reference system as the provided
+#'   type of location.
 #' @param ... Additional parameters passed to \code{get_location_data} if type
 #'   is character and index is `NULL`.
 #' @return A simple feature object from data provided to type.
@@ -87,6 +90,7 @@ get_location <- function(type,
                          id_col = "id",
                          index = NULL,
                          union = FALSE,
+                         crs = NULL,
                          ...) {
   stopifnot(
     check_sf(type) || is.character(type),
@@ -167,6 +171,7 @@ get_location <- function(type,
   }
 
   if (!is.null(location)) {
+    location <- st_transform_ext(location, crs = crs)
     return(location)
   } else {
     if (warn) {
