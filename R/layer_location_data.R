@@ -90,20 +90,18 @@ layer_location_data <-
 
     # Assign aesthetics for text/label geoms
     if (geom %in% text_geoms) {
-      stopifnot(
-        is.character(label_col),
-        label_col %in% names(data)
-      )
 
       if (is.null(mapping)) {
         mapping <- ggplot2::aes()
       }
 
-      mapping <-
-        utils::modifyList(
-          ggplot2::aes(label = .data[[label_col]]),
-          mapping
-        )
+      if (is.character(label_col) && (label_col %in% names(data))) {
+        mapping <-
+          utils::modifyList(
+            ggplot2::aes(label = .data[[label_col]]),
+            mapping
+          )
+      }
 
       if (geom %in% ggrepel_geoms) {
         mapping <-
