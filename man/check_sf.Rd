@@ -36,12 +36,14 @@ check_sp(x)
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
 not; defaults to \code{FALSE}. (used by check_sf)}
 
-\item{...}{Additional parameters passed to sf::st_bbox when calling as_bbox or
-passed to sf::st_sf, sf::st_as_sf, or df_to_sf for as_sf (depending on class of x)}
+\item{...}{Additional parameters passed to \code{sf::st_bbox} when calling \code{as_bbox} or
+passed to \code{sf::st_sf}, \code{sf::st_as_sf}, or \code{df_to_sf} for \code{as_sf} (depending on class of x)}
+
+\item{crs}{Coordinate reference system; used for \code{as_bbox()}}
 
 \item{y}{An sf object or a character or numeric object supported by
 \code{\link[sf]{st_crs}} that can be compared to x. (used by
-check_sf_same_crs)}
+\code{check_sf_same_crs})}
 }
 \description{
 Check the class and attributes of a simple feature object

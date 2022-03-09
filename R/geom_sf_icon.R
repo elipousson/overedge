@@ -1,6 +1,6 @@
 #' Draw SVG icons for a simple feature object
 #'
-#' Use the \code{\link[ggsvg]{geom_point_svg()}} function to plot
+#' Use the  [ggsvg::geom_point_svg()] function to plot
 #'   icons using the centroids from the input simple feature object to set the
 #'   icon location.
 #'
@@ -18,11 +18,11 @@
 #' @param source Icon source. See `map_icons$repo` for supported options.
 #'   Optional but may be required to differentiate icons with duplicate names.
 #' @param svg Optional. Custom file path or URL with SVG to pass to `svg`
-#'   parameter for `ggsvg::geom_point_svg()`.  If `icon` is provided, `svg` is
+#'   parameter for  [ggsvg::geom_point_svg()].  If `icon` is provided, `svg` is
 #'   not used.
-#' @param color SVG color passed to `ggsvg::geom_point_svg()`. default color is set to "black".
+#' @param color SVG color passed to  [ggsvg::geom_point_svg()]. default color is set to "black".
 #' @param crs Coordinate reference system; defaults to `NULL`.
-#' @param ... Additional parameters to `ggsvg::geom_point_svg()`.
+#' @param ... Additional parameters to  [ggsvg::geom_point_svg()].
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -48,7 +48,6 @@
 #' @importFrom sf st_geometry_type st_centroid st_coordinates
 #' @importFrom usethis ui_warn ui_stop
 #' @importFrom dplyr left_join rename bind_cols filter
-#' @importFrom ggsvg geom_point_svg
 #' @importFrom ggplot2 aes
 #' @importFrom stringr str_detect
 #' @importFrom rlang .data
@@ -61,7 +60,6 @@ geom_sf_icon <- function(data = NULL,
                          color = "black",
                          crs = NULL,
                          ...) {
-
   check_package_exists("ggsvg", repo = "coolbutuseless/ggsvg")
 
   if (check_sf(data)) {

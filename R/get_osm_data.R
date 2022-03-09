@@ -10,7 +10,7 @@
 #'   exclamation mark, `value = "!this"`, and can also be a vector, `value =
 #'   c("this", "that")`. If `value = "all"` or if `key = "building"` the values
 #'   passed to the osmdata package are from a preset list extracted from
-#'   \code{\link[osmdata]{available_tags()}}.
+#'   [osmdata::available_tags()].
 #' @inheritParams st_bbox_ext
 #' @param geometry Geometry type to output ("polygons", "points", "lines",
 #'   "multilines", or "multipolygons"); if multiple geometry types are needed
@@ -22,8 +22,8 @@
 #'   overpass API call, metadata including timestamp and version numbers, and
 #'   all available geometry types; defaults to `FALSE`.
 #' @param enclosing If enclosing is "relation" or "way", use the
-#'   `osmdata::opq_enclosing` function to query the OSM data (instead of
-#'   `add_osm_feature`). Defaults to `NULL`. When using enclosing, the dist,
+#'    [osmdata::opq_enclosing()] function to query the OSM data (instead of
+#'    [osmdata::add_osm_feature()]. Defaults to `NULL`. When using enclosing, the dist,
 #'   diag_ratio, asp, and unit parameters are ignored and the center of the
 #'   provided location is used for the query. geometry is set automatically
 #'   based enclosing with "relation" using "multipolygon" and "way" using

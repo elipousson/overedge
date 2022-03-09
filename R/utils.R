@@ -79,5 +79,6 @@ utils::globalVariables(c(
   ".data", ":=", "actual_unit", "asp_landscape", "asp_portrait",
   "coord_col", "img_orientation", "lat", "location_bbox", "lon",
   "map_icons", "name", "paper_sizes", "repo", "show_area",
-  "standard_scales", "svg_url"
+  "standard_scales", "svg_url", "admin_level", "center", "gps_img_direction",
+  "gps_latitude", "gps_longitude", "osm_building_tags","source_file"
 ))

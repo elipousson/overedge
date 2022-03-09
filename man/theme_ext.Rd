@@ -58,7 +58,7 @@ Default: \code{TRUE}.}
 \item{method}{Method with name of the ggplot2 geom function to use for
 modifying theme ("set", "update", or "replace"); defaults to \code{NULL}.}
 
-\item{margin}{Margin distance, a margin style supported by \code{\link[=get_margins]{get_margins()}} or
+\item{margin}{Margin distance, a margin style supported by \code{\link[=get_margin]{get_margin()}} or
 a margin object; defaults to 10.}
 
 \item{paper}{Paper, Default: 'letter'.}

@@ -106,17 +106,16 @@ label (e.g. "baltcity") as a prefix to the output file name.</p>
 <code><a href="make_filename.html">make_filename()</a></code></p></dd>
 <dt>label</dt>
 <dd><p>Label to combine with name converted to snake case with
-<code>make_clean_case</code>. The label is designed to identify
-the area or other shared characteristics across multiple data files, maps,
-or plots.</p></dd>
+<code><a href="https://rdrr.io/pkg/janitor/man/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>. The label is designed to identify the area
+or other shared characteristics across multiple data files, maps, or plots.</p></dd>
 <dt>prefix</dt>
 <dd><p>File name prefix. "date" adds a date prefix, "time" adds a
 date/time prefix; defaults to <code>NULL</code>.</p></dd>
 <dt>postfix</dt>
 <dd><p>File name postfix; defaults to <code>NULL</code>.</p></dd>
 <dt>filename</dt>
-<dd><p>File name; if file name is <code>NULL</code>, name and file type are both
-required.</p></dd>
+<dd><p>File name; if file name is <code>NULL</code>, name and file type are
+both required.</p></dd>
 <dt>device</dt>
 <dd><p>Device to use. Can either be a device function
 (e.g. <a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a>), or one of "eps", "ps", "tex" (pictex),

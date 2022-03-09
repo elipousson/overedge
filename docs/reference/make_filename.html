@@ -80,18 +80,17 @@ ggsave_ext() or data files exported with write_sf_ext()."><!-- mathjax --><scrip
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>name</dt>
 <dd><p>Name to make file name converted to snake case with
-<code>make_clean_case</code>, e.g. "Residential zoning map"
-becomes "residential_zoning_map"</p></dd>
+<code><a href="https://rdrr.io/pkg/janitor/man/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>, e.g. "Residential zoning map" becomes
+"residential_zoning_map"</p></dd>
 <dt>label</dt>
 <dd><p>Label to combine with name converted to snake case with
-<code>make_clean_case</code>. The label is designed to identify
-the area or other shared characteristics across multiple data files, maps,
-or plots.</p></dd>
+<code><a href="https://rdrr.io/pkg/janitor/man/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>. The label is designed to identify the area
+or other shared characteristics across multiple data files, maps, or plots.</p></dd>
 <dt>filetype</dt>
 <dd><p>File type or extension.</p></dd>
 <dt>filename</dt>
-<dd><p>File name; if file name is <code>NULL</code>, name and file type are both
-required.</p></dd>
+<dd><p>File name; if file name is <code>NULL</code>, name and file type are
+both required.</p></dd>
 <dt>path</dt>
 <dd><p>Path to file or data directory.</p></dd>
 <dt>prefix</dt>

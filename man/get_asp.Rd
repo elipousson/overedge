@@ -23,8 +23,8 @@ without modification.}
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
 'portrait'.}
 
-\item{margin}{A margin style supported by \code{\link[=get_margins]{get_margins()}}, a numeric vector
-(length 1 or 4) passed to dist parameter of get_margins, or a margins
+\item{margin}{A margin style supported by \code{\link[=get_margin]{get_margin()}}, a numeric vector
+(length 1 or 4) passed to dist parameter of get_margin, or a margins
 object.}
 
 \item{unit}{Unit for margin distance, Default: 'in'.}

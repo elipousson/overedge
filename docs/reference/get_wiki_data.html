@@ -84,7 +84,10 @@ Only returns Wikipedia articles with coordinates.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>dist</dt>
+    <dl><dt>location</dt>
+<dd><p>sf object. If multiple areas are provided, they are unioned
+into a single sf object using <code><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></code></p></dd>
+<dt>dist</dt>
 <dd><p>buffer distance in units. Optional.</p></dd>
 <dt>diag_ratio</dt>
 <dd><p>ratio of diagonal distance of area's bounding box used as

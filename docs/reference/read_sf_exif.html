@@ -71,16 +71,15 @@
 <dd><p>path to folder of one or more files with EXIF location metadata</p></dd>
 <dt>bbox</dt>
 <dd><p>bounding box to crop sf file (excluding images with location data
-outside the bounding box)</p></dd>
+outside the bounding box). If bbox is provided the returned data will match
+the crs of the bbox.</p></dd>
 <dt>filetype</dt>
 <dd><p>file extension or file type; defaults to "jpg"</p></dd>
 <dt>sort</dt>
 <dd><p>variable to sort by. Currently supports "lon" (default), "lat",
 or "filename"</p></dd>
 <dt>...</dt>
-<dd><p>Additional EXIF tags to pass to exiftoolr::exif_read</p></dd>
-<dt>crs</dt>
-<dd><p>Coordinate reference system to</p></dd>
+<dd><p>Additional EXIF tags to pass to <code><a href="https://rdrr.io/pkg/exiftoolr/man/exif_read.html" class="external-link">exiftoolr::exif_read</a></code></p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

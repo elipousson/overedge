@@ -5,6 +5,7 @@
 #' Only returns Wikipedia articles with coordinates.
 #'
 #' @inheritParams st_bbox_ext
+#' @inheritParams get_location_data
 #' @param radius If TRUE, use dist as a buffer around the center of the
 #'   location.
 #' @param primary If TRUE, search for primary coordinates. Set primary to "all"

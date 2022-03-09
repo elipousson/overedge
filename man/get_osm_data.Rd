@@ -31,7 +31,7 @@ get_osm_boundaries(location, level = NULL, enclosing = "way")
 \item{value}{Value of the feature key; can be negated with an initial
 exclamation mark, \code{value = "!this"}, and can also be a vector, \code{value = c("this", "that")}. If \code{value = "all"} or if \code{key = "building"} the values
 passed to the osmdata package are from a preset list extracted from
-\code{\link[osmdata]{available_tags()}}.}
+\code{\link[osmdata:available_tags]{osmdata::available_tags()}}.}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -62,8 +62,8 @@ overpass API call, metadata including timestamp and version numbers, and
 all available geometry types; defaults to \code{FALSE}.}
 
 \item{enclosing}{If enclosing is "relation" or "way", use the
-\code{osmdata::opq_enclosing} function to query the OSM data (instead of
-\code{add_osm_feature}). Defaults to \code{NULL}. When using enclosing, the dist,
+\code{\link[osmdata:opq_enclosing]{osmdata::opq_enclosing()}} function to query the OSM data (instead of
+\code{\link[osmdata:add_osm_feature]{osmdata::add_osm_feature()}}. Defaults to \code{NULL}. When using enclosing, the dist,
 diag_ratio, asp, and unit parameters are ignored and the center of the
 provided location is used for the query. geometry is set automatically
 based enclosing with "relation" using "multipolygon" and "way" using

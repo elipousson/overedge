@@ -34,13 +34,12 @@ write_sf_cache(
 \item{data}{\code{sf} object to write.}
 
 \item{name}{Name to make file name converted to snake case with
-\code{\link[janitor]{make_clean_case}}, e.g. "Residential zoning map"
-becomes "residential_zoning_map"}
+\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}, e.g. "Residential zoning map" becomes
+"residential_zoning_map"}
 
 \item{label}{Label to combine with name converted to snake case with
-\code{\link[janitor]{make_clean_case}}. The label is designed to identify
-the area or other shared characteristics across multiple data files, maps,
-or plots.}
+\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}. The label is designed to identify the area
+or other shared characteristics across multiple data files, maps, or plots.}
 
 \item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
 date/time prefix; defaults to \code{NULL}.}

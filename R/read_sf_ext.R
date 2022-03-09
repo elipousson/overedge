@@ -70,7 +70,7 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
   } else if (check_gsheet_url(url)) {
     data <- googlesheets4::read_sheet(ss = url, ...)
 
-    coords <- check_coords(data = data, coords = coords)
+    coords <- check_coords(x = data, coords = coords)
 
     data <- df_to_sf(data, coords = coords)
   } else {
@@ -129,12 +129,12 @@ read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) 
 #'
 #' @param path path to folder of one or more files with EXIF location metadata
 #' @param bbox bounding box to crop sf file (excluding images with location data
-#'   outside the bounding box)
+#'   outside the bounding box). If bbox is provided the returned data will match
+#'   the crs of the bbox.
 #' @param filetype file extension or file type; defaults to "jpg"
 #' @param sort variable to sort by. Currently supports "lon" (default), "lat",
 #'   or "filename"
-#' @param crs Coordinate reference system to
-#' @param ... Additional EXIF tags to pass to exiftoolr::exif_read
+#' @param ... Additional EXIF tags to pass to `exiftoolr::exif_read`
 #' @family read_write
 #' @export
 #' @importFrom checkmate check_directory_exists
@@ -204,7 +204,8 @@ read_sf_exif <- function(path = NULL,
       get_location_data(
         location = bbox,
         data = data,
-        from_crs = exif_crs
+        from_crs = exif_crs,
+        crs = sf::st_crs(bbox)
       )
   }
 

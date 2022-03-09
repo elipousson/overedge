@@ -8,11 +8,12 @@ check_class <- function(x, check = NULL) {
 #' @param x An `sf`, `sfc`, or `bbox` object.
 #' @param y An sf object or a character or numeric object supported by
 #'   \code{\link[sf]{st_crs}} that can be compared to x. (used by
-#'   check_sf_same_crs)
+#'   `check_sf_same_crs`)
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
 #'   not; defaults to `FALSE`. (used by check_sf)
-#' @param ... Additional parameters passed to sf::st_bbox when calling as_bbox or
-#'   passed to sf::st_sf, sf::st_as_sf, or df_to_sf for as_sf (depending on class of x)
+#' @param crs Coordinate reference system; used for `as_bbox()`
+#' @param ... Additional parameters passed to `sf::st_bbox` when calling `as_bbox` or
+#'   passed to `sf::st_sf`, `sf::st_as_sf`, or `df_to_sf` for `as_sf` (depending on class of x)
 #' @details
 #' - check_sf: check if x it a `sf` class object.
 #' - check_bbox: check if x is a `bbox` class object.
@@ -61,7 +62,7 @@ as_sf <- function(x, ...) {
       x <- sf::st_sf(x, ...)
     } else if (check_raster(x)) {
       x <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...)
-    } else if (check_spatial(x)) {
+    } else if (check_sp(x)) {
       x <- sf::st_as_sf(x, ...)
     } else if (is.data.frame(x)) {
       x <- df_to_sf(x, ...)
@@ -86,7 +87,7 @@ as_bbox <- function(x, crs = 4326, ...) {
       x <- sf::st_bbox(x, ...)
     } else if (check_raster(x)) {
       x <- sf::st_bbox(x, ...)
-    } else if (check_spatial(x)) {
+    } else if (check_sp(x)) {
       x <- sf::st_bbox(sf::st_as_sf(x), ...)
     } else if (length(x) == 4) {
       x <- sf::st_bbox(c(
@@ -118,5 +119,5 @@ check_raster <- function(x) {
 #' @name check_sp
 #' @rdname check_sf
 check_sp <- function(x) {
-  any(grepl("Spatial", class(location)))
+  any(grepl("Spatial", class(x)))
 }

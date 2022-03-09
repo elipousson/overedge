@@ -19,7 +19,7 @@
 #' @param position Legend position (“left”,“top”, “right”, “bottom”) or a
 #'   two-element numeric vector to set position using Normalized Parent
 #'   Coordinates ("npc").
-#' @param margin Margin distance, a margin style supported by [get_margins()] or
+#' @param margin Margin distance, a margin style supported by [get_margin()] or
 #'   a margin object; defaults to 10.
 #' @param unit Legend margin units; defaults to 'pt'.
 #' @param inset If `TRUE` and position is "topleft", "bottomleft", "topright",

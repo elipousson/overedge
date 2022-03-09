@@ -105,5 +105,4 @@ st_bbox_asp <- function(x = NULL,
   } else {
     return(bbox)
   }
-
 }

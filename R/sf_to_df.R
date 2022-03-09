@@ -73,7 +73,7 @@ df_to_sf <- function(x,
                      sep = ",",
                      rev = TRUE) {
   if ((length(coords) == 1) && (length(into) == 2)) {
-    into <- check_coords(data = NULL, coords = into)
+    into <- check_coords(x = NULL, coords = into)
 
     x <-
       tidyr::separate(
@@ -94,7 +94,7 @@ df_to_sf <- function(x,
 
     coords <- into
   } else {
-    coords <- check_coords(data = x, coords = coords, rev = rev)
+    coords <- check_coords(x = x, coords = coords, rev = rev)
   }
 
   lon <- coords[[1]]
@@ -136,9 +136,9 @@ df_to_sf <- function(x,
 #' @rdname sf_to_df
 #' @name df_to_sf
 #' @param rev If TRUE, reverse c("lat", "lon") coords to c("lon", "lat"). check_coords only.
-check_coords <- function(data = NULL, coords = NULL, rev = FALSE) {
-  if (!is.null(data) && is.data.frame(data)) {
-    data_names <- tolower(names(data))
+check_coords <- function(x = NULL, coords = NULL, rev = FALSE) {
+  if (!is.null(x) && is.data.frame(x)) {
+    data_names <- tolower(names(x))
     # FIXME: there may still be an issue with capitalization (at least with consistency)
     if ("lon" %in% data_names) {
       x_coords <- c("lon", "lat")
@@ -146,11 +146,13 @@ check_coords <- function(data = NULL, coords = NULL, rev = FALSE) {
       x_coords <- c("long", "lat")
     } else if ("longitude" %in% data_names) {
       x_coords <- c("longitude", "latitude")
-    } else if ("Y" %in% data_names) {
-      x_coords <- c("Y", "X")
+    } else if ("y" %in% data_names) {
+      x_coords <- c("y", "x")
+    } else {
+      x_coords <- NULL
     }
 
-    if (!is.null(coords) && !is.null(x_coords) && (coords != x_coords)) {
+    if (!is.null(coords) && !is.null(x_coords) && !setequal(coords, x_coords)) {
       usethis::ui_warn("The provided coordinates do not appear to match the data.
                      Replacing coordinates with suggested values based on column names.")
       coords <- x_coords

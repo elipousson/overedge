@@ -1,32 +1,3 @@
-#' Load data for basemap layers
-#'
-#' @inheritParams get_data_batch
-#' @rdname make_basemap
-#' @noRd
-load_basemap_layers <-
-  function(location,
-           label = NULL,
-           layers = c("streets", "parks", "osm_buildings", "mta_bus_lines", "mta_bus_stops", "trees", "vegetated_area", "unimproved_property"),
-           dist = 0,
-           diag_ratio = NULL,
-           asp = 1,
-           crop = TRUE,
-           crs = 3857) {
-    mapbaltimore::get_data_batch(
-      area = location,
-      label = label,
-      batch = layers,
-      adj = list(dist = dist, diag_ratio = diag_ratio, asp = asp),
-      crop = crop,
-      load = TRUE,
-      save = FALSE,
-      crs = crs
-    )
-  }
-# TODO: Create a way of loading the layers into a nested dataframe instead of loading into the environment individually
-
-
-
 #' @title Make basemap for Baltimore
 #' @description Load basemap layers *must* be run before make_basemap in order for the data to be accessible. TODO: check whether data is loaded and then run load data with preset parameters if data is not already accessible in the environment.
 #' @param location sf or bbox object

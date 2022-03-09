@@ -36,17 +36,17 @@ Optional but may be necessary to differentiate icons with duplicate names.}
 Optional but may be required to differentiate icons with duplicate names.}
 
 \item{svg}{Optional. Custom file path or URL with SVG to pass to \code{svg}
-parameter for \code{ggsvg::geom_point_svg()}.  If \code{icon} is provided, \code{svg} is
+parameter for  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}}.  If \code{icon} is provided, \code{svg} is
 not used.}
 
-\item{color}{SVG color passed to \code{ggsvg::geom_point_svg()}. default color is set to "black".}
+\item{color}{SVG color passed to  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}}. default color is set to "black".}
 
 \item{crs}{Coordinate reference system; defaults to \code{NULL}.}
 
-\item{...}{Additional parameters to \code{ggsvg::geom_point_svg()}.}
+\item{...}{Additional parameters to  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}}.}
 }
 \description{
-Use the \code{\link[ggsvg]{geom_point_svg()}} function to plot
+Use the  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}} function to plot
 icons using the centroids from the input simple feature object to set the
 icon location.
 }

@@ -45,6 +45,8 @@ without modification.}
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
 'portrait'.}
+
+\item{clip}{If \code{TRUE}, create scaled layer even if the data is cut off; defaults to \code{FALSE}.}
 }
 \description{
 Uses \link{layer_neatline}, \link{standard_scales}, and \link{convert_dist_scale}.

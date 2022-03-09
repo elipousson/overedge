@@ -97,7 +97,7 @@ nodes_only parameters are not fully supported currently.</p>
 <dd><p>Value of the feature key; can be negated with an initial
 exclamation mark, <code>value = "!this"</code>, and can also be a vector, <code>value = c("this", "that")</code>. If <code>value = "all"</code> or if <code>key = "building"</code> the values
 passed to the osmdata package are from a preset list extracted from
-<code>available_tags()</code>.</p></dd>
+<code><a href="https://docs.ropensci.org/osmdata/reference/available_tags.html" class="external-link">osmdata::available_tags()</a></code>.</p></dd>
 <dt>dist</dt>
 <dd><p>buffer distance in units. Optional.</p></dd>
 <dt>diag_ratio</dt>
@@ -128,8 +128,8 @@ overpass API call, metadata including timestamp and version numbers, and
 all available geometry types; defaults to <code>FALSE</code>.</p></dd>
 <dt>enclosing</dt>
 <dd><p>If enclosing is "relation" or "way", use the
-<code><a href="https://docs.ropensci.org/osmdata/reference/opq_enclosing.html" class="external-link">osmdata::opq_enclosing</a></code> function to query the OSM data (instead of
-<code>add_osm_feature</code>). Defaults to <code>NULL</code>. When using enclosing, the dist,
+<code><a href="https://docs.ropensci.org/osmdata/reference/opq_enclosing.html" class="external-link">osmdata::opq_enclosing()</a></code> function to query the OSM data (instead of
+<code><a href="https://docs.ropensci.org/osmdata/reference/add_osm_feature.html" class="external-link">osmdata::add_osm_feature()</a></code>. Defaults to <code>NULL</code>. When using enclosing, the dist,
 diag_ratio, asp, and unit parameters are ignored and the center of the
 provided location is used for the query. geometry is set automatically
 based enclosing with "relation" using "multipolygon" and "way" using

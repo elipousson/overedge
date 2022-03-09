@@ -36,17 +36,16 @@ ggsave_ext(
 \code{\link[=make_filename]{make_filename()}}}
 
 \item{label}{Label to combine with name converted to snake case with
-\code{\link[janitor]{make_clean_case}}. The label is designed to identify
-the area or other shared characteristics across multiple data files, maps,
-or plots.}
+\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}. The label is designed to identify the area
+or other shared characteristics across multiple data files, maps, or plots.}
 
 \item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
 date/time prefix; defaults to \code{NULL}.}
 
 \item{postfix}{File name postfix; defaults to \code{NULL}.}
 
-\item{filename}{File name; if file name is \code{NULL}, name and file type are both
-required.}
+\item{filename}{File name; if file name is \code{NULL}, name and file type are
+both required.}
 
 \item{device}{Device to use. Can either be a device function
 (e.g. \link{png}), or one of "eps", "ps", "tex" (pictex),

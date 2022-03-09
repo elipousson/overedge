@@ -13,8 +13,7 @@ st_bearing(x, dir = FALSE, crs = 4326)
 \code{FALSE}, return the absolute (positive) bearing value. If \code{TRUE}, return
 negative and positive bearing values. Default: \code{FALSE}.}
 
-\item{crs}{Coordinate reference system passed to
-\code{\link[sf]{st_coordinates()}} (must be geographic not projected).
+\item{crs}{Coordinate reference system passed to \code{\link[sf:st_coordinates]{sf::st_coordinates()}} (must be geographic not projected).
 Default: 4326.}
 }
 \description{

@@ -5,6 +5,7 @@
 #' @inheritParams convert_dist_scale
 #' @inheritParams st_bbox_ext
 #' @inheritParams layer_neatline
+#' @param clip If `TRUE`, create scaled layer even if the data is cut off; defaults to `FALSE`.
 #' @family layer
 #' @name layer_scaled
 #' @export

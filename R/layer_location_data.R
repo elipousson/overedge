@@ -26,6 +26,7 @@
 #' @importFrom ggplot2 aes geom_sf geom_sf_text geom_sf_label
 #' @importFrom geomtextpath geom_textsf geom_labelsf
 #' @importFrom ggrepel geom_text_repel geom_label_repel
+#' @importFrom utils modifyList
 layer_location_data <-
   function(mapping = NULL,
            data = NULL,
@@ -99,14 +100,14 @@ layer_location_data <-
       }
 
       mapping <-
-        modifyList(
+        utils::modifyList(
           ggplot2::aes(label = .data[[label_col]]),
           mapping
         )
 
       if (geom %in% ggrepel_geoms) {
         mapping <-
-          modifyList(
+          utils::modifyList(
             ggplot2::aes(
               geometry = .data[[attributes(data)$sf_column]]
             ),

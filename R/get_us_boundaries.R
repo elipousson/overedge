@@ -16,7 +16,7 @@
 #'  \code{\link[tigris]{states}}
 #'  \code{\link[USAboundaries]{us_counties}}
 #' @rdname get_us_counties
-#' @export
+#' @noRd
 #' @importFrom dplyr select
 #' @importFrom sf st_make_valid
 get_us_counties <- function(location = NULL,
@@ -29,7 +29,9 @@ get_us_counties <- function(location = NULL,
                             crop = FALSE,
                             trim = FALSE,
                             detailed = FALSE) {
+  check_package_exists("USAboundaries")
   check_package_exists("USAboundariesData")
+
   package <- "USAboundariesData"
 
   if (historical) {

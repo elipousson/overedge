@@ -68,8 +68,8 @@
   orientation <span class="op">=</span> <span class="cn">NULL</span>,
   scale <span class="op">=</span> <span class="cn">NULL</span>,
   scale_unit <span class="op">=</span> <span class="st">"in"</span>,
-  scale_factor <span class="op">=</span> <span class="cn">NULL</span>,
   actual_unit <span class="op">=</span> <span class="cn">NULL</span>,
+  scale_factor <span class="op">=</span> <span class="cn">NULL</span>,
   dpi <span class="op">=</span> <span class="fl">120</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -91,6 +91,8 @@ are used as dist.</p></dd>
 (converted to inches by dividing by dpi), or "in".</p></dd>
 <dt>actual_unit</dt>
 <dd><p>any unit supported by convert_dist_units</p></dd>
+<dt>scale_factor</dt>
+<dd><p>factor for converting from scale_unit to actual_unit, e.g. if 1" = 1', the scale factor is 12. optional if scale if provided; defaults to <code>NULL</code>.</p></dd>
 <dt>dpi</dt>
 <dd><p>dots per square inch (used as conversion factor for "px" to "in")</p></dd>
 </dl></div>

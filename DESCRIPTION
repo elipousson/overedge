@@ -12,14 +12,12 @@ RoxygenNote: 7.1.2
 Imports: 
     checkmate,
     dplyr,
-    esri2sf,
     exifr,
     FlickrAPI (>= 0.1.0.1),
     geomtextpath,
     geosphere,
     ggplot2,
     ggrepel,
-    ggsvg,
     glue,
     httr2,
     googlesheets4,
@@ -51,5 +49,9 @@ Suggests:
     rmarkdown,
     covr,
     testthat (>= 3.0.0),
+    gt,
+    birdseyeview,
+    esri2sf,
+    ggsvg
 Config/testthat/edition: 3
 VignetteBuilder: knitr

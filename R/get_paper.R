@@ -253,8 +253,8 @@ get_margin <- function(margin = NULL,
 #' @param asp Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 #'   character (e.g. "1:3"). If numeric, [get_asp()] returns the same value
 #'   without modification.
-#' @param margin A margin style supported by [get_margins()], a numeric vector
-#'   (length 1 or 4) passed to dist parameter of get_margins, or a margins
+#' @param margin A margin style supported by [get_margin()], a numeric vector
+#'   (length 1 or 4) passed to dist parameter of get_margin, or a margins
 #'   object.
 #' @param block_asp If `TRUE`, return the aspect ratio of a text, map, or plot
 #'   block on the paper when using the specified margins.
@@ -308,7 +308,9 @@ get_asp <- function(asp = NULL,
       } else if (is.numeric(margin)) {
         margin <- get_margin(dist = margin, unit = unit)
       } else if (!check_class(margin, check = "margin")) {
-        usethis::ui_stop("margin must be either a character string matching the margin options (“none”, “narrow”, “standard”, “wide”, or “extrawide”), a numeric vector that can be passed to the dist parameter of get_margins, or a margin class object.")
+        usethis::ui_stop("margin must be either a character string matching the margin options ('none', 'narrow', 'standard', 'wide', or 'extrawide'),
+                         a numeric vector that can be passed to the dist parameter of get_margins,
+                         or a margin class object.")
       }
 
       margin <- as.numeric(margin)
@@ -367,6 +369,7 @@ get_standard_scale <- function(scale = NULL,
 #' @param scale_unit "mm" (converted to cm by dividing by 10), "cm", "px"
 #'   (converted to inches by dividing by dpi), or "in".
 #' @param actual_unit any unit supported by convert_dist_units
+#' @param scale_factor factor for converting from scale_unit to actual_unit, e.g. if 1" = 1', the scale factor is 12. optional if scale if provided; defaults to `NULL`.
 #' @param dpi dots per square inch (used as conversion factor for "px" to "in")
 #' @return dist values converted from scale_unit to actual_unit based on
 #'   scale_factor or information from standard_scales object. If paper is
@@ -378,8 +381,8 @@ convert_dist_scale <- function(dist = NULL,
                                orientation = NULL,
                                scale = NULL,
                                scale_unit = "in",
-                               scale_factor = NULL,
                                actual_unit = NULL,
+                               scale_factor = NULL,
                                dpi = 120) {
   if (!is.null(scale)) {
     scale <- get_standard_scale(scale = scale)

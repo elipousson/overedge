@@ -4,8 +4,7 @@
 #' @param dir Logical indicator whether to include direction in bearing; If
 #'   `FALSE`, return the absolute (positive) bearing value. If `TRUE`, return
 #'   negative and positive bearing values. Default: `FALSE`.
-#' @param crs Coordinate reference system passed to
-#'   \code{\link[sf]{st_coordinates()}} (must be geographic not projected).
+#' @param crs Coordinate reference system passed to [sf::st_coordinates()] (must be geographic not projected).
 #'   Default: 4326.
 #' @examples
 #' \dontrun{

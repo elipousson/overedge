@@ -10,16 +10,15 @@ read_sf_exif(path = NULL, bbox = NULL, filetype = "jpg", sort = "lon", ...)
 \item{path}{path to folder of one or more files with EXIF location metadata}
 
 \item{bbox}{bounding box to crop sf file (excluding images with location data
-outside the bounding box)}
+outside the bounding box). If bbox is provided the returned data will match
+the crs of the bbox.}
 
 \item{filetype}{file extension or file type; defaults to "jpg"}
 
 \item{sort}{variable to sort by. Currently supports "lon" (default), "lat",
 or "filename"}
 
-\item{...}{Additional EXIF tags to pass to exiftoolr::exif_read}
-
-\item{crs}{Coordinate reference system to}
+\item{...}{Additional EXIF tags to pass to \code{exiftoolr::exif_read}}
 }
 \description{
 Read EXIF data from folder of images.

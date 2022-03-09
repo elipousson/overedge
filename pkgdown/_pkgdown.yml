@@ -7,7 +7,6 @@ reference:
   contents:
   - '`get_location`'
   - '`get_location_data`'
-  - '`get_us_counties`'
   - starts_with("read")
   - starts_with("write")
 - title: Downloading spatial data from APIs

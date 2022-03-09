@@ -24,7 +24,7 @@ df_to_sf(
   rev = TRUE
 )
 
-check_coords(data = NULL, coords = NULL, rev = FALSE)
+check_coords(x = NULL, coords = NULL, rev = FALSE)
 }
 \arguments{
 \item{x}{A \code{sf} or \code{sfc} object or a data frame with lat/lon coordinates in a

@@ -16,18 +16,17 @@ make_filename(
 }
 \arguments{
 \item{name}{Name to make file name converted to snake case with
-\code{\link[janitor]{make_clean_case}}, e.g. "Residential zoning map"
-becomes "residential_zoning_map"}
+\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}, e.g. "Residential zoning map" becomes
+"residential_zoning_map"}
 
 \item{label}{Label to combine with name converted to snake case with
-\code{\link[janitor]{make_clean_case}}. The label is designed to identify
-the area or other shared characteristics across multiple data files, maps,
-or plots.}
+\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}. The label is designed to identify the area
+or other shared characteristics across multiple data files, maps, or plots.}
 
 \item{filetype}{File type or extension.}
 
-\item{filename}{File name; if file name is \code{NULL}, name and file type are both
-required.}
+\item{filename}{File name; if file name is \code{NULL}, name and file type are
+both required.}
 
 \item{path}{Path to file or data directory.}
 

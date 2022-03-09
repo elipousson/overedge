@@ -10,8 +10,8 @@ convert_dist_scale(
   orientation = NULL,
   scale = NULL,
   scale_unit = "in",
-  scale_factor = NULL,
   actual_unit = NULL,
+  scale_factor = NULL,
   dpi = 120
 )
 }
@@ -30,6 +30,8 @@ are used as dist.}
 (converted to inches by dividing by dpi), or "in".}
 
 \item{actual_unit}{any unit supported by convert_dist_units}
+
+\item{scale_factor}{factor for converting from scale_unit to actual_unit, e.g. if 1" = 1', the scale factor is 12. optional if scale if provided; defaults to \code{NULL}.}
 
 \item{dpi}{dots per square inch (used as conversion factor for "px" to "in")}
 }
