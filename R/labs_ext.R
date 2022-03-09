@@ -16,18 +16,18 @@ labs_ext <- function(title = ggplot2::waiver(),
                      caption = ggplot2::waiver(),
                      tag = ggplot2::waiver(),
                      alt = ggplot2::waiver(),
-                     alt_insight = ggplot2::waiver(),
                      location = NULL,
                      locationname_col = NULL, # Check param name
-                     source = NULL) {
+                     source = NULL,
+                     ...) {
   labs_glued <-
     ggplot2::labs(
       title = glue::glue(title),
       subtitle = glue::glue(subtitle),
       caption = glue::glue(caption),
       tag = glue::glue(tag),
-      alt = alt,
-      alt_insight = alt_insight
+      alt = glue::glue(alt),
+      ...
     )
 
   labs_glued

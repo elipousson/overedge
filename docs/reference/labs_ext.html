@@ -72,10 +72,10 @@ subtitle, and caption. In progress.</p>
   caption <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
   tag <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
   alt <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  alt_insight <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
   location <span class="op">=</span> <span class="cn">NULL</span>,
   locationname_col <span class="op">=</span> <span class="cn">NULL</span>,
-  source <span class="op">=</span> <span class="cn">NULL</span>
+  source <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -95,9 +95,6 @@ top-left of the plot by default.</p></dd>
 <dt>alt</dt>
 <dd><p>Text used for the generation of alt-text for the plot.
 See <a href="https://ggplot2.tidyverse.org/reference/get_alt_text.html" class="external-link">get_alt_text</a> for examples.</p></dd>
-<dt>alt_insight</dt>
-<dd><p>Text used for the generation of alt-text for the plot.
-See <a href="https://ggplot2.tidyverse.org/reference/get_alt_text.html" class="external-link">get_alt_text</a> for examples.</p></dd>
 <dt>location</dt>
 <dd><p>sf or bbox object or character string</p></dd>
 <dt>locationname_col</dt>
@@ -106,6 +103,8 @@ places within the simple feature collection provided to location. Not
 supported for bbox objects.</p></dd>
 <dt>source</dt>
 <dd><p>Data source(s). Not yet used or supported by function.</p></dd>
+<dt>...</dt>
+<dd><p>A list of new name-value pairs. The name should be an aesthetic.</p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

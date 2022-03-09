@@ -10,10 +10,10 @@ labs_ext(
   caption = ggplot2::waiver(),
   tag = ggplot2::waiver(),
   alt = ggplot2::waiver(),
-  alt_insight = ggplot2::waiver(),
   location = NULL,
   locationname_col = NULL,
-  source = NULL
+  source = NULL,
+  ...
 )
 }
 \arguments{
@@ -31,9 +31,6 @@ top-left of the plot by default.}
 \item{alt}{Text used for the generation of alt-text for the plot.
 See \link[ggplot2]{get_alt_text} for examples.}
 
-\item{alt_insight}{Text used for the generation of alt-text for the plot.
-See \link[ggplot2]{get_alt_text} for examples.}
-
 \item{location}{sf or bbox object or character string}
 
 \item{locationname_col}{Column name holding name or identifier for distinct
@@ -41,6 +38,8 @@ places within the simple feature collection provided to location. Not
 supported for bbox objects.}
 
 \item{source}{Data source(s). Not yet used or supported by function.}
+
+\item{...}{A list of new name-value pairs. The name should be an aesthetic.}
 }
 \description{
 A helper function that converts strings to glue strings for the title,
