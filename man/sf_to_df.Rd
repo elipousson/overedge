@@ -4,8 +4,7 @@
 \alias{sf_to_df}
 \alias{df_to_sf}
 \alias{check_coords}
-\title{Convert simple feature object to data frame with coordinates or data frame to
-simple feature}
+\title{Convert between simple feature to data frame objects}
 \usage{
 sf_to_df(
   x,

@@ -18,9 +18,10 @@ reference:
   - '`get_flickr_photos`'
 - title: Working with simple feature and bounding box objects
   contents:
+  - starts_with("as_")
+  - starts_with("check")
   - starts_with("st_")
   - '`sf_to_df`'
-  - starts_with("check")
   - starts_with("sf_bbox")
 - title: Layers and geoms for ggplot2 maps
   contents:

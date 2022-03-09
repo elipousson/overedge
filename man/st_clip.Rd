@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_clip.R
 \name{st_clip}
 \alias{st_clip}
-\title{Clip a simple feature or bounding box to a side or corner}
+\title{Clip the side or corner of a simple feature or bounding box object}
 \usage{
 st_clip(
   x,

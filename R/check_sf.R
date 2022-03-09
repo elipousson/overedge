@@ -7,17 +7,13 @@ check_class <- function(x, check = NULL) {
 #'
 #' @param x An `sf`, `sfc`, or `bbox` object.
 #' @param y An sf object or a character or numeric object supported by
-#'   \code{\link[sf]{st_crs}} that can be compared to x. (used by
-#'   `check_sf_same_crs`)
+#'   [sf::st_crs] that can be compared to x. (used by [check_sf_same_crs])
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
-#'   not; defaults to `FALSE`. (used by check_sf)
-#' @param crs Coordinate reference system; used for `as_bbox()`
-#' @param ... Additional parameters passed to `sf::st_bbox` when calling `as_bbox` or
-#'   passed to `sf::st_sf`, `sf::st_as_sf`, or `df_to_sf` for `as_sf` (depending on class of x)
+#'   not; defaults to `FALSE`. (used by [check_sf])
 #' @details
-#' - check_sf: check if x it a `sf` class object.
-#' - check_bbox: check if x is a `bbox` class object.
-#' - check_sf_list: check if x is a named list of `sf` class objects.
+#' - [check_sf]: check if x it a `sf` class object.
+#' - [check_bbox]: check if x is a `bbox` class object.
+#' - [check_sf_list]: check if x is a named list of `sf` class objects.
 #' @export
 #' @md
 check_sf <- function(x, ext = FALSE) {
@@ -47,61 +43,6 @@ check_sf_list <- function(x) {
   is_named <- !is.null(names(x)) && !("" %in% names(x))
   is_sf_list && is_named
 }
-
-#' @name as_sf
-#' @rdname  check_sf
-#' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf
-as_sf <- function(x, ...) {
-  # Convert objects to sf if needed
-  if (check_sf(x)) {
-    return(x)
-  } else {
-    if (check_bbox(x)) {
-      x <- sf_bbox_to_sf(x)
-    } else if (check_sfc(x)) {
-      x <- sf::st_sf(x, ...)
-    } else if (check_raster(x)) {
-      x <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...)
-    } else if (check_sp(x)) {
-      x <- sf::st_as_sf(x, ...)
-    } else if (is.data.frame(x)) {
-      x <- df_to_sf(x, ...)
-    }
-    return(x)
-  }
-}
-
-#' @name as_bbox
-#' @rdname  check_sf
-#' @importFrom sf st_crs
-as_bbox <- function(x, crs = 4326, ...) {
-  # Convert objects to sf if needed
-  if (check_bbox(x)) {
-    return(x)
-  } else {
-    if (check_sf(x, ext = TRUE)) {
-      if (st_geom_type(x, check = "POINT")) {
-        x <- st_buffer_ext(x, dist = 1)
-      }
-
-      x <- sf::st_bbox(x, ...)
-    } else if (check_raster(x)) {
-      x <- sf::st_bbox(x, ...)
-    } else if (check_sp(x)) {
-      x <- sf::st_bbox(sf::st_as_sf(x), ...)
-    } else if (length(x) == 4) {
-      x <- sf::st_bbox(c(
-        xmin = x[1], ymin = x[2],
-        xmax = x[3], ymax = x[4]
-      ),
-      crs = crs, ...
-      )
-    }
-
-    return(x)
-  }
-}
-
 
 #' @name check_sf_same_crs
 #' @rdname  check_sf

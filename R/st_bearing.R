@@ -1,4 +1,4 @@
-#' Get bearing of a simple feature object with LINESTRING geometry
+#' Get bearing from simple feature objects with LINESTRING geometry
 #'
 #' @param x A `sf` object.
 #' @param dir Logical indicator whether to include direction in bearing; If

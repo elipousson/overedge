@@ -1,5 +1,5 @@
 
-#' Clip a simple feature or bounding box to a side or corner
+#' Clip the side or corner of a simple feature or bounding box object
 #'
 #' Clip based on the corner of the object bounding box.
 #'

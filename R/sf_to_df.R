@@ -1,5 +1,4 @@
-#' Convert simple feature object to data frame with coordinates or data frame to
-#' simple feature
+#' Convert between simple feature to data frame objects
 #'
 #' Helper function to convert a simple feature object to data frame by dropping
 #' geometry, converting geometry to well known text, or (if the geometry type is

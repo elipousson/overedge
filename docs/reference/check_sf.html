@@ -70,10 +70,6 @@
 
 <span class="fu">check_sf_list</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
 
-<span class="fu">as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">as_bbox</span><span class="op">(</span><span class="va">x</span>, crs <span class="op">=</span> <span class="fl">4326</span>, <span class="va">...</span><span class="op">)</span>
-
 <span class="fu">check_sf_same_crs</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
 
 <span class="fu">check_raster</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
@@ -88,15 +84,9 @@
 <dt>ext</dt>
 <dd><p>If <code>TRUE</code>, check if x is a <code>sf</code>, <code>sfc</code>, or <code>bbox</code> class object or
 not; defaults to <code>FALSE</code>. (used by check_sf)</p></dd>
-<dt>...</dt>
-<dd><p>Additional parameters passed to <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">sf::st_bbox</a></code> when calling <code>as_bbox</code> or
-passed to <code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::st_sf</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">sf::st_as_sf</a></code>, or <code>df_to_sf</code> for <code>as_sf</code> (depending on class of x)</p></dd>
-<dt>crs</dt>
-<dd><p>Coordinate reference system; used for <code>as_bbox()</code></p></dd>
 <dt>y</dt>
 <dd><p>An sf object or a character or numeric object supported by
-<code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code> that can be compared to x. (used by
-<code>check_sf_same_crs</code>)</p></dd>
+<a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs</a> that can be compared to x. (used by check_sf_same_crs)</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

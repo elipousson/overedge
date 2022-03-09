@@ -5,8 +5,6 @@
 \alias{check_sfc}
 \alias{check_bbox}
 \alias{check_sf_list}
-\alias{as_sf}
-\alias{as_bbox}
 \alias{check_sf_same_crs}
 \alias{check_raster}
 \alias{check_sp}
@@ -20,10 +18,6 @@ check_bbox(x)
 
 check_sf_list(x)
 
-as_sf(x, ...)
-
-as_bbox(x, crs = 4326, ...)
-
 check_sf_same_crs(x, y)
 
 check_raster(x)
@@ -34,24 +28,18 @@ check_sp(x)
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
 
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
-not; defaults to \code{FALSE}. (used by check_sf)}
-
-\item{...}{Additional parameters passed to \code{sf::st_bbox} when calling \code{as_bbox} or
-passed to \code{sf::st_sf}, \code{sf::st_as_sf}, or \code{df_to_sf} for \code{as_sf} (depending on class of x)}
-
-\item{crs}{Coordinate reference system; used for \code{as_bbox()}}
+not; defaults to \code{FALSE}. (used by \link{check_sf})}
 
 \item{y}{An sf object or a character or numeric object supported by
-\code{\link[sf]{st_crs}} that can be compared to x. (used by
-\code{check_sf_same_crs})}
+\link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{check_sf_same_crs})}
 }
 \description{
 Check the class and attributes of a simple feature object
 }
 \details{
 \itemize{
-\item check_sf: check if x it a \code{sf} class object.
-\item check_bbox: check if x is a \code{bbox} class object.
-\item check_sf_list: check if x is a named list of \code{sf} class objects.
+\item \link{check_sf}: check if x it a \code{sf} class object.
+\item \link{check_bbox}: check if x is a \code{bbox} class object.
+\item \link{check_sf_list}: check if x is a named list of \code{sf} class objects.
 }
 }
