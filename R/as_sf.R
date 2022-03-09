@@ -5,16 +5,15 @@
 #' @param x A `sf`, `bbox`, `sfc`, `raster`, `sp`, or `dataframe` object that
 #'   can be converted into a simple feature or bounding box object. [as_bbox()]
 #'   can also convert a vector with xmin, ymin, xmax, and ymax values.
-#' @param crs Coordinate reference system; used for [as_bbox()]
+#' @param crs Coordinate reference system for sf or bbox obect to return
 #' @param ... Additional parameters passed to [sf::st_bbox()] when calling
 #'   [as_bbox()] or passed to [sf::st_sf()], [sf::st_as_sf()], or [df_to_sf()]
 #'   for [as_sf()] (depending on class of x)
+#' @export
 #' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf
-as_sf <- function(x, ...) {
+as_sf <- function(x, crs = NULL, ...) {
   # Convert objects to sf if needed
-  if (check_sf(x)) {
-    return(x)
-  } else {
+  if (!check_sf(x)) {
     if (check_bbox(x)) {
       x <- sf_bbox_to_sf(x)
     } else if (check_sfc(x)) {
@@ -24,20 +23,21 @@ as_sf <- function(x, ...) {
     } else if (check_sp(x)) {
       x <- sf::st_as_sf(x, ...)
     } else if (is.data.frame(x)) {
+      # TODO: Need to figure out a way to pass the crs to df_to_sf
       x <- df_to_sf(x, ...)
     }
-    return(x)
   }
+  x <- st_transform_ext(x, crs = crs)
+  return(x)
 }
 
 #' @name as_bbox
 #' @rdname as_sf
+#' @export
 #' @importFrom sf st_bbox st_as_sf
-as_bbox <- function(x, crs = 4326, ...) {
+as_bbox <- function(x, crs = NULL, ...) {
   # Convert objects to sf if needed
-  if (check_bbox(x)) {
-    return(x)
-  } else {
+  if (!check_bbox(x)) {
     if (check_sf(x, ext = TRUE)) {
       if (st_geom_type(x, check = "POINT")) {
         x <- st_buffer_ext(x, dist = 1)
@@ -58,7 +58,8 @@ as_bbox <- function(x, crs = 4326, ...) {
     } else if (is.data.frame(x)) {
       x <- sf::st_bbox(df_to_sf(x), ...)
     }
-
-    return(x)
   }
+
+  x <- st_transform_ext(x, crs = crs)
+  return(x)
 }
