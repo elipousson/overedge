@@ -182,16 +182,18 @@ read_sf_exif <- function(path = NULL,
       )
     )
 
-  data <- data |>
-    janitor::clean_names("snake") |>
+  data <-
     # Rename variables
     dplyr::rename(
+      janitor::clean_names(data, "snake"),
       lat = gps_latitude,
       lon = gps_longitude,
       img_dir = gps_img_direction,
       filename = source_file
-    ) |>
-    dplyr::arrange({{ sort }})
+    )
+
+  data <-
+    dplyr::arrange(data, {{ sort }})
 
   exif_crs <- 4326
   data <- df_to_sf(data, crs = exif_crs)

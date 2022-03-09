@@ -102,13 +102,14 @@ get_paper <- function(paper = "letter",
   width <- paper$width
   height <- paper$height
 
-  if (orientation == "portrait") {
+  if (orientation %in% c("portrait", "square")) {
     paper <-
       dplyr::rename(
         paper,
         asp = asp_portrait
-      ) |>
-      dplyr::select(-asp_landscape)
+      )
+    paper <-
+      dplyr::select(paper, -asp_landscape)
   } else if (orientation == "landscape") {
     paper$width <- height
     paper$height <- width
@@ -117,19 +118,15 @@ get_paper <- function(paper = "letter",
       dplyr::rename(
         paper,
         asp = asp_landscape
-      ) |>
-      dplyr::select(-asp_portrait)
-  } else if (orientation == "square") {
+      )
+
     paper <-
-      dplyr::rename(
-        paper,
-        asp = asp_portrait
-      ) |>
-      dplyr::select(-asp_landscape)
+      dplyr::select(paper, -asp_portrait)
   }
 
-  paper <- paper |>
+  paper <-
     dplyr::mutate(
+      paper,
       orientation = orientation
     )
 
