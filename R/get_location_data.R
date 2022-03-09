@@ -76,6 +76,10 @@ get_location_data <- function(location = NULL,
     }
   }
 
+  if (check_bbox(data)) {
+    data <- as_sf(data)
+  }
+
   # Check if data is not an  sf object
   if (!(check_sf(data))) {
 
