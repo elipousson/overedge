@@ -145,7 +145,7 @@ get_location <- function(type,
     # Filter sf
     if (check_sf(location, ext = TRUE)) {
       location <- as_sf(location)
-
+      location <- st_transform_ext(location, crs = type_crs)
       location <- sf::st_filter(type, location)
     }
   }
