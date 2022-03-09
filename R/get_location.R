@@ -148,7 +148,7 @@ get_location <- function(type,
     }
 
     # Filter sf
-    if (check_sf(location, ext = TRUE)) {
+    if (!is.null(location) && check_sf(location, ext = TRUE)) {
       location <- as_sf(location)
       location <- st_transform_ext(location, crs = type_crs)
       location <- sf::st_filter(type, location)
@@ -167,18 +167,20 @@ get_location <- function(type,
       )
   }
 
-  if (!is.null(label)) {
-    location$label <- label
-  }
-
   if (!is.null(location)) {
     location <- st_transform_ext(location, crs = crs)
     return(location)
   } else {
+    location <- type
+
     if (warn) {
       usethis::ui_warn("Returning all locations of this type.")
     }
-
-    return(type)
   }
+
+  if (!is.null(label)) {
+    location$label <- label
+  }
+
+  return(location)
 }
