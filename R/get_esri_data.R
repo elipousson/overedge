@@ -37,6 +37,9 @@ get_esri_data <- function(location = NULL,
                           locationname_col = NULL,
                           locationname,
                           ...) {
+
+  check_package_exists("esri2sf", repo = "yonghah/esri2sf")
+
   if (!is.null(location)) {
     # Adjust bounding box
     bbox <- st_bbox_ext(
