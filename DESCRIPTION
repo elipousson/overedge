@@ -41,7 +41,10 @@ Imports:
     utils,
     fs
 Remotes:
-    elipousson/FlickrAPI
+    koki25ando/FlickrAPI,
+    yonghah/esri2sf,
+    coolbutuseless/ggsvg,
+    elipousson/birdseyeview
 Depends: 
     R (>= 2.10)
 LazyData: true
