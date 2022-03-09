@@ -111,6 +111,7 @@ get_location <- function(type,
   dots <- rlang::list2(...)
 
   if (any(c("locationname_col", "locationname") %in% names(dots))) {
+    # FIXME: location cannot be combined with locationname and locationname_col. This may be a non-issue.
     warn <- FALSE
   } else {
     warn <- TRUE

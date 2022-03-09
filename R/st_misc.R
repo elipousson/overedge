@@ -68,6 +68,7 @@ st_center <- function(x,
   if (ext) {
     crs <- sf::st_crs(x)
     geom <- sf::st_geometry(x)
+    # FIXME: There may be no difference between the geom and centroid for point data
     centroid <- suppressWarnings(sf::st_centroid(geom, ...))
 
     return(

@@ -22,10 +22,34 @@
     <loc>/articles/index.html</loc>
   </url>
   <url>
+    <loc>/articles/working-sf-bbox-objects.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
     <loc>/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/as_sf.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_bbox.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_sf.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_sf_list.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_sf_same_crs.html</loc>
+  </url>
+  <url>
+    <loc>/reference/convert_dist_scale.html</loc>
+  </url>
+  <url>
+    <loc>/reference/convert_dist_units.html</loc>
   </url>
   <url>
     <loc>/reference/df_to_sf.html</loc>
@@ -52,16 +76,34 @@
     <loc>/reference/get_margin.html</loc>
   </url>
   <url>
+    <loc>/reference/get_open_data.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_osm_data.html</loc>
   </url>
   <url>
     <loc>/reference/get_paper.html</loc>
   </url>
   <url>
+    <loc>/reference/get_socrata_data.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_standard_scale.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_us_counties.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_wiki_data.html</loc>
+  </url>
+  <url>
     <loc>/reference/ggsave_ext.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/labs_ext.html</loc>
   </url>
   <url>
     <loc>/reference/layer_location_data.html</loc>
@@ -73,6 +115,9 @@
     <loc>/reference/layer_neatline.html</loc>
   </url>
   <url>
+    <loc>/reference/layer_scaled.html</loc>
+  </url>
+  <url>
     <loc>/reference/layer_show_location.html</loc>
   </url>
   <url>
@@ -82,10 +127,16 @@
     <loc>/reference/map_icons.html</loc>
   </url>
   <url>
+    <loc>/reference/osm_building_tags.html</loc>
+  </url>
+  <url>
     <loc>/reference/overedge-package.html</loc>
   </url>
   <url>
     <loc>/reference/paper_sizes.html</loc>
+  </url>
+  <url>
+    <loc>/reference/read_sf_exif.html</loc>
   </url>
   <url>
     <loc>/reference/read_sf_ext.html</loc>
@@ -121,13 +172,28 @@
     <loc>/reference/st_buffer_ext.html</loc>
   </url>
   <url>
+    <loc>/reference/st_clip.html</loc>
+  </url>
+  <url>
+    <loc>/reference/st_coords.html</loc>
+  </url>
+  <url>
+    <loc>/reference/st_erase.html</loc>
+  </url>
+  <url>
     <loc>/reference/st_inscribed_square.html</loc>
+  </url>
+  <url>
+    <loc>/reference/st_misc.html</loc>
   </url>
   <url>
     <loc>/reference/st_scale_rotate.html</loc>
   </url>
   <url>
     <loc>/reference/st_transform_ext.html</loc>
+  </url>
+  <url>
+    <loc>/reference/standard_scales.html</loc>
   </url>
   <url>
     <loc>/reference/theme_ext.html</loc>

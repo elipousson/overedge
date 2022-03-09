@@ -61,6 +61,7 @@
     <a class="dropdown-item" href="../articles/get_location.html">Get locations and location data</a>
     <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
+    <a class="dropdown-item" href="../articles/working-sf-bbox-objects.html">Working with simple feature and bounding box objects</a>
   </div>
 </li>
       </ul>
@@ -292,7 +293,7 @@
 <span class="co">#&gt; Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Blues is 9</span>
 <span class="co">#&gt; Returning the palette you asked for with that many colors</span></code></pre></div>
 <p><img src="ggsave_ext_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<p>Two other functions (<code><a href="../reference/layer_mask.html">layer_mask()</a></code> and <code><a href="../reference/layer_show_location.html">layer_show_location()</a></code>) allow you to add <code><a href="../reference/layer_neatline.html">layer_neatline()</a></code> to a map along with a mask or location boundary line using the same parameters.</p>
+<p>The <code><a href="../reference/layer_mask.html">layer_mask()</a></code> function also allow you to add <code><a href="../reference/layer_neatline.html">layer_neatline()</a></code> to a map along with a mask using the same parameters.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">basemap</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/layer_mask.html">layer_mask</a></span><span class="op">(</span>
@@ -307,7 +308,7 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">letter_map</span> <span class="op">&lt;-</span>
   <span class="va">basemap</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/layer_show_location.html">layer_show_location</a></span><span class="op">(</span>
+  <span class="fu">birdseyeview</span><span class="fu">::</span><span class="fu"><a href="https://elipousson.github.io/birdseyeview/reference/layer_show_location.html" class="external-link">layer_show_location</a></span><span class="op">(</span>
     data <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span>,
     dist <span class="op">=</span> <span class="fl">200</span>,
     size <span class="op">=</span> <span class="fl">1.5</span>,
@@ -349,7 +350,7 @@
   label <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">name</span>,
   prefix <span class="op">=</span> <span class="st">"date"</span>
 <span class="op">)</span>
-<span class="co">#&gt; [1] "2022-03-04_harwood_neighborhood_map"</span></code></pre></div>
+<span class="co">#&gt; [1] "2022-03-09_harwood_neighborhood_map"</span></code></pre></div>
 <div class="section level3">
 <h3 id="save-map-with-ggsave_ext">Save map with ggsave_ext<a class="anchor" aria-label="anchor" href="#save-map-with-ggsave_ext"></a>
 </h3>

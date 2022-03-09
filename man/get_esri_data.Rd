@@ -2,7 +2,8 @@
 % Please edit documentation in R/get_esri_data.R
 \name{get_esri_data}
 \alias{get_esri_data}
-\title{Use esri2sf to get data from an ArcGIS FeatureServer or MapServer for a location}
+\title{Use esri2sf to get data from an ArcGIS FeatureServer or MapServer for a
+location}
 \usage{
 get_esri_data(
   location = NULL,
@@ -20,10 +21,11 @@ get_esri_data(
 )
 }
 \arguments{
-\item{location}{\code{sf} object. Optional.}
+\item{location}{sf, sfc, or bbox object (or other object convertible with
+\code{\link[=as_bbox]{as_bbox()}}. Optional.}
 
 \item{url}{FeatureServer or MapServer url to retrieve data from. Passed to
-\code{url} parameter of \code{\link[esri2sf]{esri2sf}} or
+\code{url} parameter of \code{\link[esri2sf:esri2sf]{esri2sf::esri2sf()}} or
 \code{\link[esri2sf]{esri2df}} functions.}
 
 \item{dist}{buffer distance in units. Optional.}
@@ -53,7 +55,8 @@ location names for features}
 
 \item{locationname}{location name}
 
-\item{...}{Additional arguments passed to esri2sf::esri2df or esri2sf::esri2sf}
+\item{...}{Additional arguments passed to \link[esri2sf:esri2sf]{esri2sf::esri2df} or
+\link[esri2sf:esri2sf]{esri2sf::esri2sf}}
 }
 \description{
 Wraps the \code{\link[esri2sf]{esri2sf}} and \code{\link[esri2sf]{esri2df}}

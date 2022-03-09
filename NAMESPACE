@@ -2,7 +2,13 @@
 
 export(as_bbox)
 export(as_sf)
+export(check_bbox)
+export(check_raster)
 export(check_sf)
+export(check_sf_list)
+export(check_sf_same_crs)
+export(check_sfc)
+export(check_sp)
 export(convert_dist_scale)
 export(convert_dist_units)
 export(df_to_sf)
