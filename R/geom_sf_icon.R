@@ -1,18 +1,17 @@
 #' Draw SVG icons for a simple feature object
 #'
-#' Use the  [ggsvg::geom_point_svg()] function to plot
-#'   icons using the centroids from the input simple feature object to set the
-#'   icon location.
+#' Use the  [ggsvg::geom_point_svg()] function to plot icons using the centroids
+#' from the input simple feature object to set the icon location.
 #'
 #' @param data A `sf` object. Any objects with polygon geometry are converted to
-#'   points using \code{\link[sf]{st_centroid()}}.
+#'   points using [sf::st_centroid()].
 #' @param iconname_col The column name in the input data to use as the icon
 #'   name. If the name matches multiple icons, the first match from `map_icons`
 #'   is used. You may provide a px or source value to select a different match
 #'   if needed but, in that case, all icons must use the same px or source
-#'   value. Note that the icon column should not be mapped with `aes()`.
-#' @param icon Icon name. Default `NULL`. If `icon` is provided, `iconname_col` is
-#'   not used.
+#'   value. Note that the icon column should not be mapped with [ggplot2::aes()].
+#' @param icon Icon name. Default `NULL`. If `icon` is provided, `iconname_col`
+#'   is not used.
 #' @param px Icon size in pixels. See `map_icons$px` for supported options.
 #'   Optional but may be necessary to differentiate icons with duplicate names.
 #' @param source Icon source. See `map_icons$repo` for supported options.
@@ -20,7 +19,8 @@
 #' @param svg Optional. Custom file path or URL with SVG to pass to `svg`
 #'   parameter for  [ggsvg::geom_point_svg()].  If `icon` is provided, `svg` is
 #'   not used.
-#' @param color SVG color passed to  [ggsvg::geom_point_svg()]. default color is set to "black".
+#' @param color SVG color passed to  [ggsvg::geom_point_svg()]. default color is
+#'   set to "black".
 #' @param crs Coordinate reference system; defaults to `NULL`.
 #' @param ... Additional parameters to  [ggsvg::geom_point_svg()].
 #' @examples

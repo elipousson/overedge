@@ -18,16 +18,16 @@ geom_sf_icon(
 }
 \arguments{
 \item{data}{A \code{sf} object. Any objects with polygon geometry are converted to
-points using \code{\link[sf]{st_centroid()}}.}
+points using \code{\link[sf:geos_unary]{sf::st_centroid()}}.}
 
 \item{iconname_col}{The column name in the input data to use as the icon
 name. If the name matches multiple icons, the first match from \code{map_icons}
 is used. You may provide a px or source value to select a different match
 if needed but, in that case, all icons must use the same px or source
-value. Note that the icon column should not be mapped with \code{aes()}.}
+value. Note that the icon column should not be mapped with \code{\link[ggplot2:aes]{ggplot2::aes()}}.}
 
-\item{icon}{Icon name. Default \code{NULL}. If \code{icon} is provided, \code{iconname_col} is
-not used.}
+\item{icon}{Icon name. Default \code{NULL}. If \code{icon} is provided, \code{iconname_col}
+is not used.}
 
 \item{px}{Icon size in pixels. See \code{map_icons$px} for supported options.
 Optional but may be necessary to differentiate icons with duplicate names.}
@@ -39,16 +39,16 @@ Optional but may be required to differentiate icons with duplicate names.}
 parameter for  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}}.  If \code{icon} is provided, \code{svg} is
 not used.}
 
-\item{color}{SVG color passed to  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}}. default color is set to "black".}
+\item{color}{SVG color passed to  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}}. default color is
+set to "black".}
 
 \item{crs}{Coordinate reference system; defaults to \code{NULL}.}
 
 \item{...}{Additional parameters to  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}}.}
 }
 \description{
-Use the  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}} function to plot
-icons using the centroids from the input simple feature object to set the
-icon location.
+Use the  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}} function to plot icons using the centroids
+from the input simple feature object to set the icon location.
 }
 \examples{
 \dontrun{
