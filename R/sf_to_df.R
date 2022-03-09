@@ -36,7 +36,7 @@ sf_to_df <- function(x,
                      keep_all = TRUE) {
   x <- st_transform_ext(x, crs = crs)
 
-  x <- st_coords(x, geometry = geometry, coords = coords, bind = TRUE, drop = TRUE)
+  x <- st_coords(x, geometry = geometry, coords = coords, keep_all = TRUE, drop = TRUE)
 
   return(as.data.frame(x))
 }

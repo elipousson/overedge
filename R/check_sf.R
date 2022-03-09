@@ -11,8 +11,8 @@ check_class <- function(x, check = NULL) {
 #'   check_sf_same_crs)
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
 #'   not; defaults to `FALSE`. (used by check_sf)
-#' @param ... Additional parameters passed to sf::st_bbox when calling check_to_bbox or
-#'   passed to sf::st_sf, sf::st_as_sf, or df_to_sf for check_to_sf (depending on class of x)
+#' @param ... Additional parameters passed to sf::st_bbox when calling as_bbox or
+#'   passed to sf::st_sf, sf::st_as_sf, or df_to_sf for as_sf (depending on class of x)
 #' @details
 #' - check_sf: check if x it a `sf` class object.
 #' - check_bbox: check if x is a `bbox` class object.
@@ -47,10 +47,10 @@ check_sf_list <- function(x) {
   is_sf_list && is_named
 }
 
-#' @name check_to_sf
+#' @name as_sf
 #' @rdname  check_sf
 #' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf
-check_to_sf <- function(x, ...) {
+as_sf <- function(x, ...) {
   # Convert objects to sf if needed
   if (check_sf(x)) {
     return(x)
@@ -70,10 +70,10 @@ check_to_sf <- function(x, ...) {
   }
 }
 
-#' @name check_to_bbox
+#' @name as_bbox
 #' @rdname  check_sf
 #' @importFrom sf st_crs
-check_to_bbox <- function(x, crs = 4326, ...) {
+as_bbox <- function(x, crs = 4326, ...) {
   # Convert objects to sf if needed
   if (check_bbox(x)) {
     return(x)

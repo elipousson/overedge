@@ -5,7 +5,7 @@
 \title{Layer location data into a ggplot2 map}
 \usage{
 layer_location_data(
-  mapping = ggplot2::aes(),
+  mapping = NULL,
   data = NULL,
   label,
   geom = "sf",
@@ -80,7 +80,7 @@ Default FALSE.}
 \item{crs}{coordinate reference system to return}
 
 \item{label_col}{Column name or id for a column with the text or labels to
-pass to \link{ggrepel} functions.}
+pass to any text geom.}
 
 \item{...}{Parameters passed to selected geom}
 }
@@ -89,7 +89,9 @@ ggplot2 geom
 }
 \description{
 Helper function to make a ggplot2 layer from data returned by
-\code{get_location_data}
+\code{get_location_data}. For text geoms, the required aesthetic mapping is
+set based on the name_col but can be values passed to mapping take
+precedence.
 }
 \seealso{
 \code{\link[ggplot2]{CoordSf}}

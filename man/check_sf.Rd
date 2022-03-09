@@ -5,8 +5,8 @@
 \alias{check_sfc}
 \alias{check_bbox}
 \alias{check_sf_list}
-\alias{check_to_sf}
-\alias{check_to_bbox}
+\alias{as_sf}
+\alias{as_bbox}
 \alias{check_sf_same_crs}
 \alias{check_raster}
 \alias{check_sp}
@@ -20,9 +20,9 @@ check_bbox(x)
 
 check_sf_list(x)
 
-check_to_sf(x, ...)
+as_sf(x, ...)
 
-check_to_bbox(x, crs = 4326, ...)
+as_bbox(x, crs = 4326, ...)
 
 check_sf_same_crs(x, y)
 
@@ -36,8 +36,8 @@ check_sp(x)
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
 not; defaults to \code{FALSE}. (used by check_sf)}
 
-\item{...}{Additional parameters passed to sf::st_bbox when calling check_to_bbox or
-passed to sf::st_sf, sf::st_as_sf, or df_to_sf for check_to_sf (depending on class of x)}
+\item{...}{Additional parameters passed to sf::st_bbox when calling as_bbox or
+passed to sf::st_sf, sf::st_as_sf, or df_to_sf for as_sf (depending on class of x)}
 
 \item{y}{An sf object or a character or numeric object supported by
 \code{\link[sf]{st_crs}} that can be compared to x. (used by

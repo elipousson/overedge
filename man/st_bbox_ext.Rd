@@ -16,7 +16,7 @@ st_bbox_ext(
   sf = FALSE
 )
 
-st_bbox_asp(x = NULL, asp = NULL)
+st_bbox_asp(x = NULL, asp = NULL, sf = FALSE)
 }
 \arguments{
 \item{x}{An object sf, bbox, sfc, raster, or sp object or a data frame that

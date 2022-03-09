@@ -37,24 +37,23 @@ layer_mask <- function(data = NULL,
       diag_ratio = diag_ratio,
       unit = unit,
       asp = asp,
-      crs = crs
+      crs = crs,
+      sf = TRUE
     )
   }
 
-  mask <- check_to_bbox(mask)
+  # Convert mask to sf if needed
+  mask <- as_sf(mask)
 
   if (!is.null(data)) {
-
-    data <- check_to_sf(data)
+    # Convert data to sf if needed
+    data <- as_sf(data)
+    # Erase data from mask
     data <- st_transform_ext(data, crs)
-
-    if (nrow(data) > 1) {
-      data <- sf::st_union(data)
-    }
-
-    mask <- suppressWarnings(sf::st_difference(sf_bbox_to_sf(mask), data))
+    mask <- st_erase(x = mask, y = data)
   }
 
+  # Create mask layer
   mask_layer <-
     layer_location_data(
       data = mask,
@@ -65,9 +64,11 @@ layer_mask <- function(data = NULL,
       ...
     )
 
+  # Create neatline layer
   neatline_layer <- NULL
 
   if (neatline && all(vapply(c(dist, diag_ratio, asp), is.null, TRUE))) {
+    # FIXME: This option is not documented and may not be expected behavior in all cases
     neatline_layer <-
       layer_neatline(
         data = mask,

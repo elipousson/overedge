@@ -3,14 +3,14 @@
 #'
 #' An extended version of st_coords that supports binding coordinates to the
 #' object, optionally dropping the geometry, and returning wkt or a point on
-#' surface (geometyr = "surface point") instead of the centroid.
+#' surface (geometry = "surface point") instead of the centroid.
 #'
 #' @param x sf, bbox, or sfc object
 #' @param coords Column names to use for coordinates in results, Default: NULL;
 #'   which is set to c("lon", "lat") by check_coords
 #' @param geometry geometry to use for coordinates "centroid", "surface point",
 #'   or alternatively "wkt"; defaults to NULL ("centroid")
-#' @param bind If TRUE, bind the coordinates columns to the provided object x,
+#' @param keep_all If TRUE, bind the coordinates columns to the provided object x,
 #'   Default: TRUE
 #' @param drop If TRUE and x is an sf object, drop the geometry Default: TRUE
 #' @rdname st_coords
@@ -18,9 +18,8 @@
 #' @importFrom sf st_as_text st_as_sfc st_point_on_surface st_coordinates
 #'   st_drop_geometry
 #' @importFrom dplyr select bind_cols
-st_coords <- function(x, coords = NULL, geometry = NULL, bind = TRUE, drop = TRUE) {
+st_coords <- function(x, coords = NULL, geometry = NULL, keep_all = TRUE, drop = TRUE) {
   geometry <- match.arg(geometry, c("centroid", "surface point", "wkt"))
-  x_coords <- NULL
 
   stopifnot(
     check_sf(x, ext = TRUE)
@@ -54,8 +53,8 @@ st_coords <- function(x, coords = NULL, geometry = NULL, bind = TRUE, drop = TRU
       )
   }
 
-  # If x is an sfc or bind = FALSE return coordinates
-  if (!bind) {
+  # If x is an sfc or keep_all = FALSE return coordinates
+  if (!keep_all) {
     if (geometry == "wkt") {
       return(x$wkt)
     } else {

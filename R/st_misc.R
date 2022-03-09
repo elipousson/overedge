@@ -38,7 +38,7 @@ NULL
 #' @export
 #' @importFrom sf st_geometry st_crs
 st_scale_rotate <- function(x, scale = 1, rotate = 0) {
-  x <- check_to_sf(x)
+  x <- as_sf(x)
 
   # rotate function (see here: https://r-spatial.github.io/sf/articles/sf3.html#affine-transformations
   rot <- function(a) matrix(c(cos(a), sin(a), -sin(a), cos(a)), 2, 2)
@@ -63,7 +63,7 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
 st_center <- function(x,
                       ext = TRUE,
                       ...) {
-  x <- check_to_sf(x)
+  x <- as_sf(x)
 
   if (ext) {
     crs <- sf::st_crs(x)
@@ -90,7 +90,7 @@ st_center <- function(x,
 #' @importFrom usethis ui_stop
 #' @importFrom purrr discard
 st_inscribed_square <- function(x, rotate = 0) {
-  x <- check_to_sf(x)
+  x <- as_sf(x)
 
   if (sf::st_is_longlat(x)) {
     usethis::ui_stop("st_inscribed_square does not work for data using geographic coordinates.
@@ -128,8 +128,7 @@ st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE) {
   } else if (!is.null(check)) {
     geom_type <- unique(geom_type)
 
-   check_type <- (check %in% geom_type)
-
+    check_type <- (check %in% geom_type)
   } else {
     check_type <-
       list(

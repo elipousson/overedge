@@ -1,7 +1,9 @@
 #' Layer location data into a ggplot2 map
 #'
 #' Helper function to make a ggplot2 layer from data returned by
-#' \code{get_location_data}
+#' \code{get_location_data}. For text geoms, the required aesthetic mapping is
+#' set based on the name_col but can be values passed to mapping take
+#' precedence.
 #'
 #' @param label label for area (appended to data as a prefix if data is a
 #'   string)
@@ -11,7 +13,7 @@
 #' @param unit unit to adjust location by dist or diag_ratio; defaults to
 #'   "meter"
 #' @param label_col Column name or id for a column with the text or labels to
-#'   pass to [ggrepel] functions.
+#'   pass to any text geom.
 #' @param ... Parameters passed to selected geom
 #' @inheritParams get_location_data
 #' @inheritParams ggplot2::geom_sf
@@ -25,7 +27,7 @@
 #' @importFrom geomtextpath geom_textsf geom_labelsf
 #' @importFrom ggrepel geom_text_repel geom_label_repel
 layer_location_data <-
-  function(mapping = ggplot2::aes(),
+  function(mapping = NULL,
            data = NULL,
            label,
            geom = "sf",
@@ -69,15 +71,50 @@ layer_location_data <-
         crs = crs
       )
 
+    text_geoms <- c("text", "label", "textsf", "labelsf", "text_repel", "label_repel")
+    ggrepel_geoms <- c("text_repel", "label_repel")
+
+    # Match geoms
     geom <- match.arg(
       geom,
-      c("sf", "icon", "text", "label", "textsf", "labelsf", "text_repel", "label_repel")
+      c("sf", "icon", text_geoms)
     )
 
+    # Check if packages are available for text/label geoms
     if (geom %in% c("textsf", "labelsf")) {
       check_package_exists("geomtextpath")
-    } else if (geom %in% c("text_repel", "label_repel")) {
+    } else if (geom %in% ggrepel_geoms) {
       check_package_exists("ggrepel")
+    }
+
+    # Assign aesthetics for text/label geoms
+    if (geom %in% text_geoms) {
+      stopifnot(
+        is.character(label_col),
+        label_col %in% names(data)
+      )
+
+      if (is.null(mapping)) {
+        mapping <- ggplot2::aes()
+      }
+
+      mapping <-
+        modifyList(
+          ggplot2::aes(label = .data[[label_col]]),
+          mapping
+        )
+
+      if (geom %in% ggrepel_geoms) {
+        mapping <-
+          modifyList(
+            ggplot2::aes(
+              geometry = .data[[attributes(data)$sf_column]]
+            ),
+            mapping
+          )
+
+        stat <- "sf_coordinates"
+      }
     }
 
     layer <-
@@ -113,21 +150,15 @@ layer_location_data <-
           ...
         ),
         "text_repel" = ggrepel::geom_text_repel(
-          mapping = ggplot2::aes(
-            label = .data[[label_col]],
-            geometry = .data[[attributes(data)$sf_column]]
-          ),
+          mapping = mapping,
           data = data,
-          stat = "sf_coordinates",
+          stat = stat,
           ...
         ),
         "label_repel" = ggrepel::geom_label_repel(
           data = data,
-          mapping = ggplot2::aes(
-            label = .data[[label_col]],
-            geometry = .data[[attributes(data)$sf_column]]
-          ),
-          stat = "sf_coordinates",
+          mapping = mapping,
+          stat = stat,
           ...
         )
       )

@@ -20,7 +20,7 @@
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext
 #' @export
-#' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf st_transform
+#' @importFrom sf st_bbox
 st_bbox_ext <- function(x = NULL,
                         dist = NULL,
                         diag_ratio = NULL,
@@ -28,8 +28,7 @@ st_bbox_ext <- function(x = NULL,
                         unit = NULL,
                         crs = NULL,
                         sf = FALSE) {
-
-  x <- check_to_sf(x)
+  x <- as_sf(x)
 
   # Get buffered area
   x <-
@@ -40,9 +39,7 @@ st_bbox_ext <- function(x = NULL,
       unit = unit
     )
 
-  if (!is.null(crs)) {
-    x <- sf::st_transform(x, crs)
-  }
+  x <- st_transform_ext(x, crs)
 
   if (!is.null(asp)) {
     # Get aspect adjusted bbox
@@ -67,9 +64,9 @@ st_bbox_ext <- function(x = NULL,
 #' @name st_bbox_asp
 #' @export
 st_bbox_asp <- function(x = NULL,
-                        asp = NULL) {
-
-  bbox <- check_to_bbox(x)
+                        asp = NULL,
+                        sf = FALSE) {
+  bbox <- as_bbox(x)
 
   # Get adjusted aspect ratio
   asp <- get_asp(asp = asp)
@@ -103,5 +100,10 @@ st_bbox_asp <- function(x = NULL,
       )
   }
 
-  return(bbox)
+  if (sf) {
+    return(sf_bbox_to_sf(bbox))
+  } else {
+    return(bbox)
+  }
+
 }
