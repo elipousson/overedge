@@ -173,7 +173,7 @@ get_location <- function(type,
   } else {
     location <- type
 
-    if (warn) {
+    if (warn && (nrow(type) > 1)) {
       usethis::ui_warn("Returning all locations of this type.")
     }
   }
