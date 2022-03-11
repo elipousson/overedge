@@ -122,6 +122,52 @@ read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) 
   return(data)
 }
 
+#' @rdname read_sf_ext
+#' @aliases read_sf_download
+#' @inheritParams get_data_dir
+#' @inheritParams make_filename
+#' @md
+#' @export
+#' @importFrom sf st_crs
+read_sf_download <-
+  function(url,
+           bbox = NULL,
+           filename = NULL,
+           path = NULL,
+           filetype = "geojson",
+           prefix = "date",
+           method = "auto",
+           crs = 4226,
+           ...) {
+
+    path <- get_data_dir(path = path)
+
+    destfile <-
+      make_filename(
+        prefix = prefix,
+        filename = filename,
+        path = path,
+        filetype = filetype
+      )
+
+    download.file(
+      url = url,
+      destfile = destfile,
+      method = method,
+      ...)
+
+    data <- read_sf_path(path = destfile)
+
+    # FIXME: This may work for my use case but is not a very general pattern
+    if (crs == 4326) {
+      sf::st_crs(data) <- crs
+    } else if (!is.null(crs)) {
+      data <- st_transform_ext(data, crs = crs)
+    }
+
+    return(data)
+  }
+
 
 #' Read EXIF location data from images to a simple feature object
 #'

@@ -4,6 +4,7 @@
 \alias{read_sf_path}
 \alias{read_sf_url}
 \alias{read_sf_package}
+\alias{read_sf_download}
 \title{Read spatial data in a bounding box to a simple feature object}
 \usage{
 read_sf_path(path, bbox = NULL, ...)
@@ -11,6 +12,18 @@ read_sf_path(path, bbox = NULL, ...)
 read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
 read_sf_package(data, bbox = NULL, package, filetype = "gpkg", ...)
+
+read_sf_download(
+  url,
+  bbox = NULL,
+  filename = NULL,
+  path = NULL,
+  filetype = "geojson",
+  prefix = "date",
+  method = "auto",
+  crs = 4226,
+  ...
+)
 }
 \arguments{
 \item{path}{file path; used by read_sf_path only}
@@ -34,6 +47,12 @@ if the url is a Google Sheet}
 \item{filetype}{file type supported by \code{\link[sf]{read_sf}}., Default:
 'gpkg'; used by read_sf_package only and required only if the data is in
 the package cache directory or extdata system files.}
+
+\item{filename}{File name; if file name is \code{NULL}, name and file type are
+both required.}
+
+\item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
+date/time prefix; defaults to \code{NULL}.}
 }
 \description{
 An extended version of \code{\link[sf]{read_sf}} that support reading spatial

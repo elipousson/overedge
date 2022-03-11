@@ -10,6 +10,7 @@
 \alias{sf_bbox_transform}
 \alias{sf_bbox_to_sf}
 \alias{sf_bbox_to_wkt}
+\alias{sf_bbox_to_sfc}
 \alias{sf_bbox_to_lonlat_query}
 \alias{sf_bbox_shift}
 \alias{sf_bbox_contract}
@@ -31,6 +32,8 @@ sf_bbox_transform(bbox, crs)
 sf_bbox_to_sf(bbox)
 
 sf_bbox_to_wkt(bbox)
+
+sf_bbox_to_sfc(bbox)
 
 sf_bbox_to_lonlat_query(bbox, coords = c("longitude", "latitude"), crs = 4326)
 

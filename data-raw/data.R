@@ -282,7 +282,7 @@ dist_unit_options <-
 usethis::use_data(
   dist_unit_options,
   overwrite = TRUE,
-  internal = TRUE
+  internal = FALSE
 )
 
 
@@ -327,4 +327,83 @@ standard_scales <-
 usethis::use_data(
   standard_scales,
   overwrite = TRUE
+)
+
+us_states <-
+  tigris::states(
+    cb = TRUE,
+    resolution = "20m"
+  )
+
+us_states <-
+  us_states %>%
+  janitor::clean_names("snake") %>%
+  sf::st_transform(3857)
+
+nest_states <-
+  us_states %>%
+  dplyr::group_by(geoid) %>%
+  dplyr::group_nest(keep = TRUE)
+
+us_states <-
+  purrr::map_dfr(
+    .x = nest_states$data,
+    ~ tibble::tibble(
+      name = unique(.x$name),
+      geoid = unique(.x$name),
+      statefp = unique(.x$statefp),
+      abb = unique(.x$stusps),
+      bbox = list(sf::st_bbox(.x)),
+      wkt =  sf::st_as_text(sf::st_as_sfc(.x))
+      )
+    )
+
+usethis::use_data(
+  us_states,
+  overwrite = TRUE,
+  internal = FALSE
+)
+
+
+us_counties <-
+  purrr::map_dfr(
+    us_states$statefp,
+    ~ tigris::counties(
+      state = .x,
+      cb = TRUE,
+      resolution = "20m"
+    )
+  )
+
+us_counties_simple <-
+  us_counties %>%
+  janitor::clean_names("snake") %>%
+  sf::st_transform(3857)
+
+nest_counties <-
+  us_counties_simple %>% # us_counties %>%
+  dplyr::left_join(
+    dplyr::select(us_states, state_abb = abb, statefp), by = "statefp"
+  ) %>%
+  dplyr::group_by(geoid) %>%
+  dplyr::group_nest(keep = TRUE)
+
+us_counties <-
+  purrr::map_dfr(
+    .x = nest_counties$data,
+    ~ tibble::tibble(
+      name = unique(.x$name),
+      geoid = unique(.x$geoid),
+      countyfp = unique(.x$countyfp),
+      statefp = unique(.x$statefp),
+      abb_state = unique(.x$state_abb),
+      bbox = list(sf::st_bbox(.x)),
+      wkt = sf::st_as_text(sf::st_as_sfc(.x))
+    )
+  )
+
+usethis::use_data(
+  us_counties,
+  overwrite = TRUE,
+  internal = FALSE
 )

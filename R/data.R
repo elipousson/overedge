@@ -114,3 +114,35 @@
 #'
 #' @format A character vector with length of 84
 "osm_building_tags"
+
+#' U.S. State boundaries (1:20 mi scale, bbox and wkt)
+#'
+#' U.S. State boundaries data downloaded with [tigris::states].
+#'
+#' @format A data frame with 52 rows and 6 variables:
+#' \describe{
+#'   \item{\code{name}}{State name}
+#'   \item{\code{geoid}}{State GeoID}
+#'   \item{\code{statefp}}{State FIPS}
+#'   \item{\code{abb}}{State abbreviation (USPS)}
+#'   \item{\code{bbox}}{Bounding box}
+#'   \item{\code{wkt}}{Well known text}
+#'}
+"us_states"
+
+
+#' U.S. County boundaries (1:20 mi scale, bbox and wkt)
+#'
+#' U.S. County boundaries data downloaded with [tigris::counties].
+#'
+#' @format A data frame with 3220 rows and 7 variables:
+#' \describe{
+#'   \item{\code{name}}{County name}
+#'   \item{\code{geoid}}{County GeoID}
+#'   \item{\code{countyfp}}{County FIPS}
+#'   \item{\code{statefp}}{State FIPS}
+#'   \item{\code{abb_state}}{State abbreviation (USPS)}
+#'   \item{\code{bbox}}{Bounding box}
+#'   \item{\code{wkt}}{Well known text}
+#'}
+"us_counties"

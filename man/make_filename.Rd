@@ -11,7 +11,8 @@ make_filename(
   filename = NULL,
   path = NULL,
   prefix = NULL,
-  postfix = NULL
+  postfix = NULL,
+  cache = FALSE
 )
 }
 \arguments{

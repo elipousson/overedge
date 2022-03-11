@@ -134,9 +134,9 @@ sf_bbox_transform <- function(bbox, crs) {
 #'  - \code{\link[sfx]{st_extent}}
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom sf st_as_sf st_as_sfc
+#' @importFrom sf st_as_sf
 sf_bbox_to_sf <- function(bbox) {
-  sf::st_as_sf(sf::st_as_sfc(bbox))
+  sf::st_as_sf(sf_bbox_to_sfc(bbox))
 }
 
 #' @rdname sf_bbox_misc
@@ -144,7 +144,14 @@ sf_bbox_to_sf <- function(bbox) {
 #' @importFrom sf st_as_text st_as_sfc
 sf_bbox_to_wkt <- function(bbox) {
   # Convert bbox to well known text
-  sf::st_as_text(sf::st_as_sfc(bbox))
+  sf::st_as_text(sf_bbox_to_sfc(bbox))
+}
+
+#' @rdname sf_bbox_misc
+#' @export
+#' @importFrom sf st_as_sf st_as_sfc
+sf_bbox_to_sfc <- function(bbox) {
+  sf::st_as_sfc(bbox)
 }
 
 #' @rdname sf_bbox_misc
@@ -277,4 +284,39 @@ sf_bbox_expand <- function(bbox,
     side = "all",
     dir = 1
   )
+}
+
+#' @param point point to find npc coords for center
+#' @noRd
+sf_bbox_to_npc <- function(point,
+                           bbox) {
+  if (check_sf(bbox)) {
+    bbox <- sf::st_bbox(bbox)
+  }
+
+  crs <- sf::st_crs(bbox)
+
+  if (check_sf(marker)) {
+    marker <- sf::st_coordinates(st_center(marker, ext = FALSE))
+  }
+
+  npc <- c(0, 0)
+
+  xdist <-
+    sf::st_distance(
+      sf::st_point(c(bbox[["xmin"]], bbox[["ymin"]])),
+      sf::st_point(c(marker[1], bbox[["ymin"]]))
+    )
+
+
+  ydist <-
+    sf::st_distance(
+      sf::st_point(c(bbox[["xmin"]], bbox[["ymin"]])),
+      sf::st_point(c(bbox[["xmin"]], marker[2]))
+    )
+
+  npc[1] <- as.numeric(xdist) / sf_bbox_xdist(bbox)
+  npc[2] <- as.numeric(ydist) / sf_bbox_ydist(bbox)
+
+  return(npc)
 }

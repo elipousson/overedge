@@ -79,7 +79,19 @@ supported for all data types).</p>
 
 <span class="fu">read_sf_url</span><span class="op">(</span><span class="va">url</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">read_sf_package</span><span class="op">(</span><span class="va">data</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">package</span>, filetype <span class="op">=</span> <span class="st">"gpkg"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">read_sf_package</span><span class="op">(</span><span class="va">data</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">package</span>, filetype <span class="op">=</span> <span class="st">"gpkg"</span>, <span class="va">...</span><span class="op">)</span>
+
+<span class="fu">read_sf_download</span><span class="op">(</span>
+  <span class="va">url</span>,
+  bbox <span class="op">=</span> <span class="cn">NULL</span>,
+  filename <span class="op">=</span> <span class="cn">NULL</span>,
+  path <span class="op">=</span> <span class="cn">NULL</span>,
+  filetype <span class="op">=</span> <span class="st">"geojson"</span>,
+  prefix <span class="op">=</span> <span class="st">"date"</span>,
+  method <span class="op">=</span> <span class="st">"auto"</span>,
+  crs <span class="op">=</span> <span class="fl">4226</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -106,6 +118,12 @@ if the url is a Google Sheet</p></dd>
 <dd><p>file type supported by <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></code>., Default:
 'gpkg'; used by read_sf_package only and required only if the data is in
 the package cache directory or extdata system files.</p></dd>
+<dt>filename</dt>
+<dd><p>File name; if file name is <code>NULL</code>, name and file type are
+both required.</p></dd>
+<dt>prefix</dt>
+<dd><p>File name prefix. "date" adds a date prefix, "time" adds a
+date/time prefix; defaults to <code>NULL</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

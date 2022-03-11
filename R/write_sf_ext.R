@@ -228,10 +228,15 @@ make_filename <- function(name = NULL,
                           filename = NULL,
                           path = NULL,
                           prefix = NULL,
-                          postfix = NULL) {
+                          postfix = NULL,
+                          cache = FALSE) {
   stopifnot(
     is.character(name) || is.character(filename)
   )
+
+  if (cache) {
+    path <- get_data_dir(path = path)
+  }
 
   if (!is.null(filetype)) {
     filetype <- paste0(".", filetype)
@@ -334,20 +339,21 @@ str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", 
 #' Check existence of data directory and create if nonexistent
 #'
 #' @param path Path to directory to use as data directory.
-#' @noRd
+#' @export
 #' @importFrom rappdirs user_cache_dir
 #' @importFrom checkmate test_directory_exists
 #' @importFrom usethis ui_yeah ui_done
-data_dir <- function(path = NULL) {
+get_data_dir <- function(path = NULL) {
   if (is.null(path)) {
     path <- rappdirs::user_cache_dir("overedge")
   }
 
   if (!checkmate::test_directory_exists(path)) {
-    if (usethis::ui_yeah("The data directory {usethis::ui_path(path)} does not exist.
-                         Do you want to create a directory at this location?")) {
+    if (usethis::ui_yeah(
+    "The data directory {usethis::ui_path(path)} does not exist.
+    Do you want to create a directory at this location?")) {
       dir.create(path = path)
-      usethis::ui_done("New directory created at {usethis::ui_path(data_path)}")
+      usethis::ui_done("New directory created at {usethis::ui_path(path)}")
     }
   }
 

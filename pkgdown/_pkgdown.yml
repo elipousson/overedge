@@ -33,18 +33,23 @@ reference:
   - '`labs_ext`'
   - '`ggsave_ext`'
   - '`make_filename`'
-- title: Utility functions and reference data
+  - '`get_data_dir`'
+- title: Setting units and formatting
   contents:
-  - '`map_icons`'
-  - '`valid_dist_units`'
   - '`convert_dist_units`'
-  - '`standard_scales`'
   - '`get_standard_scale`'
   - '`convert_dist_scale`'
-  - '`paper_sizes`'
   - '`get_paper`'
   - '`get_margin`'
   - '`get_asp`'
+- title: Reference data for units and formatting
+  contents:
+  - '`map_icons`'
+  - '`valid_dist_units`'
+  - '`standard_scales`'
+  - '`paper_sizes`'
   - '`osm_building_tags`'
-
-
+- title: U.S. administrative boundary data
+  contents:
+  - '`us_states`'
+  - '`us_counties`'
