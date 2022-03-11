@@ -2,6 +2,7 @@
 % Please edit documentation in R/ggsave_ext.R
 \name{ggsave_ext}
 \alias{ggsave_ext}
+\alias{write_exif}
 \title{Save a ggplot and update file EXIF metadata}
 \usage{
 ggsave_ext(
@@ -29,6 +30,17 @@ ggsave_ext(
   args = NULL,
   ...
 )
+
+write_exif(
+  path = NULL,
+  filetype = NULL,
+  title = NULL,
+  author = NULL,
+  date = NULL,
+  keywords = NULL,
+  args = NULL,
+  overwrite = TRUE
+)
 }
 \arguments{
 \item{plot}{Plot to save, defaults to last plot displayed.}
@@ -45,8 +57,7 @@ date/time prefix; defaults to \code{NULL}.}
 
 \item{postfix}{File name postfix; defaults to \code{NULL}.}
 
-\item{filename}{File name; if file name is \code{NULL}, name and file type are
-both required.}
+\item{filename}{File name to create on disk.}
 
 \item{device}{Device to use. Can either be a device function
 (e.g. \link{png}), or one of "eps", "ps", "tex" (pictex),
@@ -54,7 +65,9 @@ both required.}
 
 \item{filetype}{File type or extension.}
 
-\item{path}{Path to file or data directory.}
+\item{path}{Path of the directory to save plot to: \code{path} and \code{filename}
+are combined to create the fully qualified file name. Defaults to the
+working directory.}
 
 \item{paper}{Paper matching name from \code{paper_sizes} (e.g. "letter"). Not case
 sensitive.}

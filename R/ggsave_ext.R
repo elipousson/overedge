@@ -5,6 +5,7 @@
 #' sentence case name with spaces (e.g. "Baltimore city map") and appending a
 #' label (e.g. "baltcity") as a prefix to the output file name.
 #'
+#' @inheritParams ggplot2::ggsave
 #' @param name Plot name, used to create filename (if filename is `NULL`) using
 #'   [make_filename()]
 #' @inheritParams make_filename
@@ -24,7 +25,6 @@
 #' @param args Alternate arguments passed to [exiftoolr::exif_call()].
 #'   If args is not `NULL`, title and author are ignored; defaults to `NULL`.
 #' @param ... Additional parameters passed to [ggplot2::ggsave()]
-#' @inheritParams ggplot2::ggsave
 #' @inheritParams make_filename
 #' @examples
 #' \dontrun{
@@ -53,8 +53,7 @@
 #' @rdname ggsave_ext
 #' @export
 #' @importFrom ggplot2 ggsave last_plot
-#' @importFrom glue glue
-#' @importFrom exiftoolr exif_call
+#' @importFrom stringr str_detect str_extract str_remove
 ggsave_ext <- function(plot = ggplot2::last_plot(),
                        name = NULL,
                        label = NULL,
@@ -125,50 +124,62 @@ ggsave_ext <- function(plot = ggplot2::last_plot(),
   )
 
   if (exif) {
-    check_package_exists("exifr")
+    write_exif(path = filename, filetype = filetype, title = title, author = author, keywords = keywords, date = NULL, args = args)
+  }
+}
 
-    if (is.null(args)) {
-      if (is.null(title)) {
-        title <- ""
-      }
-
-      if (is.null(author)) {
-        author <- ""
-      }
-
-      title <- glue::glue(title)
-
-      # FIXME: exiftoolr::exif_call() does not support the "now" value supported by exif
-      # If CreateDate is set to now automatically, why bother revising with exiftoolr anyway?
-      if ("png" %in% filetype) {
-        create_date <- "-CreationTime=now "
-      } else {
-        create_date <-
-          c(
-            "-CreateDate=now ",
-            "-ModifyDate=now "
-          )
-      }
-
-      # TODO: Add support for subjects https://stackoverflow.com/questions/28588696/python-exiftool-combining-subject-and-keyword-tags#28609886
-      args <-
-        c(
-          glue::glue("-Author={author} "),
-          glue::glue("-Title={title} "),
-          paste0("-Keywords+=", keywords, " "),
-          # create_date,
-          "-overwrite_original"
-        )
+#' @name write_exif
+#' @rdname ggsave_ext
+#' @export
+#' @importFrom glue glue
+#' @importFrom exiftoolr exif_call
+#' @importFrom usethis ui_done ui_path
+write_exif <- function(path = NULL, filetype = NULL, title = NULL, author = NULL, date = NULL, keywords = NULL, args = NULL, overwrite = TRUE) {
+  check_package_exists("exifr")
+  # FIXME: I want to implement a method that allows adding, replacing, or modifying exif
+  if (is.null(args)) {
+    if (!is.null(title)) {
+      args <- c(args, "-Title=Untitled")
+    } else {
+      args <- c(args, glue::glue("-Title={title}"))
     }
 
-    if (!is.null(args)) {
+    if (!is.null(author)) {
+      args <- c(args, glue::glue("-Author={author}"))
+    }
+
+    if (!is.null(date)) {
+      # FIXME: exiftoolr::exif_call() does not support the "now" value supported by exif
+      # If CreateDate is set to now automatically, why bother revising with exiftoolr anyway?
+      # TODO: Add support for subjects https://stackoverflow.com/questions/28588696/python-exiftool-combining-subject-and-keyword-tags#28609886
+      date <- "now"
+      if ("png" %in% filetype) {
+        args <- c(args, glue::glue("-CreationTime={date}"))
+      } else {
+        args <- c(args, c("-CreateDate={date}", "-ModifyDate={date}"))
+      }
+    }
+
+    if (!is.null(keywords)) {
+      args <- c(args, paste0("-Keywords+=", keywords))
+    }
+
+    if (overwrite) {
+      args <- c(args, "-overwrite_original")
+    }
+  }
+
+  if (!is.null(args)) {
+    suppressMessages(
       suppressWarnings(
         exiftoolr::exif_call(
           args = args,
-          path = filename,
+          path = path,
           quiet = TRUE
         )
       )
-    }
+    )
+
+    usethis::ui_done("EXIF metadata updated for {usethis::ui_path(path)}")
   }
 }
