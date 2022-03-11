@@ -96,6 +96,17 @@ label (e.g. "baltcity") as a prefix to the output file name.</p>
   keywords <span class="op">=</span> <span class="cn">NULL</span>,
   args <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
+<span class="op">)</span>
+
+<span class="fu">write_exif</span><span class="op">(</span>
+  path <span class="op">=</span> <span class="cn">NULL</span>,
+  filetype <span class="op">=</span> <span class="cn">NULL</span>,
+  title <span class="op">=</span> <span class="cn">NULL</span>,
+  author <span class="op">=</span> <span class="cn">NULL</span>,
+  date <span class="op">=</span> <span class="cn">NULL</span>,
+  keywords <span class="op">=</span> <span class="cn">NULL</span>,
+  args <span class="op">=</span> <span class="cn">NULL</span>,
+  overwrite <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -116,8 +127,7 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 <dt>postfix</dt>
 <dd><p>File name postfix; defaults to <code>NULL</code>.</p></dd>
 <dt>filename</dt>
-<dd><p>File name; if file name is <code>NULL</code>, name and file type are
-both required.</p></dd>
+<dd><p>File name to create on disk.</p></dd>
 <dt>device</dt>
 <dd><p>Device to use. Can either be a device function
 (e.g. <a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a>), or one of "eps", "ps", "tex" (pictex),
@@ -125,7 +135,9 @@ both required.</p></dd>
 <dt>filetype</dt>
 <dd><p>File type or extension.</p></dd>
 <dt>path</dt>
-<dd><p>Path to file or data directory.</p></dd>
+<dd><p>Path of the directory to save plot to: <code>path</code> and <code>filename</code>
+are combined to create the fully qualified file name. Defaults to the
+working directory.</p></dd>
 <dt>paper</dt>
 <dd><p>Paper matching name from <code>paper_sizes</code> (e.g. "letter"). Not case
 sensitive.</p></dd>
