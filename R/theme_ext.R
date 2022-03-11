@@ -1,6 +1,8 @@
 #' Modify the text, margins, or legend for a ggplot theme
 #'
-#' Helper functions for modifying a ggplot theme.
+#' Helper functions for modifying a ggplot theme. The "replace" and "update"
+#' options for the method parameter are not currently working; keeping method =
+#' NULL or method = "set" is recommended.
 #'
 #' @param font_family Font family, Default: 'Helvetica' If `NULL`, font_family
 #'   is pulled from current set theme which is helpful for resetting all text
@@ -49,21 +51,34 @@ NULL
 theme_text <- function(font_family = NULL,
                        color = "black",
                        geom_text = TRUE,
+                       hjust = NULL,
+                       vjust = NULL,
                        method = NULL) {
+
   if (is.null(font_family)) {
     font_family <- ggplot2::theme_get()$text$family
   }
 
+  if (is.null(hjust) && is.null(vjust)) {
+    hjust <- 0
+    vjust <- 0.5
+  }
+
+  theme <- ggplot2::theme_get()
+
   text_theme <-
-    ggplot2::theme(
-      plot.title = ggplot2::element_text(family = font_family, color = color),
-      plot.subtitle = ggplot2::element_text(family = font_family, color = color),
-      plot.caption = ggplot2::element_text(family = font_family, color = color),
-      strip.text = ggplot2::element_text(family = font_family, color = color),
-      axis.text = ggplot2::element_text(family = font_family, color = color),
-      axis.title = ggplot2::element_text(family = font_family, color = color),
-      legend.text = ggplot2::element_text(family = font_family, color = color),
-      legend.title = ggplot2::element_text(family = font_family, color = color)
+    modifyList(
+      theme,
+      ggplot2::theme(
+        plot.title = ggplot2::element_text(family = font_family, color = color, hjust = hjust, vjust = vjust),
+        plot.subtitle = ggplot2::element_text(family = font_family, color = color, hjust = hjust, vjust = vjust),
+        plot.caption = ggplot2::element_text(family = font_family, color = color, hjust = hjust, vjust = vjust),
+        strip.text = ggplot2::element_text(family = font_family, color = color, hjust = hjust, vjust = vjust),
+        axis.text = ggplot2::element_text(family = font_family, color = color, hjust = hjust, vjust = vjust),
+        axis.title = ggplot2::element_text(family = font_family, color = color, hjust = hjust, vjust = vjust),
+        legend.text = ggplot2::element_text(family = font_family, color = color, hjust = hjust, vjust = vjust),
+        legend.title = ggplot2::element_text(family = font_family, color = color, hjust = hjust, vjust = vjust)
+      )
     )
 
   if (!is.null(method)) {
@@ -102,7 +117,13 @@ theme_margin <- function(margin = "standard",
                          color = NA,
                          size = 0,
                          method = NULL) {
+
+
+  theme <- ggplot2::theme_get()
+
   margin_theme <-
+    modifyList(
+      theme,
     ggplot2::theme(
       plot.background = ggplot2::element_rect(
         fill = fill,
@@ -119,6 +140,7 @@ theme_margin <- function(margin = "standard",
         header = header,
         footer = footer
       )
+    )
     )
 
   if (!is.null(method)) {

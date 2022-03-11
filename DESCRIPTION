@@ -12,8 +12,9 @@ RoxygenNote: 7.1.2
 Imports: 
     checkmate,
     dplyr,
-    exifr,
+    exiftoolr,
     FlickrAPI (>= 0.1.0.1),
+    fs,
     geomtextpath,
     geosphere,
     ggplot2,
@@ -38,8 +39,7 @@ Imports:
     tidyselect,
     units,
     usethis,
-    utils,
-    fs
+    utils
 Remotes:
     koki25ando/FlickrAPI,
     yonghah/esri2sf,

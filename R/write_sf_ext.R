@@ -233,6 +233,13 @@ make_filename <- function(name = NULL,
     is.character(name) || is.character(filename)
   )
 
+  if (!is.null(filetype)) {
+    filetype <- paste0(".", filetype)
+  } else if (is.null(filetype) && !is.null(filename)) {
+    filetype <- stringr::str_extract(filename, "(?<=\\.).+$")
+    filename <- stringr::str_remove(filename, paste0("\\.", filetype, "$"))
+  }
+
   if (is.null(filename)) {
     if (!is.null(label)) {
       filename <-
@@ -244,22 +251,18 @@ make_filename <- function(name = NULL,
     } else {
       filename <- name
     }
-
-    filename <-
-      str_prefix(
-        prefix = prefix,
-        string = filename,
-        postfix = postfix,
-        clean = TRUE
-      )
-
-    if (!is.null(filetype)) {
-      filetype <- paste0(".", filetype)
-    }
-
-    filename <-
-      paste0(filename, filetype)
   }
+
+  filename <-
+    str_prefix(
+      prefix = prefix,
+      string = filename,
+      postfix = postfix,
+      clean = TRUE
+    )
+
+  filename <-
+    paste0(filename, filetype)
 
   if (!is.null(path)) {
     if (!(checkmate::check_directory_exists(path))) {

@@ -79,7 +79,7 @@ label (e.g. "baltcity") as a prefix to the output file name.</p>
   prefix <span class="op">=</span> <span class="cn">NULL</span>,
   postfix <span class="op">=</span> <span class="cn">NULL</span>,
   filename <span class="op">=</span> <span class="cn">NULL</span>,
-  device <span class="op">=</span> <span class="st">"png"</span>,
+  device <span class="op">=</span> <span class="cn">NULL</span>,
   filetype <span class="op">=</span> <span class="cn">NULL</span>,
   path <span class="op">=</span> <span class="cn">NULL</span>,
   paper <span class="op">=</span> <span class="cn">NULL</span>,
@@ -93,6 +93,7 @@ label (e.g. "baltcity") as a prefix to the output file name.</p>
   exif <span class="op">=</span> <span class="cn">FALSE</span>,
   title <span class="op">=</span> <span class="cn">NULL</span>,
   author <span class="op">=</span> <span class="cn">NULL</span>,
+  keywords <span class="op">=</span> <span class="cn">NULL</span>,
   args <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -151,14 +152,19 @@ theme element.</p></dd>
 <dd><p>If <code>TRUE</code>, the EXIF metadata for the exported file is updated
 with the exifr package; defaults to <code>FALSE</code>.</p></dd>
 <dt>title</dt>
-<dd><p>Title of plot or map, added to EXIF metadata, Default: <code>NULL</code>.</p></dd>
+<dd><p>Title of plot or map, added to file metadata with exiftoolr,
+Default: <code>NULL</code>.</p></dd>
 <dt>author</dt>
-<dd><p>Author of plot or map, added to EXIF metadata, Default: <code>NULL</code>.</p></dd>
+<dd><p>Author of plot or map, added to file metadata with exiftoolr,
+Default: <code>NULL</code>.</p></dd>
+<dt>keywords</dt>
+<dd><p>Keyword(s) added to file metadata with with exiftoolr,
+Default: <code>NULL</code>.</p></dd>
 <dt>args</dt>
-<dd><p>Alternate arguments passed to <code><a href="https://rdrr.io/pkg/exifr/man/exiftool_call.html" class="external-link">exiftool_call</a></code>.
+<dd><p>Alternate arguments passed to <code><a href="https://rdrr.io/pkg/exiftoolr/man/exif_call.html" class="external-link">exiftoolr::exif_call()</a></code>.
 If args is not <code>NULL</code>, title and author are ignored; defaults to <code>NULL</code>.</p></dd>
 <dt>...</dt>
-<dd><p>Additional parameters passed to <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></code></p></dd>
+<dd><p>Additional parameters passed to <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggplot2::ggsave()</a></code></p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

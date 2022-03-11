@@ -11,6 +11,8 @@ theme_text(
   font_family = NULL,
   color = "black",
   geom_text = TRUE,
+  hjust = NULL,
+  vjust = NULL,
   method = NULL
 )
 
@@ -99,7 +101,9 @@ or "bottomright", place the legend in an inset position; defaults to
 \code{NULL}.}
 }
 \description{
-Helper functions for modifying a ggplot theme.
+Helper functions for modifying a ggplot theme. The "replace" and "update"
+options for the method parameter are not currently working; keeping method =
+NULL or method = "set" is recommended.
 }
 \seealso{
 \itemize{

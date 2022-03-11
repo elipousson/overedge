@@ -8,8 +8,12 @@
 #' @param name Plot name, used to create filename (if filename is `NULL`) using
 #'   [make_filename()]
 #' @inheritParams make_filename
-#' @param title Title of plot or map, added to EXIF metadata, Default: `NULL`.
-#' @param author Author of plot or map, added to EXIF metadata, Default: `NULL`.
+#' @param title Title of plot or map, added to file metadata with exiftoolr,
+#'   Default: `NULL`.
+#' @param author Author of plot or map, added to file metadata with exiftoolr,
+#'   Default: `NULL`.
+#' @param keywords Keyword(s) added to file metadata with with exiftoolr,
+#'   Default: `NULL`.
 #' @param paper Paper matching name from `paper_sizes` (e.g. "letter"). Not case
 #'   sensitive.
 #' @param orientation Page orientation ("portrait", "landscape", or "square").
@@ -17,9 +21,9 @@
 #'   theme element.
 #' @param exif If `TRUE`, the EXIF metadata for the exported file is updated
 #'   with the exifr package; defaults to `FALSE`.
-#' @param args Alternate arguments passed to \code{\link[exifr]{exiftool_call}}.
+#' @param args Alternate arguments passed to [exiftoolr::exif_call()].
 #'   If args is not `NULL`, title and author are ignored; defaults to `NULL`.
-#' @param ... Additional parameters passed to \code{\link[ggplot2]{ggsave}}
+#' @param ... Additional parameters passed to [ggplot2::ggsave()]
 #' @inheritParams ggplot2::ggsave
 #' @inheritParams make_filename
 #' @examples
@@ -50,14 +54,14 @@
 #' @export
 #' @importFrom ggplot2 ggsave last_plot
 #' @importFrom glue glue
-#' @importFrom exifr exiftool_call
+#' @importFrom exiftoolr exif_call
 ggsave_ext <- function(plot = ggplot2::last_plot(),
                        name = NULL,
                        label = NULL,
                        prefix = NULL,
                        postfix = NULL,
                        filename = NULL,
-                       device = "png",
+                       device = NULL,
                        filetype = NULL,
                        path = NULL,
                        paper = NULL,
@@ -71,6 +75,7 @@ ggsave_ext <- function(plot = ggplot2::last_plot(),
                        exif = FALSE,
                        title = NULL,
                        author = NULL,
+                       keywords = NULL,
                        args = NULL,
                        ...) {
   if (!is.null(paper)) {
@@ -84,8 +89,15 @@ ggsave_ext <- function(plot = ggplot2::last_plot(),
     is.numeric(width) && is.numeric(height)
   )
 
-  if (is.null(filetype)) {
-    filetype <- device
+  if (is.null(device)) {
+    if (is.null(filetype) && stringr::str_detect(filename, "\\.")) {
+      filetype <- stringr::str_extract(filename, "(?<=\\.).+$")
+      filename <- stringr::str_remove(filename, paste0("\\.", filetype, "$"))
+    }
+
+    if (!is.null(filetype)) {
+      device <- filetype
+    }
   }
 
   filename <-
@@ -116,33 +128,46 @@ ggsave_ext <- function(plot = ggplot2::last_plot(),
     check_package_exists("exifr")
 
     if (is.null(args)) {
+      if (is.null(title)) {
+        title <- ""
+      }
+
+      if (is.null(author)) {
+        author <- ""
+      }
+
       title <- glue::glue(title)
 
-      if (device == "png") {
-        create_date <-
-          paste0("-CreationTime=now ")
+      # FIXME: exiftoolr::exif_call() does not support the "now" value supported by exif
+      # If CreateDate is set to now automatically, why bother revising with exiftoolr anyway?
+      if ("png" %in% filetype) {
+        create_date <- "-CreationTime=now "
       } else {
         create_date <-
-          paste0(
+          c(
             "-CreateDate=now ",
             "-ModifyDate=now "
           )
       }
 
-      exifr::exiftool_call(
-        args = glue::glue(
-          "-Author='{author}' ",
-          "-Title='{title}' ",
-          "{create_date}",
+      # TODO: Add support for subjects https://stackoverflow.com/questions/28588696/python-exiftool-combining-subject-and-keyword-tags#28609886
+      args <-
+        c(
+          glue::glue("-Author={author} "),
+          glue::glue("-Title={title} "),
+          paste0("-Keywords+=", keywords, " "),
+          # create_date,
           "-overwrite_original"
-        ),
-        fnames = filename,
-        quiet = TRUE
-      )
-    } else if (!is.null(args)) {
-      exifr::exiftool_call(
-        args = args,
-        fnames = filename
+        )
+    }
+
+    if (!is.null(args)) {
+      suppressWarnings(
+        exiftoolr::exif_call(
+          args = args,
+          path = filename,
+          quiet = TRUE
+        )
       )
     }
   }

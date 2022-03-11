@@ -140,8 +140,10 @@ read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) 
 #' @importFrom checkmate check_directory_exists
 #' @importFrom purrr map_dfr
 #' @importFrom fs dir_ls
-#' @importFrom exifr read_exif
-#' @importFrom dplyr rename arrange mutate row_number
+#' @importFrom exiftoolr exif_read
+#' @importFrom dplyr rename_with rename mutate case_when arrange
+#' @importFrom janitor clean_names
+#' @importFrom sf st_crs
 read_sf_exif <- function(path = NULL,
                          bbox = NULL,
                          filetype = "jpg",
@@ -152,14 +154,19 @@ read_sf_exif <- function(path = NULL,
 
   tags <-
     c(
-      "SourceFile",
-      "GPSImgDirection",
-      "GPSLatitude",
-      "GPSLongitude",
       "ImageDescription",
+      "FileName",
+      "CreateDate",
+      "DateTimeOriginal",
+      "OffsetTimeOriginal",
       "ImageWidth",
       "ImageHeight",
-      "Orientation"
+      "Orientation",
+      "SourceFile",
+      "FileSize",
+      "FileType",
+      "*GPS*",
+      ...
     )
 
   # FIXME: Could filetype be inferred from the files at the path?
@@ -170,26 +177,55 @@ read_sf_exif <- function(path = NULL,
           path = path,
           glob = paste0("*.", filetype)
         ),
-        ~ exifr::read_exif(
+        ~ exiftoolr::exif_read(
           .x,
-          tags = c(
-            # FIXME: The default fields likely vary by filetype and could be set based on that
+          tags = tags
+            # FIXME: The default fields likely vary by file type and could be set based on that
             # NOTE: Are there other tags that should be included by default?
-            tags,
-            ...
-          )
         )
       )
     )
 
   data <-
     # Rename variables
-    dplyr::rename(
+    dplyr::rename_with(
       janitor::clean_names(data, "snake"),
-      lat = gps_latitude,
-      lon = gps_longitude,
-      img_dir = gps_img_direction,
-      filename = source_file
+      ~ sub("^gps_", "", .x)
+    )
+
+  data <-
+    dplyr::rename(
+      data,
+      lon = longitude,
+      lon_ref = longitude_ref,
+      lat = latitude,
+      lat_ref = latitude_ref,
+      image_direction = img_direction,
+      image_direction_ref = img_direction_ref,
+      path = source_file,
+      exif_orientation = orientation
+    )
+
+  data <-
+    dplyr::mutate(
+      data,
+      exif_orientation =
+        dplyr::case_when(
+          exif_orientation == 1 ~ "Horizontal (normal)",
+          exif_orientation == 2 ~ "Mirror horizontal",
+          exif_orientation == 3 ~ "Rotate 180",
+          exif_orientation == 4 ~ "Mirror vertical",
+          exif_orientation == 5 ~ "Mirror horizontal and rotate 270 CW",
+          exif_orientation == 6 ~ "Rotate 90 CW",
+          exif_orientation == 7 ~ "Mirror horizontal and rotate 90 CW",
+          exif_orientation == 8 ~ "Rotate 270 CW"
+        ),
+      orientation =
+        dplyr::case_when(
+          (image_width / image_height) > 1 ~ "landscape",
+          (image_width / image_height) < 1 ~ "portrait",
+          (image_width / image_height) == 1 ~ "square"
+        )
     )
 
   data <-

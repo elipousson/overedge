@@ -5,6 +5,7 @@
 \alias{st_scale_rotate}
 \alias{st_center}
 \alias{st_inscribed_square}
+\alias{st_circumscribed_circle}
 \alias{st_geom_type}
 \title{Modify the geometry of a simple feature or bounding box object}
 \usage{
@@ -13,6 +14,8 @@ st_scale_rotate(x, scale = 1, rotate = 0)
 st_center(x, ext = TRUE, ...)
 
 st_inscribed_square(x, rotate = 0)
+
+st_circumscribed_circle(x, scale = 1)
 
 st_geom_type(x, ext = TRUE, check = NULL, by_geometry = FALSE)
 }

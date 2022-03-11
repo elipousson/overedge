@@ -92,7 +92,7 @@ layer_neatline <- function(data = NULL,
       list(
         neatline,
         ggplot2::theme(
-          panel.grid.major = ggplot2::element_line(color = "transparent")
+          panel.grid.major = ggplot2::element_blank()
         )
       )
   }

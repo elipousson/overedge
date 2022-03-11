@@ -11,7 +11,7 @@ ggsave_ext(
   prefix = NULL,
   postfix = NULL,
   filename = NULL,
-  device = "png",
+  device = NULL,
   filetype = NULL,
   path = NULL,
   paper = NULL,
@@ -25,6 +25,7 @@ ggsave_ext(
   exif = FALSE,
   title = NULL,
   author = NULL,
+  keywords = NULL,
   args = NULL,
   ...
 )
@@ -80,14 +81,19 @@ theme element.}
 \item{exif}{If \code{TRUE}, the EXIF metadata for the exported file is updated
 with the exifr package; defaults to \code{FALSE}.}
 
-\item{title}{Title of plot or map, added to EXIF metadata, Default: \code{NULL}.}
+\item{title}{Title of plot or map, added to file metadata with exiftoolr,
+Default: \code{NULL}.}
 
-\item{author}{Author of plot or map, added to EXIF metadata, Default: \code{NULL}.}
+\item{author}{Author of plot or map, added to file metadata with exiftoolr,
+Default: \code{NULL}.}
 
-\item{args}{Alternate arguments passed to \code{\link[exifr]{exiftool_call}}.
+\item{keywords}{Keyword(s) added to file metadata with with exiftoolr,
+Default: \code{NULL}.}
+
+\item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}.
 If args is not \code{NULL}, title and author are ignored; defaults to \code{NULL}.}
 
-\item{...}{Additional parameters passed to \code{\link[ggplot2]{ggsave}}}
+\item{...}{Additional parameters passed to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}}
 }
 \description{
 Save a plot or map then update the EXIF metadata for the title, author, and

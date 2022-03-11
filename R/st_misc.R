@@ -104,6 +104,26 @@ st_inscribed_square <- function(x, rotate = 0) {
   x <- st_scale_rotate(x, rotate = (rotate + 45))
 }
 
+#' @rdname st_misc
+#' @name st_circumscribed_circle
+#' @export
+st_circumscribed_circle <- function(x, scale = 1) {
+
+  bbox <- as_bbox(x)
+  radius <- sf_bbox_diagdist(bbox) / 2
+
+  center <- st_center(x, ext = FALSE)
+
+  circle <-
+    st_buffer_ext(
+      x = center,
+      dist = radius * scale
+    )
+
+  return(circle)
+}
+
+
 
 #' @rdname st_misc
 #' @name st_geom_type
