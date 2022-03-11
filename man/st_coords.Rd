@@ -4,21 +4,30 @@
 \alias{st_coords}
 \title{Get coordinates for simple feature or bounding box object}
 \usage{
-st_coords(x, coords = NULL, geometry = NULL, keep_all = TRUE, drop = TRUE)
+st_coords(
+  x,
+  coords = NULL,
+  geometry = NULL,
+  crs = NULL,
+  keep_all = TRUE,
+  drop = TRUE
+)
 }
 \arguments{
 \item{x}{sf, bbox, or sfc object}
 
 \item{coords}{Column names to use for coordinates in results, Default: NULL;
-which is set to c("lon", "lat") by check_coords}
+which is set to c("lon", "lat") by \link{check_coords}}
 
 \item{geometry}{geometry to use for coordinates "centroid", "surface point",
 or alternatively "wkt"; defaults to NULL ("centroid")}
 
-\item{keep_all}{If TRUE, bind the coordinates columns to the provided object x,
-Default: TRUE}
+\item{crs}{Coordinate reference system to use for coordinates; defaults to \code{NULL}.}
 
-\item{drop}{If TRUE and x is an sf object, drop the geometry Default: TRUE}
+\item{keep_all}{If \code{TRUE}, bind the coordinates columns to the provided object x,
+Default: \code{TRUE}.}
+
+\item{drop}{If \code{TRUE} and x is an sf object, drop the geometry Default: \code{TRUE}.}
 }
 \description{
 An extended version of st_coords that supports binding coordinates to the

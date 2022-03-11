@@ -69,7 +69,14 @@ surface (geometry = "surface point") instead of the centroid.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_coords</span><span class="op">(</span><span class="va">x</span>, coords <span class="op">=</span> <span class="cn">NULL</span>, geometry <span class="op">=</span> <span class="cn">NULL</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_coords</span><span class="op">(</span>
+  <span class="va">x</span>,
+  coords <span class="op">=</span> <span class="cn">NULL</span>,
+  geometry <span class="op">=</span> <span class="cn">NULL</span>,
+  crs <span class="op">=</span> <span class="cn">NULL</span>,
+  keep_all <span class="op">=</span> <span class="cn">TRUE</span>,
+  drop <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,15 +85,17 @@ surface (geometry = "surface point") instead of the centroid.</p>
 <dd><p>sf, bbox, or sfc object</p></dd>
 <dt>coords</dt>
 <dd><p>Column names to use for coordinates in results, Default: NULL;
-which is set to c("lon", "lat") by check_coords</p></dd>
+which is set to c("lon", "lat") by <a href="sf_to_df.html">check_coords</a></p></dd>
 <dt>geometry</dt>
 <dd><p>geometry to use for coordinates "centroid", "surface point",
 or alternatively "wkt"; defaults to NULL ("centroid")</p></dd>
+<dt>crs</dt>
+<dd><p>Coordinate reference system to use for coordinates; defaults to <code>NULL</code>.</p></dd>
 <dt>keep_all</dt>
-<dd><p>If TRUE, bind the coordinates columns to the provided object x,
-Default: TRUE</p></dd>
+<dd><p>If <code>TRUE</code>, bind the coordinates columns to the provided object x,
+Default: <code>TRUE</code>.</p></dd>
 <dt>drop</dt>
-<dd><p>If TRUE and x is an sf object, drop the geometry Default: TRUE</p></dd>
+<dd><p>If <code>TRUE</code> and x is an sf object, drop the geometry Default: <code>TRUE</code>.</p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
