@@ -141,17 +141,17 @@ sf_bbox_to_sf <- function(bbox) {
 
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom sf st_as_text st_as_sfc
-sf_bbox_to_wkt <- function(bbox) {
-  # Convert bbox to well known text
-  sf::st_as_text(sf_bbox_to_sfc(bbox))
+#' @importFrom sf st_as_sf st_as_sfc
+sf_bbox_to_sfc <- function(bbox) {
+  sf::st_as_sfc(bbox)
 }
 
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom sf st_as_sf st_as_sfc
-sf_bbox_to_sfc <- function(bbox) {
-  sf::st_as_sfc(bbox)
+#' @importFrom sf st_as_text st_as_sfc
+sf_bbox_to_wkt <- function(bbox) {
+  # Convert bbox to well known text
+  sf::st_as_text(sf_bbox_to_sfc(bbox))
 }
 
 #' @rdname sf_bbox_misc

@@ -115,7 +115,7 @@
 #' @format A character vector with length of 84
 "osm_building_tags"
 
-#' U.S. State boundaries (1:20 mi scale, bbox and wkt)
+#' U.S. State boundaries (1:5 mi scale, bbox and wkt)
 #'
 #' U.S. State boundaries data downloaded with [tigris::states].
 #'
@@ -131,7 +131,7 @@
 "us_states"
 
 
-#' U.S. County boundaries (1:20 mi scale, bbox and wkt)
+#' U.S. County boundaries (1:5 mi scale, bbox and wkt)
 #'
 #' U.S. County boundaries data downloaded with [tigris::counties].
 #'

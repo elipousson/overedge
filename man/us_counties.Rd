@@ -3,7 +3,7 @@
 \docType{data}
 \name{us_counties}
 \alias{us_counties}
-\title{U.S. County boundaries (1:20 mi scale, bbox and wkt)}
+\title{U.S. County boundaries (1:5 mi scale, bbox and wkt)}
 \format{
 A data frame with 3220 rows and 7 variables:
 \describe{

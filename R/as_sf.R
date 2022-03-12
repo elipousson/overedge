@@ -63,3 +63,20 @@ as_bbox <- function(x, crs = NULL, ...) {
   x <- st_transform_ext(x, crs = crs)
   return(x)
 }
+
+
+#' @name as_sfc
+#' @rdname as_sf
+#' @export
+#' @importFrom sf st_geometry st_as_sfc
+as_sfc <- function(x, crs = NULL, ...) {
+
+  if (check_sf(x)) {
+    x <- sf::st_geometry(x, ...)
+  } else if (!check_sfc(x)) {
+    x <- sf::st_as_sfc(x, ...)
+  }
+
+  x <- st_transform_ext(x, crs = crs)
+  return(x)
+}

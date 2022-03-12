@@ -332,7 +332,7 @@ usethis::use_data(
 us_states <-
   tigris::states(
     cb = TRUE,
-    resolution = "20m"
+    resolution = "5m"
   )
 
 us_states <-
@@ -371,17 +371,17 @@ us_counties <-
     ~ tigris::counties(
       state = .x,
       cb = TRUE,
-      resolution = "20m"
+      resolution = "5m"
     )
   )
 
-us_counties_simple <-
+us_counties <-
   us_counties %>%
   janitor::clean_names("snake") %>%
   sf::st_transform(3857)
 
 nest_counties <-
-  us_counties_simple %>% # us_counties %>%
+  us_counties %>% # us_counties %>%
   dplyr::left_join(
     dplyr::select(us_states, state_abb = abb, statefp), by = "statefp"
   ) %>%

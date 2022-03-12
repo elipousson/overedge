@@ -3,11 +3,14 @@
 \name{as_sf}
 \alias{as_sf}
 \alias{as_bbox}
+\alias{as_sfc}
 \title{Convert an object to a simple feature or bounding box object}
 \usage{
 as_sf(x, crs = NULL, ...)
 
 as_bbox(x, crs = NULL, ...)
+
+as_sfc(x, crs = NULL, ...)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or \code{dataframe} object that

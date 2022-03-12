@@ -16,6 +16,7 @@ reference:
   - '`get_wiki_data`'
   - '`get_open_data`'
   - '`get_flickr_photos`'
+  - '`get_admin_data`'
 - title: Working with simple feature and bounding box objects
   contents:
   - starts_with("as_")

@@ -14,7 +14,8 @@
 #' @export
 #' @importFrom sf st_transform st_crs
 st_transform_ext <- function(x,
-                             crs = NULL) {
+                             crs = NULL,
+                             return = NULL) {
   stopifnot(
     check_sf(x, ext = TRUE)
   )
@@ -31,6 +32,9 @@ st_transform_ext <- function(x,
     } else {
       # If x is an sf or sfc object
       x <- sf::st_transform(x, crs)
+      if ("bbox" %in% return) {
+        x <- sf::st_bbox(x)
+      }
     }
   }
 
