@@ -31,7 +31,7 @@ read_sf_download(
 \item{bbox}{Bounding box object; Default: NULL. If bbox is provided, read_sf only
 returns features intersecting the bounding box.}
 
-\item{...}{additional parameters passed to \code{\link[sf]{read_sf}}. May
+\item{...}{additional parameters passed to \code{\link[sf:st_read]{sf::read_sf()}}. May
 include query parameter.}
 
 \item{url}{url for spatial data file or for ArcGIS FeatureServer or MapServer

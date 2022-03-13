@@ -103,7 +103,7 @@ read_sf_pkg <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
   # Read package data
   pkg_files <- utils::data(package = package)$results[, "Item"]
 
-  if (data %in% package_files) {
+  if (data %in% pkg_files) {
     return(eval_data(data = data, package = package))
   }
 
