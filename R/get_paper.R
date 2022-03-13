@@ -330,15 +330,15 @@ get_asp <- function(asp = NULL,
 
 #' Get standard scales and convert to scale distances
 #'
-#' @name get_standard_scale
+#' @name get_scale
 #' @param scale Scale name
 #' @param standard USGS, Engineering, or Architectural
 #' @param series Map series
 #' @export
 #' @importFrom dplyr filter
-get_standard_scale <- function(scale = NULL,
-                               standard = NULL,
-                               series = NULL) {
+get_scale <- function(scale = NULL,
+                      standard = NULL,
+                      series = NULL) {
   select_scale <- standard_scales
 
   if (!is.null(scale)) {
@@ -365,7 +365,7 @@ get_standard_scale <- function(scale = NULL,
 #' @param dist distance to convert. If paper is provided, paper width and height
 #'   are used as dist.
 #' @inheritParams get_paper
-#' @inheritParams get_standard_scale
+#' @inheritParams get_scale
 #' @param scale_unit "mm" (converted to cm by dividing by 10), "cm", "px"
 #'   (converted to inches by dividing by dpi), or "in".
 #' @param actual_unit any unit supported by convert_dist_units
@@ -385,7 +385,7 @@ convert_dist_scale <- function(dist = NULL,
                                scale_factor = NULL,
                                dpi = 120) {
   if (!is.null(scale)) {
-    scale <- get_standard_scale(scale = scale)
+    scale <- get_scale(scale = scale)
   }
 
   if (!is.null(paper) && is.null(dist)) {

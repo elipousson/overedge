@@ -70,7 +70,7 @@
           
           <code><a href="get_location.html">get_location()</a></code> 
         </dt>
-        <dd>Get location of specified type</dd>
+        <dd>Get location of a specified type based on name, id, or location</dd>
       </dl><dl><dt>
           
           <code><a href="get_location_data.html">get_location_data()</a></code> 
@@ -78,24 +78,19 @@
         <dd>Get data for a location</dd>
       </dl><dl><dt>
           
-          <code><a href="read_sf_exif.html">read_sf_exif()</a></code> 
-        </dt>
-        <dd>Read EXIF location data from images to a simple feature object</dd>
-      </dl><dl><dt>
-          
           <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_package()</a></code> <code><a href="read_sf_ext.html">read_sf_download()</a></code> 
         </dt>
         <dd>Read spatial data in a bounding box to a simple feature object</dd>
       </dl><dl><dt>
           
-          <code><a href="ggsave_ext.html">ggsave_ext()</a></code> <code><a href="ggsave_ext.html">write_exif()</a></code> 
-        </dt>
-        <dd>Save a ggplot and update file EXIF metadata</dd>
-      </dl><dl><dt>
-          
           <code><a href="write_sf_ext.html">write_sf_ext()</a></code> <code><a href="write_sf_ext.html">write_sf_cache()</a></code> 
         </dt>
         <dd>Write or cache a simple feature object to a file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_sf_exif.html">read_sf_exif()</a></code> <code><a href="read_sf_exif.html">write_exif()</a></code> 
+        </dt>
+        <dd>Read EXIF location data from images to a simple feature object</dd>
       </dl></div><div class="section level2">
       <h2 id="downloading-spatial-data-from-apis">Downloading spatial data from APIs<a class="anchor" aria-label="anchor" href="#downloading-spatial-data-from-apis"></a></h2>
       
@@ -118,6 +113,11 @@ location</dd>
           <code><a href="get_osm_data.html">get_osm_data()</a></code> <code><a href="get_osm_data.html">get_osm_boundaries()</a></code> 
         </dt>
         <dd>Use osmdata to get Open Street Map data for a location</dd>
+      </dl><dl><dt>
+          
+          <code><a href="osm_building_tags.html">osm_building_tags</a></code> 
+        </dt>
+        <dd>OpenStreetMap building tags</dd>
       </dl><dl><dt>
           
           <code><a href="get_wiki_data.html">get_wiki_data()</a></code> 
@@ -269,7 +269,7 @@ border</dd>
         <dd>Add labels to a ggplot2 location map</dd>
       </dl><dl><dt>
           
-          <code><a href="ggsave_ext.html">ggsave_ext()</a></code> <code><a href="ggsave_ext.html">write_exif()</a></code> 
+          <code><a href="ggsave_ext.html">ggsave_ext()</a></code> 
         </dt>
         <dd>Save a ggplot and update file EXIF metadata</dd>
       </dl><dl><dt>
@@ -281,9 +281,9 @@ border</dd>
           
           <code><a href="get_data_dir.html">get_data_dir()</a></code> 
         </dt>
-        <dd>Check existence of data directory and create if nonexistent</dd>
+        <dd>Check data directory and create if needed</dd>
       </dl></div><div class="section level2">
-      <h2 id="setting-units-and-formatting">Setting units and formatting<a class="anchor" aria-label="anchor" href="#setting-units-and-formatting"></a></h2>
+      <h2 id="unit-and-formatting-utilities">Unit and formatting utilities<a class="anchor" aria-label="anchor" href="#unit-and-formatting-utilities"></a></h2>
       
       
 
@@ -295,12 +295,17 @@ border</dd>
 
       <dl><dt>
           
-          <code><a href="convert_dist_units.html">convert_dist_units()</a></code> 
+          <code><a href="get_paper.html">get_paper()</a></code> 
         </dt>
-        <dd>Convert distances between different units</dd>
+        <dd>Get standard paper and image sizes</dd>
       </dl><dl><dt>
           
-          <code><a href="get_standard_scale.html">get_standard_scale()</a></code> 
+          <code><a href="get_margin.html">get_margin()</a></code> 
+        </dt>
+        <dd>Get margins for a ggplot2 plot or map based on style or distance</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_scale.html">get_scale()</a></code> 
         </dt>
         <dd>Get standard scales and convert to scale distances</dd>
       </dl><dl><dt>
@@ -310,14 +315,9 @@ border</dd>
         <dd>Convert distance from scale to actual units</dd>
       </dl><dl><dt>
           
-          <code><a href="get_paper.html">get_paper()</a></code> 
+          <code><a href="convert_dist_units.html">convert_dist_units()</a></code> 
         </dt>
-        <dd>Get standard paper and image sizes</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_margin.html">get_margin()</a></code> 
-        </dt>
-        <dd>Get margins for a ggplot2 plot or map based on style or distance</dd>
+        <dd>Convert distances between different units</dd>
       </dl><dl><dt>
           
           <code><a href="get_asp.html">get_asp()</a></code> 
@@ -354,11 +354,6 @@ border</dd>
           <code><a href="paper_sizes.html">paper_sizes</a></code> 
         </dt>
         <dd>Standard paper and image sizes</dd>
-      </dl><dl><dt>
-          
-          <code><a href="osm_building_tags.html">osm_building_tags</a></code> 
-        </dt>
-        <dd>OpenStreetMap building tags</dd>
       </dl></div><div class="section level2">
       <h2 id="u-s-administrative-boundary-data">U.S. administrative boundary data<a class="anchor" aria-label="anchor" href="#u-s-administrative-boundary-data"></a></h2>
       

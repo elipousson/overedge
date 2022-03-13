@@ -54,7 +54,6 @@ theme_text <- function(font_family = NULL,
                        hjust = NULL,
                        vjust = NULL,
                        method = NULL) {
-
   if (is.null(font_family)) {
     font_family <- ggplot2::theme_get()$text$family
   }
@@ -117,30 +116,28 @@ theme_margin <- function(margin = "standard",
                          color = NA,
                          size = 0,
                          method = NULL) {
-
-
   theme <- ggplot2::theme_get()
 
   margin_theme <-
     modifyList(
       theme,
-    ggplot2::theme(
-      plot.background = ggplot2::element_rect(
-        fill = fill,
-        color = color,
-        size = grid::unit(size, units = unit)
-      ),
-      plot.margin = get_margin(
-        margin = margin,
-        paper = paper,
-        orientation = orientation,
-        dist = dist,
-        unit = unit,
-        plot_width = plot_width,
-        header = header,
-        footer = footer
+      ggplot2::theme(
+        plot.background = ggplot2::element_rect(
+          fill = fill,
+          color = color,
+          size = grid::unit(size, units = unit)
+        ),
+        plot.margin = get_margin(
+          margin = margin,
+          paper = paper,
+          orientation = orientation,
+          dist = dist,
+          unit = unit,
+          plot_width = plot_width,
+          header = header,
+          footer = footer
+        )
       )
-    )
     )
 
   if (!is.null(method)) {

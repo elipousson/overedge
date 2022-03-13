@@ -83,14 +83,13 @@ layer_location_data <-
 
     # Check if packages are available for text/label geoms
     if (geom %in% c("textsf", "labelsf")) {
-      check_package_exists("geomtextpath")
+      check_pkg_installed("geomtextpath")
     } else if (geom %in% ggrepel_geoms) {
-      check_package_exists("ggrepel")
+      check_pkg_installed("ggrepel")
     }
 
     # Assign aesthetics for text/label geoms
     if (geom %in% text_geoms) {
-
       if (is.null(mapping)) {
         mapping <- ggplot2::aes()
       }

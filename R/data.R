@@ -127,7 +127,7 @@
 #'   \item{\code{abb}}{State abbreviation (USPS)}
 #'   \item{\code{bbox}}{Bounding box}
 #'   \item{\code{wkt}}{Well known text}
-#'}
+#' }
 "us_states"
 
 
@@ -144,5 +144,5 @@
 #'   \item{\code{abb_state}}{State abbreviation (USPS)}
 #'   \item{\code{bbox}}{Bounding box}
 #'   \item{\code{wkt}}{Well known text}
-#'}
+#' }
 "us_counties"

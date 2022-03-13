@@ -7,12 +7,14 @@ reference:
   contents:
   - '`get_location`'
   - '`get_location_data`'
-  - starts_with("read")
-  - starts_with("write")
+  - '`read_sf_ext`'
+  - '`write_sf_ext`'
+  - '`read_sf_exif`'
 - title: Downloading spatial data from APIs
   contents:
   - '`get_esri_data`'
   - '`get_osm_data`'
+  - '`osm_building_tags`'
   - '`get_wiki_data`'
   - '`get_open_data`'
   - '`get_flickr_photos`'
@@ -35,13 +37,13 @@ reference:
   - '`ggsave_ext`'
   - '`make_filename`'
   - '`get_data_dir`'
-- title: Setting units and formatting
+- title: Unit and formatting utilities
   contents:
-  - '`convert_dist_units`'
-  - '`get_standard_scale`'
-  - '`convert_dist_scale`'
   - '`get_paper`'
   - '`get_margin`'
+  - '`get_scale`'
+  - '`convert_dist_scale`'
+  - '`convert_dist_units`'
   - '`get_asp`'
 - title: Reference data for units and formatting
   contents:
@@ -49,7 +51,6 @@ reference:
   - '`valid_dist_units`'
   - '`standard_scales`'
   - '`paper_sizes`'
-  - '`osm_building_tags`'
 - title: U.S. administrative boundary data
   contents:
   - '`us_states`'

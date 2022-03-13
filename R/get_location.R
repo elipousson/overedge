@@ -1,4 +1,4 @@
-#' Get location of specified type
+#' Get location of a specified type based on name, id, or location
 #'
 #' Filter by name or id or use a spatial filter based on an sf object or
 #' geocoded street address. Optionally you can use an index list to match the
@@ -157,6 +157,7 @@ get_location <- function(type,
 
   if (union && (nrow(location) > 1)) {
     location <-
+      # FIXME: as_sf does not currently account for the possibility of a dataframe with a valid geometry column
       sf::st_as_sf(
         data.frame(
           "name" = as.character(

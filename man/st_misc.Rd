@@ -13,7 +13,7 @@ st_scale_rotate(x, scale = 1, rotate = 0)
 
 st_center(x, ext = TRUE, ...)
 
-st_inscribed_square(x, rotate = 0)
+st_inscribed_square(x, scale = 1, rotate = 0)
 
 st_circumscribed_circle(x, scale = 1)
 

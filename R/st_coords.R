@@ -32,15 +32,17 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
     x_coords <- x
   }
 
+  geom_type <- overedge::st_geom_type(data, ext = FALSE)
+
   if (geometry == "wkt") {
     # Convert geometry to wkt
-    x$geowkt <- sf::st_as_text(sf::st_as_sfc(x_coords))
+    x_coords <-
+      data.frame("wkt" = sf::st_as_text(sf::st_as_sfc(x_coords)))
   } else {
     # Convert to coordinates at centroid or as a point on surface
     # FIXME: This approach may be an issue if a sf object has mixed geometry
-    geometry_type <- st_geom_type(x_coords, ext = FALSE)
 
-    if (geometry_type != "POINT") {
+    if (st_geom_type(x_coords, ext = FALSE) != "POINT") {
       if (geometry == "centroid") {
         # FIXME: Double check that this doesn't cause issues for sfc objects
         x_coords <- st_center(x_coords, ext = FALSE)
@@ -62,13 +64,9 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
 
   # If x is an sfc or keep_all = FALSE return coordinates
   if (!keep_all) {
-    if (geometry == "wkt") {
-      return(x$geowkt)
-    } else {
-      return(x_coords)
-    }
-  } else if (geometry != "wkt") {
-    # FIXME: What if someone passes a sf object with lon/lat columns to x
+    return(x_coords)
+  } else {
+    # FIXME: What if someone passes a sf object with lon/lat columns to x?
     x <- dplyr::bind_cols(x, x_coords)
   }
 

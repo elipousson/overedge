@@ -2,7 +2,6 @@
 % Please edit documentation in R/ggsave_ext.R
 \name{ggsave_ext}
 \alias{ggsave_ext}
-\alias{write_exif}
 \title{Save a ggplot and update file EXIF metadata}
 \usage{
 ggsave_ext(
@@ -29,17 +28,6 @@ ggsave_ext(
   keywords = NULL,
   args = NULL,
   ...
-)
-
-write_exif(
-  path = NULL,
-  filetype = NULL,
-  title = NULL,
-  author = NULL,
-  date = NULL,
-  keywords = NULL,
-  args = NULL,
-  overwrite = TRUE
 )
 }
 \arguments{
@@ -94,17 +82,16 @@ theme element.}
 \item{exif}{If \code{TRUE}, the EXIF metadata for the exported file is updated
 with the exifr package; defaults to \code{FALSE}.}
 
-\item{title}{Title of plot or map, added to file metadata with exiftoolr,
-Default: \code{NULL}.}
+\item{title}{Title to add to file metadata with exiftoolr, Default: \code{NULL}.}
 
-\item{author}{Author of plot or map, added to file metadata with exiftoolr,
-Default: \code{NULL}.}
+\item{author}{Author to add to file metadata with exiftoolr, Default: \code{NULL}.}
 
 \item{keywords}{Keyword(s) added to file metadata with with exiftoolr,
 Default: \code{NULL}.}
 
-\item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}.
-If args is not \code{NULL}, title and author are ignored; defaults to \code{NULL}.}
+\item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}. If args
+is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
+\code{NULL}.}
 
 \item{...}{Additional parameters passed to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}}
 }
@@ -138,5 +125,4 @@ if (interactive()) {
 }
 \seealso{
 \code{\link[ggplot2]{ggsave}}
-\code{\link[exifr]{exiftool_call}}
 }

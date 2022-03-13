@@ -34,20 +34,15 @@ check_geom <- function(x) {
 #'
 #' @param package Name of a package.
 #' @param repo GitHub repository to use for the package.
-#' @importFrom checkmate test_directory_exists
-#' @importFrom usethis ui_warn ui_yeah
-#' @importFrom remotes install_github
+#' @importFrom rlang is_installed check_installed
 #' @noRd
-check_package_exists <- function(package, repo = NULL) {
-  if (!checkmate::test_directory_exists(find.package(package, quiet = TRUE)) && interactive()) {
-    usethis::ui_warn("{usethis::ui_value(package)} is not installed.")
-    if (usethis::ui_yeah("Do you want to try to install {package}?")) {
-      if (is.null(repo)) {
-        install.packages(package)
-      } else {
-        remotes::install_github(repo)
-      }
+check_pkg_installed <- function(package, repo = NULL) {
+  if (!rlang::is_installed(pkg = package)) {
+    if (!is.null(repo)) {
+      package <- repo
     }
+
+    rlang::check_installed(pkg = package)
   }
 }
 
@@ -80,5 +75,7 @@ utils::globalVariables(c(
   "coord_col", "img_orientation", "lat", "location_bbox", "lon",
   "map_icons", "name", "paper_sizes", "repo", "show_area",
   "standard_scales", "svg_url", "admin_level", "center", "gps_img_direction",
-  "gps_latitude", "gps_longitude", "osm_building_tags","source_file"
+  "img_direction", "img_direction_ref", "latitude", "latitude_ref", "longitude",
+  "longitude_ref", "orientation", "us_counties", "us_states",
+  "gps_latitude", "gps_longitude", "osm_building_tags", "source_file"
 ))

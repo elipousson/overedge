@@ -44,7 +44,7 @@ A large number of cities have adopted [ArcGIS Hub](https://www.esri.com/en-us/ar
 
 For example, this FeatureServer from [Open Baltimore](https://data.baltimorecity.gov/datasets/landmarks-1/explore) provides a list of designated landmarks in Downtown Baltimore.
 
-```{r}
+```{r, eval=FALSE}
 # https://data.baltimorecity.gov/datasets/landmarks-1/explore
 url <- "https://opendata.baltimorecity.gov/egis/rest/services/Hosted/Landmarks/FeatureServer/0"
 

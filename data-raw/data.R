@@ -354,9 +354,9 @@ us_states <-
       statefp = unique(.x$statefp),
       abb = unique(.x$stusps),
       bbox = list(sf::st_bbox(.x)),
-      wkt =  sf::st_as_text(sf::st_as_sfc(.x))
-      )
+      wkt = sf::st_as_text(sf::st_as_sfc(.x))
     )
+  )
 
 usethis::use_data(
   us_states,
@@ -383,7 +383,8 @@ us_counties <-
 nest_counties <-
   us_counties %>% # us_counties %>%
   dplyr::left_join(
-    dplyr::select(us_states, state_abb = abb, statefp), by = "statefp"
+    dplyr::select(us_states, state_abb = abb, statefp),
+    by = "statefp"
   ) %>%
   dplyr::group_by(geoid) %>%
   dplyr::group_nest(keep = TRUE)

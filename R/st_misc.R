@@ -76,7 +76,7 @@ st_center <- function(x,
         "sf" = sf::st_sf(centroid),
         "sfc" = centroid,
         "crs" = crs,
-        "geom" = geom
+        "geom" = geom # This is just the original geometry
       )
     )
   } else {
@@ -90,7 +90,7 @@ st_center <- function(x,
 #' @importFrom sf st_is_longlat st_inscribed_circle st_geometry st_dimension st_set_geometry
 #' @importFrom usethis ui_stop
 #' @importFrom purrr discard
-st_inscribed_square <- function(x, rotate = 0) {
+st_inscribed_square <- function(x, scale = 1, rotate = 0) {
   x <- as_sf(x)
 
   if (sf::st_is_longlat(x)) {
@@ -98,17 +98,16 @@ st_inscribed_square <- function(x, rotate = 0) {
                       Use sf::st_transform() to change the data to use projected coordinates to use this function.")
   }
 
-  geom <- sf::st_inscribed_circle(sf::st_geometry(x), nQuadSegs = 1)
+  geom <- sf::st_inscribed_circle(as_sfc(x), nQuadSegs = 1)
   geom <- purrr::discard(geom, ~ is.na(sf::st_dimension(.x)))
   x <- sf::st_set_geometry(x, geom)
-  x <- st_scale_rotate(x, rotate = (rotate + 45))
+  x <- st_scale_rotate(x, rotate = (rotate + 45), scale = scale)
 }
 
 #' @rdname st_misc
 #' @name st_circumscribed_circle
 #' @export
 st_circumscribed_circle <- function(x, scale = 1) {
-
   bbox <- as_bbox(x)
   radius <- sf_bbox_diagdist(bbox) / 2
 
@@ -163,3 +162,6 @@ st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE) {
 
   return(check_type)
 }
+
+# TODO: Consider adding a check_geom_type function
+# check_geom_type <- function(type, by_geometry = FALSE) {}

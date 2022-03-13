@@ -29,7 +29,6 @@ Imports:
     purrr,
     rappdirs,
     readr,
-    remotes,
     rlang,
     RSocrata,
     sf,
