@@ -41,7 +41,7 @@ get_us_counties <- function(location = NULL,
   }
 
   counties <-
-    read_sf_package(
+    read_sf_pkg(
       data = data,
       package = package
     )
@@ -67,7 +67,7 @@ get_us_counties <- function(location = NULL,
 
   if (detailed) {
     location_counties <-
-      read_sf_package(
+      read_sf_pkg(
         data = gsub("_lores", "_hires", data),
         package = package # ,
         # FIXME: add a query that can be passed to read_sf that returns a subset of the data

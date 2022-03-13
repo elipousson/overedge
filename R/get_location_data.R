@@ -27,7 +27,7 @@
 #'   Default FALSE.
 #' @param from_crs coordinate reference system of the data.
 #' @param crs coordinate reference system to return
-#' @param ... additional parameters passed to read_sf_path, read_sf_url, or read_sf_package
+#' @param ... additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg
 #' @rdname get_location_data
 #' @export
 #' @importFrom usethis ui_yeah ui_warn
@@ -97,7 +97,7 @@ get_location_data <- function(location = NULL,
     } else if (!is.null(url)) {
       data <- read_sf_url(url = url, bbox = bbox, ...)
     } else if (!is.null(package)) {
-      data <- read_sf_package(data = data, bbox = bbox, package = package, filetype = filetype, ...)
+      data <- read_sf_pkg(data = data, bbox = bbox, package = package, filetype = filetype, ...)
     }
   }
 

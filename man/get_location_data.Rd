@@ -72,7 +72,7 @@ Default FALSE.}
 
 \item{crs}{coordinate reference system to return}
 
-\item{...}{additional parameters passed to read_sf_path, read_sf_url, or read_sf_package}
+\item{...}{additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg}
 }
 \description{
 Returns data for a selected area or areas with an optional buffer. If both

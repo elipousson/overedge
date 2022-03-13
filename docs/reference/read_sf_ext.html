@@ -79,7 +79,7 @@ supported for all data types).</p>
 
 <span class="fu">read_sf_url</span><span class="op">(</span><span class="va">url</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">read_sf_package</span><span class="op">(</span><span class="va">data</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">package</span>, filetype <span class="op">=</span> <span class="st">"gpkg"</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">read_sf_pkg</span><span class="op">(</span><span class="va">data</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">package</span>, filetype <span class="op">=</span> <span class="st">"gpkg"</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="fu">read_sf_download</span><span class="op">(</span>
   <span class="va">url</span>,
@@ -110,12 +110,12 @@ to access with <code><a href="get_esri_data.html">get_esri_data()</a></code>; us
 <dd><p>Character vector with coordinate values; used for <code>read_sf_url()</code>
 if the url is a Google Sheet</p></dd>
 <dt>data</dt>
-<dd><p>character; name of data; used by read_sf_package only</p></dd>
+<dd><p>character; name of data; used by read_sf_pkg only</p></dd>
 <dt>package</dt>
-<dd><p>character; package name; used by read_sf_package only</p></dd>
+<dd><p>character; package name; used by read_sf_pkg only</p></dd>
 <dt>filetype</dt>
 <dd><p>file type supported by <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code>., Default:
-'gpkg'; used by read_sf_package only and required only if the data is in
+'gpkg'; used by read_sf_pkg only and required only if the data is in
 the package cache directory or extdata system files.</p></dd>
 <dt>filename</dt>
 <dd><p>File name; if file name is <code>NULL</code>, name and file type are
@@ -133,7 +133,7 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>read_sf_package()</code> looks for three types of package data:
+    <p><code>read_sf_pkg()</code> looks for three types of package data:
 = Data loaded with the package</p><ul><li><p>External data in the <code>extdata</code> system files folder.</p></li>
 <li><p>Cached data in the cache directory returned by <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">user_cache_dir</a></code></p></li>
 </ul></div>

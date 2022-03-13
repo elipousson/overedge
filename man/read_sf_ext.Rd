@@ -4,7 +4,7 @@
 \alias{read_sf_ext}
 \alias{read_sf_path}
 \alias{read_sf_url}
-\alias{read_sf_package}
+\alias{read_sf_pkg}
 \alias{read_sf_download}
 \title{Read spatial data in a bounding box to a simple feature object}
 \usage{
@@ -12,7 +12,7 @@ read_sf_path(path, bbox = NULL, ...)
 
 read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
-read_sf_package(data, bbox = NULL, package, filetype = "gpkg", ...)
+read_sf_pkg(data, bbox = NULL, package, filetype = "gpkg", ...)
 
 read_sf_download(
   url,
@@ -40,12 +40,12 @@ to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by read_sf_ur
 \item{coords}{Character vector with coordinate values; used for \code{\link[=read_sf_url]{read_sf_url()}}
 if the url is a Google Sheet}
 
-\item{data}{character; name of data; used by read_sf_package only}
+\item{data}{character; name of data; used by read_sf_pkg only}
 
-\item{package}{character; package name; used by read_sf_package only}
+\item{package}{character; package name; used by read_sf_pkg only}
 
 \item{filetype}{file type supported by \code{\link[sf:st_read]{sf::read_sf()}}., Default:
-'gpkg'; used by read_sf_package only and required only if the data is in
+'gpkg'; used by read_sf_pkg only and required only if the data is in
 the package cache directory or extdata system files.}
 
 \item{filename}{File name; if file name is \code{NULL}, name and file type are
@@ -71,7 +71,7 @@ associated package. Optionally provide a bounding box to filter data (not
 supported for all data types).
 }
 \details{
-\code{\link[=read_sf_package]{read_sf_package()}} looks for three types of package data:
+\code{\link[=read_sf_pkg]{read_sf_pkg()}} looks for three types of package data:
 = Data loaded with the package
 \itemize{
 \item External data in the \code{extdata} system files folder.

@@ -9,22 +9,22 @@
 #' @param path file path; used by [read_sf_path()] only
 #' @param url url for spatial data file or for ArcGIS FeatureServer or MapServer
 #'   to access with [get_esri_data()]; used by read_sf_url only
-#' @param data character; name of data; used by read_sf_package only
-#' @param package character; package name; used by read_sf_package only
+#' @param data character; name of data; used by read_sf_pkg only
+#' @param package character; package name; used by read_sf_pkg only
 #' @param filetype file type supported by [sf::read_sf()]., Default:
-#'   'gpkg'; used by read_sf_package only and required only if the data is in
+#'   'gpkg'; used by read_sf_pkg only and required only if the data is in
 #'   the package cache directory or extdata system files.
 #' @param bbox Bounding box object; Default: NULL. If bbox is provided, read_sf only
 #'   returns features intersecting the bounding box.
 #' @param coords Character vector with coordinate values; used for [read_sf_url()]
 #'   if the url is a Google Sheet
-#' @param ... additional parameters passed to \code{\link[sf]{read_sf}}. May
+#' @param ... additional parameters passed to [sf::read_sf()]. May
 #'   include query parameter.
 #' @name read_sf_ext
 #' @family read_write
 #' @details
 #'
-#' [read_sf_package()] looks for three types of package data:
+#' [read_sf_pkg()] looks for three types of package data:
 #'   = Data loaded with the package
 #'   - External data in the `extdata` system files folder.
 #'   - Cached data in the cache directory returned by \code{\link[rappdirs]{user_cache_dir}}
@@ -58,7 +58,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 }
 
 #' @rdname read_sf_ext
-#' @aliases read_sf_url
+#' @name read_sf_url
 #' @export
 #' @importFrom sf read_sf
 read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
@@ -92,15 +92,16 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 }
 
 #' @rdname read_sf_ext
-#' @aliases read_sf_package
+#' @name read_sf_pkg
 #' @export
 #' @md
 #' @importFrom stringr str_detect
-read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
+#' @importFrom utils data
+read_sf_pkg <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
   check_pkg_installed(package)
 
   # Read package data
-  package_files <- data(package = package)$results[, "Item"]
+  pkg_files <- utils::data(package = package)$results[, "Item"]
 
   if (data %in% package_files) {
     return(eval_data(data = data, package = package))
@@ -108,6 +109,8 @@ read_sf_package <- function(data, bbox = NULL, package, filetype = "gpkg", ...) 
 
   if (!stringr::str_detect(data, "\\.")) {
     filename <- paste0(data, ".", filetype)
+  } else {
+    filename <- data
   }
 
   pkg_extdata_files <- list.files(system.file("extdata", package = package))

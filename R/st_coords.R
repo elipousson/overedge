@@ -16,7 +16,7 @@
 #' @param drop If `TRUE` and x is an sf object, drop the geometry Default: `TRUE`.
 #' @rdname st_coords
 #' @export
-#' @importFrom sf st_as_text st_as_sfc st_point_on_surface st_coordinates
+#' @importFrom sf st_as_text st_point_on_surface st_coordinates
 #'   st_drop_geometry
 #' @importFrom dplyr select bind_cols
 st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = TRUE, drop = TRUE) {
@@ -32,12 +32,12 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
     x_coords <- x
   }
 
-  geom_type <- overedge::st_geom_type(data, ext = FALSE)
+  geom_type <- overedge::st_geom_type(x_coords, ext = FALSE)
 
   if (geometry == "wkt") {
     # Convert geometry to wkt
     x_coords <-
-      data.frame("wkt" = sf::st_as_text(sf::st_as_sfc(x_coords)))
+      data.frame("wkt" = sf::st_as_text(as_sfc(x_coords)))
   } else {
     # Convert to coordinates at centroid or as a point on surface
     # FIXME: This approach may be an issue if a sf object has mixed geometry
