@@ -17,7 +17,7 @@
 #' @rdname st_coords
 #' @export
 #' @importFrom sf st_as_text st_point_on_surface st_coordinates
-#'   st_drop_geometry
+#'   st_drop_geometry st_zm
 #' @importFrom dplyr select bind_cols
 st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = TRUE, drop = TRUE) {
   geometry <- match.arg(geometry, c("centroid", "surface point", "wkt"))
@@ -47,7 +47,7 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
         # FIXME: Double check that this doesn't cause issues for sfc objects
         x_coords <- st_center(x_coords, ext = FALSE)
       } else if (geometry == "surface point") {
-        x_coords <- suppressMessages(sf::st_point_on_surface(x_coords))
+        x_coords <- suppressMessages(sf::st_point_on_surface(sf::st_zm(x_coords)))
       }
     }
 
