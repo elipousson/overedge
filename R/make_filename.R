@@ -72,7 +72,9 @@ make_filename <- function(name = NULL,
   filename <-
     paste0(filename, filetype)
 
-  filename <- file.path(path, filename)
+  if (!is.null(path)) {
+    filename <- file.path(path, filename)
+  }
 
   return(filename)
 }
