@@ -66,7 +66,11 @@ sf_bbox_dist <- function(bbox, from, to, units = FALSE) {
       sf::st_point(c(bbox[[to[1]]], bbox[[to[2]]]))
     )
 
-  dist <- units::drop_units(dist)
+  if (check_class(dist, "units")) {
+    dist <- units::drop_units(dist)
+  } else {
+    dist <- as.numeric(dist)
+  }
 
   if (units) {
     bbox_units <- sf::st_crs(bbox)$units_gdal
