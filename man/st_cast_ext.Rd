@@ -4,18 +4,23 @@
 \alias{st_cast_ext}
 \title{Cast geometry to another type}
 \usage{
-st_cast_ext(x, to = "POINT", ...)
+st_cast_ext(x, to = "POINT", simplify = TRUE, ...)
 }
 \arguments{
 \item{x}{A \code{sf} or \code{sfc} object to cast to another type.}
 
 \item{to}{character; target type, if missing, simplification is tried; when \code{x} is of type \code{sfg} (i.e., a single geometry) then \code{to} needs to be specified.}
 
+\item{simplify}{If TRUE, simplify geometry type; defaults to TRUE.}
+
 \item{...}{ignored}
 }
 \description{
-Wrapper for \code{\link[sf:st_cast]{sf::st_cast()}} that currently only supports casting MULTIPOLYGON
-to POLYGON or MULTIPOLYGON or POLYGON to POINT.
+Wrapper for \code{\link[sf:st_cast]{sf::st_cast()}} that currently supports casting MULTIPOLYGON to
+POLYGON or MULTIPOLYGON or POLYGON to POINT or, if simplify = FALSE, can cast
+MULTIPOINT to LINESTRING. This is not very different than the basic
+functionality of st_cast but further development may improve the utility of
+this function.
 }
 \seealso{
 \code{\link[sf]{st_cast}}

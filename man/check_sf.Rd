@@ -16,7 +16,7 @@ check_sfc(x)
 
 check_bbox(x)
 
-check_sf_list(x)
+check_sf_list(x, is_named = FALSE)
 
 check_sf_same_crs(x, y)
 
@@ -29,6 +29,8 @@ check_sp(x)
 
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
 not; defaults to \code{FALSE}. (used by \link{check_sf})}
+
+\item{is_named}{If TRUE, check if sf list is named; defaults FALSE}
 
 \item{y}{An sf object or a character or numeric object supported by
 \link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{check_sf_same_crs})}

@@ -40,11 +40,16 @@ check_bbox <- function(x) {
 
 #' @rdname check_sf
 #' @name check_sf_list
+#' @param is_named If TRUE, check if sf list is named; defaults FALSE
 #' @export
-check_sf_list <- function(x) {
+check_sf_list <- function(x, is_named = FALSE) {
   is_sf_list <- is.list(x) && all(vapply(x, check_sf, TRUE))
-  is_named <- !is.null(names(x)) && !("" %in% names(x))
-  is_sf_list && is_named
+  if (is_named) {
+    is_named <- !is.null(names(x)) && !("" %in% names(x))
+    is_sf_list && is_named
+  } else {
+    is_sf_list
+  }
 }
 
 #' @name check_sf_same_crs
