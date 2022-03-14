@@ -1,4 +1,4 @@
-#' Get bounding box buffered to aspect ratio
+#' Get a bounding box buffered to match an aspect ratio
 #'
 #' Takes an area as an sf object or a bounding box and returns a bounding box
 #' that matches the provided aspect ratio and contains the area or bounding box

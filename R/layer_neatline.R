@@ -1,5 +1,5 @@
-#' Set map limits to sf or bbox object with optional adjustments and panel
-#' border
+#' Set map limits to a simple feature or bounding box with a specified distance
+#' buffer, aspect ratio, and panel border
 #'
 #' Set limits for a map to the bounding box of an x using
 #' \code{\link[ggplot2]{coord_sf}}. Optionally, adjust the x size by applying a

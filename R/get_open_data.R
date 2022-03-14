@@ -45,7 +45,6 @@
 #' }
 #' @export
 #' @importFrom usethis ui_stop
-#' @importFrom RSocrata ls.socrata read.socrata
 #' @importFrom glue glue
 #' @importFrom janitor clean_names
 get_open_data <- function(data = NULL,
@@ -72,6 +71,8 @@ get_open_data <- function(data = NULL,
       Other open data access options (e.g. CKAN, Flat Data) may be added in the future."
     )
   }
+
+  check_pkg_installed("RSocrata")
 
   # Check for an API key
   if ((is.null(key) | key == "") && !(data == "list")) {
@@ -164,6 +165,8 @@ get_socrata_data <- function(data = NULL,
                              key = NULL,
                              from_crs = 4326,
                              crs = NULL) {
+  check_pkg_installed("RSocrata")
+
   get_open_data(
     data = data,
     source_url = source_url,

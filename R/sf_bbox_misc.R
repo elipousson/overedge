@@ -58,7 +58,7 @@ sf_bbox_asp <- function(bbox, orientation = FALSE) {
 #' @rdname sf_bbox_misc
 #' @export
 #' @importFrom sf st_crs st_point st_distance
-#' @importFrom units as_units
+#' @importFrom units as_units drop_units
 sf_bbox_dist <- function(bbox, from, to, units = FALSE) {
   dist <-
     sf::st_distance(
@@ -66,7 +66,7 @@ sf_bbox_dist <- function(bbox, from, to, units = FALSE) {
       sf::st_point(c(bbox[[to[1]]], bbox[[to[2]]]))
     )
 
-  dist <- as.numeric(dist)
+  dist <- units::drop_units(dist)
 
   if (units) {
     bbox_units <- sf::st_crs(bbox)$units_gdal
@@ -287,6 +287,7 @@ sf_bbox_expand <- function(bbox,
 }
 
 #' @param point point to find npc coords for center
+#' @importFrom units drop_units
 #' @noRd
 sf_bbox_to_npc <- function(point,
                            bbox) {
@@ -315,8 +316,8 @@ sf_bbox_to_npc <- function(point,
       sf::st_point(c(bbox[["xmin"]], marker[2]))
     )
 
-  npc[1] <- as.numeric(xdist) / sf_bbox_xdist(bbox)
-  npc[2] <- as.numeric(ydist) / sf_bbox_ydist(bbox)
+  npc[1] <- units::drop_units(xdist) / sf_bbox_xdist(bbox)
+  npc[2] <- units::drop_units(ydist) / sf_bbox_ydist(bbox)
 
   return(npc)
 }

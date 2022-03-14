@@ -19,12 +19,20 @@ reference:
   - '`get_open_data`'
   - '`get_flickr_photos`'
   - '`get_admin_data`'
-- title: Working with simple feature and bounding box objects
+- title: Check or convert the class of spatial data objects
   contents:
   - starts_with("as_")
   - starts_with("check")
+- title: Working with simple feature objects
+  contents:
+  - '`st_buffer_ext`'
+  - '`st_cast_ext`'
+  - '`st_transform_ext`'
   - starts_with("st_")
   - '`sf_to_df`'
+- title: Working with bounding box objects
+  contents:
+  - '`st_bbox_ext`'
   - starts_with("sf_bbox")
 - title: Layers and geoms for ggplot2 maps
   contents:

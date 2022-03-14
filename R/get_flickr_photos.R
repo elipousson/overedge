@@ -35,7 +35,6 @@
 #' @rdname get_flickr_photos
 #' @export
 #' @importFrom purrr map_dfr
-#' @importFrom FlickrAPI get_photo_search get_flickr_api_key
 #' @importFrom dplyr rename mutate case_when filter
 get_flickr_photos <- function(api_key = NULL,
                               location = NULL,
@@ -55,6 +54,8 @@ get_flickr_photos <- function(api_key = NULL,
                               orientation = NULL,
                               geometry = TRUE,
                               crs = 4326) {
+  check_pkg_installed("FlickrAPI", repo = "koki25ando/FlickrAPI")
+
   flickr_crs <- 4326
 
   if (!is.null(location)) {

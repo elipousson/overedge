@@ -32,8 +32,6 @@
 #' @return A simple feature object with features using selected geometry type or
 #'   an `osmdata` object with features from all geometry types.
 #' @export
-#' @importFrom osmdata available_tags opq add_osm_feature opq_enclosing
-#'   opq_string osmdata_sf unique_osmdata
 #' @importFrom purrr pluck
 #' @importFrom sf st_transform
 #' @importFrom usethis ui_info
@@ -50,6 +48,8 @@ get_osm_data <- function(location = NULL,
                          enclosing = NULL,
                          nodes_only = FALSE,
                          timeout = 120) {
+  check_pkg_installed("osmdata")
+
   if ((key == "building") && is.null(value)) {
     value <- osm_building_tags
   }
@@ -167,14 +167,15 @@ get_osm_data <- function(location = NULL,
 #' @importFrom dplyr filter between
 get_osm_boundaries <- function(location,
                                level = NULL,
-                               enclosing = "way") {
+                               enclosing = "way",
+                               osmdata = TRUE) {
   boundaries <-
     get_osm_data(
       location = location,
       key = "boundary",
       value = "administrative",
       enclosing = enclosing,
-      osmdata = FALSE
+      osmdata = TRUE
     )
 
   if (!is.null(level)) {

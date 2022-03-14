@@ -26,7 +26,7 @@
 #' @param ... additional parameters passed to  \code{\link[sf]{st_buffer}}.
 #' @export
 #' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer
-#' @importFrom units set_units
+#' @importFrom units set_units drop_units
 st_buffer_ext <- function(x,
                           dist = NULL,
                           diag_ratio = NULL,
@@ -55,7 +55,7 @@ st_buffer_ext <- function(x,
       if (is.null(unit)) {
         unit <- as.character(units(dist)$numerator)
       }
-      dist <- as.numeric(dist)
+      dist <- units::drop_units(dist)
     } else if (is.null(dist) && !is.null(diag_ratio)) {
       # Use the bbox diagonal distance to make proportional buffer distance
       dist <- sf_bbox_diagdist(sf::st_bbox(x), units = FALSE) * diag_ratio

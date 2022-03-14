@@ -331,6 +331,7 @@ get_asp <- function(asp = NULL,
 #' Get standard scales and convert to scale distances
 #'
 #' @name get_scale
+#' @aliases get_standard_scale
 #' @param scale Scale name
 #' @param standard USGS, Engineering, or Architectural
 #' @param series Map series

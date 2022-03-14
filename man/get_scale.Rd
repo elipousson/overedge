@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_paper.R
 \name{get_scale}
 \alias{get_scale}
+\alias{get_standard_scale}
 \title{Get standard scales and convert to scale distances}
 \usage{
 get_scale(scale = NULL, standard = NULL, series = NULL)

@@ -24,8 +24,6 @@
 #' @family layer
 #' @export
 #' @importFrom ggplot2 aes geom_sf geom_sf_text geom_sf_label
-#' @importFrom geomtextpath geom_textsf geom_labelsf
-#' @importFrom ggrepel geom_text_repel geom_label_repel
 #' @importFrom utils modifyList
 layer_location_data <-
   function(mapping = NULL,
@@ -90,27 +88,10 @@ layer_location_data <-
 
     # Assign aesthetics for text/label geoms
     if (geom %in% text_geoms) {
-      if (is.null(mapping)) {
-        mapping <- ggplot2::aes()
-      }
-
-      if (is.character(label_col) && (label_col %in% names(data))) {
-        mapping <-
-          utils::modifyList(
-            ggplot2::aes(label = .data[[label_col]]),
-            mapping
-          )
-      }
+      mapping <- modify_label_mapping(mapping = mapping, modify = "label", colname = label_col)
 
       if (geom %in% ggrepel_geoms) {
-        mapping <-
-          utils::modifyList(
-            ggplot2::aes(
-              geometry = .data[[attributes(data)$sf_column]]
-            ),
-            mapping
-          )
-
+        mapping <- modify_label_mapping(mapping = mapping, modify = "geometry", data = data)
         stat <- "sf_coordinates"
       }
     }
@@ -137,16 +118,6 @@ layer_location_data <-
           data = data,
           ...
         ),
-        "labelsf" = geomtextpath::geom_textsf(
-          mapping = mapping,
-          data = data,
-          ...
-        ),
-        "textsf" = geomtextpath::geom_labelsf(
-          mapping = mapping,
-          data = data,
-          ...
-        ),
         "text_repel" = ggrepel::geom_text_repel(
           mapping = mapping,
           data = data,
@@ -157,6 +128,16 @@ layer_location_data <-
           data = data,
           mapping = mapping,
           stat = stat,
+          ...
+        ),
+        "labelsf" = geomtextpath::geom_textsf(
+          mapping = mapping,
+          data = data,
+          ...
+        ),
+        "textsf" = geomtextpath::geom_labelsf(
+          mapping = mapping,
+          data = data,
           ...
         )
       )

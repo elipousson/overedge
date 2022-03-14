@@ -21,7 +21,7 @@ get_osm_data(
   timeout = 120
 )
 
-get_osm_boundaries(location, level = NULL, enclosing = "way")
+get_osm_boundaries(location, level = NULL, enclosing = "way", osmdata = TRUE)
 }
 \arguments{
 \item{location}{A \code{sf}, \code{sfc}, or \code{bbox} object.}

@@ -46,6 +46,39 @@ check_pkg_installed <- function(package, repo = NULL) {
   }
 }
 
+modify_label_mapping <- function(mapping = NULL, modify = NULL, colname = NULL, data = NULL) {
+  if (is.null(mapping)) {
+    mapping <-
+      ggplot2::aes()
+  }
+
+  if (!is.null(colname)) {
+    if ("label" %in% modify) {
+      mapping <-
+        utils::modifyList(
+          ggplot2::aes(label = .data[[colname]]),
+          mapping
+        )
+    } else if ("description" %in% modify) {
+      mapping <-
+        utils::modifyList(
+          ggplot2::aes(description = .data[[colname]]),
+          mapping
+        )
+    }
+  }
+
+  if (("geometry" %in% modify) && !is.null(data)) {
+    mapping <-
+      utils::modifyList(
+        ggplot2::aes(geometry = .data[[attributes(data)$sf_column]]),
+        mapping
+      )
+  }
+
+  return(mapping)
+}
+
 #' @noRd
 eval_data <- function(data, package = NULL) {
   data <- paste0(collapse = "::", c(package, data))

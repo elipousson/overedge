@@ -4,8 +4,8 @@
 #' @param dir Logical indicator whether to include direction in bearing; If
 #'   `FALSE`, return the absolute (positive) bearing value. If `TRUE`, return
 #'   negative and positive bearing values. Default: `FALSE`.
-#' @param crs Coordinate reference system passed to [sf::st_coordinates()] (must be geographic not projected).
-#'   Default: 4326.
+#' @param crs Coordinate reference system passed to [sf::st_coordinates()] (must
+#'   be geographic not projected). Default: 4326.
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -32,10 +32,11 @@
 #'  \code{\link[geosphere]{bearing}}
 #' @rdname st_bearing
 #' @export
-#' @importFrom lwgeom st_startpoint st_endpoint
-#' @importFrom geosphere bearing
 #' @importFrom dplyr bind_cols
 st_bearing <- function(x, dir = FALSE, crs = 4326) {
+  check_pkg_installed("lwgeom")
+  check_pkg_installed("geosphere")
+
   start <- sf_to_df(lwgeom::st_startpoint(x), crs = crs)
   end <- sf_to_df(lwgeom::st_endpoint(x), crs = crs)
 
