@@ -1,5 +1,5 @@
 
-#' Get coordinates for simple feature or bounding box object
+#' Get coordinates for a simple feature or bounding box object
 #'
 #' An extended version of st_coords that supports binding coordinates to the
 #' object, optionally dropping the geometry, and returning wkt or a point on

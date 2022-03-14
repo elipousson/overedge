@@ -2,7 +2,8 @@
 % Please edit documentation in R/ggsave_ext.R
 \name{ggsave_ext}
 \alias{ggsave_ext}
-\title{Save a ggplot and update file EXIF metadata}
+\alias{gtsave_ext}
+\title{Save a ggplot2 plot or gt table to file and update file EXIF metadata}
 \usage{
 ggsave_ext(
   plot = ggplot2::last_plot(),
@@ -27,6 +28,18 @@ ggsave_ext(
   author = NULL,
   keywords = NULL,
   args = NULL,
+  ...
+)
+
+gtsave_ext(
+  gt_object,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  filetype = NULL,
+  path = NULL,
   ...
 )
 }
@@ -93,7 +106,10 @@ Default: \code{NULL}.}
 is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
 \code{NULL}.}
 
-\item{...}{Additional parameters passed to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}}
+\item{...}{Additional parameters passed to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} or
+\code{\link[gt:gtsave]{gt::gtsave()}}.}
+
+\item{gt_object}{A gt table to save to file.}
 }
 \description{
 Save a plot or map then update the EXIF metadata for the title, author, and
@@ -101,6 +117,14 @@ create data. \code{\link[=ggsave_ext]{ggsave_ext()}} also supports creating a fi
 sentence case name with spaces (e.g. "Baltimore city map") and appending a
 label (e.g. "baltcity") as a prefix to the output file name.
 }
+\section{gtsave_ext}{
+
+
+The gtsave_ext wraps the equivalent function \code{\link[gt:gtsave]{gt::gtsave()}} with a similar
+structure for creating custom file names. This function does not currently
+support EXIF metadata updates although this option may be added in the future.
+}
+
 \examples{
 \dontrun{
 if (interactive()) {

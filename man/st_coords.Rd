@@ -2,7 +2,7 @@
 % Please edit documentation in R/st_coords.R
 \name{st_coords}
 \alias{st_coords}
-\title{Get coordinates for simple feature or bounding box object}
+\title{Get coordinates for a simple feature or bounding box object}
 \usage{
 st_coords(
   x,

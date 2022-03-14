@@ -1,11 +1,18 @@
-#' Save a ggplot and update file EXIF metadata
+#' Save a ggplot2 plot or gt table to file and update file EXIF metadata
 #'
 #' Save a plot or map then update the EXIF metadata for the title, author, and
 #' create data. [ggsave_ext()] also supports creating a file name based on a
 #' sentence case name with spaces (e.g. "Baltimore city map") and appending a
 #' label (e.g. "baltcity") as a prefix to the output file name.
 #'
+#' @section gtsave_ext:
+#'
+#'   The gtsave_ext wraps the equivalent function [gt::gtsave()] with a similar
+#'   structure for creating custom file names. This function does not currently
+#'   support EXIF metadata updates although this option may be added in the future.
+#'
 #' @inheritParams ggplot2::ggsave
+#' @param gt_object A gt table to save to file.
 #' @param name Plot name, used to create filename (if filename is `NULL`) using
 #'   [make_filename()]
 #' @inheritParams make_filename
@@ -17,7 +24,8 @@
 #' @param exif If `TRUE`, the EXIF metadata for the exported file is updated
 #'   with the exifr package; defaults to `FALSE`.
 #' @inheritParams write_exif
-#' @param ... Additional parameters passed to [ggplot2::ggsave()]
+#' @param ... Additional parameters passed to [ggplot2::ggsave()] or
+#'   [gt::gtsave()].
 #' @examples
 #' \dontrun{
 #' if (interactive()) {
@@ -117,4 +125,43 @@ ggsave_ext <- function(plot = ggplot2::last_plot(),
   if (exif) {
     write_exif(path = filename, filetype = filetype, title = title, author = author, keywords = keywords, date = NULL, args = args)
   }
+}
+
+#' @name gtsave_ext
+#' @rdname ggsave_ext
+#' @export
+gtsave_ext <- function(gt_object,
+                       name = NULL,
+                       label = NULL,
+                       prefix = NULL,
+                       postfix = NULL,
+                       filename = NULL,
+                       filetype = NULL,
+                       path = NULL,
+                       ...) {
+
+  check_pkg_installed("gt")
+
+  if (is.null(filetype) && stringr::str_detect(filename, "\\.")) {
+    filetype <- stringr::str_extract(filename, "(?<=\\.).+$")
+    filename <- stringr::str_remove(filename, paste0("\\.", filetype, "$"))
+  }
+
+  filename <-
+    make_filename(
+      name = name,
+      label = label,
+      filename = filename,
+      filetype = filetype,
+      path = path,
+      prefix = prefix,
+      postfix = postfix
+    )
+
+  gt::gtsave(
+    data = gt_object,
+    filename = filename,
+    ...
+  )
+
 }

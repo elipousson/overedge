@@ -3,8 +3,8 @@
 \name{layer_neatline}
 \alias{layer_neatline}
 \alias{set_map_limits}
-\title{Set map limits to sf or bbox object with optional adjustments and panel
-border}
+\title{Set map limits to a simple feature or bounding box with a specified distance
+buffer, aspect ratio, and panel border}
 \usage{
 layer_neatline(
   data = NULL,

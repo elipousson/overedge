@@ -4,7 +4,7 @@
 \alias{st_bbox_ext}
 \alias{st_bbox_adj}
 \alias{st_bbox_asp}
-\title{Get bounding box buffered to aspect ratio}
+\title{Get a bounding box buffered to match an aspect ratio}
 \usage{
 st_bbox_ext(
   x = NULL,
