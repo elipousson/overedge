@@ -82,16 +82,15 @@ layer_location_data <-
     # Check if packages are available for text/label geoms
     if (geom %in% c("textsf", "labelsf")) {
       check_pkg_installed("geomtextpath")
-    } else if (geom %in% ggrepel_geoms) {
-      check_pkg_installed("ggrepel")
     }
 
     # Assign aesthetics for text/label geoms
     if (geom %in% text_geoms) {
-      mapping <- modify_label_mapping(mapping = mapping, modify = "label", colname = label_col)
+      mapping <- modify_mapping(mapping = mapping, label = label_col)
 
       if (geom %in% ggrepel_geoms) {
-        mapping <- modify_label_mapping(mapping = mapping, modify = "geometry", data = data)
+        check_pkg_installed("ggrepel")
+        mapping <- modify_label_mapping(mapping = mapping, data = data)
         stat <- "sf_coordinates"
       }
     }

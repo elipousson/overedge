@@ -46,29 +46,86 @@ check_pkg_installed <- function(package, repo = NULL) {
   }
 }
 
-modify_label_mapping <- function(mapping = NULL, modify = NULL, colname = NULL, data = NULL) {
+#' Add column to data if not present
+#'
+#' @param data Data frame or simple feature object
+#' @param col Column name/value
+#' @noRd
+add_col <- function(data, col = NULL) {
+  if (!is.null(col) && !(col %in% names(data)) && any(length(col) %in% c(nrow(data), 1))) {
+    # FIXME: This is a non-standard pattern - I like it but it may or may not be appropriate and should be documented
+    data[[col]] <- col
+  }
+
+  data
+}
+
+#' Modify mapping for ggplot2 aesthetics
+#'
+#' @param mapping aesthetic mapping to modify
+#' @param data Data used to determine sf column for geometry aesthetic
+#' @param ... Additional parameters with aesthetics to modify and column values
+#'   to use, e.g. label = label_col
+#' @noRd
+modify_mapping <- function(mapping = NULL, data = NULL, ...) {
   if (is.null(mapping)) {
     mapping <-
       ggplot2::aes()
   }
 
-  if (!is.null(colname)) {
-    if ("label" %in% modify) {
+  params <- rlang::list2(...)
+
+  if (!is.null(params)) {
+    if (("label" %in% names(params)) && !is.null(params$label)) {
       mapping <-
         utils::modifyList(
-          ggplot2::aes(label = .data[[colname]]),
+          ggplot2::aes(label = .data[[params$label]]),
           mapping
         )
-    } else if ("description" %in% modify) {
+    }
+
+    if (("description" %in% names(params)) && !is.null(params$description)) {
       mapping <-
         utils::modifyList(
-          ggplot2::aes(description = .data[[colname]]),
+          ggplot2::aes(description = .data[[params$description]]),
+          mapping
+        )
+    }
+
+    if (("fill" %in% names(params)) && !is.null(params$fill)) {
+      mapping <-
+        utils::modifyList(
+          ggplot2::aes(fill = .data[[params$fill]]),
+          mapping
+        )
+    }
+
+    if (("size" %in% names(params)) && !is.null(params$size)) {
+      mapping <-
+        utils::modifyList(
+          ggplot2::aes(size = .data[[params$size]]),
+          mapping
+        )
+    }
+
+    if (("color" %in% names(params)) && !is.null(params$color)) {
+      mapping <-
+        utils::modifyList(
+          ggplot2::aes(color = .data[[params$color]]),
+          mapping
+        )
+    }
+
+    if (("linetype" %in% names(params)) && !is.null(params$linetype)) {
+      mapping <-
+        utils::modifyList(
+          ggplot2::aes(linetype = .data[[params$linetype]]),
           mapping
         )
     }
   }
 
-  if (("geometry" %in% modify) && !is.null(data)) {
+  if (!is.null(data)) {
     mapping <-
       utils::modifyList(
         ggplot2::aes(geometry = .data[[attributes(data)$sf_column]]),
