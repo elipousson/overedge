@@ -90,7 +90,7 @@ layer_location_data <-
 
       if (geom %in% ggrepel_geoms) {
         check_pkg_installed("ggrepel")
-        mapping <- modify_label_mapping(mapping = mapping, data = data)
+        mapping <- modify_mapping(mapping = mapping, data = data)
         stat <- "sf_coordinates"
       }
     }
