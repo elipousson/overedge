@@ -41,6 +41,8 @@ as_bbox <- function(x, crs = NULL, ...) {
     if (check_sf(x, ext = TRUE)) {
       if (st_geom_type(x, check = "POINT")) {
         x <- st_buffer_ext(x, dist = 1)
+      } else if (st_geom_type(x, check = "MULTIPOINT")) {
+        x <- sf::st_cast(x, to = "POLYGON")
       }
 
       x <- sf::st_bbox(x, ...)
