@@ -94,12 +94,13 @@ NULL or method = "set" is recommended.</p>
 <span class="op">)</span>
 
 <span class="fu">theme_legend</span><span class="op">(</span>
-  <span class="va">position</span>,
+  position <span class="op">=</span> <span class="cn">NULL</span>,
+  justification <span class="op">=</span> <span class="cn">NULL</span>,
   margin <span class="op">=</span> <span class="fl">10</span>,
   unit <span class="op">=</span> <span class="st">"pt"</span>,
   inset <span class="op">=</span> <span class="cn">TRUE</span>,
   bgcolor <span class="op">=</span> <span class="st">"white"</span>,
-  justification <span class="op">=</span> <span class="cn">NULL</span>,
+  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, align <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,
   method <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -157,16 +158,17 @@ these parameters.</p></dd>
 <dt>position</dt>
 <dd><p>Legend position (“left”,“top”, “right”, “bottom”) or a
 two-element numeric vector to set position using Normalized Parent
-Coordinates ("npc").</p></dd>
+Coordinates ("npc"); defaults NULL</p></dd>
+<dt>justification</dt>
+<dd><p>If <code>NULL</code>, justification is set to "center"; defaults to
+<code>NULL</code>. Use justification to set legend position if inset = FALSE. Supports
+"topleft", "bottomleft", "topright", or "bottomright" values.</p></dd>
 <dt>inset</dt>
 <dd><p>If <code>TRUE</code> and position is "topleft", "bottomleft", "topright",
 or "bottomright", place the legend in an inset position; defaults to
 <code>TRUE</code>.</p></dd>
 <dt>bgcolor</dt>
 <dd><p>Fill color for legend background; defaults to 'white'.</p></dd>
-<dt>justification</dt>
-<dd><p>If <code>NULL</code>, justification is set to "center"; defaults to
-<code>NULL</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

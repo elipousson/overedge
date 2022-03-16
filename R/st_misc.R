@@ -140,9 +140,9 @@ st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE) {
   geom_type <- sf::st_geometry_type(x, by_geometry = by_geometry)
 
   if (is.null(check) && !ext) {
-    if (length(geom_type) > 1) {
-      usethis::ui_warn("The sf object provded contains multiple geometry types: {geom_type}")
-    }
+    # if (length(geom_type) > 1) {
+     # usethis::ui_warn("The sf object provded contains multiple geometry types: {geom_type}")
+    # }
 
     return(geom_type)
   } else if (!is.null(check)) {

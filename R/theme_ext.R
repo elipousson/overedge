@@ -20,7 +20,10 @@
 #'   `NA`.
 #' @param position Legend position (“left”,“top”, “right”, “bottom”) or a
 #'   two-element numeric vector to set position using Normalized Parent
-#'   Coordinates ("npc").
+#'   Coordinates ("npc"); defaults NULL
+#' @param justification If `NULL`, justification is set to "center"; defaults to
+#'   `NULL`. Use justification to set legend position if inset = FALSE. Supports
+#'   "topleft", "bottomleft", "topright", or "bottomright" values.
 #' @param margin Margin distance, a margin style supported by [get_margin()] or
 #'   a margin object; defaults to 10.
 #' @param unit Legend margin units; defaults to 'pt'.
@@ -28,8 +31,6 @@
 #'   or "bottomright", place the legend in an inset position; defaults to
 #'   `TRUE`.
 #' @param bgcolor Fill color for legend background; defaults to 'white'.
-#' @param justification If `NULL`, justification is set to "center"; defaults to
-#'   `NULL`.
 #' @param method Method with name of the ggplot2 geom function to use for
 #'   modifying theme ("set", "update", or "replace"); defaults to `NULL`.
 #' @inheritParams get_paper
@@ -152,14 +153,16 @@ theme_margin <- function(margin = "standard",
 #' @export
 #' @importFrom ggplot2 element_blank element_rect theme
 #' @importFrom grid unit
-theme_legend <- function(position,
+theme_legend <- function(position = NULL,
+                         justification = NULL,
                          margin = 10,
                          unit = "pt",
                          inset = TRUE,
                          bgcolor = "white",
-                         justification = NULL,
+                         title = list(face = "bold", align = 0),
                          method = NULL) {
 
+  # FIXME: This part needs a test
   # If margin is not a unit object
   if (!("unit" %in% class(margin))) {
     # use a numeric margin as a dist
@@ -177,52 +180,110 @@ theme_legend <- function(position,
     bg <- ggplot2::element_rect(fill = bgcolor)
   }
 
-  if (!is.numeric(position)) {
+  null_position <- is.null(position)
+  if (null_position || !is.numeric(position)) {
+
     position <- match.arg(position, c(
       "left", "right", "bottom", "top",
       "topleft", "bottomleft", "topright", "bottomright", "none"
     ))
-
-    if (position == "none") {
-      hide_legend <- TRUE
-    } else {
-      hide_legend <- FALSE
-    }
   }
 
-  if (hide_legend) {
+  if ("none" %in% position) {
     legend_theme <-
       ggplot2::theme(legend.position = "none")
   } else {
+    # TODO: Document that inset legends only work
+    # position <- match.arg(position, c("topleft", "bottomleft", "topright", "bottomright"))
+
     if (inset) {
-      if (grepl("top", position)) {
+      if (any(grepl("top", position))) {
         y_position <- 0.95
         y_justification <- "top"
-      } else if (grepl("bottom", position)) {
+      } else if (any(grepl("bottom", position))) {
         y_position <- 0.05
         y_justification <- "bottom"
+      } else {
+        y_position <- 0.5
+        y_justification <- "center"
       }
 
-      if (grepl("left", position)) {
+      if (any(grepl("left", position))) {
         x_position <- 0.05
         x_justification <- "left"
-      } else if (grepl("right", position)) {
+      } else if (any(grepl("right", position))) {
         x_position <- 0.95
         x_justification <- "right"
+      } else {
+        x_position <- 0.5
+        x_justification <- "center"
       }
 
       position <- grid::unit(c(x_position, y_position), unit = "npc")
       justification <- c(x_justification, y_justification)
-    } else if (is.null(justification)) {
-      justification <- "center"
+      box_justification <-
+        switch(x_justification,
+          "left" = "right",
+          "right" = "left"
+        )
+    } else {
+
+      justification <-
+        match.arg(
+          justification,
+          c("right", "left", "bottom", "top", "center",
+            "topleft", "bottomleft", "topright", "bottomright"),
+          several.ok = TRUE)
+
+      justification <-
+        switch (justification,
+        "topright" = c("right", "top"),
+        "topleft" = c("left", "top"),
+        "bottomright" = c("right", "bottom"),
+        "bottomleft" = c("left", "bottom")
+      )
+
+      if (length(justification) == 2) {
+        if ((grepl("top", justification[[1]]) || grepl("bottom", justification[[1]]))) {
+          justification <- rev(justification)
+        }
+
+        if (null_position) {
+          position <- justification[[1]]
+        }
+      }
+
+      if (any(grepl("left", justification))) {
+        box_justification <- "right"
+      } else if (any(grepl("right", justification))) {
+        box_justification <- "left"
+      } else {
+        box_justification <- "left"
+      }
+    }
+
+    if (is.list(title) && all(c("face", "align") %in% names(title))) {
+      title <- ggplot2::element_text(face = title$face)
+      # text <- ggplot2::element_text(hjust = align)
+      align_title <- title$align
+    } else if (is.null(title)) {
+
+      # text <- ggplot2::element_text(hjust = align)
+      # FIXME: This may break
+      title <- ggplot2::element_text(face = "bold")
+      align_title <- 0 # align
     }
 
     legend_theme <-
       ggplot2::theme(
         legend.position = position,
         legend.justification = justification,
+        legend.box.just = box_justification,
         legend.margin = margin,
-        legend.background = bg
+        legend.background = bg,
+        legend.title = title,
+        legend.title.align = align_title#,
+        # legend.text = text
       )
   }
 

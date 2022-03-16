@@ -32,12 +32,13 @@ theme_margin(
 )
 
 theme_legend(
-  position,
+  position = NULL,
+  justification = NULL,
   margin = 10,
   unit = "pt",
   inset = TRUE,
   bgcolor = "white",
-  justification = NULL,
+  title = list(face = "bold", align = 0),
   method = NULL
 )
 }
@@ -92,16 +93,17 @@ these parameters.}
 
 \item{position}{Legend position (“left”,“top”, “right”, “bottom”) or a
 two-element numeric vector to set position using Normalized Parent
-Coordinates ("npc").}
+Coordinates ("npc"); defaults NULL}
+
+\item{justification}{If \code{NULL}, justification is set to "center"; defaults to
+\code{NULL}. Use justification to set legend position if inset = FALSE. Supports
+"topleft", "bottomleft", "topright", or "bottomright" values.}
 
 \item{inset}{If \code{TRUE} and position is "topleft", "bottomleft", "topright",
 or "bottomright", place the legend in an inset position; defaults to
 \code{TRUE}.}
 
 \item{bgcolor}{Fill color for legend background; defaults to 'white'.}
-
-\item{justification}{If \code{NULL}, justification is set to "center"; defaults to
-\code{NULL}.}
 }
 \description{
 Helper functions for modifying a ggplot theme. The "replace" and "update"
