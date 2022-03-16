@@ -76,10 +76,10 @@ provided.</p>
   asp <span class="op">=</span> <span class="cn">NULL</span>,
   unit <span class="op">=</span> <span class="cn">NULL</span>,
   crs <span class="op">=</span> <span class="cn">NULL</span>,
-  sf <span class="op">=</span> <span class="cn">FALSE</span>
+  class <span class="op">=</span> <span class="st">"bbox"</span>
 <span class="op">)</span>
 
-<span class="fu">st_bbox_asp</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, asp <span class="op">=</span> <span class="cn">NULL</span>, sf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="fu">st_bbox_asp</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, asp <span class="op">=</span> <span class="cn">NULL</span>, class <span class="op">=</span> <span class="st">"bbox"</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -106,8 +106,8 @@ instead of "kilometer") are also supported. Distance in units is converted
 to units matching GDAL units for x; defaults to "meter"</p></dd>
 <dt>crs</dt>
 <dd><p>Coordinate reference system of bounding box to return</p></dd>
-<dt>sf</dt>
-<dd><p>If <code>TRUE</code>, return a <code>sf</code> object; defaults to <code>FALSE</code>.</p></dd>
+<dt>class</dt>
+<dd><p>Class of object to return (sf or bbox); defaults to "bbox".</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

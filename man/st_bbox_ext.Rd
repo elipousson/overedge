@@ -13,10 +13,10 @@ st_bbox_ext(
   asp = NULL,
   unit = NULL,
   crs = NULL,
-  sf = FALSE
+  class = "bbox"
 )
 
-st_bbox_asp(x = NULL, asp = NULL, sf = FALSE)
+st_bbox_asp(x = NULL, asp = NULL, class = "bbox")
 }
 \arguments{
 \item{x}{An object sf, bbox, sfc, raster, or sp object or a data frame that
@@ -41,7 +41,7 @@ to units matching GDAL units for x; defaults to "meter"}
 
 \item{crs}{Coordinate reference system of bounding box to return}
 
-\item{sf}{If \code{TRUE}, return a \code{sf} object; defaults to \code{FALSE}.}
+\item{class}{Class of object to return (sf or bbox); defaults to "bbox".}
 }
 \value{
 Class \code{bbox} object

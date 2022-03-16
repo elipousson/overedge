@@ -152,11 +152,11 @@ st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE) {
   } else {
     check_type <-
       list(
-        POINTS = grepl("POINT$", geom_type),
-        POLYGONS = grepl("POLYGON$", geom_type),
-        LINESTRINGS = grepl("STRING$", geom_type),
+        "POINTS" = grepl("POINT$", geom_type),
+        "POLYGONS" = grepl("POLYGON$", geom_type),
+        "LINESTRINGS" = grepl("STRING$", geom_type),
         # FIXME: This is only a partial set of geometry types
-        TYPES = geom_type
+        "TYPES" = geom_type
       )
   }
 

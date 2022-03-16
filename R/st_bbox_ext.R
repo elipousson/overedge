@@ -15,7 +15,7 @@
 #' @inheritParams st_buffer_ext
 #' @inheritParams get_asp
 #' @param crs Coordinate reference system of bounding box to return
-#' @param sf If `TRUE`, return a `sf` object; defaults to `FALSE`.
+#' @param class Class of object to return (sf or bbox); defaults to "bbox".
 #' @return Class \code{bbox} object
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext
@@ -27,8 +27,7 @@ st_bbox_ext <- function(x = NULL,
                         asp = NULL,
                         unit = NULL,
                         crs = NULL,
-                        sf = FALSE) {
-  x <- as_sf(x)
+                        class = "bbox") {
 
   # Get buffered area
   x <-
@@ -53,7 +52,7 @@ st_bbox_ext <- function(x = NULL,
       sf::st_bbox(x)
   }
 
-  if (sf) {
+  if ("sf" %in% class) {
     return(sf_bbox_to_sf(bbox))
   } else {
     return(bbox)
@@ -65,7 +64,7 @@ st_bbox_ext <- function(x = NULL,
 #' @export
 st_bbox_asp <- function(x = NULL,
                         asp = NULL,
-                        sf = FALSE) {
+                        class = "bbox") {
   bbox <- as_bbox(x)
 
   # Get adjusted aspect ratio
@@ -100,7 +99,8 @@ st_bbox_asp <- function(x = NULL,
       )
   }
 
-  if (sf) {
+
+  if ("sf" %in% class) {
     return(sf_bbox_to_sf(bbox))
   } else {
     return(bbox)

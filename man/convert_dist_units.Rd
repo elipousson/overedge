@@ -4,14 +4,14 @@
 \alias{convert_dist_units}
 \title{Convert distances between different units}
 \usage{
-convert_dist_units(dist, from_unit = NULL, to_unit = "meter")
+convert_dist_units(dist, from = NULL, to = "meter")
 }
 \arguments{
 \item{dist}{Numeric or units}
 
-\item{from_unit}{Existing unit for dist, Default: NULL. If dist is a units object, the numerator is used as from_unit}
+\item{from}{Existing unit for dist, Default: NULL. If dist is a units object, the numerator is used as from_unit}
 
-\item{to_unit}{Unit to convert distance to, Default: 'meter'}
+\item{to}{Unit to convert distance to, Default: 'meter'}
 }
 \value{
 OUTPUT_DESCRIPTION

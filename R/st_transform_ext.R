@@ -7,6 +7,7 @@
 #'   supported by \code{\link[sf]{st_crs}}
 #' @param crs A coordinate reference system to convert x to or another  `sf`,
 #'   `sfc`, or `bbox` object that is used to provide crs.
+#' @param class Class of object to return (sf or bbox).
 #' @return An `sf`, `sfc`, or `bbox` object transformed to a new coordinate
 #'   reference system.
 #' @seealso \code{\link[sf]{st_transform}},\code{\link[sf]{st_crs}}
@@ -15,7 +16,7 @@
 #' @importFrom sf st_transform st_crs
 st_transform_ext <- function(x,
                              crs = NULL,
-                             return = NULL) {
+                             class = NULL) {
   stopifnot(
     check_sf(x, ext = TRUE)
   )
@@ -29,11 +30,14 @@ st_transform_ext <- function(x,
     if (check_bbox(x)) {
       # If x is a bbox
       x <- sf_bbox_transform(bbox = x, crs = crs)
+      if ("sf" %in% class) {
+        x <- as_sf(x)
+      }
     } else {
       # If x is an sf or sfc object
       x <- sf::st_transform(x, crs)
-      if ("bbox" %in% return) {
-        x <- sf::st_bbox(x)
+      if ("bbox" %in% class) {
+        x <- as_bbox(x)
       }
     }
   }

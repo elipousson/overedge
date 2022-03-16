@@ -62,11 +62,11 @@ st_buffer_ext <- function(x,
     }
 
     dist <-
-      convert_dist_units(dist = dist, from_unit = unit, to_unit = crs$units_gdal)
+      convert_dist_units(dist = dist, from = unit, to = crs$units_gdal)
 
     if (!is.null(dist_limits)) {
       dist_limits <-
-        convert_dist_units(dist = dist_limits, from_unit = unit, to_unit = crs$units_gdal)
+        convert_dist_units(dist = dist_limits, from = unit, to = crs$units_gdal)
     }
 
     if (!is.null(dist_limits) && (length(dist_limits) >= 2) && check_class(dist_limits, "units")) {
@@ -109,15 +109,15 @@ st_buffer_ext <- function(x,
 #'
 #'
 #' @param dist Numeric or units
-#' @param from_unit Existing unit for dist, Default: NULL. If dist is a units object, the numerator is used as from_unit
-#' @param to_unit Unit to convert distance to, Default: 'meter'
+#' @param from Existing unit for dist, Default: NULL. If dist is a units object, the numerator is used as from_unit
+#' @param to Unit to convert distance to, Default: 'meter'
 #' @return OUTPUT_DESCRIPTION
 #' @rdname convert_dist_units
 #' @export
 #' @importFrom units set_units
 convert_dist_units <- function(dist,
-                               from_unit = NULL,
-                               to_unit = "meter") {
+                               from = NULL,
+                               to = "meter") {
   dist_is_units <- check_class(dist, "units")
 
   stopifnot(
@@ -125,31 +125,31 @@ convert_dist_units <- function(dist,
   )
 
   if (dist_is_units) {
-    from_unit <- as.character(units(dist)$numerator)
+    from <- as.character(units(dist)$numerator)
   }
 
-  if (!is.null(from_unit)) {
-    from_unit <- match.arg(from_unit, dist_unit_options)
+  if (!is.null(from)) {
+    from <- match.arg(from, dist_unit_options)
 
     if (!dist_is_units) {
-      from_unit <- gsub(" ", "_", from_unit)
+      from <- gsub(" ", "_", from)
       dist <-
         units::set_units(
           x = dist,
-          value = from_unit,
+          value = from,
           mode = "standard"
         )
     }
   }
 
-  if (!is.null(to_unit)) {
-    to_unit <- gsub(" ", "_", to_unit)
-    to_unit <- match.arg(to_unit, dist_unit_options)
+  if (!is.null(to)) {
+    to <- gsub(" ", "_", to)
+    to <- match.arg(to, dist_unit_options)
 
     dist <-
       units::set_units(
         x = dist,
-        value = to_unit,
+        value = to,
         mode = "standard"
       )
   }

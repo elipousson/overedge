@@ -4,7 +4,7 @@
 \alias{st_transform_ext}
 \title{Transform or convert coordinates of a simple feature or bounding box object}
 \usage{
-st_transform_ext(x, crs = NULL, return = NULL)
+st_transform_ext(x, crs = NULL, class = NULL)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object, or a character or numeric object
@@ -12,6 +12,8 @@ supported by \code{\link[sf]{st_crs}}}
 
 \item{crs}{A coordinate reference system to convert x to or another  \code{sf},
 \code{sfc}, or \code{bbox} object that is used to provide crs.}
+
+\item{class}{Class of object to return (sf or bbox).}
 }
 \value{
 An \code{sf}, \code{sfc}, or \code{bbox} object transformed to a new coordinate
