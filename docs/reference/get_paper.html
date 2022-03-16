@@ -77,7 +77,12 @@ units. May return multiple paper sizes depending on parameters.</p>
   size <span class="op">=</span> <span class="cn">NULL</span>,
   width <span class="op">=</span> <span class="cn">NULL</span>,
   height <span class="op">=</span> <span class="cn">NULL</span>,
-  units <span class="op">=</span> <span class="cn">NULL</span>
+  units <span class="op">=</span> <span class="cn">NULL</span>,
+  cols <span class="op">=</span> <span class="fl">1</span>,
+  rows <span class="op">=</span> <span class="fl">1</span>,
+  gutter <span class="op">=</span> <span class="fl">0</span>,
+  margin <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -97,17 +102,31 @@ units. May return multiple paper sizes depending on parameters.</p>
 <dd><p>Size number (only used for "ISO" and "JIS" series). Standard,
 series, and size may all be required to return a single paper when using
 these parameters.</p></dd>
-<dt>width</dt>
-<dd><p>Width in units, Default: <code>NULL</code>.</p></dd>
-<dt>height</dt>
-<dd><p>Height in units, Default: <code>NULL</code>.</p></dd>
+<dt>width, height</dt>
+<dd><p>Width and height in units, Default: <code>NULL</code>.</p></dd>
 <dt>units</dt>
 <dd><p>Paper size units, either "in", "mm", or "px"; defaults to <code>NULL</code>
 (using "in" if width or height are provided).</p></dd>
+<dt>cols, rows</dt>
+<dd><p>Number of expected columns and rows in paper; used to
+determine row_height and section_asp in paper data frame returned by
+get_paper if rows or cols is greater than 1; defaults to <code>NULL</code>.</p></dd>
+<dt>margin</dt>
+<dd><p>Margin style (options include "extrawide", "wide", "standard",
+"narrow", "none"), Additional "auto" option to generate margin based on
+line length is planned but not yet implemented. Default: <code>NULL</code> (equivalent
+to "none").</p></dd>
+<dt>...</dt>
+<dd><p>Additional parameters passed to get_margin. plot_width can only be
+passed in these parameters if paper has only a single row. margin is returned as a list column.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Data frame with one or more paper/image sizes.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>If margin is provided, a block_width, block_height, and block_asp are calculated.</p>
     </div>
 
     <div class="section level2">

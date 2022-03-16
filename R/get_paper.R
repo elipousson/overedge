@@ -5,6 +5,8 @@
 #' (optionally including series and size) parameter, or width, height and
 #' units. May return multiple paper sizes depending on parameters.
 #'
+#' If margin is provided, a block_width, block_height, and block_asp are calculated.
+#'
 #' @param paper Paper, Default: 'letter'.
 #' @param orientation Orientation "portrait", "landscape", or "square", Default:
 #'   'portrait'.
@@ -14,11 +16,15 @@
 #' @param size Size number (only used for "ISO" and "JIS" series). Standard,
 #'   series, and size may all be required to return a single paper when using
 #'   these parameters.
-#' @param width Width in units, Default: `NULL`.
-#' @param height Height in units, Default: `NULL`.
+#' @param width,height Width and height in units, Default: `NULL`.
 #' @param units Paper size units, either "in", "mm", or "px"; defaults to `NULL`
 #'   (using "in" if width or height are provided).
-#' @param cols,rows Number of expected columns and rows in paper; used to determine row_height and section_asp in paper data frame returned by get_paper if rows or cols is greater than 1; defaults to `NULL`.
+#' @param cols,rows Number of expected columns and rows in paper; used to
+#'   determine row_height and section_asp in paper data frame returned by
+#'   get_paper if rows or cols is greater than 1; defaults to `NULL`.
+#' @inheritParams get_margin
+#' @param ... Additional parameters passed to get_margin. plot_width can only be
+#'   passed in these parameters if paper has only a single row. margin is returned as a list column.
 #' @return Data frame with one or more paper/image sizes.
 #' @examples
 #' \dontrun{
@@ -43,7 +49,10 @@ get_paper <- function(paper = "letter",
                       height = NULL,
                       units = NULL,
                       cols = 1,
-                      rows = 1) {
+                      rows = 1,
+                      gutter = 0,
+                      margin = NULL,
+                      ...) {
   orientation <- match.arg(orientation, c("portrait", "landscape", "square"), several.ok = TRUE)
 
   has_width <- !is.null(width)
@@ -134,27 +143,24 @@ get_paper <- function(paper = "letter",
       dplyr::select(paper, -asp_portrait)
   }
 
-  if ((cols > 1) || rows > 1) {
+  if (!is.null(cols) || !is.null(rows)) {
     paper <-
       dplyr::mutate(
         paper,
         cols = cols,
-        col_width = width / cols,
+        col_width = (width - gutter) / cols,
         rows = rows,
-        row_height = height / rows,
+        row_height = (height - gutter) / rows,
+        gutter = gutter,
         section_asp = col_width / row_height,
         orientation = orientation,
         .after = asp,
       )
     # usethis::ui_info("Based on the provided paper ({paper$name}), orientation, rows, and/or columns, the expected detail map size is {col_width} by {row_height}.")
-  } else {
-    paper <-
-      dplyr::mutate(
-        paper,
-        section_asp = asp,
-        orientation = orientation,
-        .after = asp
-      )
+  }
+
+  if (!is.null(margin)) {
+    paper <- get_margin(paper = paper, margin = margin, ...)
   }
 
   return(paper)
@@ -170,14 +176,16 @@ get_paper <- function(paper = "letter",
 #'
 #' @param margin Margin style (options include "extrawide", "wide", "standard",
 #'   "narrow", "none"), Additional "auto" option to generate margin based on
-#'   line length is planned but not yet implemented. Default: `NULL` (equivalent to "none").
+#'   line length is planned but not yet implemented. Default: `NULL` (equivalent
+#'   to "none").
 #' @param dist Margin distance (single value used to all sides), Default: `NULL`
 #' @param unit Unit for margin distance, Default: 'in'.
 #' @param plot_width Plot or map width in units. If `paper` and `plot_width` are
 #'   provided, margins are half the distance between the two evenly distributed.
-#'   This is not tested and may not work with all page sizes/orientations.
-#' @param header Header height in units; defaults to 0.
-#' @param footer Footer height in units; defaults to 0.
+#'   This sets the margin distance for height as well as width so does not work
+#'   well with header and footers and should be improved in the future.
+#' @param header,footer Header and footer height in units; defaults to 0. Please
+#'   note: headers and footers are not currently supported for "px" units.
 #' @inheritParams get_paper
 #' @return A \code{\link[ggplot2]{margin}} element intended for use with
 #'   \code{\link[ggplot2]{element_rect}} and the `plot.background` theme element.
@@ -210,10 +218,19 @@ get_margin <- function(margin = NULL,
   margin <- match.arg(margin, c("none", "narrow", "standard", "extrawide", "wide"))
   unit <- match.arg(unit, c("in", "mm", "px", "cm", "npc", "picas", "pc", "pt", "lines", "char", "native"))
 
-  if (!is.null(paper)) {
+  if (!is.null(paper) && is.character(paper)) {
     paper <- get_paper(paper = paper, orientation = orientation)
 
     if (!is.null(plot_width)) {
+      dist <- (paper$width - plot_width) / 2
+    }
+  } else if (is.data.frame(paper)) {
+    if (!any(c("width", "height", "orientation", "asp", "cols", "rows") %in% names(paper))) {
+      usethis::ui_stop("The dataframe provided to paper provided does not appear to include the required columns.")
+    }
+
+    # FIXME: get_paper only passes to get_margin if margin is a character value but the value of margin does not matter to set the dist if plot_width is provided.
+    if (!is.null(plot_width) && (nrow(paper) == 1)) {
       dist <- (paper$width - plot_width) / 2
     }
   }
@@ -267,11 +284,35 @@ get_margin <- function(margin = NULL,
     }
   }
 
+  # FIXME: What is this doing? I think it is
   if (unit != "px") {
     margin <- margin + grid::unit(x = c(header, 0, 0, footer), unit = unit)
   }
 
-  return(margin)
+  if (!is.data.frame(paper)) {
+    return(margin)
+  } else {
+    # FIXME: This is mainly for the case of get_paper calling get_margin. It could be moved to get_paper or to a separate utility function.
+    paper_margin <- margin
+    margin_num <- as.numeric(paper_margin)
+    margin_width <- margin_num[[2]] + margin_num[[4]]
+    margin_height <- margin_num[[1]] + margin_num[[3]]
+
+    paper <-
+      dplyr::mutate(
+        paper,
+        block_width = width - margin_width,
+        block_height = height - margin_height,
+        block_asp = block_width / block_height,
+        col_width = (block_width - gutter) / cols,
+        row_height = (block_height - gutter) / rows,
+        section_asp = col_width / row_height,
+        margin = list(paper_margin)
+      )
+
+    return(paper)
+  }
+
 }
 
 #' Get aspect ratio from string or based on specific paper and margins

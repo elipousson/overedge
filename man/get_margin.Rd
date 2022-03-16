@@ -18,7 +18,8 @@ get_margin(
 \arguments{
 \item{margin}{Margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on
-line length is planned but not yet implemented. Default: \code{NULL} (equivalent to "none").}
+line length is planned but not yet implemented. Default: \code{NULL} (equivalent
+to "none").}
 
 \item{paper}{Paper, Default: 'letter'.}
 
@@ -31,11 +32,11 @@ line length is planned but not yet implemented. Default: \code{NULL} (equivalent
 
 \item{plot_width}{Plot or map width in units. If \code{paper} and \code{plot_width} are
 provided, margins are half the distance between the two evenly distributed.
-This is not tested and may not work with all page sizes/orientations.}
+This sets the margin distance for height as well as width so does not work
+well with header and footers and should be improved in the future.}
 
-\item{header}{Header height in units; defaults to 0.}
-
-\item{footer}{Footer height in units; defaults to 0.}
+\item{header, footer}{Header and footer height in units; defaults to 0. Please
+note: headers and footers are not currently supported for "px" units.}
 }
 \value{
 A \code{\link[ggplot2]{margin}} element intended for use with

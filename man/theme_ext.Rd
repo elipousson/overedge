@@ -74,11 +74,14 @@ a margin object; defaults to 10.}
 
 \item{plot_width}{Plot or map width in units. If \code{paper} and \code{plot_width} are
 provided, margins are half the distance between the two evenly distributed.
-This is not tested and may not work with all page sizes/orientations.}
+This sets the margin distance for height as well as width so does not work
+well with header and footers and should be improved in the future.}
 
-\item{header}{Header height in units; defaults to 0.}
+\item{header}{Header and footer height in units; defaults to 0. Please
+note: headers and footers are not currently supported for "px" units.}
 
-\item{footer}{Footer height in units; defaults to 0.}
+\item{footer}{Header and footer height in units; defaults to 0. Please
+note: headers and footers are not currently supported for "px" units.}
 
 \item{fill}{Fill for \code{plot.background} theme element passed to
 \code{\link[ggplot2]{element_rect}} Default: \code{NA}.}

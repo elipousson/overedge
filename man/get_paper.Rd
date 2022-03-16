@@ -14,7 +14,10 @@ get_paper(
   height = NULL,
   units = NULL,
   cols = 1,
-  rows = 1
+  rows = 1,
+  gutter = 0,
+  margin = NULL,
+  ...
 )
 }
 \arguments{
@@ -32,14 +35,22 @@ get_paper(
 series, and size may all be required to return a single paper when using
 these parameters.}
 
-\item{width}{Width in units, Default: \code{NULL}.}
-
-\item{height}{Height in units, Default: \code{NULL}.}
+\item{width, height}{Width and height in units, Default: \code{NULL}.}
 
 \item{units}{Paper size units, either "in", "mm", or "px"; defaults to \code{NULL}
 (using "in" if width or height are provided).}
 
-\item{cols, rows}{Number of expected columns and rows in paper; used to determine row_height and section_asp in paper data frame returned by get_paper if rows or cols is greater than 1; defaults to \code{NULL}.}
+\item{cols, rows}{Number of expected columns and rows in paper; used to
+determine row_height and section_asp in paper data frame returned by
+get_paper if rows or cols is greater than 1; defaults to \code{NULL}.}
+
+\item{margin}{Margin style (options include "extrawide", "wide", "standard",
+"narrow", "none"), Additional "auto" option to generate margin based on
+line length is planned but not yet implemented. Default: \code{NULL} (equivalent
+to "none").}
+
+\item{...}{Additional parameters passed to get_margin. plot_width can only be
+passed in these parameters if paper has only a single row. margin is returned as a list column.}
 }
 \value{
 Data frame with one or more paper/image sizes.
@@ -48,6 +59,9 @@ Data frame with one or more paper/image sizes.
 Use the "paper" parameter (matching name from \link{paper_sizes}), standard
 (optionally including series and size) parameter, or width, height and
 units. May return multiple paper sizes depending on parameters.
+}
+\details{
+If margin is provided, a block_width, block_height, and block_asp are calculated.
 }
 \examples{
 \dontrun{

@@ -139,11 +139,14 @@ a margin object; defaults to 10.</p></dd>
 <dt>plot_width</dt>
 <dd><p>Plot or map width in units. If <code>paper</code> and <code>plot_width</code> are
 provided, margins are half the distance between the two evenly distributed.
-This is not tested and may not work with all page sizes/orientations.</p></dd>
+This sets the margin distance for height as well as width so does not work
+well with header and footers and should be improved in the future.</p></dd>
 <dt>header</dt>
-<dd><p>Header height in units; defaults to 0.</p></dd>
+<dd><p>Header and footer height in units; defaults to 0. Please
+note: headers and footers are not currently supported for "px" units.</p></dd>
 <dt>footer</dt>
-<dd><p>Footer height in units; defaults to 0.</p></dd>
+<dd><p>Header and footer height in units; defaults to 0. Please
+note: headers and footers are not currently supported for "px" units.</p></dd>
 <dt>fill</dt>
 <dd><p>Fill for <code>plot.background</code> theme element passed to
 <code><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></code> Default: <code>NA</code>.</p></dd>
