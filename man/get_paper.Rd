@@ -12,7 +12,9 @@ get_paper(
   size = NULL,
   width = NULL,
   height = NULL,
-  units = NULL
+  units = NULL,
+  cols = 1,
+  rows = 1
 )
 }
 \arguments{
@@ -36,6 +38,8 @@ these parameters.}
 
 \item{units}{Paper size units, either "in", "mm", or "px"; defaults to \code{NULL}
 (using "in" if width or height are provided).}
+
+\item{cols, rows}{Number of expected columns and rows in paper; used to determine row_height and section_asp in paper data frame returned by get_paper if rows or cols is greater than 1; defaults to \code{NULL}.}
 }
 \value{
 Data frame with one or more paper/image sizes.

@@ -109,9 +109,9 @@ st_buffer_ext <- function(x,
 #'
 #'
 #' @param dist Numeric or units
-#' @param from Existing unit for dist, Default: NULL. If dist is a units object, the numerator is used as from_unit
+#' @param from Existing unit for dist, Default: NULL. If dist is a units object, the numerator is used as "from"
 #' @param to Unit to convert distance to, Default: 'meter'
-#' @return OUTPUT_DESCRIPTION
+#' @return Object created by [units::set_units()]
 #' @rdname convert_dist_units
 #' @export
 #' @importFrom units set_units

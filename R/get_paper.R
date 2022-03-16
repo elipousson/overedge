@@ -18,6 +18,7 @@
 #' @param height Height in units, Default: `NULL`.
 #' @param units Paper size units, either "in", "mm", or "px"; defaults to `NULL`
 #'   (using "in" if width or height are provided).
+#' @param cols,rows Number of expected columns and rows in paper; used to determine row_height and section_asp in paper data frame returned by get_paper if rows or cols is greater than 1; defaults to `NULL`.
 #' @return Data frame with one or more paper/image sizes.
 #' @examples
 #' \dontrun{
@@ -40,10 +41,16 @@ get_paper <- function(paper = "letter",
                       size = NULL,
                       width = NULL,
                       height = NULL,
-                      units = NULL) {
+                      units = NULL,
+                      cols = 1,
+                      rows = 1) {
   orientation <- match.arg(orientation, c("portrait", "landscape", "square"), several.ok = TRUE)
 
-  if (!is.null(standard) | !is.null(width)) {
+  has_width <- !is.null(width)
+  has_height <- !is.null(height)
+  has_standard <- !is.null(standard)
+
+  if (has_standard | has_width | has_height) {
     paper <- NULL
   }
 
@@ -52,7 +59,7 @@ get_paper <- function(paper = "letter",
       paper_sizes,
       tolower(.data$name) %in% tolower(paper)
     )
-  } else if (!is.null(standard)) {
+  } else if (has_standard) {
     paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
     paper <- dplyr::filter(
       paper_sizes,
@@ -76,31 +83,34 @@ get_paper <- function(paper = "letter",
         )
       }
     }
-  } else if (!is.null(width)) {
-    paper_width <- width
-
+  } else if (has_width | has_height) {
     units <- match.arg(units, c("in", "mm", "px"))
     paper_units <- units
 
-    paper <- dplyr::filter(
-      paper_sizes,
-      .data$width %in% paper_width,
-      .data$units %in% paper_units
-    )
+    if (has_width) {
+      paper_width <- width
+      paper <- dplyr::filter(
+        paper_sizes,
+        .data$width %in% paper_width,
+        .data$units %in% paper_units
+      )
+    }
 
-    if (!is.null(height)) {
+    if (has_height) {
       paper_height <- height
 
       paper <- dplyr::filter(
         paper_sizes,
-        .data$height %in% paper_height
+        .data$height %in% paper_height,
+        .data$units %in% paper_units
       )
     }
   }
 
   # Save width and height before checking orientation
-  width <- paper$width
-  height <- paper$height
+  # FIXME: This approach sets orientation globally even if returning multiple paper sizes (this is OK but should be documented)
+  paper_width <- paper$width
+  paper_height <- paper$height
 
   if (orientation %in% c("portrait", "square")) {
     paper <-
@@ -111,8 +121,8 @@ get_paper <- function(paper = "letter",
     paper <-
       dplyr::select(paper, -asp_landscape)
   } else if (orientation == "landscape") {
-    paper$width <- height
-    paper$height <- width
+    paper$width <- paper_height
+    paper$height <- paper_width
 
     paper <-
       dplyr::rename(
@@ -124,11 +134,28 @@ get_paper <- function(paper = "letter",
       dplyr::select(paper, -asp_portrait)
   }
 
-  paper <-
-    dplyr::mutate(
-      paper,
-      orientation = orientation
-    )
+  if ((cols > 1) || rows > 1) {
+    paper <-
+      dplyr::mutate(
+        paper,
+        cols = cols,
+        col_width = width / cols,
+        rows = rows,
+        row_height = height / rows,
+        section_asp = col_width / row_height,
+        orientation = orientation,
+        .after = asp,
+      )
+    # usethis::ui_info("Based on the provided paper ({paper$name}), orientation, rows, and/or columns, the expected detail map size is {col_width} by {row_height}.")
+  } else {
+    paper <-
+      dplyr::mutate(
+        paper,
+        section_asp = asp,
+        orientation = orientation,
+        .after = asp
+      )
+  }
 
   return(paper)
 }
@@ -426,7 +453,7 @@ convert_dist_scale <- function(dist = NULL,
   dist <- convert_dist_units(
     dist = dist * scale_factor,
     # FIXME: This is a bit awkward in order to hijack
-    to_unit = actual_unit
+    to = actual_unit
   )
 
   if (!is.null(paper)) {
