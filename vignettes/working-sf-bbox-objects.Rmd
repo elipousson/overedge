@@ -25,12 +25,12 @@ crs <- 3857
 # Get UMBC from state open data on educational facilities
 umbc <-
   get_location(
-   # location = baltimore_msa_counties,
+    # location = baltimore_msa_counties,
     type = "https://geodata.md.gov/imap/rest/services/Education/MD_EducationFacilities/FeatureServer/0",
     name = "University of Maryland, Baltimore County",
     name_col = "sitename",
     crs = crs
-)
+  )
 ```
 
 
@@ -39,8 +39,9 @@ umbc <-
 bbox_large <-
   st_bbox_ext(
     x = umbc,
-    dist = 1/8,
-    unit = "mile")
+    dist = 1 / 8,
+    unit = "mile"
+  )
 
 # Check if it is a bbox
 check_bbox(bbox_large)
@@ -67,10 +68,10 @@ check_sf_same_crs(large_sf, bbox_large)
 
 
 ```{r}
-bbox_small <- 
+bbox_small <-
   st_bbox_ext(
     bbox_large,
-    dist = -1/16,
+    dist = -1 / 16,
     unit = "mile"
   )
 
@@ -78,7 +79,7 @@ small_sf <- sf_bbox_to_sf(bbox_small)
 
 basemap <-
   ggplot2::ggplot() +
-   layer_location_data(
+  layer_location_data(
     data = bbox_large,
     fill = "darkgreen",
     alpha = 0.5
@@ -119,7 +120,6 @@ basemap +
     color = "black",
     alpha = 0.1
   )
-
 ```
 
 ```{r}
@@ -136,9 +136,9 @@ dplyr::glimpse(center)
 ```{r}
 bbox_stretched <-
   sf_bbox_expand(
-  bbox = bbox_small,
-  y_nudge = 50
-)
+    bbox = bbox_small,
+    y_nudge = 50
+  )
 
 basemap +
   layer_location_data(
@@ -148,10 +148,10 @@ basemap +
 
 paper_sf <-
   st_bbox_asp(
-  x = bbox_large,
-  asp = 8.5/11,
-  sf = TRUE
-)
+    x = bbox_large,
+    asp = 8.5 / 11,
+    class = "sf"
+  )
 
 sf::st_geometry(paper_sf) <- "geometry"
 
@@ -163,4 +163,3 @@ basemap +
     linetype = "dashed"
   )
 ```
-

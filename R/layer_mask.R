@@ -38,18 +38,16 @@ layer_mask <- function(data = NULL,
       unit = unit,
       asp = asp,
       crs = crs,
-      sf = TRUE
+      class = "sf"
     )
+  } else {
+    # Convert mask to sf if needed
+    mask <- as_sf(mask)
   }
 
-  # Convert mask to sf if needed
-  mask <- as_sf(mask)
-
   if (!is.null(data)) {
-    # Convert data to sf if needed
-    data <- as_sf(data)
     # Erase data from mask
-    data <- st_transform_ext(data, crs)
+    data <- st_transform_ext(data, crs, class = "sf")
     mask <- st_erase(x = mask, y = data)
   }
 
