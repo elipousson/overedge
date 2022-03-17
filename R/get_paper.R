@@ -312,7 +312,6 @@ get_margin <- function(margin = NULL,
 
     return(paper)
   }
-
 }
 
 #' Get aspect ratio from string or based on specific paper and margins

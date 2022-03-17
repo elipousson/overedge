@@ -97,7 +97,6 @@ write_sf_cache <- function(data,
                            filename = NULL,
                            prefix = NULL,
                            postfix = NULL) {
-
   data_dir <- get_data_dir(path = data_dir)
 
   filename <-

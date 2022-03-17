@@ -1,6 +1,8 @@
 #' Convert an object to a simple feature or bounding box object
 #'
-#' Both functions will pass a NULL value without returning an error.
+#' Both functions will pass a NULL value without returning an error. If a POINT
+#' or MULTIPOINT object is passed to [as_bbox] a 0.00000001 meter buffer is
+#' applied.
 #'
 #' @param x A `sf`, `bbox`, `sfc`, `raster`, `sp`, or `dataframe` object that
 #'   can be converted into a simple feature or bounding box object. [as_bbox()]
@@ -39,10 +41,8 @@ as_bbox <- function(x, crs = NULL, ...) {
   # Convert objects to sf if needed
   if (!check_bbox(x)) {
     if (check_sf(x, ext = TRUE)) {
-      if (st_geom_type(x, check = "POINT")) {
-        x <- st_buffer_ext(x, dist = 1)
-      } else if (st_geom_type(x, check = "MULTIPOINT")) {
-        x <- sf::st_cast(x, to = "POLYGON")
+      if (st_geom_type(x)$POINTS) {
+        x <- st_buffer_ext(x, dist = 0.00000001)
       }
 
       x <- sf::st_bbox(x, ...)

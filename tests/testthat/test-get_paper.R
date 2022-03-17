@@ -28,5 +28,4 @@ test_that("get_paper works", {
     get_paper(paper = "letter", orientation = "landscape", margin = "none")$block_asp,
     11 / 8.5
   )
-
 })

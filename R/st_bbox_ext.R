@@ -65,7 +65,6 @@ st_bbox_ext <- function(x = NULL,
 st_bbox_asp <- function(x = NULL,
                         asp = NULL,
                         class = "bbox") {
-
   bbox <- as_bbox(x)
   # Get adjusted aspect ratio
   asp <- get_asp(asp = asp)

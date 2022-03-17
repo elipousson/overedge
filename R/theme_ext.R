@@ -182,7 +182,6 @@ theme_legend <- function(position = NULL,
 
   null_position <- is.null(position)
   if (null_position || !is.numeric(position)) {
-
     position <- match.arg(position, c(
       "left", "right", "bottom", "top",
       "topleft", "bottomleft", "topright", "bottomright", "none"
@@ -227,21 +226,23 @@ theme_legend <- function(position = NULL,
           "right" = "left"
         )
     } else {
-
       justification <-
         match.arg(
           justification,
-          c("right", "left", "bottom", "top", "center",
-            "topleft", "bottomleft", "topright", "bottomright"),
-          several.ok = TRUE)
+          c(
+            "right", "left", "bottom", "top", "center",
+            "topleft", "bottomleft", "topright", "bottomright"
+          ),
+          several.ok = TRUE
+        )
 
       justification <-
-        switch (justification,
-        "topright" = c("right", "top"),
-        "topleft" = c("left", "top"),
-        "bottomright" = c("right", "bottom"),
-        "bottomleft" = c("left", "bottom")
-      )
+        switch(justification,
+          "topright" = c("right", "top"),
+          "topleft" = c("left", "top"),
+          "bottomright" = c("right", "bottom"),
+          "bottomleft" = c("left", "bottom")
+        )
 
       if (length(justification) == 2) {
         if ((grepl("top", justification[[1]]) || grepl("bottom", justification[[1]]))) {
@@ -282,7 +283,7 @@ theme_legend <- function(position = NULL,
         legend.margin = margin,
         legend.background = bg,
         legend.title = title,
-        legend.title.align = align_title#,
+        legend.title.align = align_title # ,
         # legend.text = text
       )
   }
