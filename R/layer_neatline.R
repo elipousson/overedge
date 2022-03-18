@@ -70,35 +70,39 @@ layer_neatline <- function(data = NULL,
   )
 
   # Set limits with adjustments using coord_sf
-  neatline <-
+  limits <-
     ggplot2::coord_sf(
       xlim = c(bbox[["xmin"]], bbox[["xmax"]]),
       ylim = c(bbox[["ymin"]], bbox[["ymax"]]),
       label_axes = label_axes,
+      default = TRUE, # Suppress warning about coordinate system being displaced
+      crs = crs,
       ...
     )
 
   if (expand) {
-    neatline <-
+    expand <-
       list(
-        neatline,
         ggplot2::scale_y_continuous(expand = c(0, 0)),
         ggplot2::scale_x_continuous(expand = c(0, 0))
       )
+  } else {
+    expand <- NULL
   }
 
   if (hide_grid) {
-    neatline <-
+    hide_grid <-
       list(
-        neatline,
         ggplot2::theme(
-          panel.grid.major = ggplot2::element_blank()
+          panel.grid = ggplot2::element_blank()
         )
       )
+  } else {
+    hide_grid <- NULL
   }
 
   if (label_axes == "----") {
-    theme_axis <-
+    label_axes <-
       ggplot2::theme(
         axis.title = ggplot2::element_blank(),
         axis.text = ggplot2::element_blank(),
@@ -106,31 +110,48 @@ layer_neatline <- function(data = NULL,
         axis.ticks.length = ggplot2::unit(x = 0, units = "mm"),
         axis.line = ggplot2::element_blank()
       )
-
-    neatline <- list(
-      neatline,
-      theme_axis
-    )
+  } else {
+    label_axes <- NULL
   }
 
   if (bgcolor == "none") {
-    panel_background <- ggplot2::element_blank()
+    panel_background <-
+      ggplot2::element_blank()
+
+    plot_background <-
+      ggplot2::element_blank()
   } else {
-    panel_background <- ggplot2::element_rect(fill = bgcolor)
+    panel_background <-
+      ggplot2::element_rect(fill = bgcolor)
+
+    plot_background <-
+      ggplot2::element_rect(fill = bgcolor)
   }
 
-  panel_border <- ggplot2::element_rect(color = color, size = size, linetype = linetype, fill = NA)
-  theme_panel <-
+  if (color == "none") {
+    panel_border <-
+      ggplot2::element_blank()
+  } else {
+    panel_border <-
+      ggplot2::element_rect(color = color, size = size, linetype = linetype, fill = NA)
+  }
+
+  panel_theme <-
     ggplot2::theme(
       panel.border = panel_border,
-      panel.background = panel_background
+      panel.background = panel_background,
+      plot.background = plot_background
     )
 
 
-  neatline <- list(
-    neatline,
-    theme_panel
-  )
+  neatline <-
+    list(
+      limits,
+      expand,
+      hide_grid,
+      label_axes,
+      panel_theme
+    )
 
-  neatline
+  return(neatline)
 }

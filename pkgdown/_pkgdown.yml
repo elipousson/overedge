@@ -40,11 +40,16 @@ reference:
   - starts_with("geom_")
 - title: Working with ggplot2 themes, labels, and file export
   contents:
+  - '`is_gg`'
   - '`theme_ext`'
   - '`labs_ext`'
   - '`ggsave_ext`'
   - '`make_filename`'
   - '`get_data_dir`'
+- title: Working with sf and ggplot2 lists
+  contents:
+  - '`make_location_data_list`'
+  - '`as_sf_list`'
 - title: Unit and formatting utilities
   contents:
   - '`get_paper`'

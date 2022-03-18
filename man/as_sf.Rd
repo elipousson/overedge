@@ -24,5 +24,7 @@ can also convert a vector with xmin, ymin, xmax, and ymax values.}
 for \code{\link[=as_sf]{as_sf()}} (depending on class of x)}
 }
 \description{
-Both functions will pass a NULL value without returning an error. If a POINT or MULTIPOINT object is passed to \link{as_bbox} a 0.00000001 meter buffer is applied.
+Both functions will pass a NULL value without returning an error. If a POINT
+or MULTIPOINT object is passed to \link{as_bbox} a 0.00000001 meter buffer is
+applied.
 }

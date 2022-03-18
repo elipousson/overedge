@@ -2,10 +2,14 @@
 #' Get standard paper and image sizes
 #'
 #' Use the "paper" parameter (matching name from [paper_sizes]), standard
-#' (optionally including series and size) parameter, or width, height and
-#' units. May return multiple paper sizes depending on parameters.
+#' (optionally including series and size) parameter, or width, height and units.
+#' May return multiple paper sizes depending on parameters.
 #'
-#' If margin is provided, a block_width, block_height, and block_asp are calculated.
+#' If margin is provided, a block_width, block_height, and block_asp are
+#' calculated and included as columns in the returned data frame.
+#'
+#' Paper can also be a data frame with "width", "height", "orientation", and
+#' "units" columns.
 #'
 #' @param paper Paper, Default: 'letter'.
 #' @param orientation Orientation "portrait", "landscape", or "square", Default:
@@ -22,7 +26,10 @@
 #' @param cols,rows Number of expected columns and rows in paper; used to
 #'   determine row_height and section_asp in paper data frame returned by
 #'   get_paper if rows or cols is greater than 1; defaults to `NULL`.
+#' @param gutter Gutter distance in units. Gutter is used as the spacing between
+#'   rows and columns (variable spacing is not currently supported); defaults to 0.
 #' @inheritParams get_margin
+#' @param bbox A bounding box to use to get orientation using [sf_bbox_asp()] with orientation = TRUE.
 #' @param ... Additional parameters passed to get_margin. plot_width can only be
 #'   passed in these parameters if paper has only a single row. margin is returned as a list column.
 #' @return Data frame with one or more paper/image sizes.
@@ -38,7 +45,7 @@
 #' }
 #' @rdname get_paper
 #' @export
-#' @importFrom dplyr filter rename select mutate
+#' @importFrom dplyr filter select mutate
 #' @importFrom rlang .data
 get_paper <- function(paper = "letter",
                       orientation = "portrait",
@@ -51,113 +58,131 @@ get_paper <- function(paper = "letter",
                       cols = 1,
                       rows = 1,
                       gutter = 0,
+                      bbox = NULL,
                       margin = NULL,
                       ...) {
-  orientation <- match.arg(orientation, c("portrait", "landscape", "square"), several.ok = TRUE)
-
-  has_width <- !is.null(width)
-  has_height <- !is.null(height)
-  has_standard <- !is.null(standard)
-
-  if (has_standard | has_width | has_height) {
-    paper <- NULL
+  if (!is.null(bbox)) {
+    orientation <-
+      sf_bbox_asp(bbox = bbox, orientation = TRUE)
+  } else {
+    orientation <- match.arg(orientation, c("portrait", "landscape", "square"), several.ok = TRUE)
   }
 
-  if (!is.null(paper)) {
-    paper <- dplyr::filter(
-      paper_sizes,
-      tolower(.data$name) %in% tolower(paper)
+  if (is.data.frame(paper)) {
+    stopifnot(
+      all(c("width", "height", "orientation", "units") %in% names(paper)),
+      now(paper) >= 1
     )
-  } else if (has_standard) {
-    paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
-    paper <- dplyr::filter(
-      paper_sizes,
-      .data$standard %in% paper_standard
-    )
+  } else if (is.character(paper)) {
+    paper <-
+      dplyr::filter(
+        overedge::paper_sizes,
+        tolower(.data$name) %in% tolower(paper)
+      )
+  } else {
+    has_width <- !is.null(width)
+    has_height <- !is.null(height)
+    has_standard <- !is.null(standard)
 
-    if (!is.null(series)) {
-      paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"), several.ok = TRUE)
-
+    if (has_standard) {
+      paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
       paper <- dplyr::filter(
-        paper,
-        .data$series %in% paper_series
+        overedge::paper_sizes,
+        .data$standard %in% paper_standard
       )
 
-      if (!is.null(size)) {
-        paper_size <- size
+      if (!is.null(series)) {
+        paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"), several.ok = TRUE)
 
         paper <- dplyr::filter(
           paper,
-          .data$size %in% paper_size
+          .data$series %in% paper_series
+        )
+
+        if (!is.null(size)) {
+          paper_size <- size
+
+          paper <- dplyr::filter(
+            paper,
+            .data$size %in% paper_size
+          )
+        }
+      }
+    } else if (has_width | has_height) {
+      units <- match.arg(units, c("in", "mm", "px"))
+      paper_units <- units
+
+      if (has_width && has_height) {
+        paper_width <- width
+        paper_height <- height
+
+        paper <- dplyr::filter(
+          overedge::paper_sizes,
+          .data$width %in% paper_width,
+          .data$height %in% paper_height,
+          .data$units %in% paper_units
+        )
+      } else if (has_width) {
+        paper_width <- width
+        paper <- dplyr::filter(
+          overedge::paper_sizes,
+          .data$width %in% paper_width,
+          .data$units %in% paper_units
+        )
+      } else if (has_height) {
+        paper_height <- height
+        paper <- dplyr::filter(
+          overedge::paper_sizes,
+          .data$height %in% paper_height,
+          .data$units %in% paper_units
         )
       }
-    }
-  } else if (has_width | has_height) {
-    units <- match.arg(units, c("in", "mm", "px"))
-    paper_units <- units
-
-    if (has_width) {
-      paper_width <- width
-      paper <- dplyr::filter(
-        paper_sizes,
-        .data$width %in% paper_width,
-        .data$units %in% paper_units
-      )
-    }
-
-    if (has_height) {
-      paper_height <- height
-
-      paper <- dplyr::filter(
-        paper_sizes,
-        .data$height %in% paper_height,
-        .data$units %in% paper_units
-      )
     }
   }
 
   # Save width and height before checking orientation
   # FIXME: This approach sets orientation globally even if returning multiple paper sizes (this is OK but should be documented)
-  paper_width <- paper$width
-  paper_height <- paper$height
+  if (!(orientation %in% names(paper))) {
+    paper$orientation <- orientation
 
-  if (orientation %in% c("portrait", "square")) {
-    paper <-
-      dplyr::rename(
-        paper,
-        asp = asp_portrait
-      )
-    paper <-
-      dplyr::select(paper, -asp_landscape)
-  } else if (orientation == "landscape") {
-    paper$width <- paper_height
-    paper$height <- paper_width
+    # FIXME: This corrects an issue that probably should be addresses in correcting the underlying data
+    if (paper$asp_portrait > 1) {
+      paper$orientation <- "landscape"
+    } else if (orientation == "landscape") {
+      # width and height for most papers are assumed to be in a portrait format
+      paper_width <- paper$width
+      paper_height <- paper$height
 
-    paper <-
-      dplyr::rename(
-        paper,
-        asp = asp_landscape
-      )
+      paper$width <- paper_height
+      paper$height <- paper_width
+    }
 
     paper <-
-      dplyr::select(paper, -asp_portrait)
+      dplyr::select(paper, -c(asp_portrait, asp_landscape, asp_text))
   }
 
-  if (!is.null(cols) || !is.null(rows)) {
-    paper <-
-      dplyr::mutate(
-        paper,
-        cols = cols,
-        col_width = (width - gutter) / cols,
-        rows = rows,
-        row_height = (height - gutter) / rows,
-        gutter = gutter,
-        section_asp = col_width / row_height,
-        orientation = orientation,
-        .after = asp,
-      )
-    # usethis::ui_info("Based on the provided paper ({paper$name}), orientation, rows, and/or columns, the expected detail map size is {col_width} by {row_height}.")
-  }
+  paper <-
+    dplyr::mutate(
+      paper,
+      asp = width / height,
+      .after = height
+    )
+
+  stopifnot(
+    is.numeric(cols) && is.numeric(rows) && is.numeric(gutter)
+  )
+
+  paper <-
+    dplyr::mutate(
+      paper,
+      cols = cols,
+      col_width = (width - gutter) / cols,
+      rows = rows,
+      row_height = (height - gutter) / rows,
+      gutter = gutter,
+      section_asp = col_width / row_height,
+      .after = asp
+    )
 
   if (!is.null(margin)) {
     paper <- get_margin(paper = paper, margin = margin, ...)

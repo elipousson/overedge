@@ -16,6 +16,7 @@ get_paper(
   cols = 1,
   rows = 1,
   gutter = 0,
+  bbox = NULL,
   margin = NULL,
   ...
 )
@@ -44,6 +45,11 @@ these parameters.}
 determine row_height and section_asp in paper data frame returned by
 get_paper if rows or cols is greater than 1; defaults to \code{NULL}.}
 
+\item{gutter}{Gutter distance in units. Gutter is used as the spacing between
+rows and columns (variable spacing is not currently supported); defaults to 0.}
+
+\item{bbox}{A bounding box to use to get orientation using \code{\link[=sf_bbox_asp]{sf_bbox_asp()}} with orientation = TRUE.}
+
 \item{margin}{Margin style (options include "extrawide", "wide", "standard",
 "narrow", "none"), Additional "auto" option to generate margin based on
 line length is planned but not yet implemented. Default: \code{NULL} (equivalent
@@ -57,11 +63,15 @@ Data frame with one or more paper/image sizes.
 }
 \description{
 Use the "paper" parameter (matching name from \link{paper_sizes}), standard
-(optionally including series and size) parameter, or width, height and
-units. May return multiple paper sizes depending on parameters.
+(optionally including series and size) parameter, or width, height and units.
+May return multiple paper sizes depending on parameters.
 }
 \details{
-If margin is provided, a block_width, block_height, and block_asp are calculated.
+If margin is provided, a block_width, block_height, and block_asp are
+calculated and included as columns in the returned data frame.
+
+Paper can also be a data frame with "width", "height", "orientation", and
+"units" columns.
 }
 \examples{
 \dontrun{

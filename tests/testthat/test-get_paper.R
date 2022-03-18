@@ -11,7 +11,7 @@ test_that("get_paper works", {
 
   expect_identical(
     nrow(get_paper(width = 11, height = 17)),
-    3L
+    1L
   )
 
   expect_identical(
@@ -24,8 +24,9 @@ test_that("get_paper works", {
     4.25
   )
 
+  # Checks get_margins
   expect_identical(
-    get_paper(paper = "letter", orientation = "landscape", margin = "none")$block_asp,
-    11 / 8.5
+    get_paper(paper = "letter", orientation = "landscape", margin = "extrawide")$block_asp,
+    7 / 4.5
   )
 })

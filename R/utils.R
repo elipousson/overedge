@@ -60,6 +60,21 @@ add_col <- function(data, col = NULL) {
   data
 }
 
+#' Group data by column if present
+#'
+#' @param data Data frame or simple feature object
+#' @param col Column name/value
+#' @noRd
+group_by_col <- function(data, col = NULL) {
+  if (!is.null(col) && (length(col) == 1) && !is.null(data)) {
+    if (col %in% names(data)) {
+      dplyr::group_by(data, .data[[col]])
+    }
+  } else {
+    data
+  }
+}
+
 #' Modify mapping for ggplot2 aesthetics
 #'
 #' @param mapping aesthetic mapping to modify
