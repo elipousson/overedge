@@ -118,32 +118,32 @@
     unit <span class="op">=</span> <span class="st">"mile"</span><span class="op">)</span>
 
 <span class="co"># Check if it is a bbox</span>
-<span class="fu"><a href="../reference/check_sf.html">check_bbox</a></span><span class="op">(</span><span class="va">bbox_large</span><span class="op">)</span>
+<span class="fu"><a href="../reference/is_sf.html">is_bbox</a></span><span class="op">(</span><span class="va">bbox_large</span><span class="op">)</span>
 <span class="co">#&gt; [1] TRUE</span>
 
 <span class="va">large_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_sf.html">as_sf</a></span><span class="op">(</span><span class="va">bbox_large</span><span class="op">)</span>
 
 <span class="co"># Checks if data is a sf object</span>
-<span class="fu"><a href="../reference/check_sf.html">check_sf</a></span><span class="op">(</span><span class="va">large_sf</span><span class="op">)</span>
+<span class="fu"><a href="../reference/is_sf.html">is_sf</a></span><span class="op">(</span><span class="va">large_sf</span><span class="op">)</span>
 <span class="co">#&gt; [1] TRUE</span>
 
 <span class="co"># Checks if data is a sf, bbox, or sfc object</span>
-<span class="fu"><a href="../reference/check_sf.html">check_sf</a></span><span class="op">(</span><span class="va">large_sf</span>, ext <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="../reference/is_sf.html">is_sf</a></span><span class="op">(</span><span class="va">large_sf</span>, ext <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] TRUE</span>
 
 <span class="co"># Check if data is sfc</span>
-<span class="fu"><a href="../reference/check_sf.html">check_sfc</a></span><span class="op">(</span><span class="va">large_sf</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span>
+<span class="fu"><a href="../reference/is_sf.html">is_sfc</a></span><span class="op">(</span><span class="va">large_sf</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span>
 <span class="co">#&gt; [1] FALSE</span>
 
 <span class="co"># Check if data is a named list of sf objects</span>
-<span class="fu"><a href="../reference/check_sf.html">check_sf_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"large_sf"</span> <span class="op">=</span> <span class="va">large_sf</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/is_sf.html">is_sf_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"large_sf"</span> <span class="op">=</span> <span class="va">large_sf</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] TRUE</span>
 
 <span class="co"># Check if two sf objects have the same coordinate reference system</span>
-<span class="fu"><a href="../reference/check_sf.html">check_sf_same_crs</a></span><span class="op">(</span><span class="va">large_sf</span>, <span class="va">bbox_large</span><span class="op">)</span>
+<span class="fu"><a href="../reference/is_sf.html">is_same_crs</a></span><span class="op">(</span><span class="va">large_sf</span>, <span class="va">bbox_large</span><span class="op">)</span>
 <span class="co">#&gt; [1] TRUE</span>
 
-<span class="co"># Additional checks include check_raster() check_sp()</span></code></pre></div>
+<span class="co"># Additional checks include is_raster() is_sp()</span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bbox_small</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="../reference/st_bbox_ext.html">st_bbox_ext</a></span><span class="op">(</span>

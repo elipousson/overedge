@@ -51,7 +51,7 @@ st_buffer_ext <- function(x,
     # Get crs and rename gdal units to match options for set_units
     crs <- sf::st_crs(x)
 
-    if (check_class(dist, "units")) {
+    if (is_class(dist, "units")) {
       if (is.null(unit)) {
         unit <- as.character(units(dist)$numerator)
       }
@@ -69,7 +69,7 @@ st_buffer_ext <- function(x,
         convert_dist_units(dist = dist_limits, from = unit, to = crs$units_gdal)
     }
 
-    if (!is.null(dist_limits) && (length(dist_limits) >= 2) && check_class(dist_limits, "units")) {
+    if (!is.null(dist_limits) && (length(dist_limits) >= 2) && is_class(dist_limits, "units")) {
       min_limit <- min(dist_limits)
       max_limit <- max(dist_limits)
 
@@ -118,7 +118,7 @@ st_buffer_ext <- function(x,
 convert_dist_units <- function(dist,
                                from = NULL,
                                to = "meter") {
-  dist_is_units <- check_class(dist, "units")
+  dist_is_units <- is_class(dist, "units")
 
   stopifnot(
     is.numeric(dist) || dist_is_units

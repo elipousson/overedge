@@ -70,8 +70,8 @@ as_sf_list <- function(x, nm = "data", col = NULL) {
     is.null(col) || (is.character(col) && (length(col) == 1))
   )
 
-  if (!overedge::check_sf_list(x)) {
-    if ((is.data.frame(data)) && ("data" %in% names(data)) && overedge::check_sf_list(data$data)) {
+  if (!overedge::is_sf_list(x)) {
+    if ((is.data.frame(data)) && ("data" %in% names(data)) && overedge::is_sf_list(data$data)) {
       # data frame with nested list column named data
       # produced by group_nest w/ keep_all = TRUE
 
@@ -82,7 +82,7 @@ as_sf_list <- function(x, nm = "data", col = NULL) {
       }
 
       x <- x$data
-    } else if (overedge::check_sf(x)) {
+    } else if (overedge::is_sf(x)) {
       if (is.null(col)) {
         x <- list(x) # coercible sf object in list length 1
       } else {
@@ -95,7 +95,7 @@ as_sf_list <- function(x, nm = "data", col = NULL) {
   }
 
   stopifnot(
-    overedge::check_sf_list(x)
+    overedge::is_sf_list(x)
   )
 
   if (is.null(names(x)) && !is.null(nm)) {

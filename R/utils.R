@@ -27,7 +27,7 @@ check_gsheet_url <- function(x) {
 #' Check if objects is a ggplot2 layer
 #' @noRd
 check_geom <- function(x) {
-  check_class(x[[1]], "Layer") && check_class(x[[1]], "gg")
+  is_class(x[[1]], "Layer") && is_class(x[[1]], "gg")
 }
 
 #' Check if package exists and prompt to install if not

@@ -399,7 +399,7 @@ get_asp <- function(asp = NULL,
         margin <- get_margin(margin = margin, paper = paper$name, orientation = orientation, unit = unit)
       } else if (is.numeric(margin)) {
         margin <- get_margin(dist = margin, unit = unit)
-      } else if (!check_class(margin, check = "margin")) {
+      } else if (!is_class(margin, check = "margin")) {
         usethis::ui_stop("margin must be either a character string matching the margin options ('none', 'narrow', 'standard', 'wide', or 'extrawide'),
                          a numeric vector that can be passed to the dist parameter of get_margins,
                          or a margin class object.")

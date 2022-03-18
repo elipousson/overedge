@@ -23,7 +23,7 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
   geometry <- match.arg(geometry, c("centroid", "surface point", "wkt"))
 
   stopifnot(
-    check_sf(x, ext = TRUE)
+    is_sf(x, ext = TRUE)
   )
 
   if (!is.null(crs)) {

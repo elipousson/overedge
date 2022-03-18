@@ -44,26 +44,26 @@ bbox_large <-
   )
 
 # Check if it is a bbox
-check_bbox(bbox_large)
+is_bbox(bbox_large)
 
 large_sf <- as_sf(bbox_large)
 
 # Checks if data is a sf object
-check_sf(large_sf)
+is_sf(large_sf)
 
 # Checks if data is a sf, bbox, or sfc object
-check_sf(large_sf, ext = TRUE)
+is_sf(large_sf, ext = TRUE)
 
 # Check if data is sfc
-check_sfc(large_sf$geometry)
+is_sfc(large_sf$geometry)
 
 # Check if data is a named list of sf objects
-check_sf_list(list("large_sf" = large_sf))
+is_sf_list(list("large_sf" = large_sf))
 
 # Check if two sf objects have the same coordinate reference system
-check_sf_same_crs(large_sf, bbox_large)
+is_same_crs(large_sf, bbox_large)
 
-# Additional checks include check_raster() check_sp()
+# Additional checks include is_raster() is_sp()
 ```
 
 

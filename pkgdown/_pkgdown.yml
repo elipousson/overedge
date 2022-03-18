@@ -22,7 +22,7 @@ reference:
 - title: Check or convert the class of spatial data objects
   contents:
   - starts_with("as_")
-  - starts_with("check")
+  - starts_with("is_")
 - title: Working with simple feature objects
   contents:
   - '`st_buffer_ext`'

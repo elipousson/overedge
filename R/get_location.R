@@ -93,8 +93,8 @@ get_location <- function(type,
                          crs = NULL,
                          ...) {
   stopifnot(
-    check_sf(type) || is.character(type),
-    is.character(location) || is.null(location) || check_sf(location, ext = TRUE),
+    is_sf(type) || is.character(type),
+    is.character(location) || is.null(location) || is_sf(location, ext = TRUE),
     is.list(index) || is.null(index),
     is.logical(union)
   )
@@ -148,7 +148,7 @@ get_location <- function(type,
     }
 
     # Filter sf
-    if (!is.null(location) && check_sf(location, ext = TRUE)) {
+    if (!is.null(location) && is_sf(location, ext = TRUE)) {
       location <- as_sf(location)
       location <- st_transform_ext(location, crs = type_crs)
       location <- sf::st_filter(type, location)

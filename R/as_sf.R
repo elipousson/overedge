@@ -15,14 +15,14 @@
 #' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf
 as_sf <- function(x, crs = NULL, ...) {
   # Convert objects to sf if needed
-  if (!check_sf(x)) {
-    if (check_bbox(x)) {
+  if (!is_sf(x)) {
+    if (is_bbox(x)) {
       x <- sf_bbox_to_sf(x)
-    } else if (check_sfc(x)) {
+    } else if (is_sfc(x)) {
       x <- sf::st_sf(x, ...)
-    } else if (check_raster(x)) {
+    } else if (is_raster(x)) {
       x <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...)
-    } else if (check_sp(x)) {
+    } else if (is_sp(x)) {
       x <- sf::st_as_sf(x, ...)
     } else if (is.data.frame(x)) {
       # TODO: Need to figure out a way to pass the crs to df_to_sf
@@ -39,16 +39,16 @@ as_sf <- function(x, crs = NULL, ...) {
 #' @importFrom sf st_bbox st_as_sf
 as_bbox <- function(x, crs = NULL, ...) {
   # Convert objects to sf if needed
-  if (!check_bbox(x)) {
-    if (check_sf(x, ext = TRUE)) {
+  if (!is_bbox(x)) {
+    if (is_sf(x, ext = TRUE)) {
       if (st_geom_type(x)$POINTS) {
         x <- st_buffer_ext(x, dist = 0.00000001)
       }
 
       x <- sf::st_bbox(x, ...)
-    } else if (check_raster(x)) {
+    } else if (is_raster(x)) {
       x <- sf::st_bbox(x, ...)
-    } else if (check_sp(x)) {
+    } else if (is_sp(x)) {
       x <- sf::st_bbox(sf::st_as_sf(x), ...)
     } else if (length(x) == 4) {
       x <- sf::st_bbox(c(
@@ -72,9 +72,9 @@ as_bbox <- function(x, crs = NULL, ...) {
 #' @export
 #' @importFrom sf st_geometry st_as_sfc
 as_sfc <- function(x, crs = NULL, ...) {
-  if (check_sf(x)) {
+  if (is_sf(x)) {
     x <- sf::st_geometry(x, ...)
-  } else if (!check_sfc(x)) {
+  } else if (!is_sfc(x)) {
     x <- sf::st_as_sfc(x, ...)
   }
 

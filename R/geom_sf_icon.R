@@ -62,7 +62,7 @@ geom_sf_icon <- function(data = NULL,
                          ...) {
   check_pkg_installed("ggsvg", repo = "coolbutuseless/ggsvg")
 
-  if (check_sf(data)) {
+  if (is_sf(data)) {
     data <- sf_to_df(x = data, coords = c("lon", "lat"), keep_all = TRUE, crs = crs)
   }
 

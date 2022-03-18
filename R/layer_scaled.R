@@ -38,7 +38,7 @@ layer_scaled <-
       asp <- scaled_paper$asp
     }
 
-    if (!check_sf(data, ext = TRUE)) {
+    if (!is_sf(data, ext = TRUE)) {
       usethis::ui_stop("data must be a bounding box or simple feature object.")
     } else {
       # Get adjusted bounding box for data

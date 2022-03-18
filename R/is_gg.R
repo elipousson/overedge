@@ -30,8 +30,8 @@ is_gg_sf_layer <- function(x) {
 #' @rdname is_gg
 #' @export
 is_gg_scale <- function(x) {
-  (check_class(x, "Scale") && ggplot2::is.ggproto(x)) ||
-    (check_class(x[[1]], "Scale") && ggplot2::is.ggproto(x[[1]]))
+  (is_class(x, "Scale") && ggplot2::is.ggproto(x)) ||
+    (is_class(x[[1]], "Scale") && ggplot2::is.ggproto(x[[1]]))
 
 }
 
@@ -39,8 +39,8 @@ is_gg_scale <- function(x) {
 #' @rdname is_gg
 #' @export
 is_gg_theme <- function(x) {
-  check_class(x, "theme") && check_class(x, "gg") ||
-    check_class(x[[1]], "theme") && check_class(x[[1]], "gg")
+  is_class(x, "theme") && is_class(x, "gg") ||
+    is_class(x[[1]], "theme") && is_class(x[[1]], "gg")
 }
 
 #' @name is_gg_component

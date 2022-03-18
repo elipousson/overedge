@@ -66,7 +66,7 @@ sf_bbox_dist <- function(bbox, from, to, units = FALSE) {
       sf::st_point(c(bbox[[to[1]]], bbox[[to[2]]]))
     )
 
-  if (check_class(dist, "units")) {
+  if (is_class(dist, "units")) {
     dist <- units::drop_units(dist)
   } else {
     dist <- as.numeric(dist)
@@ -124,7 +124,7 @@ sf_bbox_diagdist <- function(bbox, units = FALSE) {
 #' @export
 #' @importFrom sf st_crs st_transform st_bbox
 sf_bbox_transform <- function(bbox, crs) {
-  if (!check_sf_same_crs(bbox, crs)) {
+  if (!is_same_crs(bbox, crs)) {
     bbox_sf <- sf::st_transform(sf_bbox_to_sf(bbox), crs)
     bbox <- sf::st_bbox(bbox_sf)
   }
@@ -295,13 +295,13 @@ sf_bbox_expand <- function(bbox,
 #' @noRd
 sf_bbox_to_npc <- function(point,
                            bbox) {
-  if (check_sf(bbox)) {
+  if (is_sf(bbox)) {
     bbox <- sf::st_bbox(bbox)
   }
 
   crs <- sf::st_crs(bbox)
 
-  if (check_sf(marker)) {
+  if (is_sf(marker)) {
     marker <- sf::st_coordinates(st_center(marker, ext = FALSE))
   }
 

@@ -18,16 +18,16 @@ st_transform_ext <- function(x,
                              crs = NULL,
                              class = NULL) {
   stopifnot(
-    check_sf(x, ext = TRUE)
+    is_sf(x, ext = TRUE)
   )
 
   if (!is.null(crs)) {
-    if (check_sf(crs, ext = TRUE) && !check_sf_same_crs(x, crs)) {
+    if (is_sf(crs, ext = TRUE) && !is_same_crs(x, crs)) {
       # if x has a different crs than the sf object passed to crs
       crs <- sf::st_crs(crs)
     }
 
-    if (check_bbox(x)) {
+    if (is_bbox(x)) {
       # If x is a bbox
       x <- sf_bbox_transform(bbox = x, crs = crs)
       if ("sf" %in% class) {

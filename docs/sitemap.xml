@@ -34,16 +34,16 @@
     <loc>/reference/as_sf.html</loc>
   </url>
   <url>
-    <loc>/reference/check_bbox.html</loc>
+    <loc>/reference/is_bbox.html</loc>
   </url>
   <url>
-    <loc>/reference/check_sf.html</loc>
+    <loc>/reference/is_sf.html</loc>
   </url>
   <url>
-    <loc>/reference/check_sf_list.html</loc>
+    <loc>/reference/is_sf_list.html</loc>
   </url>
   <url>
-    <loc>/reference/check_sf_same_crs.html</loc>
+    <loc>/reference/is_same_crs.html</loc>
   </url>
   <url>
     <loc>/reference/convert_dist_scale.html</loc>
