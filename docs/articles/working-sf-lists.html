@@ -91,16 +91,2561 @@
 
     
     
-<p>Both [as_sf] and as_bbox both support sf list objects. Other key functions that work with sf list objects by applying the function to each object in the list:</p>
+<p>When mapping with simple feature objects, it can be helpful to create a list of related objects. A list could be:</p>
 <ul>
+<li>A list of related locations</li>
+<li>A list of different types of data for a single location</li>
+<li>A list of the same type of data for multiple locations</li>
+</ul>
+<p>To ease the use of simple feature lists, overedge includes several dedicated functions for creating or modifying these lists along with support for sf lists in most of the key functions.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">overedge</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></code></pre></div>
+<p>To start, <code>as_sf_list</code> can turn a sf object into a list and optionally use a grouping column to define how the list is structured.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="va">nc_list_name</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/as_sf.html">as_sf_list</a></span><span class="op">(</span><span class="va">nc</span>, col <span class="op">=</span> <span class="st">"NAME"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">nc_list_name</span><span class="op">)</span>
+<span class="co">#&gt; List of 100</span>
+<span class="co">#&gt;  $ alamance    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.111</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.39</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1904</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1904</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Alamance"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37001"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37001</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 1</span>
+<span class="co">#&gt;   ..$ BIR74    : num 4672</span>
+<span class="co">#&gt;   ..$ SID74    : num 13</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1243</span>
+<span class="co">#&gt;   ..$ BIR79    : num 5767</span>
+<span class="co">#&gt;   ..$ SID79    : num 11</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1397</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:10, 1:2] -79.2 -79.2 -79.5 -79.5 -79.5 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ alexander   : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.066</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.07</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1950</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1950</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Alexander"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37003"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37003</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 2</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1333</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 128</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1683</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 150</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:17, 1:2] -81.1 -81.1 -81.1 -81.3 -81.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ alleghany   : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.061</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.23</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1827</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1827</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Alleghany"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37005"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37005</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 3</span>
+<span class="co">#&gt;   ..$ BIR74    : num 487</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 10</span>
+<span class="co">#&gt;   ..$ BIR79    : num 542</span>
+<span class="co">#&gt;   ..$ SID79    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 12</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:26, 1:2] -81.2 -81.2 -81.3 -81.3 -81.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ anson       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.138</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.62</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2096</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2096</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Anson"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37007"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37007</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 4</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1570</span>
+<span class="co">#&gt;   ..$ SID74    : num 15</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 952</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1875</span>
+<span class="co">#&gt;   ..$ SID79    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1161</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -79.9 -80.3 -80.3 -80.3 -80.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ ashe        : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.114</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.44</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1825</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1825</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Ashe"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37009"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37009</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 5</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1091</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 10</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1364</span>
+<span class="co">#&gt;   ..$ SID79    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 19</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -81.5 -81.5 -81.6 -81.6 -81.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ avery       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.064</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.21</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1892</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1892</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Avery"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37011"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37011</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 6</span>
+<span class="co">#&gt;   ..$ BIR74    : num 781</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 4</span>
+<span class="co">#&gt;   ..$ BIR79    : num 977</span>
+<span class="co">#&gt;   ..$ SID79    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 5</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:28, 1:2] -81.9 -82 -81.9 -81.9 -82 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ beaufort    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.203</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 3.2</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2004</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2004</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Beaufort"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37013"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37013</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 7</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2692</span>
+<span class="co">#&gt;   ..$ SID74    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1131</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2909</span>
+<span class="co">#&gt;   ..$ SID79    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1163</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 2</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:25, 1:2] -77.1 -77.1 -77.1 -77.2 -77.2 ...</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:11, 1:2] -76.6 -76.6 -76.9 -76.9 -77.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ bertie      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.18</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.15</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1905</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1905</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Bertie"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37015"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37015</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 8</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1324</span>
+<span class="co">#&gt;   ..$ SID74    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 921</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1616</span>
+<span class="co">#&gt;   ..$ SID79    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1161</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:45, 1:2] -76.8 -76.8 -76.8 -76.9 -76.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ bladen      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.225</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.11</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2162</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2162</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Bladen"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37017"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37017</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 9</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1782</span>
+<span class="co">#&gt;   ..$ SID74    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 818</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2052</span>
+<span class="co">#&gt;   ..$ SID79    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1023</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:31, 1:2] -78.3 -78.3 -78.4 -78.6 -78.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ brunswick   : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.212</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.02</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2241</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2241</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Brunswick"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37019"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37019</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 10</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2181</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 659</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2655</span>
+<span class="co">#&gt;   ..$ SID79    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 841</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -78.7 -78.6 -78.6 -78.6 -78.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ buncombe    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.168</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1988</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1988</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Buncombe"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37021"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37021</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 11</span>
+<span class="co">#&gt;   ..$ BIR74    : num 7515</span>
+<span class="co">#&gt;   ..$ SID74    : num 9</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 930</span>
+<span class="co">#&gt;   ..$ BIR79    : num 9956</span>
+<span class="co">#&gt;   ..$ SID79    : num 18</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1206</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:45, 1:2] -82.3 -82.3 -82.4 -82.4 -82.4 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ burke       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.134</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.75</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1958</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1958</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Burke"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37023"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37023</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 12</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3573</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 326</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4314</span>
+<span class="co">#&gt;   ..$ SID79    : num 15</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 407</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:34, 1:2] -81.8 -81.9 -82 -82 -81.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ cabarrus    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.091</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.32</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2042</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2042</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Cabarrus"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37025"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37025</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 13</span>
+<span class="co">#&gt;   ..$ BIR74    : num 4099</span>
+<span class="co">#&gt;   ..$ SID74    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 856</span>
+<span class="co">#&gt;   ..$ BIR79    : num 5669</span>
+<span class="co">#&gt;   ..$ SID79    : num 20</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1203</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:14, 1:2] -80.5 -80.5 -80.7 -80.7 -80.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ caldwell    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.122</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.52</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1932</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1932</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Caldwell"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37027"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37027</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 14</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3609</span>
+<span class="co">#&gt;   ..$ SID74    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 309</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4249</span>
+<span class="co">#&gt;   ..$ SID79    : num 9</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 360</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -81.3 -81.4 -81.4 -81.5 -81.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ camden      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.062</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.55</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1834</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1834</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Camden"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37029"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37029</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 15</span>
+<span class="co">#&gt;   ..$ BIR74    : num 286</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 115</span>
+<span class="co">#&gt;   ..$ BIR79    : num 350</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 139</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:24, 1:2] -76 -76 -76 -76.2 -76.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ carteret    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.125</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.87</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2156</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2156</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Carteret"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37031"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37031</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 16</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2414</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 341</span>
+<span class="co">#&gt;   ..$ BIR79    : num 3339</span>
+<span class="co">#&gt;   ..$ SID79    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 487</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 2</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:21, 1:2] -77.1 -77.2 -77.2 -77.1 -77.1 ...</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:9, 1:2] -76.5 -76.6 -76.5 -76.5 -76.4 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ caswell     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.114</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.35</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1838</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1838</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Caswell"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37033"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37033</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 17</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1035</span>
+<span class="co">#&gt;   ..$ SID74    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 550</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1253</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 597</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:7, 1:2] -79.5 -79.5 -79.2 -79.1 -79.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ catawba     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.106</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.44</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1986</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1986</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Catawba"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37035"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37035</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 18</span>
+<span class="co">#&gt;   ..$ BIR74    : num 5754</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 790</span>
+<span class="co">#&gt;   ..$ BIR79    : num 6883</span>
+<span class="co">#&gt;   ..$ SID79    : num 21</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 914</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:14, 1:2] -81 -81.5 -81.5 -81.4 -81.4 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ chatham     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.18</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.14</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1973</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1973</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Chatham"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37037"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37037</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 19</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1646</span>
+<span class="co">#&gt;   ..$ SID74    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 591</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2398</span>
+<span class="co">#&gt;   ..$ SID79    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 687</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -79.6 -79.5 -79.2 -79.2 -79.1 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ cherokee    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.12</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.69</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2088</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2088</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Cherokee"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37039"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37039</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 20</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1027</span>
+<span class="co">#&gt;   ..$ SID74    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 32</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1173</span>
+<span class="co">#&gt;   ..$ SID79    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 42</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -84.3 -84.2 -84.2 -84.1 -84 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ chowan      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.044</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.16</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1887</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1887</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Chowan"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37041"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37041</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 21</span>
+<span class="co">#&gt;   ..$ BIR74    : num 751</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 368</span>
+<span class="co">#&gt;   ..$ BIR79    : num 899</span>
+<span class="co">#&gt;   ..$ SID79    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 491</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:17, 1:2] -76.7 -76.6 -76.6 -76.6 -76.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ clay        : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.051</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.1</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2109</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2109</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Clay"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37043"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37043</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 22</span>
+<span class="co">#&gt;   ..$ BIR74    : num 284</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1</span>
+<span class="co">#&gt;   ..$ BIR79    : num 419</span>
+<span class="co">#&gt;   ..$ SID79    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 5</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:17, 1:2] -83.9 -84 -84 -84 -83.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ cleveland   : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.118</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.51</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2032</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2032</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Cleveland"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37045"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37045</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 23</span>
+<span class="co">#&gt;   ..$ BIR74    : num 4866</span>
+<span class="co">#&gt;   ..$ SID74    : num 10</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1491</span>
+<span class="co">#&gt;   ..$ BIR79    : num 5526</span>
+<span class="co">#&gt;   ..$ SID79    : num 21</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1729</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:21, 1:2] -81.3 -81.4 -81.8 -81.8 -81.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ columbus    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.24</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.37</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2232</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2232</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Columbus"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37047"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37047</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 24</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3350</span>
+<span class="co">#&gt;   ..$ SID74    : num 15</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1431</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4144</span>
+<span class="co">#&gt;   ..$ SID79    : num 17</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1832</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:33, 1:2] -78.7 -79.1 -79 -79 -79 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ craven      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.177</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.92</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2119</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2119</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Craven"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37049"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37049</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 25</span>
+<span class="co">#&gt;   ..$ BIR74    : num 5868</span>
+<span class="co">#&gt;   ..$ SID74    : num 13</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1744</span>
+<span class="co">#&gt;   ..$ BIR79    : num 7595</span>
+<span class="co">#&gt;   ..$ SID79    : num 18</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 2342</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 2</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:29, 1:2] -76.9 -76.9 -77 -77 -77 ...</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:10, 1:2] -76.6 -76.6 -76.8 -77 -77.1 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ cumberland  : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.172</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.83</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2090</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2090</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Cumberland"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37051"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37051</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 26</span>
+<span class="co">#&gt;   ..$ BIR74    : num 20366</span>
+<span class="co">#&gt;   ..$ SID74    : num 38</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 7043</span>
+<span class="co">#&gt;   ..$ BIR79    : num 26370</span>
+<span class="co">#&gt;   ..$ SID79    : num 57</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 10614</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:29, 1:2] -78.5 -78.5 -78.8 -78.9 -78.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ currituck   : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.07</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.97</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1831</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1831</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Currituck"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37053"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37053</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 27</span>
+<span class="co">#&gt;   ..$ BIR74    : num 508</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 123</span>
+<span class="co">#&gt;   ..$ BIR79    : num 830</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 145</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 3</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:26, 1:2] -76 -76 -76 -76 -76.1 ...</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:7, 1:2] -76 -76 -75.9 -75.9 -76 ...</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:5, 1:2] -75.9 -75.9 -75.8 -75.8 -75.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ dare        : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.094</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 3.64</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2000</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2000</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Dare"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37055"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37055</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 28</span>
+<span class="co">#&gt;   ..$ BIR74    : num 521</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 43</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1059</span>
+<span class="co">#&gt;   ..$ SID79    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 73</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 3</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:6, 1:2] -75.8 -75.8 -75.5 -75.7 -75.7 ...</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:9, 1:2] -75.9 -75.9 -76 -76 -75.8 ...</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:9, 1:2] -75.5 -75.5 -75.5 -75.5 -75.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ davidson    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.145</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.79</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1951</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1951</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Davidson"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37057"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37057</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 29</span>
+<span class="co">#&gt;   ..$ BIR74    : num 5509</span>
+<span class="co">#&gt;   ..$ SID74    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 736</span>
+<span class="co">#&gt;   ..$ BIR79    : num 7143</span>
+<span class="co">#&gt;   ..$ SID79    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 941</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:31, 1:2] -80.1 -80.2 -80.2 -80.3 -80.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ davie       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.069</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.2</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1948</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1948</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Davie"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37059"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37059</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 30</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1207</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 148</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1438</span>
+<span class="co">#&gt;   ..$ SID79    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 177</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:29, 1:2] -80.5 -80.5 -80.5 -80.6 -80.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ duplin      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.204</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.87</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2100</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2100</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Duplin"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37061"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37061</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 31</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2483</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1061</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2777</span>
+<span class="co">#&gt;   ..$ SID79    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1227</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:30, 1:2] -77.7 -77.9 -77.9 -78 -78 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ durham      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.077</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.27</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1908</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1908</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Durham"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37063"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37063</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 32</span>
+<span class="co">#&gt;   ..$ BIR74    : num 7970</span>
+<span class="co">#&gt;   ..$ SID74    : num 16</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 3732</span>
+<span class="co">#&gt;   ..$ BIR79    : num 10432</span>
+<span class="co">#&gt;   ..$ SID79    : num 22</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 4948</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:18, 1:2] -79 -79 -78.8 -78.8 -78.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ edgecombe   : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.131</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.52</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1928</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1928</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Edgecombe"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37065"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37065</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 33</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3657</span>
+<span class="co">#&gt;   ..$ SID74    : num 10</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 2186</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4359</span>
+<span class="co">#&gt;   ..$ SID79    : num 9</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 2696</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:28, 1:2] -77.7 -77.7 -77.8 -77.8 -77.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ forsyth     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.108</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.48</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1900</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1900</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Forsyth"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37067"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37067</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 34</span>
+<span class="co">#&gt;   ..$ BIR74    : num 11858</span>
+<span class="co">#&gt;   ..$ SID74    : num 10</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 3919</span>
+<span class="co">#&gt;   ..$ BIR79    : num 15704</span>
+<span class="co">#&gt;   ..$ SID79    : num 18</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 5031</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:22, 1:2] -80 -80.1 -80.2 -80.2 -80.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ franklin    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.128</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.55</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1897</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1897</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Franklin"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37069"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37069</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 35</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1399</span>
+<span class="co">#&gt;   ..$ SID74    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 736</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1863</span>
+<span class="co">#&gt;   ..$ SID79    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 950</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:20, 1:2] -78.3 -78.3 -78.3 -78.3 -78.4 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ gaston      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.091</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.47</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2068</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2068</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Gaston"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37071"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37071</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 36</span>
+<span class="co">#&gt;   ..$ BIR74    : num 9014</span>
+<span class="co">#&gt;   ..$ SID74    : num 11</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1523</span>
+<span class="co">#&gt;   ..$ BIR79    : num 11455</span>
+<span class="co">#&gt;   ..$ SID79    : num 26</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 2194</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:19, 1:2] -81.3 -81.3 -81.3 -81.4 -81.4 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ gates       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.091</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.28</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1835</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1835</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Gates"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37073"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37073</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 37</span>
+<span class="co">#&gt;   ..$ BIR74    : num 420</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 254</span>
+<span class="co">#&gt;   ..$ BIR79    : num 594</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 371</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:17, 1:2] -76.6 -76.6 -76.6 -76.7 -76.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ graham      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.078</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.2</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2056</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2056</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Graham"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37075"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37075</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 38</span>
+<span class="co">#&gt;   ..$ BIR74    : num 415</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 40</span>
+<span class="co">#&gt;   ..$ BIR79    : num 488</span>
+<span class="co">#&gt;   ..$ SID79    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 45</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -83.7 -83.8 -83.8 -83.8 -83.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ granville   : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.143</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.66</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1840</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1840</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Granville"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37077"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37077</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 39</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1671</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 930</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2074</span>
+<span class="co">#&gt;   ..$ SID79    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1058</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:17, 1:2] -78.7 -78.8 -78.8 -78.8 -78.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ greene      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.07</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.1</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2016</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2016</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Greene"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37079"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37079</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 40</span>
+<span class="co">#&gt;   ..$ BIR74    : num 870</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 534</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1178</span>
+<span class="co">#&gt;   ..$ SID79    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 664</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:23, 1:2] -77.8 -77.8 -77.8 -77.8 -77.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ guilford    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.17</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.68</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1903</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1903</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Guilford"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37081"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37081</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 41</span>
+<span class="co">#&gt;   ..$ BIR74    : num 16184</span>
+<span class="co">#&gt;   ..$ SID74    : num 23</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 5483</span>
+<span class="co">#&gt;   ..$ BIR79    : num 20543</span>
+<span class="co">#&gt;   ..$ SID79    : num 38</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 7089</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:6, 1:2] -79.5 -80 -80 -80 -79.5 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ halifax     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.19</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.2</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1846</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1846</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Halifax"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37083"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37083</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 42</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3608</span>
+<span class="co">#&gt;   ..$ SID74    : num 18</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 2365</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4463</span>
+<span class="co">#&gt;   ..$ SID79    : num 17</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 2980</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:53, 1:2] -77.3 -77.4 -77.4 -77.4 -77.5 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ harnett     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.154</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.68</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2030</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2030</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Harnett"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37085"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37085</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 43</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3776</span>
+<span class="co">#&gt;   ..$ SID74    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1051</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4789</span>
+<span class="co">#&gt;   ..$ SID79    : num 10</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1453</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:22, 1:2] -78.6 -78.7 -78.8 -78.9 -78.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ haywood     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.144</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.69</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1996</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1996</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Haywood"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37087"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37087</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 44</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2110</span>
+<span class="co">#&gt;   ..$ SID74    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 57</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2463</span>
+<span class="co">#&gt;   ..$ SID79    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 62</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:39, 1:2] -82.7 -82.8 -82.9 -83 -83 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ henderson   : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.095</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.47</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2047</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2047</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Henderson"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37089"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37089</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 45</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2574</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 158</span>
+<span class="co">#&gt;   ..$ BIR79    : num 3679</span>
+<span class="co">#&gt;   ..$ SID79    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 264</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:35, 1:2] -82.6 -82.6 -82.6 -82.6 -82.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ hertford    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.097</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.67</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1833</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1833</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Hertford"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37091"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37091</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 46</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1452</span>
+<span class="co">#&gt;   ..$ SID74    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 954</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1838</span>
+<span class="co">#&gt;   ..$ SID79    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1237</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:22, 1:2] -76.7 -77 -77 -77.1 -77.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ hoke        : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.098</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.26</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2097</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2097</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Hoke"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37093"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37093</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 47</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1494</span>
+<span class="co">#&gt;   ..$ SID74    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 987</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1706</span>
+<span class="co">#&gt;   ..$ SID79    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1172</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:14, 1:2] -79.3 -79.4 -79.4 -79.5 -79.4 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ hyde        : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.167</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.71</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2099</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2099</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Hyde"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37095"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37095</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 48</span>
+<span class="co">#&gt;   ..$ BIR74    : num 338</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 134</span>
+<span class="co">#&gt;   ..$ BIR79    : num 427</span>
+<span class="co">#&gt;   ..$ SID79    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 169</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 2</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:23, 1:2] -76.5 -76.5 -76.6 -76.6 -76.6 ...</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:8, 1:2] -76 -76 -75.9 -75.8 -75.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ iredell     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.155</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.78</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1947</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1947</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Iredell"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37097"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37097</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 49</span>
+<span class="co">#&gt;   ..$ BIR74    : num 4139</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1144</span>
+<span class="co">#&gt;   ..$ BIR79    : num 5400</span>
+<span class="co">#&gt;   ..$ SID79    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1305</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:19, 1:2] -80.7 -80.8 -81 -81 -81 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ jackson     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.125</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.6</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2039</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2039</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Jackson"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37099"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37099</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 50</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1143</span>
+<span class="co">#&gt;   ..$ SID74    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 215</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1504</span>
+<span class="co">#&gt;   ..$ SID79    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 307</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:36, 1:2] -83.1 -83.2 -83.1 -83.1 -83.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ johnston    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.207</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.85</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1989</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1989</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Johnston"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37101"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37101</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 51</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3999</span>
+<span class="co">#&gt;   ..$ SID74    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1165</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4780</span>
+<span class="co">#&gt;   ..$ SID79    : num 13</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1349</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -78.5 -78.5 -78.6 -78.6 -78.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ jones       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.121</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.98</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2091</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2091</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Jones"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37103"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37103</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 52</span>
+<span class="co">#&gt;   ..$ BIR74    : num 578</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 297</span>
+<span class="co">#&gt;   ..$ BIR79    : num 650</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 305</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:31, 1:2] -77 -77.1 -77.1 -77.1 -77.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ lee         : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.065</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.09</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2026</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2026</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Lee"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37105"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37105</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 53</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2252</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 736</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2949</span>
+<span class="co">#&gt;   ..$ SID79    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 905</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:24, 1:2] -79.2 -79.3 -79.3 -79.3 -79.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ lenoir      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.104</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.55</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2065</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2065</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Lenoir"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37107"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37107</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 54</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3589</span>
+<span class="co">#&gt;   ..$ SID74    : num 10</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1826</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4225</span>
+<span class="co">#&gt;   ..$ SID79    : num 14</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 2047</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:31, 1:2] -77.8 -77.8 -77.8 -77.8 -77.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ lincoln     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.078</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.38</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2034</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2034</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Lincoln"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37109"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37109</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 55</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2216</span>
+<span class="co">#&gt;   ..$ SID74    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 302</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2817</span>
+<span class="co">#&gt;   ..$ SID79    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 350</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:11, 1:2] -81 -81.4 -81.5 -81.5 -81.5 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ macon       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.131</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.68</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2082</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2082</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Macon"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37113"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37113</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 57</span>
+<span class="co">#&gt;   ..$ BIR74    : num 797</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 9</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1157</span>
+<span class="co">#&gt;   ..$ SID79    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 22</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:29, 1:2] -83.1 -83.5 -83.5 -83.6 -83.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ madison     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.118</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.6</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1946</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1946</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Madison"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37115"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37115</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 58</span>
+<span class="co">#&gt;   ..$ BIR74    : num 765</span>
+<span class="co">#&gt;   ..$ SID74    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 5</span>
+<span class="co">#&gt;   ..$ BIR79    : num 926</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 3</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:30, 1:2] -82.9 -82.9 -82.8 -82.8 -82.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ martin      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.118</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.9</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1937</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1937</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Martin"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37117"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37117</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 59</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1549</span>
+<span class="co">#&gt;   ..$ SID74    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 883</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1849</span>
+<span class="co">#&gt;   ..$ SID79    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1033</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:37, 1:2] -77.2 -77.2 -77.3 -77.3 -77.4 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ mc_dowell   : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.116</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.66</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1964</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1964</span>
+<span class="co">#&gt;   ..$ NAME     : chr "McDowell"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37111"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37111</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 56</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1946</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 134</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2215</span>
+<span class="co">#&gt;   ..$ SID79    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 128</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:35, 1:2] -81.8 -81.8 -81.8 -81.9 -82 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ mecklenburg : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.143</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.89</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2041</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2041</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Mecklenburg"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37119"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37119</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 60</span>
+<span class="co">#&gt;   ..$ BIR74    : num 21588</span>
+<span class="co">#&gt;   ..$ SID74    : num 44</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 8027</span>
+<span class="co">#&gt;   ..$ BIR79    : num 30757</span>
+<span class="co">#&gt;   ..$ SID79    : num 35</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 11631</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:31, 1:2] -81 -81 -81 -81 -81 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ mitchell    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.059</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.32</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1927</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1927</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Mitchell"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37121"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37121</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 61</span>
+<span class="co">#&gt;   ..$ BIR74    : num 671</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1</span>
+<span class="co">#&gt;   ..$ BIR79    : num 919</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 4</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:34, 1:2] -82.1 -82.1 -82.1 -82.1 -82.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ montgomery  : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.13</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.73</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2044</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2044</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Montgomery"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37123"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37123</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 62</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1258</span>
+<span class="co">#&gt;   ..$ SID74    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 472</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1598</span>
+<span class="co">#&gt;   ..$ SID79    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 588</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:24, 1:2] -80.1 -80.1 -80.1 -80.1 -80.1 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ moore       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.181</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.98</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2040</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2040</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Moore"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37125"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37125</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 63</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2648</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 844</span>
+<span class="co">#&gt;   ..$ BIR79    : num 3534</span>
+<span class="co">#&gt;   ..$ SID79    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1151</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:29, 1:2] -79.6 -79.6 -79.7 -79.8 -79.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ nash        : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.142</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.64</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1913</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1913</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Nash"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37127"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37127</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 64</span>
+<span class="co">#&gt;   ..$ BIR74    : num 4021</span>
+<span class="co">#&gt;   ..$ SID74    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1851</span>
+<span class="co">#&gt;   ..$ BIR79    : num 5189</span>
+<span class="co">#&gt;   ..$ SID79    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 2274</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:23, 1:2] -78.2 -78.2 -78.2 -78.2 -78.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ new_hanover : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.042</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 0.999</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2238</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2238</span>
+<span class="co">#&gt;   ..$ NAME     : chr "New Hanover"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37129"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37129</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 65</span>
+<span class="co">#&gt;   ..$ BIR74    : num 5526</span>
+<span class="co">#&gt;   ..$ SID74    : num 12</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1633</span>
+<span class="co">#&gt;   ..$ BIR79    : num 6917</span>
+<span class="co">#&gt;   ..$ SID79    : num 9</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 2100</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:23, 1:2] -78 -78 -78 -78 -78 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ northampton : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.153</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.21</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1832</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1832</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Northampton"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37131"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37131</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 66</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1421</span>
+<span class="co">#&gt;   ..$ SID74    : num 9</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1066</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1606</span>
+<span class="co">#&gt;   ..$ SID79    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1197</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:34, 1:2] -77.2 -77.2 -77.3 -77.3 -77.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ onslow      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.195</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.78</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2146</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2146</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Onslow"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37133"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37133</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 67</span>
+<span class="co">#&gt;   ..$ BIR74    : num 11158</span>
+<span class="co">#&gt;   ..$ SID74    : num 29</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 2217</span>
+<span class="co">#&gt;   ..$ BIR79    : num 14655</span>
+<span class="co">#&gt;   ..$ SID79    : num 23</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 3568</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:19, 1:2] -77.5 -77.6 -77.7 -77.7 -77.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ orange      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.104</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.29</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1907</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1907</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Orange"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37135"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37135</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 68</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3164</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 776</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4478</span>
+<span class="co">#&gt;   ..$ SID79    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1086</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:9, 1:2] -79 -79.1 -79.2 -79.3 -79.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ pamlico     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.082</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.39</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2085</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2085</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Pamlico"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37137"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37137</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 69</span>
+<span class="co">#&gt;   ..$ BIR74    : num 542</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 222</span>
+<span class="co">#&gt;   ..$ BIR79    : num 631</span>
+<span class="co">#&gt;   ..$ SID79    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 277</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:20, 1:2] -76.9 -76.9 -77 -77 -77 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ pasquotank  : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.053</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.17</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1848</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1848</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Pasquotank"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37139"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37139</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 70</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1638</span>
+<span class="co">#&gt;   ..$ SID74    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 622</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2275</span>
+<span class="co">#&gt;   ..$ SID79    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 933</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:20, 1:2] -76.3 -76.3 -76.4 -76.5 -76.5 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ pender      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.214</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.15</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2185</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2185</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Pender"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37141"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37141</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 71</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1228</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 580</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1602</span>
+<span class="co">#&gt;   ..$ SID79    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 763</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:34, 1:2] -78 -78.1 -78.2 -78.2 -78.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ perquimans  : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.063</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1881</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1881</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Perquimans"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37143"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37143</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 72</span>
+<span class="co">#&gt;   ..$ BIR74    : num 484</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 230</span>
+<span class="co">#&gt;   ..$ BIR79    : num 676</span>
+<span class="co">#&gt;   ..$ SID79    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 310</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:12, 1:2] -76.5 -76.5 -76.6 -76.6 -76.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ person      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.109</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.32</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1841</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1841</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Person"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37145"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37145</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 73</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1556</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 613</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1790</span>
+<span class="co">#&gt;   ..$ SID79    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 650</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:6, 1:2] -78.8 -79 -79.2 -79.1 -78.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ pitt        : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.168</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.79</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1984</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1984</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Pitt"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37147"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37147</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 74</span>
+<span class="co">#&gt;   ..$ BIR74    : num 5094</span>
+<span class="co">#&gt;   ..$ SID74    : num 14</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 2620</span>
+<span class="co">#&gt;   ..$ BIR79    : num 6635</span>
+<span class="co">#&gt;   ..$ SID79    : num 11</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 3059</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:45, 1:2] -77.5 -77.5 -77.5 -77.5 -77.5 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ polk        : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.06</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.04</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2071</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2071</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Polk"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37149"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37149</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 75</span>
+<span class="co">#&gt;   ..$ BIR74    : num 533</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 95</span>
+<span class="co">#&gt;   ..$ BIR79    : num 673</span>
+<span class="co">#&gt;   ..$ SID79    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 79</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:16, 1:2] -82.2 -82.3 -82.3 -82.4 -82.4 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ randolph    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.201</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.8</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1968</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1968</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Randolph"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37151"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37151</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 76</span>
+<span class="co">#&gt;   ..$ BIR74    : num 4456</span>
+<span class="co">#&gt;   ..$ SID74    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 384</span>
+<span class="co">#&gt;   ..$ BIR79    : num 5711</span>
+<span class="co">#&gt;   ..$ SID79    : num 12</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 483</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:7, 1:2] -79.8 -80.1 -80 -79.5 -79.5 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ richmond    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.121</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.85</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2107</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2107</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Richmond"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37153"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37153</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 77</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2756</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1043</span>
+<span class="co">#&gt;   ..$ BIR79    : num 3108</span>
+<span class="co">#&gt;   ..$ SID79    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1218</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:36, 1:2] -79.7 -79.9 -79.9 -79.9 -79.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ robeson     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.24</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2150</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2150</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Robeson"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37155"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37155</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 78</span>
+<span class="co">#&gt;   ..$ BIR74    : num 7889</span>
+<span class="co">#&gt;   ..$ SID74    : num 31</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 5904</span>
+<span class="co">#&gt;   ..$ BIR79    : num 9087</span>
+<span class="co">#&gt;   ..$ SID79    : num 26</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 6899</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:25, 1:2] -78.9 -78.9 -79 -79 -79 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ rockingham  : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.153</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.62</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1839</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1839</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Rockingham"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37157"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37157</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 79</span>
+<span class="co">#&gt;   ..$ BIR74    : num 4449</span>
+<span class="co">#&gt;   ..$ SID74    : num 16</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1243</span>
+<span class="co">#&gt;   ..$ BIR79    : num 5386</span>
+<span class="co">#&gt;   ..$ SID79    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1369</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:7, 1:2] -79.5 -79.5 -80 -80 -79.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ rowan       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.134</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.59</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1980</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1980</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Rowan"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37159"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37159</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 80</span>
+<span class="co">#&gt;   ..$ BIR74    : num 4606</span>
+<span class="co">#&gt;   ..$ SID74    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1057</span>
+<span class="co">#&gt;   ..$ BIR79    : num 6427</span>
+<span class="co">#&gt;   ..$ SID79    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1504</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:18, 1:2] -80.3 -80.7 -80.8 -80.7 -80.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ rutherford  : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.146</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.78</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2027</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2027</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Rutherford"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37161"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37161</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 81</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2992</span>
+<span class="co">#&gt;   ..$ SID74    : num 12</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 495</span>
+<span class="co">#&gt;   ..$ BIR79    : num 3543</span>
+<span class="co">#&gt;   ..$ SID79    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 576</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:33, 1:2] -82 -82 -82.1 -82.1 -82.1 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ sampson     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.241</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.21</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2083</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2083</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Sampson"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37163"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37163</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 82</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3025</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1396</span>
+<span class="co">#&gt;   ..$ BIR79    : num 3447</span>
+<span class="co">#&gt;   ..$ SID79    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1524</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:40, 1:2] -78.1 -78.1 -78.2 -78.3 -78.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ scotland    : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.08</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.19</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2123</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2123</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Scotland"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37165"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37165</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 83</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2255</span>
+<span class="co">#&gt;   ..$ SID74    : num 8</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1206</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2617</span>
+<span class="co">#&gt;   ..$ SID79    : num 16</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1436</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:17, 1:2] -79.5 -79.7 -79.7 -79.7 -79.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ stanly      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.103</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.46</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2045</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2045</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Stanly"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37167"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37167</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 84</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2356</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 370</span>
+<span class="co">#&gt;   ..$ BIR79    : num 3039</span>
+<span class="co">#&gt;   ..$ SID79    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 528</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:32, 1:2] -80.1 -80.1 -80.1 -80.2 -80.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ stokes      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.124</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.43</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1837</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1837</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Stokes"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37169"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37169</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 85</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1612</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 160</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2038</span>
+<span class="co">#&gt;   ..$ SID79    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 176</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:6, 1:2] -80 -80.5 -80.4 -80 -80 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ surry       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.143</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.63</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1828</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1828</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Surry"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37171"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37171</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 86</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3188</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 208</span>
+<span class="co">#&gt;   ..$ BIR79    : num 3616</span>
+<span class="co">#&gt;   ..$ SID79    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 260</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:28, 1:2] -80.5 -80.5 -80.5 -80.5 -80.6 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ swain       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.141</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.32</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2013</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2013</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Swain"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37173"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37173</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 87</span>
+<span class="co">#&gt;   ..$ BIR74    : num 675</span>
+<span class="co">#&gt;   ..$ SID74    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 281</span>
+<span class="co">#&gt;   ..$ BIR79    : num 883</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 406</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:44, 1:2] -83.3 -83.4 -83.5 -83.7 -83.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ transylvania: sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.098</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.39</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2067</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2067</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Transylvania"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37175"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37175</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 88</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1173</span>
+<span class="co">#&gt;   ..$ SID74    : num 3</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 92</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1401</span>
+<span class="co">#&gt;   ..$ SID79    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 104</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:22, 1:2] -82.9 -83 -83 -83.1 -83 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ tyrrell     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.099</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.41</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1963</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1963</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Tyrrell"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37177"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37177</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 89</span>
+<span class="co">#&gt;   ..$ BIR74    : num 248</span>
+<span class="co">#&gt;   ..$ SID74    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 116</span>
+<span class="co">#&gt;   ..$ BIR79    : num 319</span>
+<span class="co">#&gt;   ..$ SID79    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 141</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:16, 1:2] -76.2 -76.2 -76.2 -76.3 -76.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ union       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.163</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.72</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2095</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2095</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Union"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37179"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37179</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 90</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3915</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1034</span>
+<span class="co">#&gt;   ..$ BIR79    : num 5273</span>
+<span class="co">#&gt;   ..$ SID79    : num 9</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1348</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:18, 1:2] -80.8 -80.8 -80.8 -80.5 -80.5 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ vance       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.072</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.08</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1842</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1842</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Vance"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37181"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37181</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 91</span>
+<span class="co">#&gt;   ..$ BIR74    : num 2180</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1179</span>
+<span class="co">#&gt;   ..$ BIR79    : num 2753</span>
+<span class="co">#&gt;   ..$ SID79    : num 6</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 1492</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:13, 1:2] -78.5 -78.5 -78.5 -78.5 -78.5 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ wake        : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.219</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 2.13</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1938</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1938</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Wake"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37183"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37183</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 92</span>
+<span class="co">#&gt;   ..$ BIR74    : num 14484</span>
+<span class="co">#&gt;   ..$ SID74    : num 16</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 4397</span>
+<span class="co">#&gt;   ..$ BIR79    : num 20857</span>
+<span class="co">#&gt;   ..$ SID79    : num 31</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 6221</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -78.9 -79 -78.9 -78.9 -78.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ warren      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.118</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.42</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1836</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1836</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Warren"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37185"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37185</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 93</span>
+<span class="co">#&gt;   ..$ BIR74    : num 968</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 748</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1190</span>
+<span class="co">#&gt;   ..$ SID79    : num 2</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 844</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:14, 1:2] -78.3 -78.3 -78.3 -78.1 -77.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ washington  : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.1</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.33</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1962</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1962</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Washington"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37187"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37187</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 94</span>
+<span class="co">#&gt;   ..$ BIR74    : num 990</span>
+<span class="co">#&gt;   ..$ SID74    : num 5</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 521</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1141</span>
+<span class="co">#&gt;   ..$ SID79    : num 0</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 651</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:18, 1:2] -76.4 -76.6 -76.8 -76.8 -76.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ watauga     : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.081</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.29</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1880</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1880</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Watauga"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37189"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37189</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 95</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1323</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 17</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1775</span>
+<span class="co">#&gt;   ..$ SID79    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 33</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:23, 1:2] -81.8 -81.8 -81.8 -81.9 -81.9 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ wayne       : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.142</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.66</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 2029</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 2029</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Wayne"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37191"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37191</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 96</span>
+<span class="co">#&gt;   ..$ BIR74    : num 6638</span>
+<span class="co">#&gt;   ..$ SID74    : num 18</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 2593</span>
+<span class="co">#&gt;   ..$ BIR79    : num 8227</span>
+<span class="co">#&gt;   ..$ SID79    : num 23</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 3073</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:29, 1:2] -78.2 -78.2 -78.3 -78.3 -78.3 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ wilkes      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.199</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.98</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1874</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1874</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Wilkes"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37193"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37193</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 97</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3146</span>
+<span class="co">#&gt;   ..$ SID74    : num 4</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 200</span>
+<span class="co">#&gt;   ..$ BIR79    : num 3725</span>
+<span class="co">#&gt;   ..$ SID79    : num 7</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 222</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:47, 1:2] -81 -81.1 -81.1 -81.2 -81.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ wilson      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.094</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.31</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1979</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1979</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Wilson"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37195"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37195</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 98</span>
+<span class="co">#&gt;   ..$ BIR74    : num 3702</span>
+<span class="co">#&gt;   ..$ SID74    : num 11</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 1827</span>
+<span class="co">#&gt;   ..$ BIR79    : num 4706</span>
+<span class="co">#&gt;   ..$ SID79    : num 13</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 2330</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:19, 1:2] -78.1 -78.1 -78.2 -78.2 -78.2 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;  $ yadkin      : sf [1 × 15] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ AREA     : num 0.086</span>
+<span class="co">#&gt;   ..$ PERIMETER: num 1.27</span>
+<span class="co">#&gt;   ..$ CNTY_    : num 1893</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num 1893</span>
+<span class="co">#&gt;   ..$ NAME     : chr "Yadkin"</span>
+<span class="co">#&gt;   ..$ FIPS     : chr "37197"</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num 37197</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int 99</span>
+<span class="co">#&gt;   ..$ BIR74    : num 1269</span>
+<span class="co">#&gt;   ..$ SID74    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num 65</span>
+<span class="co">#&gt;   ..$ BIR79    : num 1568</span>
+<span class="co">#&gt;   ..$ SID79    : num 1</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num 76</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:24, 1:2] -80.5 -80.7 -80.9 -80.9 -80.8 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span>
+<span class="co">#&gt;   [list output truncated]</span></code></pre></div>
+<p>If you use a grouping column, the list names are taken from the value of the grouping column. Alternatively, a character string with the same length as the list can be provided to the nm parameter:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">nc_list_name</span><span class="op">)</span>
+<span class="co">#&gt;   [1] "alamance"     "alexander"    "alleghany"    "anson"        "ashe"        </span>
+<span class="co">#&gt;   [6] "avery"        "beaufort"     "bertie"       "bladen"       "brunswick"   </span>
+<span class="co">#&gt;  [11] "buncombe"     "burke"        "cabarrus"     "caldwell"     "camden"      </span>
+<span class="co">#&gt;  [16] "carteret"     "caswell"      "catawba"      "chatham"      "cherokee"    </span>
+<span class="co">#&gt;  [21] "chowan"       "clay"         "cleveland"    "columbus"     "craven"      </span>
+<span class="co">#&gt;  [26] "cumberland"   "currituck"    "dare"         "davidson"     "davie"       </span>
+<span class="co">#&gt;  [31] "duplin"       "durham"       "edgecombe"    "forsyth"      "franklin"    </span>
+<span class="co">#&gt;  [36] "gaston"       "gates"        "graham"       "granville"    "greene"      </span>
+<span class="co">#&gt;  [41] "guilford"     "halifax"      "harnett"      "haywood"      "henderson"   </span>
+<span class="co">#&gt;  [46] "hertford"     "hoke"         "hyde"         "iredell"      "jackson"     </span>
+<span class="co">#&gt;  [51] "johnston"     "jones"        "lee"          "lenoir"       "lincoln"     </span>
+<span class="co">#&gt;  [56] "macon"        "madison"      "martin"       "mc_dowell"    "mecklenburg" </span>
+<span class="co">#&gt;  [61] "mitchell"     "montgomery"   "moore"        "nash"         "new_hanover" </span>
+<span class="co">#&gt;  [66] "northampton"  "onslow"       "orange"       "pamlico"      "pasquotank"  </span>
+<span class="co">#&gt;  [71] "pender"       "perquimans"   "person"       "pitt"         "polk"        </span>
+<span class="co">#&gt;  [76] "randolph"     "richmond"     "robeson"      "rockingham"   "rowan"       </span>
+<span class="co">#&gt;  [81] "rutherford"   "sampson"      "scotland"     "stanly"       "stokes"      </span>
+<span class="co">#&gt;  [86] "surry"        "swain"        "transylvania" "tyrrell"      "union"       </span>
+<span class="co">#&gt;  [91] "vance"        "wake"         "warren"       "washington"   "watauga"     </span>
+<span class="co">#&gt;  [96] "wayne"        "wilkes"       "wilson"       "yadkin"       "yancey"</span>
+
+<span class="va">nc_list</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/as_sf.html">as_sf_list</a></span><span class="op">(</span><span class="va">nc</span>, nm <span class="op">=</span> <span class="st">"North Carolina"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">nc_list</span><span class="op">)</span>
+<span class="co">#&gt; List of 1</span>
+<span class="co">#&gt;  $ north_carolina:Classes 'sf' and 'data.frame': 100 obs. of  15 variables:</span>
+<span class="co">#&gt;   ..$ AREA     : num [1:100] 0.114 0.061 0.143 0.07 0.153 0.097 0.062 0.091 0.118 0.124 ...</span>
+<span class="co">#&gt;   ..$ PERIMETER: num [1:100] 1.44 1.23 1.63 2.97 2.21 ...</span>
+<span class="co">#&gt;   ..$ CNTY_    : num [1:100] 1825 1827 1828 1831 1832 ...</span>
+<span class="co">#&gt;   ..$ CNTY_ID  : num [1:100] 1825 1827 1828 1831 1832 ...</span>
+<span class="co">#&gt;   ..$ NAME     : chr [1:100] "Ashe" "Alleghany" "Surry" "Currituck" ...</span>
+<span class="co">#&gt;   ..$ FIPS     : chr [1:100] "37009" "37005" "37171" "37053" ...</span>
+<span class="co">#&gt;   ..$ FIPSNO   : num [1:100] 37009 37005 37171 37053 37131 ...</span>
+<span class="co">#&gt;   ..$ CRESS_ID : int [1:100] 5 3 86 27 66 46 15 37 93 85 ...</span>
+<span class="co">#&gt;   ..$ BIR74    : num [1:100] 1091 487 3188 508 1421 ...</span>
+<span class="co">#&gt;   ..$ SID74    : num [1:100] 1 0 5 1 9 7 0 0 4 1 ...</span>
+<span class="co">#&gt;   ..$ NWBIR74  : num [1:100] 10 10 208 123 1066 ...</span>
+<span class="co">#&gt;   ..$ BIR79    : num [1:100] 1364 542 3616 830 1606 ...</span>
+<span class="co">#&gt;   ..$ SID79    : num [1:100] 0 3 6 2 3 5 2 2 2 5 ...</span>
+<span class="co">#&gt;   ..$ NWBIR79  : num [1:100] 19 12 260 145 1197 ...</span>
+<span class="co">#&gt;   ..$ geometry :sfc_MULTIPOLYGON of length 100; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:27, 1:2] -81.5 -81.5 -81.6 -81.6 -81.7 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...</span></code></pre></div>
+<p>You can check if an object is an sf list using <code>is_sf_list</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/is_sf.html">is_sf_list</a></span><span class="op">(</span><span class="va">nc_list</span><span class="op">)</span>
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<p>Both <code>as_sf</code> and <code>as_bbox</code> can convert simple feature lists to either a single simple feature data frame or a single bounding box.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/as_sf.html">as_sf</a></span><span class="op">(</span><span class="va">nc_list_name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="co">#&gt; Simple feature collection with 4 features and 14 fields</span>
+<span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: -81.34754 ymin: 34.80792 xmax: -79.23799 ymax: 36.57286</span>
+<span class="co">#&gt; Geodetic CRS:  NAD27</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 15</span></span>
+<span class="co">#&gt;    AREA PERIMETER CNTY_ CNTY_ID NAME   FIPS  FIPSNO CRESS_ID BIR74 SID74 NWBIR74</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.111      1.39  <span style="text-decoration: underline;">1</span>904    <span style="text-decoration: underline;">1</span>904 Alama… 37001  <span style="text-decoration: underline;">37</span>001        1  <span style="text-decoration: underline;">4</span>672    13    <span style="text-decoration: underline;">1</span>243</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 0.066      1.07  <span style="text-decoration: underline;">1</span>950    <span style="text-decoration: underline;">1</span>950 Alexa… 37003  <span style="text-decoration: underline;">37</span>003        2  <span style="text-decoration: underline;">1</span>333     0     128</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 0.061      1.23  <span style="text-decoration: underline;">1</span>827    <span style="text-decoration: underline;">1</span>827 Alleg… 37005  <span style="text-decoration: underline;">37</span>005        3   487     0      10</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 0.138      1.62  <span style="text-decoration: underline;">2</span>096    <span style="text-decoration: underline;">2</span>096 Anson  37007  <span style="text-decoration: underline;">37</span>007        4  <span style="text-decoration: underline;">1</span>570    15     952</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 4 more variables: BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;, NWBIR79 &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   geometry &lt;MULTIPOLYGON [°]&gt;</span></span>
+
+<span class="fu"><a href="../reference/as_sf.html">as_bbox</a></span><span class="op">(</span><span class="va">nc_list</span><span class="op">)</span>
+<span class="co">#&gt;      xmin      ymin      xmax      ymax </span>
+<span class="co">#&gt; -84.32385  33.88199 -75.45698  36.58965</span></code></pre></div>
+<p>Other key functions work with sf list objects by applying the function to each object in the list and maintain the list format, including:</p>
+<ul>
+<li><code><a href="../reference/st_transform_ext.html">st_transform_ext()</a></code></li>
 <li>
 <code><a href="../reference/st_bbox_ext.html">st_bbox_ext()</a></code>, <code><a href="../reference/st_bbox_ext.html">st_bbox_asp()</a></code>
 </li>
 <li><code><a href="../reference/st_buffer_ext.html">st_buffer_ext()</a></code></li>
-<li><code><a href="../reference/st_transform_ext.html">st_transform_ext()</a></code></li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">overedge</span><span class="op">)</span></code></pre></div>
+<p>Some of these functions can also convert a sf list into a list of bbox objects or the reverse. When using the ext = TRUE parameter, is_sf_list returns <code>TRUE</code> for sfc and bbox lists as well as sf lists.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nc_list_bbox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_bbox_ext.html">st_bbox_ext</a></span><span class="op">(</span><span class="va">nc_list_name</span>, asp <span class="op">=</span> <span class="fl">1</span>, class <span class="op">=</span> <span class="st">"bbox"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>
+
+<span class="fu"><a href="../reference/is_sf.html">is_sf_list</a></span><span class="op">(</span><span class="va">nc_list_bbox</span><span class="op">)</span>
+<span class="co">#&gt; [1] FALSE</span>
+
+<span class="fu"><a href="../reference/is_sf.html">is_sf_list</a></span><span class="op">(</span><span class="va">nc_list_bbox</span>, ext <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nc_list_name_buffered</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/st_buffer_ext.html">st_buffer_ext</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">nc_list_name</span>, dist <span class="op">=</span> <span class="fl">5</span>, unit <span class="op">=</span> <span class="st">"mi"</span><span class="op">)</span></code></pre></div>
+<p>Lists can be visualized with ggplot by creating lists of layers. This approach illustrates the results of the st_buffer_ext function above:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>
+    <span class="va">nc_list_name_buffered</span>,
+    <span class="op">~</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">.x</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">NAME</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
+<p><img src="working-sf-lists_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><code>get_location</code> also supports the creation of sf lists using the name_col, id_col, or locationname_col (used by <code>get_esri_data</code>) as a grouping column.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">park_list</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/get_location.html">get_location</a></span><span class="op">(</span>
+    type <span class="op">=</span> <span class="st">"parks"</span>,
+    name_col <span class="op">=</span> <span class="st">"park_district"</span>,
+    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Patterson"</span>, <span class="st">"Clifton"</span>, <span class="st">"Carroll"</span><span class="op">)</span>,
+    package <span class="op">=</span> <span class="st">"mapbaltimore"</span>,
+    class <span class="op">=</span> <span class="st">"list"</span>
+  <span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">park_list</span><span class="op">)</span>
+<span class="co">#&gt; List of 3</span>
+<span class="co">#&gt;  $ carroll  : sf [65 × 8] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ name         : chr [1:65] "Atlantic Ave Park" "B &amp; O Slope Park" "Calvert &amp; Madison Park" "Carroll &amp; Archer Park" ...</span>
+<span class="co">#&gt;   ..$ id           : int [1:65] 10 12 31 37 40 53 57 60 75 78 ...</span>
+<span class="co">#&gt;   ..$ address      : chr [1:65] "2304 Atlantic Ave" "1400 Cathedral St" "801 N Calvert St" "838 Carroll St" ...</span>
+<span class="co">#&gt;   ..$ name_alt     : chr [1:65] NA NA NA NA ...</span>
+<span class="co">#&gt;   ..$ operator     : chr [1:65] "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" ...</span>
+<span class="co">#&gt;   ..$ park_district: chr [1:65] "Carroll" "Carroll" "Carroll" "Carroll" ...</span>
+<span class="co">#&gt;   ..$ acres        : Units: [acres] num [1:65] 1.611 0.917 0.159 0.108 2.186 ...</span>
+<span class="co">#&gt;   ..$ geometry     :sfc_MULTIPOLYGON of length 65; first list element: List of 2</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:18, 1:2] 430354 430353 430270 430345 430351 ...</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:13, 1:2] 430420 430421 430422 430424 430442 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:7] "name" "id" "address" "name_alt" ...</span>
+<span class="co">#&gt;  $ clifton  : sf [47 × 8] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ name         : chr [1:47] "32nd Street Park" "Adams Park" "Alhambra Park" "Andover &amp; North Hill Park" ...</span>
+<span class="co">#&gt;   ..$ id           : int [1:47] 1 2 4 7 14 15 20 22 25 27 ...</span>
+<span class="co">#&gt;   ..$ address      : chr [1:47] "301 E 32nd St" "1530 Montpelier St" "5200 Alhambra Ave" "1116 Andover Rd (rear)" ...</span>
+<span class="co">#&gt;   ..$ name_alt     : chr [1:47] NA NA NA NA ...</span>
+<span class="co">#&gt;   ..$ operator     : chr [1:47] "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" ...</span>
+<span class="co">#&gt;   ..$ park_district: chr [1:47] "Clifton" "Clifton" "Clifton" "Clifton" ...</span>
+<span class="co">#&gt;   ..$ acres        : Units: [acres] num [1:47] 0.169 0.623 0.993 0.603 6.829 ...</span>
+<span class="co">#&gt;   ..$ geometry     :sfc_MULTIPOLYGON of length 47; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:9, 1:2] 433376 433404 433404 433404 433405 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:7] "name" "id" "address" "name_alt" ...</span>
+<span class="co">#&gt;  $ patterson: sf [44 × 8] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   ..$ name         : chr [1:44] "Ambrose Kennedy Park" "Anchorage Promenade Park" "Belnor Squares Park" "Betty Hyatt Park" ...</span>
+<span class="co">#&gt;   ..$ id           : int [1:44] 5 6 17 19 21 23 30 34 36 39 ...</span>
+<span class="co">#&gt;   ..$ address      : chr [1:44] "1002 Harford Rd" "2339 Boston St (rear)" "2800 Pulaski Hwy" "1710 E Baltimore St" ...</span>
+<span class="co">#&gt;   ..$ name_alt     : chr [1:44] NA NA NA NA ...</span>
+<span class="co">#&gt;   ..$ operator     : chr [1:44] "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" ...</span>
+<span class="co">#&gt;   ..$ park_district: chr [1:44] "Patterson" "Patterson" "Patterson" "Patterson" ...</span>
+<span class="co">#&gt;   ..$ acres        : Units: [acres] num [1:44] 1.725 0.297 1.106 1.759 16.817 ...</span>
+<span class="co">#&gt;   ..$ geometry     :sfc_MULTIPOLYGON of length 44; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. ..$ : num [1:33, 1:2] 434189 434192 434195 434197 434201 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:7] "name" "id" "address" "name_alt" ...</span></code></pre></div>
+<p>The <code>make_location_data_list</code> function is useful for combining locations and related data in paired named lists. For example, the prior list of parks grouped by park district can be combined with a list of park districts to make two lists of 3 sf objects.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">district_list</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/get_location.html">get_location</a></span><span class="op">(</span>
+    type <span class="op">=</span> <span class="st">"park_districts"</span>,
+    name_col <span class="op">=</span> <span class="st">"name"</span>,
+    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Patterson"</span>, <span class="st">"Clifton"</span>, <span class="st">"Carroll"</span><span class="op">)</span>,
+    package <span class="op">=</span> <span class="st">"mapbaltimore"</span>,
+    class <span class="op">=</span> <span class="st">"list"</span>
+  <span class="op">)</span>
+
+<span class="va">park_district_list</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/make_location_data_list.html">make_location_data_list</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">park_list</span>, location <span class="op">=</span> <span class="va">district_list</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">park_district_list</span><span class="op">)</span>
+<span class="co">#&gt; List of 2</span>
+<span class="co">#&gt;  $ location:List of 3</span>
+<span class="co">#&gt;   ..$ carroll  : sf [1 × 2] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ name    : chr "Carroll"</span>
+<span class="co">#&gt;   .. ..$ geometry:sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. .. ..$ : num [1:454, 1:2] 432805 432819 432875 432908 432943 ...</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   .. ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   .. ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "names")= chr "name"</span>
+<span class="co">#&gt;   ..$ clifton  : sf [1 × 2] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ name    : chr "Clifton"</span>
+<span class="co">#&gt;   .. ..$ geometry:sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. .. ..$ : num [1:548, 1:2] 440528 440557 440557 440557 440544 ...</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   .. ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   .. ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "names")= chr "name"</span>
+<span class="co">#&gt;   ..$ patterson: sf [1 × 2] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ name    : chr "Patterson"</span>
+<span class="co">#&gt;   .. ..$ geometry:sfc_MULTIPOLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. .. ..$ : num [1:447, 1:2] 436922 436947 437001 437010 437018 ...</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   .. ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   .. ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "names")= chr "name"</span>
+<span class="co">#&gt;  $ data    :List of 3</span>
+<span class="co">#&gt;   ..$ carroll  : sf [65 × 8] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ name         : chr [1:65] "Atlantic Ave Park" "B &amp; O Slope Park" "Calvert &amp; Madison Park" "Carroll &amp; Archer Park" ...</span>
+<span class="co">#&gt;   .. ..$ id           : int [1:65] 10 12 31 37 40 53 57 60 75 78 ...</span>
+<span class="co">#&gt;   .. ..$ address      : chr [1:65] "2304 Atlantic Ave" "1400 Cathedral St" "801 N Calvert St" "838 Carroll St" ...</span>
+<span class="co">#&gt;   .. ..$ name_alt     : chr [1:65] NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..$ operator     : chr [1:65] "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" ...</span>
+<span class="co">#&gt;   .. ..$ park_district: chr [1:65] "Carroll" "Carroll" "Carroll" "Carroll" ...</span>
+<span class="co">#&gt;   .. ..$ acres        : Units: [acres] num [1:65] 1.611 0.917 0.159 0.108 2.186 ...</span>
+<span class="co">#&gt;   .. ..$ geometry     :sfc_MULTIPOLYGON of length 65; first list element: List of 2</span>
+<span class="co">#&gt;   .. .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. .. ..$ : num [1:18, 1:2] 430354 430353 430270 430345 430351 ...</span>
+<span class="co">#&gt;   .. .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. .. ..$ : num [1:13, 1:2] 430420 430421 430422 430424 430442 ...</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   .. ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   .. ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:7] "name" "id" "address" "name_alt" ...</span>
+<span class="co">#&gt;   ..$ clifton  : sf [47 × 8] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ name         : chr [1:47] "32nd Street Park" "Adams Park" "Alhambra Park" "Andover &amp; North Hill Park" ...</span>
+<span class="co">#&gt;   .. ..$ id           : int [1:47] 1 2 4 7 14 15 20 22 25 27 ...</span>
+<span class="co">#&gt;   .. ..$ address      : chr [1:47] "301 E 32nd St" "1530 Montpelier St" "5200 Alhambra Ave" "1116 Andover Rd (rear)" ...</span>
+<span class="co">#&gt;   .. ..$ name_alt     : chr [1:47] NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..$ operator     : chr [1:47] "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" ...</span>
+<span class="co">#&gt;   .. ..$ park_district: chr [1:47] "Clifton" "Clifton" "Clifton" "Clifton" ...</span>
+<span class="co">#&gt;   .. ..$ acres        : Units: [acres] num [1:47] 0.169 0.623 0.993 0.603 6.829 ...</span>
+<span class="co">#&gt;   .. ..$ geometry     :sfc_MULTIPOLYGON of length 47; first list element: List of 1</span>
+<span class="co">#&gt;   .. .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. .. ..$ : num [1:9, 1:2] 433376 433404 433404 433404 433405 ...</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   .. ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   .. ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:7] "name" "id" "address" "name_alt" ...</span>
+<span class="co">#&gt;   ..$ patterson: sf [44 × 8] (S3: sf/tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ name         : chr [1:44] "Ambrose Kennedy Park" "Anchorage Promenade Park" "Belnor Squares Park" "Betty Hyatt Park" ...</span>
+<span class="co">#&gt;   .. ..$ id           : int [1:44] 5 6 17 19 21 23 30 34 36 39 ...</span>
+<span class="co">#&gt;   .. ..$ address      : chr [1:44] "1002 Harford Rd" "2339 Boston St (rear)" "2800 Pulaski Hwy" "1710 E Baltimore St" ...</span>
+<span class="co">#&gt;   .. ..$ name_alt     : chr [1:44] NA NA NA NA ...</span>
+<span class="co">#&gt;   .. ..$ operator     : chr [1:44] "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" "Baltimore City Department of Recreation and Parks" ...</span>
+<span class="co">#&gt;   .. ..$ park_district: chr [1:44] "Patterson" "Patterson" "Patterson" "Patterson" ...</span>
+<span class="co">#&gt;   .. ..$ acres        : Units: [acres] num [1:44] 1.725 0.297 1.106 1.759 16.817 ...</span>
+<span class="co">#&gt;   .. ..$ geometry     :sfc_MULTIPOLYGON of length 44; first list element: List of 1</span>
+<span class="co">#&gt;   .. .. ..$ :List of 1</span>
+<span class="co">#&gt;   .. .. .. ..$ : num [1:33, 1:2] 434189 434192 434195 434197 434201 ...</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"</span>
+<span class="co">#&gt;   .. ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   .. ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA</span>
+<span class="co">#&gt;   .. .. ..- attr(*, "names")= chr [1:7] "name" "id" "address" "name_alt" ...</span></code></pre></div>
+<p>This combined object can be used to create similar maps for each area using <code><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">purrr::map2()</a></code> as the following example illustrates.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">park_district_maps</span> <span class="op">&lt;-</span>
+  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span>
+    <span class="va">park_district_list</span><span class="op">$</span><span class="va">data</span>,
+    <span class="va">park_district_list</span><span class="op">$</span><span class="va">location</span>,
+    <span class="op">~</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+      <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
+        data <span class="op">=</span> <span class="st">"baltimore_city_detailed"</span>,
+        package <span class="op">=</span> <span class="st">"mapbaltimore"</span>,
+        fill <span class="op">=</span> <span class="st">"gray95"</span>,
+        color <span class="op">=</span> <span class="st">"gray55"</span>
+      <span class="op">)</span> <span class="op">+</span>
+      <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
+        data <span class="op">=</span> <span class="va">.x</span>,
+        location <span class="op">=</span> <span class="va">.y</span>,
+        fill <span class="op">=</span> <span class="st">"forestgreen"</span>,
+        color <span class="op">=</span> <span class="st">"lightgreen"</span>,
+        alpha <span class="op">=</span> <span class="fl">0.6</span>
+      <span class="op">)</span> <span class="op">+</span>
+      <span class="fu"><a href="../reference/layer_neatline.html">layer_neatline</a></span><span class="op">(</span>
+        data <span class="op">=</span> <span class="va">.y</span>,
+        asp <span class="op">=</span> <span class="fl">1</span>
+      <span class="op">)</span>
+  <span class="op">)</span>
+
+<span class="va">park_district_maps</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">park_district_maps</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">park_district_maps</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<p><img src="working-sf-lists_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p><code>get_location_data</code> works with sf lists but in a somewhat limited way that does not support all available features of the function. This currently works best when data is a character string which can also be used to name each sf object in the list (in combination with the label parameter).</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">map_layers</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="../reference/get_location_data.html">map_location_data</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"streets"</span>, <span class="st">"mta_bus_lines"</span>, <span class="st">"neighborhoods"</span><span class="op">)</span>,
+    package <span class="op">=</span> <span class="st">"mapbaltimore"</span>,
+    asp <span class="op">=</span> <span class="fl">1</span>,
+    location <span class="op">=</span> <span class="va">district_list</span><span class="op">$</span><span class="va">carroll</span>,
+    label <span class="op">=</span> <span class="st">"Carroll District"</span>,
+    class <span class="op">=</span> <span class="st">"list"</span>
+  <span class="op">)</span></code></pre></div>
+<p>The named lists making assembling layered maps with ggplot2 especially convenient:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">map_layers</span><span class="op">$</span><span class="va">carroll_district_streets</span>,
+    location <span class="op">=</span> <span class="va">district_list</span><span class="op">$</span><span class="va">carroll</span>,
+    fn <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">.x</span>, <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">sha_class</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="va">sha_class</span> <span class="op">!=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+    trim <span class="op">=</span> <span class="cn">TRUE</span>,
+ <span class="co">#   mapping = aes(size = sha_class),</span>
+    color <span class="op">=</span> <span class="st">"gray40"</span>,
+    size <span class="op">=</span> <span class="fl">0.2</span>,
+    fill <span class="op">=</span> <span class="cn">NA</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="co">#  sha_class_scale +</span>
+  <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">map_layers</span><span class="op">$</span><span class="va">carroll_district_neighborhoods</span>,
+    alpha <span class="op">=</span> <span class="fl">0.4</span>,
+    color <span class="op">=</span> <span class="cn">NA</span>,
+    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">name</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">map_layers</span><span class="op">$</span><span class="va">carroll_district_mta_bus_lines</span>,
+    mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">frequent</span><span class="op">)</span>,
+    size <span class="op">=</span> <span class="fl">0.3</span>,
+    alpha <span class="op">=</span> <span class="fl">0.3</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/layer_neatline.html">layer_neatline</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">district_list</span><span class="op">$</span><span class="va">carroll</span>,
+    asp <span class="op">=</span> <span class="fl">1</span>,
+    expand <span class="op">=</span> <span class="cn">TRUE</span>
+  <span class="op">)</span></code></pre></div>
+<p><img src="working-sf-lists_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
   </main>
 </div>
 
