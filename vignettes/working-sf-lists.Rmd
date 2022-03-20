@@ -12,6 +12,17 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+local({
+  hook_output <- knitr::knit_hooks$get('output')
+  knitr::knit_hooks$set(output = function(x, options) {
+    if (!is.null(options$max.height)) options$attr.output <- c(
+      options$attr.output,
+      sprintf('style="max-height: %s;"', options$max.height)
+    )
+    hook_output(x, options)
+  })
+})
 ```
 
 When mapping with simple feature objects, it can be helpful to create a list of related objects. A list could be:
@@ -31,7 +42,7 @@ library(patchwork)
 
 To start, `as_sf_list` can turn a sf object into a list and optionally use a grouping column to define how the list is structured.
 
-```{r}
+```{r, max.height='200px'}
 nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
 nc_list_name <-
@@ -40,11 +51,16 @@ nc_list_name <-
 str(nc_list_name)
 ```
 
-If you use a grouping column, the list names are taken from the value of the grouping column. Alternatively, a character string with the same length as the list can be provided to the nm parameter:
+If you use a grouping column, the list names are taken from the value of the grouping column:
 
-```{r}
+```{r, max.height='200px'}
+# List names match names from grouping column 
 names(nc_list_name)
+```
 
+Alternatively, a character string with the same length as the list can be provided to the "nm" parameter:
+
+```{r, max.height='200px'}
 nc_list <-
   as_sf_list(nc, nm = "North Carolina")
 
@@ -100,7 +116,7 @@ ggplot() +
 
 `get_location` also supports the creation of sf lists using the name_col, id_col, or locationname_col (used by `get_esri_data`) as a grouping column.
 
-```{r}
+```{r, max.height='200px'}
 park_list <-
   get_location(
     type = "parks",
@@ -115,7 +131,7 @@ str(park_list)
 
 The `make_location_data_list` function is useful for combining locations and related data in paired named lists. For example, the prior list of parks grouped by park district can be combined with a list of park districts to make two lists of 3 sf objects.
 
-```{r}
+```{r, max.height='200px'}
 district_list <-
   get_location(
     type = "park_districts",
