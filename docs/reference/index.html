@@ -40,6 +40,7 @@
     <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
     <a class="dropdown-item" href="../articles/working-sf-bbox-objects.html">Working with simple feature and bounding box objects</a>
+    <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -73,9 +74,14 @@
         <dd>Get location of a specified type based on name, id, or location</dd>
       </dl><dl><dt>
           
-          <code><a href="get_location_data.html">get_location_data()</a></code> 
+          <code><a href="get_location_data.html">get_location_data()</a></code> <code><a href="get_location_data.html">map_location_data()</a></code> 
         </dt>
         <dd>Get data for a location</dd>
+      </dl><dl><dt>
+          
+          <code><a href="make_location_data_list.html">make_location_data_list()</a></code> 
+        </dt>
+        <dd>Make a list of data and corresponding locations</dd>
       </dl><dl><dt>
           
           <code><a href="read_sf_ext.html">read_sf_path()</a></code> <code><a href="read_sf_ext.html">read_sf_url()</a></code> <code><a href="read_sf_ext.html">read_sf_pkg()</a></code> <code><a href="read_sf_ext.html">read_sf_download()</a></code> 
@@ -139,7 +145,7 @@ location</dd>
         </dt>
         <dd>Get U.S. State and County boundary data for a location</dd>
       </dl></div><div class="section level2">
-      <h2 id="check-or-convert-the-class-of-spatial-data-objects">Check or convert the class of spatial data objects<a class="anchor" aria-label="anchor" href="#check-or-convert-the-class-of-spatial-data-objects"></a></h2>
+      <h2 id="working-with-simple-feature-and-bounding-box-objects">Working with simple feature and bounding box objects<a class="anchor" aria-label="anchor" href="#working-with-simple-feature-and-bounding-box-objects"></a></h2>
       
       
 
@@ -151,36 +157,15 @@ location</dd>
 
       <dl><dt>
           
-          <code><a href="as_sf.html">as_sf()</a></code> <code><a href="as_sf.html">as_bbox()</a></code> <code><a href="as_sf.html">as_sfc()</a></code> 
+          <code><a href="as_sf.html">as_sf()</a></code> <code><a href="as_sf.html">as_bbox()</a></code> <code><a href="as_sf.html">as_sfc()</a></code> <code><a href="as_sf.html">as_sf_list()</a></code> 
         </dt>
         <dd>Convert an object to a simple feature or bounding box object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="as_sf_list.html">as_sf_list()</a></code> 
-        </dt>
-        <dd>Make a simple feature list with an optional grouping column</dd>
-      </dl><dl><dt>
-          
-          <code><a href="is_gg.html">is_gg_list()</a></code> <code><a href="is_gg.html">is_gg_layer()</a></code> <code><a href="is_gg.html">is_gg_sf_layer()</a></code> <code><a href="is_gg.html">is_gg_scale()</a></code> <code><a href="is_gg.html">is_gg_theme()</a></code> <code><a href="is_gg.html">is_gg_component()</a></code> 
-        </dt>
-        <dd>Check ggplot objects and ggplot lists</dd>
       </dl><dl><dt>
           
           <code><a href="is_sf.html">is_sf()</a></code> <code><a href="is_sf.html">is_sfc()</a></code> <code><a href="is_sf.html">is_bbox()</a></code> <code><a href="is_sf.html">is_sf_list()</a></code> <code><a href="is_sf.html">is_same_crs()</a></code> <code><a href="is_sf.html">is_raster()</a></code> <code><a href="is_sf.html">is_sp()</a></code> 
         </dt>
         <dd>Check the class and attributes of a simple feature object</dd>
-      </dl></div><div class="section level2">
-      <h2 id="working-with-simple-feature-objects">Working with simple feature objects<a class="anchor" aria-label="anchor" href="#working-with-simple-feature-objects"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
+      </dl><dl><dt>
           
           <code><a href="st_buffer_ext.html">st_buffer_ext()</a></code> <code><a href="st_buffer_ext.html">st_edge()</a></code> 
         </dt>
@@ -230,29 +215,13 @@ location</dd>
           <code><a href="sf_to_df.html">sf_to_df()</a></code> <code><a href="sf_to_df.html">df_to_sf()</a></code> <code><a href="sf_to_df.html">check_coords()</a></code> 
         </dt>
         <dd>Convert between simple feature and data frame objects</dd>
-      </dl></div><div class="section level2">
-      <h2 id="working-with-bounding-box-objects">Working with bounding box objects<a class="anchor" aria-label="anchor" href="#working-with-bounding-box-objects"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="st_bbox_ext.html">st_bbox_ext()</a></code> <code><a href="st_bbox_ext.html">st_bbox_asp()</a></code> 
-        </dt>
-        <dd>Get a bounding box buffered to match an aspect ratio</dd>
       </dl><dl><dt>
           
           <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sfc()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_expand()</a></code> 
         </dt>
         <dd>Measure, transform, and convert bounding boxes</dd>
       </dl></div><div class="section level2">
-      <h2 id="layers-and-geoms-for-ggplot-maps">Layers and geoms for ggplot2 maps<a class="anchor" aria-label="anchor" href="#layers-and-geoms-for-ggplot-maps"></a></h2>
+      <h2 id="spatial-layers-for-ggplot-maps">Spatial layers for ggplot2 maps<a class="anchor" aria-label="anchor" href="#spatial-layers-for-ggplot-maps"></a></h2>
       
       
 
@@ -301,7 +270,7 @@ buffer, aspect ratio, and panel border</dd>
 
       <dl><dt>
           
-          <code><a href="is_gg.html">is_gg_list()</a></code> <code><a href="is_gg.html">is_gg_layer()</a></code> <code><a href="is_gg.html">is_gg_sf_layer()</a></code> <code><a href="is_gg.html">is_gg_scale()</a></code> <code><a href="is_gg.html">is_gg_theme()</a></code> <code><a href="is_gg.html">is_gg_component()</a></code> 
+          <code><a href="is_gg.html">is_gg_layer()</a></code> <code><a href="is_gg.html">is_gg_sf_layer()</a></code> <code><a href="is_gg.html">is_gg_scale()</a></code> <code><a href="is_gg.html">is_gg_theme()</a></code> <code><a href="is_gg.html">is_gg_component()</a></code> <code><a href="is_gg.html">is_gg_list()</a></code> 
         </dt>
         <dd>Check ggplot objects and ggplot lists</dd>
       </dl><dl><dt>
@@ -329,27 +298,6 @@ buffer, aspect ratio, and panel border</dd>
           <code><a href="get_data_dir.html">get_data_dir()</a></code> 
         </dt>
         <dd>Check data directory and create if needed</dd>
-      </dl></div><div class="section level2">
-      <h2 id="working-with-sf-and-ggplot-lists">Working with sf and ggplot2 lists<a class="anchor" aria-label="anchor" href="#working-with-sf-and-ggplot-lists"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="make_location_data_list.html">make_location_data_list()</a></code> 
-        </dt>
-        <dd>Make a list of data and corresponding locations</dd>
-      </dl><dl><dt>
-          
-          <code><a href="as_sf_list.html">as_sf_list()</a></code> 
-        </dt>
-        <dd>Make a simple feature list with an optional grouping column</dd>
       </dl></div><div class="section level2">
       <h2 id="unit-and-formatting-utilities">Unit and formatting utilities<a class="anchor" aria-label="anchor" href="#unit-and-formatting-utilities"></a></h2>
       
@@ -392,7 +340,7 @@ buffer, aspect ratio, and panel border</dd>
         </dt>
         <dd>Get aspect ratio from string or based on specific paper and margins</dd>
       </dl></div><div class="section level2">
-      <h2 id="reference-data-for-units-and-formatting">Reference data for units and formatting<a class="anchor" aria-label="anchor" href="#reference-data-for-units-and-formatting"></a></h2>
+      <h2 id="reference-data-for-mapping-and-formatting">Reference data for mapping and formatting<a class="anchor" aria-label="anchor" href="#reference-data-for-mapping-and-formatting"></a></h2>
       
       
 

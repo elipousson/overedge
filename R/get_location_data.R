@@ -5,6 +5,14 @@
 #' filter data to include the full geometry of anything that overlaps with the
 #' area or bbox (if the area is not provided).
 #'
+#' @details Working with sf lists for data and locations:
+#'
+#'   map_data_location makes it easier to work with sf lists. It supports data
+#'   as a character vector, data as an sf list when location is a single object,
+#'   location as a character vector or sf list (including lists of bbox or sfc
+#'   objects), or when both data and location are lists (such as a list created
+#'   by make_location_data_list).
+#'
 #' @param location sf object. If multiple areas are provided, they are unioned
 #'   into a single sf object using \code{\link[sf]{st_union}}
 #' @inheritParams st_bbox_ext
@@ -27,6 +35,7 @@
 #'   Default FALSE.
 #' @param from_crs coordinate reference system of the data.
 #' @param crs coordinate reference system to return
+#' @param class Class of
 #' @param ... additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg
 #' @rdname get_location_data
 #' @export
@@ -43,13 +52,17 @@ get_location_data <- function(location = NULL,
                               url = NULL,
                               path = NULL,
                               package = NULL,
-                              filetype,
+                              filetype = "gpkg",
                               fn = NULL,
                               crop = TRUE,
                               trim = FALSE,
                               from_crs = NULL,
                               crs = NULL,
+                              class = "sf",
+                              label = NULL,
                               ...) {
+  params <- rlang::list2(...)
+
   if (!is.null(location)) {
     # Get adjusted bounding box using any adjustment variables provided
     bbox <-
@@ -63,17 +76,6 @@ get_location_data <- function(location = NULL,
       )
   } else {
     bbox <- NULL
-  }
-
-  # Check if data is in local environment
-  if ((length(data) == 1) && (data %in% ls(envir = .GlobalEnv)) && !is_sf(data)) {
-    if (usethis::ui_yeah("Do you want to load {data} from the global environment?")) {
-      data <- eval_data(data = data)
-    }
-
-    if (!is_sf(data)) {
-      usethis::ui_warn("The loaded data is not an sf object.")
-    }
   }
 
   if (is_bbox(data)) {
@@ -103,10 +105,9 @@ get_location_data <- function(location = NULL,
 
   if (!is.null(bbox)) {
     if (trim) {
-
       # If trim, match location crs to data
       location <- st_transform_ext(x = location, crs = data)
-      data <- suppressWarnings(sf::st_intersection(data, location))
+      data <- st_erase(x = data, y = location, flip = TRUE)
     } else {
       # Otherwise, match bbox crs to data
       bbox <- st_transform_ext(x = bbox, crs = data)
@@ -126,9 +127,141 @@ get_location_data <- function(location = NULL,
     data <- fn(data)
   }
 
-  if (!is.null(crs)) {
-    data <- sf::st_transform(data, crs)
+  if (!is.null(params$col)) {
+    col <- params$col
+  } else {
+    col <- NULL
   }
 
+  data <- as_sf_class(x = data, class = class, crs = crs, col = col)
+
   return(data)
+}
+
+#' @name map_location_data
+#' @rdname get_location_data
+#' @export
+map_location_data <- function(location = NULL,
+                              dist = NULL,
+                              diag_ratio = NULL,
+                              unit = NULL,
+                              asp = NULL,
+                              data = NULL,
+                              url = NULL,
+                              path = NULL,
+                              package = NULL,
+                              filetype = "gpkg",
+                              fn = NULL,
+                              crop = TRUE,
+                              trim = FALSE,
+                              from_crs = NULL,
+                              crs = NULL,
+                              class = "list",
+                              label = NULL,
+                              ...) {
+  params <- rlang::list2(...)
+
+  # FIXME: This may need some more checks to avoid passing data that would result in an error or other issue
+  len_location <- length(location)
+  len_data <- length(data)
+
+  is_char_list_location <- ((len_location > 1) && is.character(location))
+  is_list_location <- (is_sf_list(location, ext = TRUE) || is_char_list_location)
+
+  if (is_char_list_location) {
+    location <- as.list(location)
+  }
+
+  is_char_list_data <- ((len_data > 1) && is.character(data))
+  is_list_data <- (is_sf_list(data) || is_char_list_data)
+
+
+  if (is_char_list_data) {
+    data <- as.list(data)
+
+
+    if (is.null(names(data))) {
+      label <- janitor::make_clean_names(label)
+
+      data <-
+        purrr::set_names(
+          data,
+          nm = purrr::map_chr(
+            data,
+            ~ paste0(c(label, janitor::make_clean_names(.x)), collapse = "_")
+          )
+        )
+    }
+  }
+
+  if (is_list_data) {
+    data <-
+      purrr::map(
+        data,
+        ~ get_location_data(
+          location = location,
+          dist = dist,
+          diag_ratio = diag_ratio,
+          unit = unit,
+          asp = asp,
+          data = .x,
+          package = package,
+          filetype = filetype,
+          fn = fn,
+          crop = crop,
+          trim = trim,
+          from_crs = from_crs,
+          crs = crs,
+          locationname_col = params$locationname_col,
+          locationname = params$locationname
+        )
+      )
+  } else if (is_list_location) {
+    data <-
+      purrr::map(
+        location,
+        ~ get_location_data(
+          location = .x,
+          dist = dist,
+          diag_ratio = diag_ratio,
+          unit = unit,
+          asp = asp,
+          data = data,
+          package = package,
+          filetype = filetype,
+          fn = fn,
+          crop = crop,
+          trim = trim,
+          from_crs = from_crs,
+          crs = crs,
+          locationname_col = params$locationname_col,
+          locationname = params$locationname
+        )
+      )
+  } else if (is_list_data && is_list_location && (len_data == len_location)) {
+    data <-
+      purrr::map2(
+        location,
+        data,
+        ~ get_location_data(
+          location = .x,
+          dist = dist,
+          diag_ratio = diag_ratio,
+          unit = unit,
+          asp = asp,
+          data = .y,
+          package = package,
+          filetype = filetype,
+          fn = fn,
+          crop = crop,
+          trim = trim,
+          from_crs = from_crs,
+          crs = crs,
+          locationname_col = params$locationname_col,
+          locationname = params$locationname
+        )
+      )
+  }
+
+  data <- as_sf_class(x = data, class = class, crs = crs, ...)
 }

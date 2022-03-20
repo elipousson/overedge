@@ -4,7 +4,12 @@
 \alias{make_location_data_list}
 \title{Make a list of data and corresponding locations}
 \usage{
-make_location_data_list(data, location, key = c("location", "data"), ...)
+make_location_data_list(
+  data = NULL,
+  location = NULL,
+  key = c("location", "data"),
+  ...
+)
 }
 \arguments{
 \item{data, location}{A sf object or list of sf objects with data and
@@ -25,5 +30,5 @@ creation of an sf list from a sf data frame using \code{\link[dplyr:group_nest]{
 If location and data are the same length are the same length, they are
 combined into a single list. If either one is length 1 when the other is not,
 the length 1 object is repeated to match the length of the longer object.
-Different length objects where neither are length 1 return an error.
+Different length objects where neither are length 1 gives a warning.
 }

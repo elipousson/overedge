@@ -7,14 +7,15 @@
 get_location(
   type,
   name = NULL,
-  id = NULL,
-  location = NULL,
-  label = NULL,
   name_col = "name",
+  id = NULL,
   id_col = "id",
+  location = NULL,
   index = NULL,
   union = FALSE,
   crs = NULL,
+  label = NULL,
+  class = "sf",
   ...
 )
 }
@@ -26,24 +27,20 @@ character string to match the name of a list.}
 
 \item{name}{Location name to return.}
 
+\item{name_col}{Column name in type with name values, Default: 'name'
+Required if name provided.}
+
 \item{id}{Location id to return. id is coerced to character or numeric to
 match the class of the id_col for type.}
+
+\item{id_col}{Column name in type with id values, Default: 'id'. Required if
+id is provided.}
 
 \item{location}{An address, bounding box (\code{bbox}), or simple feature (\code{sf})
 object passed to \code{\link[sf]{st_filter}}. Any valid address or
 addresses are geocoded with \code{\link[tidygeocoder]{geo}}), converted to
 a simple feature object, and then used as a spatial filter. \code{bbox} objects
 are converted using \code{\link[=sf_bbox_to_sf]{sf_bbox_to_sf()}}. Multiple addresses are supported.}
-
-\item{label}{Label optionally added to "label" column; must be a length 1 or
-match the number of rows returned based on the other parameters. If \code{union = TRUE},
-using label is recommended. Default: \code{NULL}}
-
-\item{name_col}{Column name in type with name values, Default: 'name'
-Required if name provided.}
-
-\item{id_col}{Column name in type with id values, Default: 'id'. Required if
-id is provided.}
 
 \item{index}{Optional list used to match type to data, Default: \code{NULL}}
 
@@ -54,6 +51,10 @@ Default: \code{FALSE}.}
 \item{crs}{Coordinate reference system to return; defaults to NULL which
 returns data using the same coordinate reference system as the provided
 type of location.}
+
+\item{label}{Label optionally added to "label" column; must be a length 1 or
+match the number of rows returned based on the other parameters. If \code{union = TRUE},
+using label is recommended. Default: \code{NULL}}
 
 \item{...}{Additional parameters passed to \code{get_location_data} if type
 is character and index is \code{NULL}.}

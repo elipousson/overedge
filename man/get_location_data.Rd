@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_location_data.R
 \name{get_location_data}
 \alias{get_location_data}
+\alias{map_location_data}
 \title{Get data for a location}
 \usage{
 get_location_data(
@@ -14,12 +15,35 @@ get_location_data(
   url = NULL,
   path = NULL,
   package = NULL,
-  filetype,
+  filetype = "gpkg",
   fn = NULL,
   crop = TRUE,
   trim = FALSE,
   from_crs = NULL,
   crs = NULL,
+  class = "sf",
+  label = NULL,
+  ...
+)
+
+map_location_data(
+  location = NULL,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = NULL,
+  asp = NULL,
+  data = NULL,
+  url = NULL,
+  path = NULL,
+  package = NULL,
+  filetype = "gpkg",
+  fn = NULL,
+  crop = TRUE,
+  trim = FALSE,
+  from_crs = NULL,
+  crs = NULL,
+  class = "list",
+  label = NULL,
   ...
 )
 }
@@ -72,6 +96,8 @@ Default FALSE.}
 
 \item{crs}{coordinate reference system to return}
 
+\item{class}{Class of}
+
 \item{...}{additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg}
 }
 \description{
@@ -79,4 +105,13 @@ Returns data for a selected area or areas with an optional buffer. If both
 crop and trim are FALSE, the function uses \code{\link[sf]{st_intersects}} to
 filter data to include the full geometry of anything that overlaps with the
 area or bbox (if the area is not provided).
+}
+\details{
+Working with sf lists for data and locations:
+
+map_data_location makes it easier to work with sf lists. It supports data
+as a character vector, data as an sf list when location is a single object,
+location as a character vector or sf list (including lists of bbox or sfc
+objects), or when both data and location are lists (such as a list created
+by make_location_data_list).
 }

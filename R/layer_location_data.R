@@ -28,7 +28,7 @@
 layer_location_data <-
   function(mapping = NULL,
            data = NULL,
-           label,
+           label = NULL,
            geom = "sf",
            location = NULL,
            dist = NULL,
@@ -47,9 +47,9 @@ layer_location_data <-
 
     # FIXME: The use of label in this function is designed for use with batch loading
     # but it is inconsistent with how other functions handle the "label" parameter
-    if (is.character(data) && !missing(label)) {
-      data <- paste0(collapse = "_", c(label, data))
-    }
+    # if (is.character(data) && !is.null(label)) {
+    #  data <- paste0(collapse = "_", c(label, data))
+    # }
 
     data <-
       get_location_data(
@@ -67,8 +67,12 @@ layer_location_data <-
         crop = crop,
         trim = trim,
         from_crs = from_crs,
-        crs = crs
+        crs = crs,
+        class = "sf",
+        ...
       )
+
+    data <- as_sf(data)
 
     text_geoms <- c("text", "label", "textsf", "labelsf", "text_repel", "label_repel")
     ggrepel_geoms <- c("text_repel", "label_repel")

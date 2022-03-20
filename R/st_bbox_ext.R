@@ -10,8 +10,8 @@
 #'
 #'
 #' @param x An object sf, bbox, sfc, raster, or sp object or a data frame that
-#'   can be converted to an sf object. st_bbox_asp also supports vectors in the
-#'   same format as a bbox object.
+#'   can be converted to an sf object or a list of sf, bbox, or sfc objects.
+#'   st_bbox_asp also supports vectors in the same format as a bbox object.
 #' @inheritParams st_buffer_ext
 #' @inheritParams get_asp
 #' @param crs Coordinate reference system of bounding box to return
@@ -28,6 +28,18 @@ st_bbox_ext <- function(x = NULL,
                         unit = NULL,
                         crs = NULL,
                         class = "bbox") {
+  if (is_sf_list(x, ext = TRUE)) {
+    x <-
+      purrr::map(
+        x,
+        ~ st_bbox_ext(
+          .x,
+          dist = dist, asp = asp, diag_ratio = diag_ratio, unit = unit, crs = crs, class = class
+        )
+      )
+
+    return(x)
+  }
 
   # Get buffered area
   x <-
@@ -65,6 +77,12 @@ st_bbox_ext <- function(x = NULL,
 st_bbox_asp <- function(x = NULL,
                         asp = NULL,
                         class = "bbox") {
+  if (is_sf_list(x, ext = TRUE)) {
+    x <- purrr::map(x, ~ st_bbox_asp(.x, asp = asp, class = class))
+
+    return(x)
+  }
+
   bbox <- as_bbox(x)
   # Get adjusted aspect ratio
   asp <- get_asp(asp = asp)

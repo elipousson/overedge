@@ -7,6 +7,7 @@ reference:
   contents:
   - '`get_location`'
   - '`get_location_data`'
+  - '`make_location_data_list`'
   - '`read_sf_ext`'
   - '`write_sf_ext`'
   - '`read_sf_exif`'
@@ -19,22 +20,18 @@ reference:
   - '`get_open_data`'
   - '`get_flickr_photos`'
   - '`get_admin_data`'
-- title: Check or convert the class of spatial data objects
+- title: Working with simple feature and bounding box objects
   contents:
   - starts_with("as_")
-  - starts_with("is_")
-- title: Working with simple feature objects
-  contents:
+  - '`is_sf`'
   - '`st_buffer_ext`'
   - '`st_cast_ext`'
   - '`st_transform_ext`'
   - starts_with("st_")
   - '`sf_to_df`'
-- title: Working with bounding box objects
-  contents:
   - '`st_bbox_ext`'
   - starts_with("sf_bbox")
-- title: Layers and geoms for ggplot2 maps
+- title: Spatial layers for ggplot2 maps
   contents:
   - starts_with("layer_")
   - starts_with("geom_")
@@ -46,10 +43,6 @@ reference:
   - '`ggsave_ext`'
   - '`make_filename`'
   - '`get_data_dir`'
-- title: Working with sf and ggplot2 lists
-  contents:
-  - '`make_location_data_list`'
-  - '`as_sf_list`'
 - title: Unit and formatting utilities
   contents:
   - '`get_paper`'
@@ -58,7 +51,7 @@ reference:
   - '`convert_dist_scale`'
   - '`convert_dist_units`'
   - '`get_asp`'
-- title: Reference data for units and formatting
+- title: Reference data for mapping and formatting
   contents:
   - '`map_icons`'
   - '`valid_dist_units`'

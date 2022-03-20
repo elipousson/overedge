@@ -1,0 +1,213 @@
+---
+title: "Working with lists of simple feature objects"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with lists of simple feature objects}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+When mapping with simple feature objects, it can be helpful to create a list of related objects. A list could be:
+
+- A list of related locations
+- A list of different types of data for a single location
+- A list of the same type of data for multiple locations
+
+To ease the use of simple feature lists, overedge includes several dedicated functions for creating or modifying these lists along with support for sf lists in most of the key functions.
+
+```{r setup}
+library(overedge)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+```
+
+To start, `as_sf_list` can turn a sf object into a list and optionally use a grouping column to define how the list is structured.
+
+```{r}
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+
+nc_list_name <-
+  as_sf_list(nc, col = "NAME")
+
+str(nc_list_name)
+```
+
+If you use a grouping column, the list names are taken from the value of the grouping column. Alternatively, a character string with the same length as the list can be provided to the nm parameter:
+
+```{r}
+names(nc_list_name)
+
+nc_list <-
+  as_sf_list(nc, nm = "North Carolina")
+
+str(nc_list)
+```
+
+You can check if an object is an sf list using `is_sf_list`.
+
+```{r}
+is_sf_list(nc_list)
+```
+
+Both `as_sf` and `as_bbox` can convert simple feature lists to either a single simple feature data frame or a single bounding box.
+
+```{r}
+as_sf(nc_list_name) %>%
+  slice_head(n = 4)
+
+as_bbox(nc_list)
+```
+
+Other key functions  work with sf list objects by applying the function to each object in the list and maintain the list format, including:
+
+  - `st_transform_ext()`
+  - `st_bbox_ext()`, `st_bbox_asp()`
+  - `st_buffer_ext()`
+
+Some of these functions can also convert a sf list into a list of bbox objects or the reverse. When using the ext = TRUE parameter, is_sf_list returns `TRUE` for sfc and bbox lists as well as sf lists.
+
+```{r}
+nc_list_bbox <- st_bbox_ext(nc_list_name, asp = 1, class = "bbox")[1:4]
+
+is_sf_list(nc_list_bbox)
+
+is_sf_list(nc_list_bbox, ext = TRUE)
+```
+
+```{r}
+nc_list_name_buffered <-
+  st_buffer_ext(x = nc_list_name, dist = 5, unit = "mi")
+```
+
+Lists can be visualized with ggplot by creating lists of layers. This approach illustrates the results of the st_buffer_ext function above:
+
+```{r}
+ggplot() +
+  purrr::map(
+    nc_list_name_buffered,
+    ~ geom_sf(data = .x, aes(fill = NAME), alpha = 0.2)
+  ) +
+  guides(fill = "none")
+```
+
+`get_location` also supports the creation of sf lists using the name_col, id_col, or locationname_col (used by `get_esri_data`) as a grouping column.
+
+```{r}
+park_list <-
+  get_location(
+    type = "parks",
+    name_col = "park_district",
+    name = c("Patterson", "Clifton", "Carroll"),
+    package = "mapbaltimore",
+    class = "list"
+  )
+
+str(park_list)
+```
+
+The `make_location_data_list` function is useful for combining locations and related data in paired named lists. For example, the prior list of parks grouped by park district can be combined with a list of park districts to make two lists of 3 sf objects.
+
+```{r}
+district_list <-
+  get_location(
+    type = "park_districts",
+    name_col = "name",
+    name = c("Patterson", "Clifton", "Carroll"),
+    package = "mapbaltimore",
+    class = "list"
+  )
+
+park_district_list <-
+  make_location_data_list(data = park_list, location = district_list)
+
+str(park_district_list)
+```
+
+This combined object can be used to create similar maps for each area using `purrr::map2()` as the following example illustrates.
+
+```{r}
+park_district_maps <-
+  purrr::map2(
+    park_district_list$data,
+    park_district_list$location,
+    ~ ggplot() +
+      layer_location_data(
+        data = "baltimore_city_detailed",
+        package = "mapbaltimore",
+        fill = "gray95",
+        color = "gray55"
+      ) +
+      layer_location_data(
+        data = .x,
+        location = .y,
+        fill = "forestgreen",
+        color = "lightgreen",
+        alpha = 0.6
+      ) +
+      layer_neatline(
+        data = .y,
+        asp = 1
+      )
+  )
+
+park_district_maps[[1]] + park_district_maps[[2]] + park_district_maps[[3]]
+```
+
+
+`get_location_data` works with sf lists but in a somewhat limited way that does not support all available features of the function. This currently works best when data is a character string which can also be used to name each sf object in the list (in combination with the label parameter).
+
+```{r}
+map_layers <-
+  map_location_data(
+    data = c("streets", "mta_bus_lines", "neighborhoods"),
+    package = "mapbaltimore",
+    asp = 1,
+    location = district_list$carroll,
+    label = "Carroll District",
+    class = "list"
+  )
+```
+
+The named lists making assembling layered maps with ggplot2 especially convenient: 
+
+```{r}
+ggplot() +
+  layer_location_data(
+    data = map_layers$carroll_district_streets,
+    location = district_list$carroll,
+    fn = ~ filter(.x, (!is.na(sha_class) & (sha_class != ""))),
+    trim = TRUE,
+ #   mapping = aes(size = sha_class),
+    color = "gray40",
+    size = 0.2,
+    fill = NA
+  ) +
+  #  sha_class_scale +
+  layer_location_data(
+    data = map_layers$carroll_district_neighborhoods,
+    alpha = 0.4,
+    color = NA,
+    mapping = aes(fill = name)
+  ) +
+  guides(fill = "none") +
+  layer_location_data(
+    data = map_layers$carroll_district_mta_bus_lines,
+    mapping = aes(color = frequent),
+    size = 0.3,
+    alpha = 0.3
+  ) +
+  guides(color = "none") +
+  layer_neatline(
+    data = district_list$carroll,
+    asp = 1,
+    expand = TRUE
+  )
+```

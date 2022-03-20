@@ -4,6 +4,7 @@
 \alias{as_sf}
 \alias{as_bbox}
 \alias{as_sfc}
+\alias{as_sf_list}
 \title{Convert an object to a simple feature or bounding box object}
 \usage{
 as_sf(x, crs = NULL, ...)
@@ -11,17 +12,29 @@ as_sf(x, crs = NULL, ...)
 as_bbox(x, crs = NULL, ...)
 
 as_sfc(x, crs = NULL, ...)
+
+as_sf_list(x, nm = "data", col = NULL, crs = NULL)
 }
 \arguments{
-\item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or \code{dataframe} object that
+\item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that
 can be converted into a simple feature or bounding box object. \code{\link[=as_bbox]{as_bbox()}}
-can also convert a vector with xmin, ymin, xmax, and ymax values.}
+can also convert a vector with xmin, ymin, xmax, and ymax values.
+\link{as_sf_list} only supports sf objects or a data frames with a sf list
+column named "data" (typically created by using \code{\link[dplyr:group_nest]{dplyr::group_nest()}} on an
+sf object.}
 
-\item{crs}{Coordinate reference system for sf or bbox obect to return}
+\item{crs}{Coordinate reference system for \code{sf}, \code{bbox}, \code{sfc} or \code{sf} list object to
+return.}
 
 \item{...}{Additional parameters passed to \code{\link[sf:st_bbox]{sf::st_bbox()}} when calling
 \code{\link[=as_bbox]{as_bbox()}} or passed to \code{\link[sf:sf]{sf::st_sf()}}, \code{\link[sf:st_as_sf]{sf::st_as_sf()}}, or \code{\link[=df_to_sf]{df_to_sf()}}
 for \code{\link[=as_sf]{as_sf()}} (depending on class of x)}
+
+\item{nm}{For \link{as_sf_list}, name(s) for sf list; defaults to "data". If col is provided, the
+values of the grouping column are used as names.}
+
+\item{col}{For \link{as_sf_list}, the name of the column used to group data if x is a sf object or used
+to group and nest data before passing to x.}
 }
 \description{
 Both functions will pass a NULL value without returning an error. If a POINT

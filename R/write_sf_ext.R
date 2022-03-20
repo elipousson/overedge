@@ -1,10 +1,8 @@
 #' Write or cache a simple feature object to a file
 #'
-#' @description
-#' The write_sf_ext and write_sf_cache helper functions wrap the
-#' \code{\link[sf]{write_sf}} function to provide some additional options
-#' including consistent file naming with [make_filename()] and features
-#' including:
+#' The write_sf_ext and write_sf_cache helper functions wrap the [sf::write_sf]
+#' function to provide some additional options including consistent file naming
+#' with [make_filename()] and features including:
 #'
 #' - If the data is not an sf object, optionally save as an RDS file.
 #' - If filetype is "csv" or the filename ends in ".csv" the file is
@@ -13,6 +11,9 @@
 #' (if a Google account is authorized with the googlesheets4 package).
 #' - If cache is `TRUE` use write_sf_cache to cache file after writing a copy to
 #' the path provided.
+#' - If data is a named sf list, pass the name of each sf object in the list to
+#' the name parameter and keep all other parameters consistent to write a file
+#' for each object in the list.
 #'
 #' @param data `sf` object to write.
 #' @param filename File name to use. If filename is provided and the data is an
@@ -47,38 +48,54 @@ write_sf_ext <- function(data,
                          path = NULL,
                          cache = FALSE,
                          overwrite = FALSE) {
-
-  # If data is sf object, write or cache it
-  filename <-
-    make_filename(
-      name = name,
-      label = label,
-      filetype = filetype,
-      filename = filename,
-      path = NULL,
-      prefix = prefix,
-      postfix = postfix
+  if (is_sf_list(data, is_named = TRUE)) {
+    purrr::map(
+      data,
+      ~ write_sf_ext(
+        data = .x,
+        name = names(.x),
+        label = label,
+        prefix = prefix,
+        postfix = postfix,
+        filetype = filetype,
+        path = path,
+        cache = cache,
+        overwrite = overwrite
+      )
     )
-
-  if (is.null(path)) {
-    path <- filename
   } else {
-    path <- file.path(path, filename)
-  }
+    # If data is sf object, write or cache it
+    filename <-
+      make_filename(
+        name = name,
+        label = label,
+        filetype = filetype,
+        filename = filename,
+        path = NULL,
+        prefix = prefix,
+        postfix = postfix
+      )
 
-  write_sf_types(
-    data = data,
-    filename = filename,
-    filetype = filetype,
-    path = path
-  )
+    if (is.null(path)) {
+      path <- filename
+    } else {
+      path <- file.path(path, filename)
+    }
 
-  if (cache) {
-    write_sf_cache(
+    write_sf_types(
       data = data,
       filename = filename,
-      overwrite = overwrite
+      filetype = filetype,
+      path = path
     )
+
+    if (cache) {
+      write_sf_cache(
+        data = data,
+        filename = filename,
+        overwrite = overwrite
+      )
+    }
   }
 }
 

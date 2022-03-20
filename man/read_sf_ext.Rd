@@ -26,27 +26,27 @@ read_sf_download(
 )
 }
 \arguments{
-\item{path}{file path; used by \code{\link[=read_sf_path]{read_sf_path()}} only}
+\item{path}{A file path; used by \code{\link[=read_sf_path]{read_sf_path()}} only}
 
-\item{bbox}{Bounding box object; Default: NULL. If bbox is provided, read_sf only
-returns features intersecting the bounding box.}
+\item{bbox}{A bounding box object; Default: \code{NULL}. If "bbox" is provided,
+read_sf only returns features intersecting the bounding box.}
 
-\item{...}{additional parameters passed to \code{\link[sf:st_read]{sf::read_sf()}}. May
-include query parameter.}
+\item{...}{additional parameters passed to \code{\link[sf:st_read]{sf::read_sf()}}. May include query
+parameter.}
 
-\item{url}{url for spatial data file or for ArcGIS FeatureServer or MapServer
-to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by read_sf_url only}
+\item{url}{A url for a spatial data file or for ArcGIS FeatureServer or
+MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by \code{\link[=read_sf_url]{read_sf_url()}} only}
 
-\item{coords}{Character vector with coordinate values; used for \code{\link[=read_sf_url]{read_sf_url()}}
-if the url is a Google Sheet}
+\item{coords}{Character vector with coordinate values; used for
+\code{\link[=read_sf_url]{read_sf_url()}} if the "url" is a Google Sheet}
 
-\item{data}{character; name of data; used by read_sf_pkg only}
+\item{data}{character; name of data; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only}
 
-\item{package}{character; package name; used by read_sf_pkg only}
+\item{package}{character; package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only}
 
-\item{filetype}{file type supported by \code{\link[sf:st_read]{sf::read_sf()}}., Default:
-'gpkg'; used by read_sf_pkg only and required only if the data is in
-the package cache directory or extdata system files.}
+\item{filetype}{file type supported by \code{\link[sf:st_read]{sf::read_sf()}}., Default: 'gpkg';
+used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data is in the
+package cache directory or extdata system files.}
 
 \item{filename}{File name; if file name is \code{NULL}, name and file type are
 both required.}
@@ -71,11 +71,14 @@ associated package. Optionally provide a bounding box to filter data (not
 supported for all data types).
 }
 \details{
+Reading data from a package with \code{read_sf_pkg}:
+
 \code{\link[=read_sf_pkg]{read_sf_pkg()}} looks for three types of package data:
+
 = Data loaded with the package
 \itemize{
 \item External data in the \code{extdata} system files folder.
-\item Cached data in the cache directory returned by \code{\link[rappdirs]{user_cache_dir}}
+\item Cached data in the cache directory returned by \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
 }
 }
 \seealso{

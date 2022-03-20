@@ -130,9 +130,6 @@ dplyr::glimpse(center)
 ```
 
 
-
-
-
 ```{r}
 bbox_stretched <-
   sf_bbox_expand(

@@ -1,13 +1,15 @@
 #' Transform or convert coordinates of a simple feature or bounding box object
 #'
 #' Take a `sf`, `sfc`, or `bbox` object and transform to coordinate reference
-#' system to match provided `crs` or the  CRS for the provided `y` object.
+#' system to match the object provided to `crs`.
 #'
-#' @param x An `sf`, `sfc`, or `bbox` object, or a character or numeric object
-#'   supported by \code{\link[sf]{st_crs}}
-#' @param crs A coordinate reference system to convert x to or another  `sf`,
-#'   `sfc`, or `bbox` object that is used to provide crs.
-#' @param class Class of object to return (sf or bbox).
+#' @param x An `sf`, `sfc`, or `bbox` object, a list of sf objects.
+#' @param crs A character or numeric reference to a coordinate reference system
+#'   supported by [sf::st_crs()] or another  `sf`, `sfc`, or `bbox` object that
+#'   is used to provide crs.
+#' @param class Class of object to return (`sf` or `bbox`). If x is an sf list,
+#'   the returned object remains a list but may be converted to `bbox` if class
+#'   = "sf".
 #' @return An `sf`, `sfc`, or `bbox` object transformed to a new coordinate
 #'   reference system.
 #' @seealso \code{\link[sf]{st_transform}},\code{\link[sf]{st_crs}}
@@ -17,6 +19,12 @@
 st_transform_ext <- function(x,
                              crs = NULL,
                              class = NULL) {
+  if (is_sf_list(x)) {
+    x <- purrr::map(x, ~ st_transform_ext(x = .x, crs = crs, class = class))
+
+    return(x)
+  }
+
   stopifnot(
     is_sf(x, ext = TRUE)
   )
@@ -24,7 +32,7 @@ st_transform_ext <- function(x,
   if (!is.null(crs)) {
     if (is_sf(crs, ext = TRUE) && !is_same_crs(x, crs)) {
       # if x has a different crs than the sf object passed to crs
-      crs <- sf::st_crs(crs)
+      crs <- sf::st_crs(x = crs)
     }
 
     if (is_bbox(x)) {
@@ -33,12 +41,13 @@ st_transform_ext <- function(x,
       if ("sf" %in% class) {
         x <- as_sf(x)
       }
-    } else {
+    } else if (!is_same_crs(x, crs)) {
       # If x is an sf or sfc object
-      x <- sf::st_transform(x, crs)
-      if ("bbox" %in% class) {
-        x <- as_bbox(x)
-      }
+      x <- sf::st_transform(x = x, crs = crs)
+    }
+
+    if ("bbox" %in% class) {
+      x <- as_bbox(x)
     }
   }
 

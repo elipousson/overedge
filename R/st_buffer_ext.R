@@ -2,8 +2,8 @@
 #'
 #' Return an sf object with a buffer based on `dist` or a proportion of the
 #' diagonal distance defined by `diag_ratio`. If x uses geographic coordinates,
-#' the coordinate reference system is transformed into EPSG:3857 and then transformed back into the
-#' original CRS after the buffer has been applied.
+#' the coordinate reference system is transformed into EPSG:3857 and then
+#' transformed back into the original CRS after the buffer has been applied.
 #'
 #' st_edge is a variation on st_buffer_ext where dist or diag_ratio is used to
 #' define the width of the edge to return either outside the existing geometry
@@ -23,7 +23,7 @@
 #' @param dist_limits Numeric vector of any length (minimum and maximum values
 #'   used as lower and upper limits on distance buffer). Units must match the
 #'   provided units; defaults to NULL.
-#' @param ... additional parameters passed to  \code{\link[sf]{st_buffer}}.
+#' @param ... additional parameters passed to [sf::st_buffer()]
 #' @export
 #' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer
 #' @importFrom units set_units drop_units
@@ -33,6 +33,15 @@ st_buffer_ext <- function(x,
                           unit = "meter",
                           dist_limits = NULL,
                           ...) {
+  if (is_sf_list(x, ext = TRUE)) {
+    x <-
+      purrr::map(
+        x,
+        ~ st_buffer_ext(x = .x, dist = dist, diag_ratio = diag_ratio, unit = unit, dist_limits = dist_limits)
+      )
+
+    return(x)
+  }
 
   # If bbox, convert to sf
   x <- as_sf(x)

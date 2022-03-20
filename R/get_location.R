@@ -83,14 +83,15 @@
 #' @importFrom rlang list2
 get_location <- function(type,
                          name = NULL,
-                         id = NULL,
-                         location = NULL,
-                         label = NULL,
                          name_col = "name",
+                         id = NULL,
                          id_col = "id",
+                         location = NULL,
                          index = NULL,
                          union = FALSE,
                          crs = NULL,
+                         label = NULL,
+                         class = "sf",
                          ...) {
   stopifnot(
     is_sf(type) || is.character(type),
@@ -108,14 +109,7 @@ get_location <- function(type,
     type <- get_location_data(data = type, ...)
   }
 
-  dots <- rlang::list2(...)
-
-  if (any(c("locationname_col", "locationname") %in% names(dots))) {
-    # FIXME: location cannot be combined with locationname and locationname_col. This may be a non-issue.
-    warn <- FALSE
-  } else {
-    warn <- TRUE
-  }
+  params <- rlang::list2(...)
 
   type_crs <- sf::st_crs(type)
 
@@ -124,7 +118,6 @@ get_location <- function(type,
     if (!is.null(name)) {
       # Filter type by name
       location <- type[type[[name_col]] %in% name, ]
-      # FIXME: Add warning or error message if provided name does not return a location
     } else if (!is.null(id)) {
       if (is.character(type[[id_col]])) {
         # Filter type by ID
@@ -132,17 +125,21 @@ get_location <- function(type,
       } else if (is.numeric(type[[id_col]])) {
         location <- type[type[[id_col]] %in% as.numeric(id), ]
       }
-      # FIXME: Add warning or error message if provided id does not return a location
+    }
+
+    if (nrow(location) == 0) {
+      usethis::ui_stop("The name/id did not match any location of the type provided.")
     }
   } else {
     # Check if location if it is a character (assume it is an address)
     if (is.character(location)) {
       # Geocode the address
-      location <- tidygeocoder::geo(
-        address = location,
-        long = "lon",
-        lat = "lat"
-      )
+      location <-
+        tidygeocoder::geo(
+          address = location,
+          long = "lon",
+          lat = "lat"
+        )
       # Convert single address df to sf
       location <- df_to_sf(location, coords = c("lon", "lat"), crs = type_crs)
     }
@@ -160,7 +157,7 @@ get_location <- function(type,
       # FIXME: as_sf does not currently account for the possibility of a dataframe with a valid geometry column
       sf::st_as_sf(
         data.frame(
-          "name" = as.character(
+          "{name_col}" := as.character(
             knitr::combine_words(words = location[[name_col]])
           ),
           "geometry" = sf::st_union(location)
@@ -168,13 +165,10 @@ get_location <- function(type,
       )
   }
 
-  if (!is.null(location)) {
-    location <- st_transform_ext(location, crs = crs)
-    return(location)
-  } else {
+  if (is.null(location) && !is.null(type)) {
     location <- type
 
-    if (warn && (nrow(type) > 1)) {
+    if (!is.null(params$locationname_col) && (nrow(type) > 1)) {
       usethis::ui_warn("Returning all locations of this type.")
     }
   }
@@ -182,6 +176,18 @@ get_location <- function(type,
   if (!is.null(label)) {
     location$label <- label
   }
+
+  if (!is.null(name)) {
+    col <- name_col
+  } else if (!is.null(id)) {
+    col <- id_col
+  } else if (!is.null(params$locationname)) {
+    col <- locationname_col
+  } else {
+    col <- NULL
+  }
+
+  location <- as_sf_class(x = location, class = class, crs = crs, col = col)
 
   return(location)
 }

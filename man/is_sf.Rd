@@ -16,7 +16,7 @@ is_sfc(x)
 
 is_bbox(x)
 
-is_sf_list(x, is_named = FALSE)
+is_sf_list(x, is_named = FALSE, ext = FALSE)
 
 is_same_crs(x, y)
 

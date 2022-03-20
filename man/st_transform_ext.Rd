@@ -7,13 +7,15 @@
 st_transform_ext(x, crs = NULL, class = NULL)
 }
 \arguments{
-\item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object, or a character or numeric object
-supported by \code{\link[sf]{st_crs}}}
+\item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object, a list of sf objects.}
 
-\item{crs}{A coordinate reference system to convert x to or another  \code{sf},
-\code{sfc}, or \code{bbox} object that is used to provide crs.}
+\item{crs}{A character or numeric reference to a coordinate reference system
+supported by \code{\link[sf:st_crs]{sf::st_crs()}} or another  \code{sf}, \code{sfc}, or \code{bbox} object that
+is used to provide crs.}
 
-\item{class}{Class of object to return (sf or bbox).}
+\item{class}{Class of object to return (\code{sf} or \code{bbox}). If x is an sf list,
+the returned object remains a list but may be converted to \code{bbox} if class
+= "sf".}
 }
 \value{
 An \code{sf}, \code{sfc}, or \code{bbox} object transformed to a new coordinate
@@ -21,7 +23,7 @@ reference system.
 }
 \description{
 Take a \code{sf}, \code{sfc}, or \code{bbox} object and transform to coordinate reference
-system to match provided \code{crs} or the  CRS for the provided \code{y} object.
+system to match the object provided to \code{crs}.
 }
 \seealso{
 \code{\link[sf]{st_transform}},\code{\link[sf]{st_crs}}

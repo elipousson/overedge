@@ -35,13 +35,13 @@ to units matching GDAL units for x; defaults to "meter"}
 used as lower and upper limits on distance buffer). Units must match the
 provided units; defaults to NULL.}
 
-\item{...}{additional parameters passed to  \code{\link[sf]{st_buffer}}.}
+\item{...}{additional parameters passed to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
 }
 \description{
 Return an sf object with a buffer based on \code{dist} or a proportion of the
 diagonal distance defined by \code{diag_ratio}. If x uses geographic coordinates,
-the coordinate reference system is transformed into EPSG:3857 and then transformed back into the
-original CRS after the buffer has been applied.
+the coordinate reference system is transformed into EPSG:3857 and then
+transformed back into the original CRS after the buffer has been applied.
 }
 \details{
 st_edge is a variation on st_buffer_ext where dist or diag_ratio is used to

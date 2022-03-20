@@ -20,8 +20,8 @@ st_bbox_asp(x = NULL, asp = NULL, class = "bbox")
 }
 \arguments{
 \item{x}{An object sf, bbox, sfc, raster, or sp object or a data frame that
-can be converted to an sf object. st_bbox_asp also supports vectors in the
-same format as a bbox object.}
+can be converted to an sf object or a list of sf, bbox, or sfc objects.
+st_bbox_asp also supports vectors in the same format as a bbox object.}
 
 \item{dist}{buffer distance in units. Optional.}
 

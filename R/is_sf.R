@@ -42,8 +42,10 @@ is_bbox <- function(x) {
 #' @name is_sf_list
 #' @param is_named If TRUE, check if sf list is named; defaults FALSE
 #' @export
-is_sf_list <- function(x, is_named = FALSE) {
-  is_sf_list <- is.list(x) && all(vapply(x, is_sf, TRUE))
+is_sf_list <- function(x, is_named = FALSE, ext = FALSE) {
+  is_sf_list <- is.list(x) && all(vapply(x, function(x) {
+    is_sf(x, ext = ext)
+  }, TRUE))
   if (is_named) {
     is_named <- !is.null(names(x)) && !("" %in% names(x))
     is_sf_list && is_named

@@ -5,9 +5,9 @@
 \title{Layer location data into a ggplot2 map}
 \usage{
 layer_location_data(
-  mapping = NULL,
+  mapping = ggplot2::aes(),
   data = NULL,
-  label,
+  label = NULL,
   geom = "sf",
   location = NULL,
   dist = NULL,

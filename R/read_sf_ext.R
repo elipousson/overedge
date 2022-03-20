@@ -6,28 +6,30 @@
 #' associated package. Optionally provide a bounding box to filter data (not
 #' supported for all data types).
 #'
-#' @param path file path; used by [read_sf_path()] only
-#' @param url url for spatial data file or for ArcGIS FeatureServer or MapServer
-#'   to access with [get_esri_data()]; used by read_sf_url only
-#' @param data character; name of data; used by read_sf_pkg only
-#' @param package character; package name; used by read_sf_pkg only
-#' @param filetype file type supported by [sf::read_sf()]., Default:
-#'   'gpkg'; used by read_sf_pkg only and required only if the data is in
-#'   the package cache directory or extdata system files.
-#' @param bbox Bounding box object; Default: NULL. If bbox is provided, read_sf only
-#'   returns features intersecting the bounding box.
-#' @param coords Character vector with coordinate values; used for [read_sf_url()]
-#'   if the url is a Google Sheet
-#' @param ... additional parameters passed to [sf::read_sf()]. May
-#'   include query parameter.
-#' @name read_sf_ext
-#' @family read_write
-#' @details
+#' @details Reading data from a package with `read_sf_pkg`:
 #'
 #' [read_sf_pkg()] looks for three types of package data:
+#'
 #'   = Data loaded with the package
 #'   - External data in the `extdata` system files folder.
-#'   - Cached data in the cache directory returned by \code{\link[rappdirs]{user_cache_dir}}
+#'   - Cached data in the cache directory returned by [rappdirs::user_cache_dir]
+#'
+#' @param path A file path; used by [read_sf_path()] only
+#' @param url A url for a spatial data file or for ArcGIS FeatureServer or
+#'   MapServer to access with [get_esri_data()]; used by [read_sf_url()] only
+#' @param data character; name of data; used by [read_sf_pkg()] only
+#' @param package character; package name; used by [read_sf_pkg()] only
+#' @param filetype file type supported by [sf::read_sf()]., Default: 'gpkg';
+#'   used by [read_sf_pkg()] only and required only if the data is in the
+#'   package cache directory or extdata system files.
+#' @param bbox A bounding box object; Default: `NULL`. If "bbox" is provided,
+#'   read_sf only returns features intersecting the bounding box.
+#' @param coords Character vector with coordinate values; used for
+#'   [read_sf_url()] if the "url" is a Google Sheet
+#' @param ... additional parameters passed to [sf::read_sf()]. May include query
+#'   parameter.
+#' @name read_sf_ext
+#' @family read_write
 NULL
 
 #' @rdname read_sf_ext
@@ -107,10 +109,10 @@ read_sf_pkg <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
     return(eval_data(data = data, package = package))
   }
 
-  if (!stringr::str_detect(data, "\\.")) {
-    filename <- paste0(data, ".", filetype)
-  } else {
+  if (stringr::str_detect(data, "\\.")) {
     filename <- data
+  } else {
+    filename <- paste0(data, ".", filetype)
   }
 
   pkg_extdata_files <- list.files(system.file("extdata", package = package))

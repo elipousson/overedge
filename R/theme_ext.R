@@ -123,6 +123,7 @@ theme_margin <- function(margin = "standard",
     modifyList(
       theme,
       ggplot2::theme(
+        # FIXME: Should the plot.border also be defined here?
         plot.background = ggplot2::element_rect(
           fill = fill,
           color = color,

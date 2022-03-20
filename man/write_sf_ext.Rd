@@ -67,10 +67,11 @@ cached files that use the same file name.}
 for write_sf_cache; default is used when cache = TRUE for write_sf_ext)}
 }
 \description{
-The write_sf_ext and write_sf_cache helper functions wrap the
-\code{\link[sf]{write_sf}} function to provide some additional options
-including consistent file naming with \code{\link[=make_filename]{make_filename()}} and features
-including:
+The write_sf_ext and write_sf_cache helper functions wrap the \link[sf:st_write]{sf::write_sf}
+function to provide some additional options including consistent file naming
+with \code{\link[=make_filename]{make_filename()}} and features including:
+}
+\details{
 \itemize{
 \item If the data is not an sf object, optionally save as an RDS file.
 \item If filetype is "csv" or the filename ends in ".csv" the file is
@@ -79,6 +80,9 @@ automatically converted to a dataframe using \code{\link[=df_to_sf]{df_to_sf()}}
 (if a Google account is authorized with the googlesheets4 package).
 \item If cache is \code{TRUE} use write_sf_cache to cache file after writing a copy to
 the path provided.
+\item If data is a named sf list, pass the name of each sf object in the list to
+the name parameter and keep all other parameters consistent to write a file
+for each object in the list.
 }
 }
 \seealso{

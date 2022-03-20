@@ -52,8 +52,6 @@ Alternatively you can use the location parameter which supports either:
 - a valid street address (geocoded with `tidygeocoder::geo()`)
 - a simple feature object or bounding box
 
-Note: as of 2022-02-14, get_location() currently only supports a single address at a time but I expect to update the function so it supports multiple addresses).
-
 If you provide a sf or bbox object, the object is used as a spatial filter either when reading in the data (using the bbox parameter for `read_sf_path` or `read_sf_url`) or before returning the data using the `sf::st_filter()` function.
 
 ### Working with union and label parameters
