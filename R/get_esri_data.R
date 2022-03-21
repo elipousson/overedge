@@ -39,7 +39,7 @@ get_esri_data <- function(location = NULL,
                           locationname_col = NULL,
                           locationname,
                           ...) {
-  check_pkg_installed("esri2sf", repo = "yonghah/esri2sf")
+  check_pkg_installed(pkg = "esri2sf", repo = "yonghah/esri2sf")
 
   if (!is.null(location)) {
     # Adjust bounding box

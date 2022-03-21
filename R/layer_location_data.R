@@ -1,9 +1,8 @@
 #' Layer location data into a ggplot2 map
 #'
 #' Helper function to make a ggplot2 layer from data returned by
-#' \code{get_location_data}. For text geoms, the required aesthetic mapping is
-#' set based on the name_col but can be values passed to mapping take
-#' precedence.
+#' `get_location_data`. For text geoms, the required aesthetic mapping is
+#' set based on the name_col but values passed to mapping take precedence.
 #'
 #' @param label label for area (appended to data as a prefix if data is a
 #'   string)
@@ -23,7 +22,9 @@
 #' @rdname layer_location_data
 #' @family layer
 #' @export
-#' @importFrom ggplot2 aes geom_sf geom_sf_text geom_sf_label
+#' @importFrom rlang list2 fn_fmls is_missing exec
+#' @importFrom ggplot2 geom_sf geom_sf_text geom_sf_label
+#' @importFrom purrr discard
 #' @importFrom utils modifyList
 layer_location_data <-
   function(mapping = NULL,
@@ -72,20 +73,29 @@ layer_location_data <-
         ...
       )
 
+    params <-
+      rlang::list2(...)
+
     data <- as_sf(data)
 
     text_geoms <- c("text", "label", "textsf", "labelsf", "text_repel", "label_repel")
     ggrepel_geoms <- c("text_repel", "label_repel")
+    birdseyeview_geoms <- c("mark", "mapbox", "location", "context", "markers", "numbered")
 
     # Match geoms
     geom <- match.arg(
       geom,
-      c("sf", "icon", text_geoms)
+      c("sf", "icon", text_geoms, birdseyeview_geoms)
     )
 
     # Check if packages are available for text/label geoms
     if (geom %in% c("textsf", "labelsf")) {
       check_pkg_installed("geomtextpath")
+    }
+
+    # Check if packages are available for text/label geoms
+    if (geom %in% birdseyeview_geoms) {
+      check_pkg_installed(pkg = "birdseyeview", repo = "elipousson/birdseyeview")
     }
 
     # Assign aesthetics for text/label geoms
@@ -95,55 +105,39 @@ layer_location_data <-
       if (geom %in% ggrepel_geoms) {
         check_pkg_installed("ggrepel")
         mapping <- modify_mapping(mapping = mapping, data = data)
-        stat <- "sf_coordinates"
+
+        params <- c(
+          params,
+          stat = "sf_coordinates"
+        )
       }
     }
 
-    layer <-
+    geom <-
       switch(geom,
-        "sf" = ggplot2::geom_sf(
-          mapping = mapping,
-          data = data,
-          ...
-        ),
-        "icon" = geom_sf_icon(
-          mapping = mapping,
-          data = data,
-          ...
-        ),
-        "text" = ggplot2::geom_sf_text(
-          mapping = mapping,
-          data = data,
-          ...
-        ),
-        "label" = ggplot2::geom_sf_label(
-          mapping = mapping,
-          data = data,
-          ...
-        ),
-        "text_repel" = ggrepel::geom_text_repel(
-          mapping = mapping,
-          data = data,
-          stat = stat,
-          ...
-        ),
-        "label_repel" = ggrepel::geom_label_repel(
-          data = data,
-          mapping = mapping,
-          stat = stat,
-          ...
-        ),
-        "labelsf" = geomtextpath::geom_textsf(
-          mapping = mapping,
-          data = data,
-          ...
-        ),
-        "textsf" = geomtextpath::geom_labelsf(
-          mapping = mapping,
-          data = data,
-          ...
-        )
+             "sf" = ggplot2::geom_sf,
+             "icon" = geom_sf_icon,
+             "text" = ggplot2::geom_sf_text,
+             "label" = ggplot2::geom_sf_label,
+             "text_repel" = ggrepel::geom_text_repel,
+             "label_repel" = ggrepel::geom_label_repel,
+             "textsf" = geomtextpath::geom_textsf,
+             "labelsf" = geomtextpath::geom_labelsf,
+             "mark" = birdseyeview::layer_show_mark,
+             "mapbox" = birdseyeview::layer_show_mapbox,
+             "location" = birdseyeview::layer_show_location,
+             "context" = birdseyeview::layer_show_context,
+             "markers" = birdseyeview::layer_show_markers,
+             "numbered" = birdseyeview::layer_numbered_markers
       )
+
+    params <- utils::modifyList(
+      purrr::discard(rlang::fn_fmls(geom), rlang::is_missing),
+      c(list(mapping = mapping, data = data), params)
+    )
+
+    layer <-
+      rlang::exec(geom, !!!params) # mapping = mapping, data = data
 
     return(layer)
   }

@@ -36,13 +36,13 @@ check_geom <- function(x) {
 #' @param repo GitHub repository to use for the package.
 #' @importFrom rlang is_installed check_installed
 #' @noRd
-check_pkg_installed <- function(package, repo = NULL) {
-  if (!rlang::is_installed(pkg = package)) {
+check_pkg_installed <- function(pkg, repo = NULL) {
+  if (!rlang::is_installed(pkg = pkg)) {
     if (!is.null(repo)) {
-      package <- repo
+      pkg <- repo
     }
 
-    rlang::check_installed(pkg = package)
+    rlang::check_installed(pkg = pkg)
   }
 }
 

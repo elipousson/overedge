@@ -54,7 +54,7 @@ get_flickr_photos <- function(api_key = NULL,
                               orientation = NULL,
                               geometry = TRUE,
                               crs = 4326) {
-  check_pkg_installed("FlickrAPI", repo = "koki25ando/FlickrAPI")
+  check_pkg_installed(pkg = "FlickrAPI", repo = "koki25ando/FlickrAPI")
 
   flickr_crs <- 4326
 
