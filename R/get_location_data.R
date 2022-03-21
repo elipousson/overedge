@@ -140,7 +140,11 @@ get_location_data <- function(location = NULL,
 
 #' @name map_location_data
 #' @rdname get_location_data
+#' @param load If TRUE and class is "list", load data to local environment; defaults FALSE.
 #' @export
+#' @importFrom rlang list2
+#' @importFrom janitor make_clean_names
+#' @importFrom purrr set_names map_chr map map2 discard
 map_location_data <- function(location = NULL,
                               dist = NULL,
                               diag_ratio = NULL,
@@ -158,6 +162,7 @@ map_location_data <- function(location = NULL,
                               crs = NULL,
                               class = "list",
                               label = NULL,
+                              load = FALSE,
                               ...) {
   params <- rlang::list2(...)
 
@@ -263,5 +268,12 @@ map_location_data <- function(location = NULL,
       )
   }
 
+  data <- purrr::discard(~ nrow(.x) == 0)
   data <- as_sf_class(x = data, class = class, crs = crs, ...)
+
+  if (load && is_sf_list(data, is_named = TRUE)) {
+    list2env(data, envir = .GlobalEnv)
+  } else {
+    return(data)
+  }
 }

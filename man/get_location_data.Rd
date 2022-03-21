@@ -44,6 +44,7 @@ map_location_data(
   crs = NULL,
   class = "list",
   label = NULL,
+  load = FALSE,
   ...
 )
 }
@@ -99,6 +100,8 @@ Default FALSE.}
 \item{class}{Class of}
 
 \item{...}{additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg}
+
+\item{load}{If TRUE and class is "list", load data to local environment; defaults FALSE.}
 }
 \description{
 Returns data for a selected area or areas with an optional buffer. If both
