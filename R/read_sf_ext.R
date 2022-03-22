@@ -151,6 +151,7 @@ read_sf_download <-
            prefix = "date",
            method = "auto",
            ...) {
+    # TODO: Update read_sf_download to support unzipping downloads and reading files from folder
     path <- get_data_dir(path = path)
 
     destfile <-
@@ -172,3 +173,32 @@ read_sf_download <-
 
     return(data)
   }
+
+#' Read simple features using any of the extended methods
+#'
+#' @noRd
+read_sf_any <- function(bbox = NULL, ...) {
+  params <- rlang::list2(...)
+
+  # FIXME: Look at the updated version of layer_location_data for a preferred method to set read_fn
+  if (!is.null(params$path)) {
+    read_fn <- "read_sf_path"
+  } else if (!is.null(params$url)) {
+    read_fn <- "read_sf_url"
+  } else if (!is.null(params$data)) {
+    read_fn <- "read_sf_pkg"
+  } else if (!is.null(params$path) && is.null(params$method)) {
+    read_fn <- "read_sf_path"
+  } else if (!is.null(params$method)) {
+    read_fn <- "read_sf_download"
+  }
+
+  if (any(sapply(list(params$path, params$url, params$data), length) > 1)) {
+    args <- utils::modifyList(
+      params,
+      formals(rlang::expr(!!read_fn))
+    )
+
+    rlang::exec(rlang::expr(!!read_fn), !!!args)
+  }
+}

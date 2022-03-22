@@ -115,20 +115,20 @@ layer_location_data <-
 
     geom <-
       switch(geom,
-             "sf" = ggplot2::geom_sf,
-             "icon" = geom_sf_icon,
-             "text" = ggplot2::geom_sf_text,
-             "label" = ggplot2::geom_sf_label,
-             "text_repel" = ggrepel::geom_text_repel,
-             "label_repel" = ggrepel::geom_label_repel,
-             "textsf" = geomtextpath::geom_textsf,
-             "labelsf" = geomtextpath::geom_labelsf,
-             "mark" = birdseyeview::layer_show_mark,
-             "mapbox" = birdseyeview::layer_show_mapbox,
-             "location" = birdseyeview::layer_show_location,
-             "context" = birdseyeview::layer_show_context,
-             "markers" = birdseyeview::layer_show_markers,
-             "numbered" = birdseyeview::layer_numbered_markers
+        "sf" = ggplot2::geom_sf,
+        "icon" = geom_sf_icon,
+        "text" = ggplot2::geom_sf_text,
+        "label" = ggplot2::geom_sf_label,
+        "text_repel" = ggrepel::geom_text_repel,
+        "label_repel" = ggrepel::geom_label_repel,
+        "textsf" = geomtextpath::geom_textsf,
+        "labelsf" = geomtextpath::geom_labelsf,
+        "mark" = birdseyeview::layer_show_mark,
+        "mapbox" = birdseyeview::layer_show_mapbox,
+        "location" = birdseyeview::layer_show_location,
+        "context" = birdseyeview::layer_show_context,
+        "markers" = birdseyeview::layer_show_markers,
+        "numbered" = birdseyeview::layer_numbered_markers
       )
 
     params <- utils::modifyList(

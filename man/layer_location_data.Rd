@@ -43,7 +43,7 @@ string)}
 (geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".}
 
 \item{location}{sf object. If multiple areas are provided, they are unioned
-into a single sf object using \code{\link[sf]{st_union}}}
+into a single sf object using \link[sf:geos_combine]{sf::st_union}}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -61,19 +61,19 @@ without modification.}
 
 \item{package}{package name.}
 
-\item{filetype}{file type supported by \code{\link[sf]{read_sf}}. The file
+\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file
 type must be provided for extdata and cached data.}
 
 \item{fn}{Function to apply to data before returning.}
 
 \item{crop}{If TRUE, data cropped to location or bounding box
-\code{\link[sf]{st_crop}} adjusted by the \code{dist}, \code{diag_ratio}, and \code{asp}
+\link[sf:st_crop]{sf::st_crop} adjusted by the \code{dist}, \code{diag_ratio}, and \code{asp}
 parameters provided. Default TRUE.}
 
 \item{trim}{If TRUE, data trimmed to area with
 \code{\link[sf]{st_intersection}}. This option is not supported for any
 adjusted areas that use the \code{dist}, \code{diag_ratio}, or \code{asp} parameters.
-Default FALSE.}
+Default \code{FALSE}.}
 
 \item{from_crs}{coordinate reference system of the data.}
 

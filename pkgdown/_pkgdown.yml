@@ -5,13 +5,11 @@ template:
 reference:
 - title: Reading and writing spatial data
   contents:
-  - '`get_location`'
-  - '`get_location_data`'
-  - '`make_location_data_list`'
+  - starts_with("get_location")
   - '`read_sf_ext`'
   - '`write_sf_ext`'
   - '`read_sf_exif`'
-- title: Downloading spatial data from APIs
+- title: Access spatial data using suggested packages
   contents:
   - '`get_esri_data`'
   - '`get_osm_data`'
@@ -20,17 +18,23 @@ reference:
   - '`get_open_data`'
   - '`get_flickr_photos`'
   - '`get_admin_data`'
-- title: Working with simple feature and bounding box objects
+  - '`us_states`'
+  - '`us_counties`'
+- title: Check, convert, or modify simple feature and bounding box objects
   contents:
-  - starts_with("as_")
   - '`is_sf`'
-  - '`st_buffer_ext`'
-  - '`st_cast_ext`'
-  - '`st_transform_ext`'
-  - starts_with("st_")
+  - starts_with("as_")
   - '`sf_to_df`'
   - '`st_bbox_ext`'
+  - '`st_buffer_ext`'
+  - '`st_transform_ext`'
+  - '`st_cast_ext`'
   - starts_with("sf_bbox")
+- title: Create, view, and combine simple feature and bounding box objects
+  contents:
+  - starts_with("make_location")
+  - starts_with("st_")
+  - starts_with("mapview")
 - title: Spatial layers for ggplot2 maps
   contents:
   - starts_with("layer_")
@@ -57,7 +61,3 @@ reference:
   - '`valid_dist_units`'
   - '`standard_scales`'
   - '`paper_sizes`'
-- title: U.S. administrative boundary data
-  contents:
-  - '`us_states`'
-  - '`us_counties`'

@@ -23,6 +23,7 @@ get_location_data(
   crs = NULL,
   class = "sf",
   label = NULL,
+  index = NULL,
   ...
 )
 
@@ -45,12 +46,13 @@ map_location_data(
   class = "list",
   label = NULL,
   load = FALSE,
+  index = NULL,
   ...
 )
 }
 \arguments{
 \item{location}{sf object. If multiple areas are provided, they are unioned
-into a single sf object using \code{\link[sf]{st_union}}}
+into a single sf object using \link[sf:geos_combine]{sf::st_union}}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -75,29 +77,38 @@ provided, a cached or external file.}
 \item{url}{url for FeatureServer or MapServer layer to pass to
 get_area_esri_data. url can be provided to data parameter}
 
-\item{path}{path to spatial data file supported by \code{\link[sf]{read_sf}}}
+\item{path}{path to spatial data file supported by \link[sf:st_read]{sf::read_sf}}
 
 \item{package}{package name.}
 
-\item{filetype}{file type supported by \code{\link[sf]{read_sf}}. The file
+\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file
 type must be provided for extdata and cached data.}
 
 \item{fn}{Function to apply to data before returning.}
 
 \item{crop}{If TRUE, data cropped to location or bounding box
-\code{\link[sf]{st_crop}} adjusted by the \code{dist}, \code{diag_ratio}, and \code{asp}
+\link[sf:st_crop]{sf::st_crop} adjusted by the \code{dist}, \code{diag_ratio}, and \code{asp}
 parameters provided. Default TRUE.}
 
 \item{trim}{If TRUE, data trimmed to area with
 \code{\link[sf]{st_intersection}}. This option is not supported for any
 adjusted areas that use the \code{dist}, \code{diag_ratio}, or \code{asp} parameters.
-Default FALSE.}
+Default \code{FALSE}.}
 
 \item{from_crs}{coordinate reference system of the data.}
 
 \item{crs}{coordinate reference system to return}
 
-\item{class}{Class of}
+\item{class}{Class of object to return.}
+
+\item{index}{A list of possible location, data, and (optionally) package
+values. List must be named and include a value named package and package
+must be \code{NULL}, to set package based on index. If list is not NULL and
+location and/or data as character or numeric values, the location and data
+are assumed to be index values for the index list. The index parameter
+supports nested lists created by \link{make_location_data_list} (using only the
+default key names of "location" and "data"). This feature has not be fully
+tested and may result in errors or unexpected results.}
 
 \item{...}{additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg}
 

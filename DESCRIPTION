@@ -54,6 +54,7 @@ Suggests:
     ggsvg,
     lwgeom,
     osmdata,
-    RSocrata
+    RSocrata,
+    mapview
 Config/testthat/edition: 3
 VignetteBuilder: knitr

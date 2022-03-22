@@ -7,7 +7,7 @@
 \alias{as_sf_list}
 \title{Convert an object to a simple feature or bounding box object}
 \usage{
-as_sf(x, crs = NULL, ...)
+as_sf(x, crs = NULL, sf_col = "geometry", ...)
 
 as_bbox(x, crs = NULL, ...)
 

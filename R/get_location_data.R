@@ -14,28 +14,36 @@
 #'   by make_location_data_list).
 #'
 #' @param location sf object. If multiple areas are provided, they are unioned
-#'   into a single sf object using \code{\link[sf]{st_union}}
+#'   into a single sf object using [sf::st_union]
 #' @inheritParams st_bbox_ext
 #' @param data sf object including data in area. data may also be a url or file
 #'   path. data can be the name of a data object or, if package and filetype are
 #'   provided, a cached or external file.
 #' @param url url for FeatureServer or MapServer layer to pass to
 #'   get_area_esri_data. url can be provided to data parameter
-#' @param path path to spatial data file supported by \code{\link[sf]{read_sf}}
+#' @param path path to spatial data file supported by [sf::read_sf]
 #' @param package package name.
-#' @param filetype file type supported by \code{\link[sf]{read_sf}}. The file
+#' @param filetype file type supported by [sf::read_sf]. The file
 #'   type must be provided for extdata and cached data.
 #' @param fn Function to apply to data before returning.
 #' @param crop  If TRUE, data cropped to location or bounding box
-#'   \code{\link[sf]{st_crop}} adjusted by the `dist`, `diag_ratio`, and `asp`
+#'   [sf::st_crop] adjusted by the `dist`, `diag_ratio`, and `asp`
 #'   parameters provided. Default TRUE.
 #' @param trim  If TRUE, data trimmed to area with
 #'   \code{\link[sf]{st_intersection}}. This option is not supported for any
 #'   adjusted areas that use the `dist`, `diag_ratio`, or `asp` parameters.
-#'   Default FALSE.
+#'   Default `FALSE`.
 #' @param from_crs coordinate reference system of the data.
 #' @param crs coordinate reference system to return
-#' @param class Class of
+#' @param class Class of object to return.
+#' @param index A list of possible location, data, and (optionally) package
+#'   values. List must be named and include a value named package and package
+#'   must be `NULL`, to set package based on index. If list is not NULL and
+#'   location and/or data as character or numeric values, the location and data
+#'   are assumed to be index values for the index list. The index parameter
+#'   supports nested lists created by [make_location_data_list] (using only the
+#'   default key names of "location" and "data"). This feature has not be fully
+#'   tested and may result in errors or unexpected results.
 #' @param ... additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg
 #' @rdname get_location_data
 #' @export
@@ -60,7 +68,39 @@ get_location_data <- function(location = NULL,
                               crs = NULL,
                               class = "sf",
                               label = NULL,
+                              index = NULL,
                               ...) {
+  if (!is.null(index) && is.list(index)) {
+    # FIXME: This is set to work with 1 or 2 level list indices with naming conventions that match make_location_data_list
+    # This should be clearly documented as alternate index naming conventions supported if possible
+    if (("package" %in% names(index)) && is.null(package)) {
+      package <- unique(index$package) # could use data as an index
+      stopifnot(length(package) == 1)
+    }
+
+    lookup_location <- (!is.null(location) && (is.character(location) || is.numeric(location)))
+
+    # Return data from index list if provided (may include bbox, sfc, or sf objects)
+    if (lookup_location) {
+      if ("location" %in% names(index)) {
+        location <- index$location[[location]]
+      } else {
+        location <- index[[location]]
+      }
+    }
+
+    lookup_data <- (!is.null(data) && (is.character(data) || is.numeric(data)))
+
+    # Return data from index list if provided (may include character (e.g. url, file path, data name if in package), bbox, sfc, or sf objects)
+    if (lookup_data) {
+      if ("data" %in% names(index)) {
+        data <- index$data[[data]]
+      } else {
+        data <- index[[data]]
+      }
+    }
+  }
+
   params <- rlang::list2(...)
 
   if (!is.null(location)) {
@@ -75,7 +115,9 @@ get_location_data <- function(location = NULL,
         crs = from_crs
       )
   } else {
-    bbox <- NULL
+    # FIXME: document the option of passing a bounding box directly via the params
+    # If a bounding box is not in the params this should pass NULL but I need to double-check
+    bbox <- params$bbox
   }
 
   if (is_bbox(data)) {
@@ -107,6 +149,7 @@ get_location_data <- function(location = NULL,
     if (trim) {
       # If trim, match location crs to data
       location <- st_transform_ext(x = location, crs = data)
+      # TODO: Consider adding warning if dist/diag_ratio/asp params are provided along ith trim = TRUE
       data <- st_erase(x = data, y = location, flip = TRUE)
     } else {
       # Otherwise, match bbox crs to data
@@ -116,12 +159,19 @@ get_location_data <- function(location = NULL,
         data <- suppressWarnings(sf::st_crop(data, bbox))
       } else {
         # If no cropping, filter with bbox
+        # TODO: bounding box filtering may get different results than feature filtering - what if dist/diag_ratio/asp params are all NULL - should feature filtering be assumed in that case
         bbox_sf <- sf_bbox_to_sf(bbox)
-        data <- sf::st_filter(data, bbox_sf)
+
+        if (!is.null(params$join)) {
+          data <- sf::st_filter(x = data, y = bbox_sf, join = params$join)
+        } else {
+          data <- sf::st_filter(x = data, y = bbox_sf)
+        }
       }
     }
   }
 
+  # TODO: Is the following pattern of applying fn, setting col based on ... and converting the class something that should be pulled into a separate utility function?
   if (!is.null(fn)) {
     fn <- rlang::as_function(fn)
     data <- fn(data)
@@ -163,6 +213,7 @@ map_location_data <- function(location = NULL,
                               class = "list",
                               label = NULL,
                               load = FALSE,
+                              index = NULL,
                               ...) {
   params <- rlang::list2(...)
 
@@ -184,7 +235,7 @@ map_location_data <- function(location = NULL,
   if (is_char_list_data) {
     data <- as.list(data)
 
-
+    # FIXME: The addition of a index parameter to get_location_data should allow the use of the index as a secondary source of name data for map_location_data
     if (is.null(names(data))) {
       label <- janitor::make_clean_names(label)
 
@@ -218,7 +269,8 @@ map_location_data <- function(location = NULL,
           from_crs = from_crs,
           crs = crs,
           locationname_col = params$locationname_col,
-          locationname = params$locationname
+          locationname = params$locationname,
+          index = index
         )
       )
   } else if (is_list_location) {
@@ -240,7 +292,8 @@ map_location_data <- function(location = NULL,
           from_crs = from_crs,
           crs = crs,
           locationname_col = params$locationname_col,
-          locationname = params$locationname
+          locationname = params$locationname,
+          index = index
         )
       )
   } else if (is_list_data && is_list_location && (len_data == len_location)) {
@@ -263,12 +316,13 @@ map_location_data <- function(location = NULL,
           from_crs = from_crs,
           crs = crs,
           locationname_col = params$locationname_col,
-          locationname = params$locationname
+          locationname = params$locationname,
+          index = index
         )
       )
   }
 
-  data <- purrr::discard(~ nrow(.x) == 0)
+  data <- purrr::discard(data, ~ nrow(.x) == 0)
   data <- as_sf_class(x = data, class = class, crs = crs, ...)
 
   if (load && is_sf_list(data, is_named = TRUE)) {

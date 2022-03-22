@@ -112,7 +112,7 @@ string)</p></dd>
 (geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".</p></dd>
 <dt>location</dt>
 <dd><p>sf object. If multiple areas are provided, they are unioned
-into a single sf object using <code><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></code></p></dd>
+into a single sf object using <a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">sf::st_union</a></p></dd>
 <dt>dist</dt>
 <dd><p>buffer distance in units. Optional.</p></dd>
 <dt>diag_ratio</dt>
@@ -130,19 +130,19 @@ without modification.</p></dd>
 <dt>package</dt>
 <dd><p>package name.</p></dd>
 <dt>filetype</dt>
-<dd><p>file type supported by <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></code>. The file
+<dd><p>file type supported by <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>. The file
 type must be provided for extdata and cached data.</p></dd>
 <dt>fn</dt>
 <dd><p>Function to apply to data before returning.</p></dd>
 <dt>crop</dt>
 <dd><p>If TRUE, data cropped to location or bounding box
-<code><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></code> adjusted by the <code>dist</code>, <code>diag_ratio</code>, and <code>asp</code>
+<a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">sf::st_crop</a> adjusted by the <code>dist</code>, <code>diag_ratio</code>, and <code>asp</code>
 parameters provided. Default TRUE.</p></dd>
 <dt>trim</dt>
 <dd><p>If TRUE, data trimmed to area with
 <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></code>. This option is not supported for any
 adjusted areas that use the <code>dist</code>, <code>diag_ratio</code>, or <code>asp</code> parameters.
-Default FALSE.</p></dd>
+Default <code>FALSE</code>.</p></dd>
 <dt>from_crs</dt>
 <dd><p>coordinate reference system of the data.</p></dd>
 <dt>crs</dt>

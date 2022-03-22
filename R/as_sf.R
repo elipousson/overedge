@@ -16,13 +16,13 @@
 #'   [as_bbox()] or passed to [sf::st_sf()], [sf::st_as_sf()], or [df_to_sf()]
 #'   for [as_sf()] (depending on class of x)
 #' @export
-#' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf
-#' @importFrom dplyr bind_rows
-as_sf <- function(x, crs = NULL, ...) {
+#' @importFrom sf st_sf st_as_sfc st_bbox st_as_sf st_geometry
+#' @importFrom dplyr bind_rows rename
+as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
   # Convert objects to sf if needed
   if (!is_sf(x)) {
     if (is_bbox(x)) {
-      x <- sf_bbox_to_sf(x)
+      x <- sf_bbox_to_sf(x, ...)
     } else if (is_sfc(x)) {
       x <- sf::st_sf(x, ...)
     } else if (is_raster(x)) {
@@ -36,6 +36,11 @@ as_sf <- function(x, crs = NULL, ...) {
       x <- df_to_sf(x, ...)
     }
   }
+
+  if ((length(names(x)) == 1) && names(x) == "x") {
+    x <- dplyr::rename(x, "{sf_col}" := x)
+  }
+
   x <- st_transform_ext(x, crs = crs)
   return(x)
 }

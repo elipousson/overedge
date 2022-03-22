@@ -132,15 +132,22 @@ sf_bbox_transform <- function(bbox, crs) {
 }
 
 #' @param bbox bbox object
+#' @inheritParams sf::st_as_sf
 #' @return sf object
 #' @seealso
 #'  - \code{\link[sf]{st_as_sf}},\code{\link[sf]{st_as_sfc}}
 #'  - \code{\link[sfx]{st_extent}}
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom sf st_as_sf
-sf_bbox_to_sf <- function(bbox) {
-  sf::st_as_sf(sf_bbox_to_sfc(bbox))
+#' @importFrom sf st_as_sf st_geometry
+sf_bbox_to_sf <- function(bbox, sf_col = "geometry") {
+  bbox_sf <- sf::st_as_sf(sf_bbox_to_sfc(bbox))
+
+  if ((length(names(bbox_sf)) == 1) && names(bbox_sf) == "x") {
+    bbox_sf <- dplyr::rename(bbox_sf, "{sf_col}" := x)
+  }
+
+  return(bbox_sf)
 }
 
 #' @rdname sf_bbox_misc

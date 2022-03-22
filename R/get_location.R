@@ -94,16 +94,23 @@ get_location <- function(type,
                          class = "sf",
                          ...) {
   stopifnot(
-    is_sf(type) || is.character(type),
-    is.character(location) || is.null(location) || is_sf(location, ext = TRUE),
+    is_sf(type) || is.character(type) || (is.null(type) && is.list(index)),
+    is.character(location) || is.null(location) || is_sf(location, ext = TRUE) || is.numeric(location),
     is.list(index) || is.null(index),
     is.logical(union)
   )
 
-  if (is.character(type) && is.list(index)) {
-    # Return data from index list if provided
-    type <- index[[type]]
-  } else if (is.character(type)) {
+  # FIXME: This basically assumes that if an index is provided than type is coming from the index
+  # This is fine but should be clearly documented
+  if (is.list(index)) {
+    if (!is.null(index$type) && is.null(type)) {
+      type <- unique(index$type)
+    } else if (is.character(type) || is.numeric(type)) {
+      # Return data from index list if provided
+      type <- index[[type]]
+    }
+  } else if (is.character(type) && (is.null(index))) {
+    # FIXME: Again this only calls get_location_data for type if the index is NULL
     # If type is a string
     # Return data if type is a file path, url, or package data
     type <- get_location_data(data = type, ...)
@@ -116,18 +123,20 @@ get_location <- function(type,
   # If location is not provided
   if (is.null(location)) {
     if (!is.null(name)) {
+      type_name_col <- type[[name_col]]
       # Filter type by name
-      location <- type[type[[name_col]] %in% name, ]
+      location <- type[type_name_col %in% name, ]
     } else if (!is.null(id)) {
-      if (is.character(type[[id_col]])) {
+      type_id_col <- type[[id_col]]
+      if (is.character(type_id_col)) {
         # Filter type by ID
-        location <- type[type[[id_col]] %in% as.character(id), ]
+        location <- type[type_id_col %in% as.character(id), ]
       } else if (is.numeric(type[[id_col]])) {
-        location <- type[type[[id_col]] %in% as.numeric(id), ]
+        location <- type[type_id_col %in% as.numeric(id), ]
       }
     }
 
-    if (nrow(location) == 0) {
+    if (!is.null(location) && (nrow(location) == 0)) {
       usethis::ui_stop("The name/id did not match any location of the type provided.")
     }
   } else {
@@ -152,7 +161,7 @@ get_location <- function(type,
     }
   }
 
-  if (union && (nrow(location) > 1)) {
+  if (union && (nrow(location) > 1) && !is.null(name_col)) {
     location <-
       # FIXME: as_sf does not currently account for the possibility of a dataframe with a valid geometry column
       sf::st_as_sf(

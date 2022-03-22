@@ -29,7 +29,7 @@ sf_bbox_diagdist(bbox, units = FALSE)
 
 sf_bbox_transform(bbox, crs)
 
-sf_bbox_to_sf(bbox)
+sf_bbox_to_sf(bbox, sf_col = "geometry")
 
 sf_bbox_to_sfc(bbox)
 
