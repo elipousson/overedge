@@ -70,12 +70,12 @@ is_same_crs(large_sf, bbox_large)
 ```{r}
 bbox_small <-
   st_bbox_ext(
-    bbox_large,
+    x = bbox_large,
     dist = -1 / 16,
     unit = "mile"
   )
 
-small_sf <- sf_bbox_to_sf(bbox_small)
+small_sf <- as_sf(bbox_small)
 
 basemap <-
   ggplot2::ggplot() +

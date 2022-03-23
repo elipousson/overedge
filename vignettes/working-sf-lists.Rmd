@@ -233,7 +233,7 @@ ggplot() +
 
 ## Working with sf lists in combination with data and location index lists
 
-```{r}
+```{r, eval = FALSE}
 
 params <- list(
   index = list(
@@ -259,17 +259,18 @@ params <- list(
 
 location <-
   get_location(
-    type = index$type,
-    package = index$package,
+    type = params$index$type,
+    package = params$index$package,
     name = params$location$name,
     label = params$location$label
   )
 
+# TODO: map_location_data may not be passing the location bounding box correctly
 # FIXME: When this hit an error from the nonspatial data in the FeatureServer link indexed to property
 property_data <-
   map_location_data(
-    data = names(index$data),
-    index = index,
+    data = names(params$index$data),
+    index = params$index$data,
     location = location,
     dist = params$data$dist,
     class = "list",

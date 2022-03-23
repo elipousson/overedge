@@ -33,11 +33,11 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
       x <- dplyr::bind_rows(x)
     } else if (is.data.frame(x)) {
       # TODO: Need to figure out a way to pass the crs to df_to_sf
-      x <- df_to_sf(x, crs = crs, ...)
+      x <- df_to_sf(x, ...)
     }
   }
 
-  if (!is.null(sf_col)) {
+  if (!is.null(sf_col) && is_sf(x)) {
     sf::st_geometry(x) <- sf_col
   }
 

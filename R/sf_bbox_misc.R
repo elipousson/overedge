@@ -143,9 +143,8 @@ sf_bbox_transform <- function(bbox, crs = NULL) {
 sf_bbox_to_sf <- function(bbox, sf_col = "geometry") {
   bbox_sf <- sf::st_as_sf(sf_bbox_to_sfc(bbox))
 
-  if (!is.null(sf_col)) {
-    return(bbox_sf)
-    # sf::st_geometry(bbox_sf) <- sf_col
+  if (!is.null(sf_col) && is_sf(bbox_sf)) {
+    sf::st_geometry(bbox_sf) <- sf_col
   }
 
   return(bbox_sf)
