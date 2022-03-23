@@ -50,22 +50,22 @@ st_bbox_ext <- function(x = NULL,
       unit = unit
     )
 
-  if (!is.null(asp)) {
-    # Get aspect adjusted bbox
-    bbox <-
-      st_bbox_asp(
-        x = x,
-        asp = asp,
-        class = "bbox"
-      )
+  x <- st_transform_ext(x, crs = crs)
+
+  # Get aspect adjusted bbox
+  bbox <-
+    st_bbox_asp(
+      x = x,
+      asp = asp,
+      class = "bbox"
+    )
+
+  if ("sf" %in% class) {
+    return(sf_bbox_to_sf(bbox))
   } else {
-    bbox <-
-      sf::st_bbox(x)
+    return(bbox)
   }
 
-  x <- st_transform_ext(x, crs, class = class)
-
-  return(x)
 }
 
 #' @rdname st_bbox_ext
@@ -111,7 +111,6 @@ st_bbox_asp <- function(x = NULL,
         dir = "out"
       )
   }
-
 
   if ("sf" %in% class) {
     return(sf_bbox_to_sf(bbox))

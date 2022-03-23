@@ -14,9 +14,7 @@ A data frame with 85 rows and 9 variables:
 \item{\code{units}}{Units ("in", "mm", or "px") for dimensions}
 \item{\code{width}}{Width in units}
 \item{\code{height}}{Height in units}
-\item{\code{asp_portrait}}{Aspect ratio (portrait)}
-\item{\code{asp_landscape}}{Aspect ratio (landscape)}
-\item{\code{asp_text}}{Aspect ratio ("width:height")}
+\item{\code{orientation}}{Portrait (width greater than height), landscape, or square}
 \item{\code{type}}{Type (paper, postcard, print, or social)}
 }
 }

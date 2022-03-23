@@ -140,25 +140,24 @@ get_paper <- function(paper = "letter",
     }
   }
 
+  paper_orientation <- unique(paper$orientation)
+
   # Save width and height before checking orientation
-  # FIXME: This approach sets orientation globally even if returning multiple paper sizes (this is OK but should be documented)
-  if (!(orientation %in% names(paper))) {
-    paper$orientation <- orientation
+  if (!is.null(orientation) && (length(paper_orientation) == 1)) {
+    paper_width <- paper$width
+    paper_height <- paper$height
 
-    # FIXME: This corrects an issue that probably should be addresses in correcting the underlying data
-    if (paper$asp_portrait > 1) {
-      paper$orientation <- "landscape"
-    } else if (orientation == "landscape") {
+    if ((paper_orientation == "portrait") && (orientation == "landscape")) {
       # width and height for most papers are assumed to be in a portrait format
-      paper_width <- paper$width
-      paper_height <- paper$height
-
       paper$width <- paper_height
       paper$height <- paper_width
+      paper$orientation <- orientation
+    } else if ((paper_orientation == "landscape") && (orientation == "portrait")) {
+      # width and height for most papers are assumed to be in a portrait format
+      paper$width <- paper_height
+      paper$height <- paper_width
+      paper$orientation <- orientation
     }
-
-    paper <-
-      dplyr::select(paper, -c(asp_portrait, asp_landscape, asp_text))
   }
 
   paper <-
