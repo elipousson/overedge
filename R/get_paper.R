@@ -71,7 +71,7 @@ get_paper <- function(paper = "letter",
   if (is.data.frame(paper)) {
     stopifnot(
       all(c("width", "height", "orientation", "units") %in% names(paper)),
-      now(paper) >= 1
+      nrow(paper) >= 1
     )
   } else if (is.character(paper)) {
     paper <-
