@@ -81,6 +81,7 @@ layer_location_data <-
     text_geoms <- c("text", "label", "textsf", "labelsf", "text_repel", "label_repel")
     ggrepel_geoms <- c("text_repel", "label_repel")
     birdseyeview_geoms <- c("mark", "mapbox", "location", "context", "markers", "numbered")
+    is_repel_geom <- FALSE
 
     # Match geoms
     geom <- match.arg(
@@ -103,6 +104,7 @@ layer_location_data <-
       mapping <- modify_mapping(mapping = mapping, label = label_col)
 
       if (geom %in% ggrepel_geoms) {
+        is_repel_geom <- TRUE
         check_pkg_installed("ggrepel")
         mapping <- modify_mapping(mapping = mapping, data = data)
 
@@ -111,6 +113,7 @@ layer_location_data <-
           stat = "sf_coordinates"
         )
       }
+
     }
 
     geom <-
@@ -131,10 +134,24 @@ layer_location_data <-
         "numbered" = birdseyeview::layer_numbered_markers
       )
 
+    params_has_nudge <- any(c("nudge_x", "nudge_y") %in% names(params))
+    params_has_direction <- "direction" %in% names(params)
+
     params <- utils::modifyList(
       purrr::discard(rlang::fn_fmls(geom), rlang::is_missing),
       c(list(mapping = mapping, data = data), params)
     )
+
+    if (params_has_nudge) {
+      params$position <- NULL
+    } else {
+      params$nudge_x <- NULL
+      params$nudge_y <- NULL
+    }
+
+    if (!params_has_direction && is_repel_geom) {
+      params$direction <- "both"
+    }
 
     layer <-
       rlang::exec(geom, !!!params) # mapping = mapping, data = data
