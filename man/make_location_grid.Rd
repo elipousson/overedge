@@ -9,10 +9,11 @@ make_location_grid(
   dist = NULL,
   diag_ratio = NULL,
   asp = NULL,
-  unit = NULL,
+  unit = "meter",
   crs = NULL,
   cols = NULL,
   rows = NULL,
+  gutter = 0,
   rev = TRUE,
   n = NULL,
   cellsize = NULL,
@@ -44,6 +45,10 @@ to units matching GDAL units for x; defaults to "meter"}
 \item{cols, rows}{Used to set n if either are not \code{NULL}; defaults to \code{NULL}.
 row and id are added as columns to the grid if they are provided.}
 
+\item{gutter}{Distance in units between each column cell; gutter effectively
+serves as a margin as the negative buffer is applied to all cells
+(including those at the edges of the grid).}
+
 \item{rev}{If \code{TRUE}, id, row, and col numbers are assigned left to right and
 top to bottom.}
 
@@ -57,20 +62,25 @@ Create a grid with an id column and optionally a set number of columns and
 rows.
 }
 \examples{
-\dontrun{
-if (interactive()) {
-  make_location_grid(
-    location = mapbaltimore::council_districts[1, ],
-    dist = 1,
-    unit = "mile",
-    cols = 4,
-    rows = 5
-  )
-}
-}
+# Make a 4 by 5 grid covering a mile buffer around a location
+make_location_grid(
+  location = mapbaltimore::council_districts[1, ],
+  dist = 1,
+  unit = "mile",
+  cols = 4,
+  rows = 5
+)
+
+# Make a 2 by 2 grid across a location with a 1000 meter gutter between each cell
+make_location_grid(
+  location = mapbaltimore::baltimore_city,
+  dist = 500,
+  unit = "meter",
+  cols = 2,
+  rows = 2,
+  gutter = 1000
+)
 }
 \seealso{
-\code{\link[rlang]{list2}}
-\code{\link[sf]{st_make_grid}},\code{\link[sf]{st_join}}
-\code{\link[dplyr]{mutate}},\code{\link[dplyr]{ranking}}
+\link[sf:st_make_grid]{sf::st_make_grid}
 }

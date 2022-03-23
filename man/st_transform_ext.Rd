@@ -4,7 +4,7 @@
 \alias{st_transform_ext}
 \title{Transform or convert coordinates of a simple feature or bounding box object}
 \usage{
-st_transform_ext(x, crs = NULL, class = NULL)
+st_transform_ext(x = NULL, crs = NULL, class = NULL)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object, a list of sf objects.}

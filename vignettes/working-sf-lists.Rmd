@@ -40,13 +40,15 @@ library(dplyr)
 library(patchwork)
 ```
 
+## Utility functions for working with sf lists 
+
 To start, `as_sf_list` can turn a sf object into a list and optionally use a grouping column to define how the list is structured.
 
 ```{r, max.height='200px'}
 nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
 nc_list_name <-
-  as_sf_list(nc, col = "NAME")
+  as_sf_list(x = nc, col = "NAME")
 
 str(nc_list_name)
 ```
@@ -82,6 +84,8 @@ as_sf(nc_list_name) %>%
 as_bbox(nc_list)
 ```
 
+## Modifying and mapping sf lists
+
 Other key functions  work with sf list objects by applying the function to each object in the list and maintain the list format, including:
 
   - `st_transform_ext()`
@@ -114,7 +118,7 @@ ggplot() +
   guides(fill = "none")
 ```
 
-`get_location` also supports the creation of sf lists using the name_col, id_col, or locationname_col (used by `get_esri_data`) as a grouping column.
+`get_location` also supports the creation of sf lists using the name_col, id_col, or name_col (used by `get_esri_data`) as a grouping column.
 
 ```{r, max.height='200px'}
 park_list <-
@@ -177,7 +181,6 @@ park_district_maps <-
 park_district_maps[[1]] + park_district_maps[[2]] + park_district_maps[[3]]
 ```
 
-
 `get_location_data` works with sf lists but in a somewhat limited way that does not support all available features of the function. This currently works best when data is a character string which can also be used to name each sf object in the list (in combination with the label parameter).
 
 ```{r}
@@ -227,3 +230,51 @@ ggplot() +
     expand = TRUE
   )
 ```
+
+## Working with sf lists in combination with data and location index lists
+
+```{r}
+
+params <- list(
+  index = list(
+    data = list(
+      "cama" = "https://geodata.md.gov/imap/rest/services/PlanningCadastre/MD_ComputerAssistedMassAppraisal/MapServer/1",
+      "cama_bldg" = "https://geodata.md.gov/imap/rest/services/PlanningCadastre/MD_ComputerAssistedMassAppraisal/MapServer/0",
+      "parcels" = "https://geodata.md.gov/imap/rest/services/PlanningCadastre/MD_ParcelBoundaries/MapServer/0",
+      "edge_of_pavement" = "https://gisdata.baltimorecity.gov/egis/rest/services/OpenBaltimore/Edge_of_Pavement/FeatureServer/0"
+      # "property" = "https://opendata.baltimorecity.gov/egis/rest/services/NonSpatialTables/RealProperty/FeatureServer/0"
+    ),
+    type = "named_intersections",
+    package = "mapbaltimore"
+  ),
+  location = list(
+    name = "EASTERN AVE & S CONKLING ST",
+    label = "Conkling Plaza"
+  ),
+  data = list(
+    dist = 150,
+    crs = 3857
+  )
+)
+
+location <-
+  get_location(
+    type = index$type,
+    package = index$package,
+    name = params$location$name,
+    label = params$location$label
+  )
+
+# FIXME: When this hit an error from the nonspatial data in the FeatureServer link indexed to property
+property_data <-
+  map_location_data(
+    data = names(index$data),
+    index = index,
+    location = location,
+    dist = params$data$dist,
+    class = "list",
+    crs = params$data$crs
+  )
+
+```
+

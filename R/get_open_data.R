@@ -14,9 +14,9 @@
 #'   is set to "list" and a valid source_url is provided, the function returns a
 #'   list of all available resources.
 #' @inheritParams st_bbox_ext
-#' @param locationname_col name of column in Socrata data with
+#' @param name_col name of column in Socrata data with
 #'   location names (e.g. County)
-#' @param locationname location name to return
+#' @param name location name to return
 #' @param select SODA $select parameter. Set of columns to be returned, similar
 #'   to a SELECT in SQL. <https://dev.socrata.com/docs/queries/select.html>
 #' @param where SODA $where parameter. Filters the rows to be returned, similar
@@ -31,18 +31,7 @@
 #' @param location sf or bbox obkect
 #' @param from_crs Coordinate reference system for source data.
 #' @param crs Coordinate reference system to return.
-#' @examples
-#' \dontrun{
-#' ## Get Q2 2020 vehicle crash data for Cecil County, Maryland
-#' get_open_data(
-#'   source_url = "https://opendata.maryland.gov",
-#'   data = "65du-s3qu",
-#'   where = "(year = '2020') AND (quarter = 'Q2')",
-#'   locationname_col = "county_desc",
-#'   locationname = "Cecil",
-#'   key = Sys.getenv("MARYLAND_OPEN_DATA_API_KEY")
-#' )
-#' }
+#' @example examples/get_open_data.R
 #' @export
 #' @importFrom usethis ui_stop
 #' @importFrom glue glue
@@ -58,8 +47,8 @@ get_open_data <- function(data = NULL,
                           diag_ratio = NULL,
                           unit = NULL,
                           asp = NULL,
-                          locationname_col = NULL,
-                          locationname = NULL,
+                          name_col = NULL,
+                          name = NULL,
                           coords = c("longitude", "latitude"),
                           geometry = FALSE,
                           key = NULL,
@@ -106,8 +95,8 @@ get_open_data <- function(data = NULL,
 
   if (!is.null(bbox)) {
     where <- paste0("$where=", paste0(c(where, sf_bbox_to_lonlat_query(bbox = bbox, coords = coords)), collapse = " AND "))
-  } else if (!is.null(locationname_col) && !is.null(locationname)) {
-    where <- paste0("$where=", paste0(c(where, glue::glue("{locationname_col} like '{locationname}'")), collapse = " AND "))
+  } else if (!is.null(name_col) && !is.null(name)) {
+    where <- paste0("$where=", paste0(c(where, glue::glue("{name_col} like '{name}'")), collapse = " AND "))
   } else if (!is.null(where)) {
     where <- paste0("$where=", where)
   }
@@ -158,8 +147,8 @@ get_socrata_data <- function(data = NULL,
                              diag_ratio = NULL,
                              unit = NULL,
                              asp = NULL,
-                             locationname_col = NULL,
-                             locationname = NULL,
+                             name_col = NULL,
+                             name = NULL,
                              coords = c("longitude", "latitude"),
                              geometry = FALSE,
                              key = NULL,
@@ -179,8 +168,8 @@ get_socrata_data <- function(data = NULL,
     diag_ratio = diag_ratio,
     unit = unit,
     asp = asp,
-    locationname_col = locationname_col,
-    locationname = locationname,
+    name_col = name_col,
+    name = name,
     coords = c("longitude", "latitude"),
     geometry = geometry,
     key = key,

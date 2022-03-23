@@ -129,3 +129,12 @@ location as a character vector or sf list (including lists of bbox or sfc
 objects), or when both data and location are lists (such as a list created
 by make_location_data_list).
 }
+\examples{
+map_location_data(
+  data = c("streets", "mta_bus_lines"),
+  package = "mapbaltimore",
+  location = mapbaltimore::council_districts[2,],
+  label = mapbaltimore::council_districts[2,]$name,
+  load = TRUE
+)
+}

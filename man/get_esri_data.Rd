@@ -15,8 +15,8 @@ get_esri_data(
   crs = NULL,
   where = NULL,
   coords_col = NULL,
-  locationname_col = NULL,
-  locationname,
+  name_col = NULL,
+  name = NULL,
   ...
 )
 }
@@ -50,10 +50,10 @@ without modification.}
 
 \item{coords_col}{coordinate columns, e.g. c("longitude", "latitude")}
 
-\item{locationname_col}{name of ArcGIS FeatureServer or MapServer column with
+\item{name_col}{name of ArcGIS FeatureServer or MapServer column with
 location names for features}
 
-\item{locationname}{location name}
+\item{name}{location name}
 
 \item{...}{Additional arguments passed to \link[esri2sf:esri2sf]{esri2sf::esri2df} or
 \link[esri2sf:esri2sf]{esri2sf::esri2sf}}

@@ -11,6 +11,7 @@ st_buffer_ext(
   diag_ratio = NULL,
   unit = "meter",
   dist_limits = NULL,
+  single_side = FALSE,
   ...
 )
 
@@ -34,6 +35,10 @@ to units matching GDAL units for x; defaults to "meter"}
 \item{dist_limits}{Numeric vector of any length (minimum and maximum values
 used as lower and upper limits on distance buffer). Units must match the
 provided units; defaults to NULL.}
+
+\item{single_side}{If \code{TRUE}, single-sided buffers are returned for linear
+geometries, in which case negative dist values give buffers on the
+right-hand side, positive on the left.}
 
 \item{...}{additional parameters passed to \code{\link[sf:geos_unary]{sf::st_buffer()}}}
 }

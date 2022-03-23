@@ -62,6 +62,7 @@
     <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
     <a class="dropdown-item" href="../articles/working-sf-bbox-objects.html">Working with simple feature and bounding box objects</a>
+    <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
 </li>
       </ul>
@@ -126,7 +127,6 @@
 <li>a valid street address (geocoded with <code><a href="https://jessecambon.github.io/tidygeocoder/reference/geo.html" class="external-link">tidygeocoder::geo()</a></code>)</li>
 <li>a simple feature object or bounding box</li>
 </ul>
-<p>Note: as of 2022-02-14, get_location() currently only supports a single address at a time but I expect to update the function so it supports multiple addresses).</p>
 <p>If you provide a sf or bbox object, the object is used as a spatial filter either when reading in the data (using the bbox parameter for <code>read_sf_path</code> or <code>read_sf_url</code>) or before returning the data using the <code><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">sf::st_filter()</a></code> function.</p>
 <div class="section level4">
 <h4 id="working-with-union-and-label-parameters">Working with union and label parameters<a class="anchor" aria-label="anchor" href="#working-with-union-and-label-parameters"></a>
@@ -143,8 +143,8 @@
 <p>Here is are a few examples showing how you can use <code><a href="../reference/get_location.html">get_location()</a></code> to create new custom look-up functions.</p>
 <p>If your location data is from another package, you can use the package parameters passed to <code><a href="../reference/get_location_data.html">get_location_data()</a></code> to access that data even without loading the package. This approach works best when the package data uses a consistent naming scheme for columns and data to support. This makes it easy to turn the names into parameters as the example below using the <a href="https://nycgeo.mattherman.info/" class="external-link">nycgeo package</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># NOTE: install nycgeo from GitHub not CRAN</span>
-<span class="co"># remotes::install_github("mfherman/nycgeo")</span>
+<code class="sourceCode R"><span class="co"># remotes::install_github("mfherman/nycgeo")</span>
+
 <span class="va">get_nyc_borough</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">id</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">type</span> <span class="op">=</span> <span class="st">"simple"</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">data</span> <span class="op">&lt;-</span> <span class="st">"borough_sf"</span>
   <span class="kw">if</span> <span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"simple"</span><span class="op">)</span> <span class="op">{</span>
@@ -177,7 +177,7 @@
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 36061 36         061         New York    Manhattan    1         </span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 1 more variable: geometry &lt;MULTIPOLYGON [US_survey_foot]&gt;</span></span></code></pre></div>
-<p>If your location data is sourced from an ArcGIS MapServer or FeatureServer, you can use the <code>locationname</code> and <code>locationname_col</code> parameters from the underlying <code><a href="../reference/get_esri_data.html">get_esri_data()</a></code> function. This avoids the need to download the full dataset every time.</p>
+<p>If your location data is sourced from an ArcGIS MapServer or FeatureServer, you can use the <code>name</code> and <code>name_col</code> parameters from the underlying <code><a href="../reference/get_esri_data.html">get_esri_data()</a></code> function. This avoids the need to download the full dataset every time.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get_anc looks up the Advisory Neighborhood Council</span>
 <span class="co"># Data from Open Data DC https://opendata.dc.gov/datasets/fcfbf29074e549d8aff9b9c708179291</span>
@@ -187,8 +187,8 @@
 
   <span class="fu"><a href="../reference/get_location.html">get_location</a></span><span class="op">(</span>
     type <span class="op">=</span> <span class="va">url</span>,
-    locationname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span>,
-    locationname_col <span class="op">=</span> <span class="st">"name"</span>
+    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span>,
+    name_col <span class="op">=</span> <span class="st">"name"</span>
   <span class="op">)</span>
 <span class="op">}</span>
 
@@ -203,11 +203,11 @@
 <span class="co">#&gt; Bounding box:  xmin: -76.99753 ymin: 38.92135 xmax: -76.96666 ymax: 38.95024</span>
 <span class="co">#&gt; Geodetic CRS:  WGS 84</span>
 <span class="co">#&gt;   objectid anc_id                                                    web_url</span>
-<span class="co">#&gt; 1        9 ANC 5B http://anc.dc.gov/page/advisory-neighborhood-commission-5b</span>
+<span class="co">#&gt; 9        9 ANC 5B http://anc.dc.gov/page/advisory-neighborhood-commission-5b</span>
 <span class="co">#&gt;   name shape_area shape_len                               globalid creator</span>
-<span class="co">#&gt; 1   5B          0         0 {6DBCF9C2-E269-41C6-AE4D-AC645FFC101D}      NA</span>
-<span class="co">#&gt;   created editor       edited                          geoms</span>
-<span class="co">#&gt; 1      NA  DCGIS 1.573036e+12 MULTIPOLYGON (((-76.98239 3...</span></code></pre></div>
+<span class="co">#&gt; 9   5B          0         0 {6DBCF9C2-E269-41C6-AE4D-AC645FFC101D}      NA</span>
+<span class="co">#&gt;   created editor       edited                       geometry</span>
+<span class="co">#&gt; 9      NA  DCGIS 1.573036e+12 MULTIPOLYGON (((-76.98239 3...</span></code></pre></div>
 <p>Location data can also be loaded from a URL with a GeoJSON or other spatial data file.</p>
 </div>
 <div class="section level4">
@@ -215,8 +215,8 @@
 </h4>
 <p>Since location supports both addresses and sf objects, you can pull individual locations without knowing the name or id of an area. For example, you can use an address:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># NOTE: mapbaltimore is not currently available on CRAN</span>
-<span class="co"># remotes::install_github("elipousson/mapbaltimore")</span>
+<code class="sourceCode R"><span class="co"># remotes::install_github("elipousson/mapbaltimore")</span>
+
 <span class="va">lookup_tract</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">address</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/get_location.html">get_location</a></span><span class="op">(</span>
     type <span class="op">=</span> <span class="st">"baltimore_tracts"</span>,
@@ -295,7 +295,16 @@
     type <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">type</span>,
     package <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">package</span>,
     id <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">id</span>
-  <span class="op">)</span></code></pre></div>
+  <span class="op">)</span>
+
+<span class="va">district</span>
+<span class="co">#&gt; Simple feature collection with 1 feature and 2 fields</span>
+<span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: 432071 ymin: 179871.4 xmax: 436036.4 ymax: 184134.6</span>
+<span class="co">#&gt; Projected CRS: NAD83(HARN) / Maryland</span>
+<span class="co">#&gt;    id                       geometry        name</span>
+<span class="co">#&gt; 13 12 MULTIPOLYGON (((433676 1838... District 12</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -303,21 +312,26 @@
 </h2>
 <p>You can use the get_paper function to look up one or more common paper sizes or standard image sizes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">paper_options</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_paper.html">get_paper</a></span><span class="op">(</span>standard <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Twitter"</span>, <span class="st">"Instagram"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">paper_options</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_paper.html">get_paper</a></span><span class="op">(</span>paper <span class="op">=</span> <span class="cn">NULL</span>, standard <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Twitter"</span>, <span class="st">"Instagram"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">paper_options</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="25%">
+<col width="18%">
+<col width="4%">
+<col width="4%">
 <col width="6%">
-<col width="5%">
-<col width="9%">
-<col width="5%">
-<col width="5%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
 <col width="6%">
+<col width="3%">
+<col width="6%">
+<col width="3%">
+<col width="7%">
+<col width="4%">
 <col width="8%">
-<col width="9%">
-<col width="6%">
-<col width="11%">
+<col width="8%">
+<col width="4%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">name</th>
@@ -328,9 +342,14 @@
 <th align="right">width</th>
 <th align="right">height</th>
 <th align="right">asp</th>
-<th align="left">asp_text</th>
-<th align="left">type</th>
+<th align="right">cols</th>
+<th align="right">col_width</th>
+<th align="right">rows</th>
+<th align="right">row_height</th>
+<th align="right">gutter</th>
+<th align="right">section_asp</th>
 <th align="left">orientation</th>
+<th align="left">type</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -342,9 +361,14 @@
 <td align="right">1080</td>
 <td align="right">1080</td>
 <td align="right">1.000000</td>
-<td align="left">1080:1080</td>
+<td align="right">1</td>
+<td align="right">1080</td>
+<td align="right">1</td>
+<td align="right">1080</td>
+<td align="right">0</td>
+<td align="right">1.000000</td>
+<td align="left">square</td>
 <td align="left">social</td>
-<td align="left">portrait</td>
 </tr>
 <tr class="even">
 <td align="left">Instagram story</td>
@@ -355,9 +379,50 @@
 <td align="right">1080</td>
 <td align="right">1920</td>
 <td align="right">0.562500</td>
-<td align="left">1080:1920</td>
-<td align="left">social</td>
+<td align="right">1</td>
+<td align="right">1080</td>
+<td align="right">1</td>
+<td align="right">1920</td>
+<td align="right">0</td>
+<td align="right">0.562500</td>
 <td align="left">portrait</td>
+<td align="left">social</td>
+</tr>
+<tr class="odd">
+<td align="left">Twitter cover photo</td>
+<td align="left">NA</td>
+<td align="left">cover</td>
+<td align="left">Twitter</td>
+<td align="left">px</td>
+<td align="right">1500</td>
+<td align="right">500</td>
+<td align="right">3.000000</td>
+<td align="right">1</td>
+<td align="right">1500</td>
+<td align="right">1</td>
+<td align="right">500</td>
+<td align="right">0</td>
+<td align="right">3.000000</td>
+<td align="left">landscape</td>
+<td align="left">social</td>
+</tr>
+<tr class="even">
+<td align="left">Twitter image and link post</td>
+<td align="left">NA</td>
+<td align="left">post</td>
+<td align="left">Twitter</td>
+<td align="left">px</td>
+<td align="right">1200</td>
+<td align="right">628</td>
+<td align="right">1.910828</td>
+<td align="right">1</td>
+<td align="right">1200</td>
+<td align="right">1</td>
+<td align="right">628</td>
+<td align="right">0</td>
+<td align="right">1.910828</td>
+<td align="left">landscape</td>
+<td align="left">social</td>
 </tr>
 <tr class="odd">
 <td align="left">Twitter single image post</td>
@@ -368,9 +433,14 @@
 <td align="right">1200</td>
 <td align="right">675</td>
 <td align="right">1.777778</td>
-<td align="left">1200:675</td>
+<td align="right">1</td>
+<td align="right">1200</td>
+<td align="right">1</td>
+<td align="right">675</td>
+<td align="right">0</td>
+<td align="right">1.777778</td>
+<td align="left">landscape</td>
 <td align="left">social</td>
-<td align="left">portrait</td>
 </tr>
 <tr class="even">
 <td align="left">Twitter multiple image post</td>
@@ -381,35 +451,14 @@
 <td align="right">700</td>
 <td align="right">800</td>
 <td align="right">0.875000</td>
-<td align="left">700:800</td>
-<td align="left">social</td>
+<td align="right">1</td>
+<td align="right">700</td>
+<td align="right">1</td>
+<td align="right">800</td>
+<td align="right">0</td>
+<td align="right">0.875000</td>
 <td align="left">portrait</td>
-</tr>
-<tr class="odd">
-<td align="left">Twitter image and link post</td>
-<td align="left">NA</td>
-<td align="left">post</td>
-<td align="left">Twitter</td>
-<td align="left">px</td>
-<td align="right">1200</td>
-<td align="right">628</td>
-<td align="right">1.910828</td>
-<td align="left">1200:628</td>
 <td align="left">social</td>
-<td align="left">portrait</td>
-</tr>
-<tr class="even">
-<td align="left">Twitter cover photo</td>
-<td align="left">NA</td>
-<td align="left">cover</td>
-<td align="left">Twitter</td>
-<td align="left">px</td>
-<td align="right">1500</td>
-<td align="right">500</td>
-<td align="right">3.000000</td>
-<td align="left">1500:500</td>
-<td align="left">social</td>
-<td align="left">portrait</td>
 </tr>
 </tbody>
 </table>
@@ -469,12 +518,12 @@
   <span class="op">)</span>
 
 <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span><span class="va">district_trees</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="oumlaridke" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="qhytqkxnld" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#oumlaridke .gt_table {
+#qhytqkxnld .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -499,7 +548,7 @@
   border-left-color: #D3D3D3;
 }
 
-#oumlaridke .gt_heading {
+#qhytqkxnld .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -511,7 +560,7 @@
   border-right-color: #D3D3D3;
 }
 
-#oumlaridke .gt_title {
+#qhytqkxnld .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -521,7 +570,7 @@
   border-bottom-width: 0;
 }
 
-#oumlaridke .gt_subtitle {
+#qhytqkxnld .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -531,13 +580,13 @@
   border-top-width: 0;
 }
 
-#oumlaridke .gt_bottom_border {
+#qhytqkxnld .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#oumlaridke .gt_col_headings {
+#qhytqkxnld .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -552,7 +601,7 @@
   border-right-color: #D3D3D3;
 }
 
-#oumlaridke .gt_col_heading {
+#qhytqkxnld .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -572,7 +621,7 @@
   overflow-x: hidden;
 }
 
-#oumlaridke .gt_column_spanner_outer {
+#qhytqkxnld .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -584,15 +633,15 @@
   padding-right: 4px;
 }
 
-#oumlaridke .gt_column_spanner_outer:first-child {
+#qhytqkxnld .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#oumlaridke .gt_column_spanner_outer:last-child {
+#qhytqkxnld .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#oumlaridke .gt_column_spanner {
+#qhytqkxnld .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -604,7 +653,7 @@
   width: 100%;
 }
 
-#oumlaridke .gt_group_heading {
+#qhytqkxnld .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -626,7 +675,7 @@
   vertical-align: middle;
 }
 
-#oumlaridke .gt_empty_group_heading {
+#qhytqkxnld .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -641,15 +690,15 @@
   vertical-align: middle;
 }
 
-#oumlaridke .gt_from_md > :first-child {
+#qhytqkxnld .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#oumlaridke .gt_from_md > :last-child {
+#qhytqkxnld .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#oumlaridke .gt_row {
+#qhytqkxnld .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -668,7 +717,7 @@
   overflow-x: hidden;
 }
 
-#oumlaridke .gt_stub {
+#qhytqkxnld .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -680,7 +729,7 @@
   padding-left: 12px;
 }
 
-#oumlaridke .gt_summary_row {
+#qhytqkxnld .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -690,7 +739,7 @@
   padding-right: 5px;
 }
 
-#oumlaridke .gt_first_summary_row {
+#qhytqkxnld .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -700,7 +749,7 @@
   border-top-color: #D3D3D3;
 }
 
-#oumlaridke .gt_grand_summary_row {
+#qhytqkxnld .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -710,7 +759,7 @@
   padding-right: 5px;
 }
 
-#oumlaridke .gt_first_grand_summary_row {
+#qhytqkxnld .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -720,11 +769,11 @@
   border-top-color: #D3D3D3;
 }
 
-#oumlaridke .gt_striped {
+#qhytqkxnld .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#oumlaridke .gt_table_body {
+#qhytqkxnld .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -733,7 +782,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#oumlaridke .gt_footnotes {
+#qhytqkxnld .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -747,13 +796,13 @@
   border-right-color: #D3D3D3;
 }
 
-#oumlaridke .gt_footnote {
+#qhytqkxnld .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#oumlaridke .gt_sourcenotes {
+#qhytqkxnld .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -767,41 +816,41 @@
   border-right-color: #D3D3D3;
 }
 
-#oumlaridke .gt_sourcenote {
+#qhytqkxnld .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#oumlaridke .gt_left {
+#qhytqkxnld .gt_left {
   text-align: left;
 }
 
-#oumlaridke .gt_center {
+#qhytqkxnld .gt_center {
   text-align: center;
 }
 
-#oumlaridke .gt_right {
+#qhytqkxnld .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#oumlaridke .gt_font_normal {
+#qhytqkxnld .gt_font_normal {
   font-weight: normal;
 }
 
-#oumlaridke .gt_font_bold {
+#qhytqkxnld .gt_font_bold {
   font-weight: bold;
 }
 
-#oumlaridke .gt_font_italic {
+#qhytqkxnld .gt_font_italic {
   font-style: italic;
 }
 
-#oumlaridke .gt_super {
+#qhytqkxnld .gt_super {
   font-size: 65%;
 }
 
-#oumlaridke .gt_footnote_marks {
+#qhytqkxnld .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -824,7 +873,7 @@
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">genus</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">x_coord</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">y_coord</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">geom</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">geometry</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>

@@ -14,9 +14,9 @@
 #' @param where string for where condition. Default is 1=1 for all rows.
 #' @param where where query string passed to esri2sf, Default: NULL
 #' @param coords_col coordinate columns, e.g. c("longitude", "latitude")
-#' @param locationname_col name of ArcGIS FeatureServer or MapServer column with
+#' @param name_col name of ArcGIS FeatureServer or MapServer column with
 #'   location names for features
-#' @param locationname location name
+#' @param name location name
 #' @param ... Additional arguments passed to [esri2sf::esri2df] or
 #'   [esri2sf::esri2sf]
 #' @inheritParams sf_bbox_to_lonlat_query
@@ -36,8 +36,8 @@ get_esri_data <- function(location = NULL,
                           crs = NULL,
                           where = NULL,
                           coords_col = NULL,
-                          locationname_col = NULL,
-                          locationname,
+                          name_col = NULL,
+                          name = NULL,
                           ...) {
   check_pkg_installed(pkg = "esri2sf", repo = "yonghah/esri2sf")
 
@@ -70,10 +70,10 @@ get_esri_data <- function(location = NULL,
         ...
       )
     }
-  } else if (!is.null(locationname_col)) {
+  } else if (!is.null(name_col)) {
     where <- c(
       where,
-      glue::glue("{locationname_col} = '{locationname}'")
+      glue::glue("{name_col} = '{name}'")
     )
 
     meta <- esri2sf::esrimeta(url)

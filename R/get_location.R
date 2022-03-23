@@ -37,43 +37,8 @@
 #' @param ... Additional parameters passed to \code{get_location_data} if type
 #'   is character and index is `NULL`.
 #' @return A simple feature object from data provided to type.
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-#'   # Check if type as sf object with name/id lookup works
-#'   get_location(type = nc, name = "Warren", name_col = "NAME")
-#'   get_location(type = nc, id = 37185, id_col = "FIPSNO")
 #'
-#'   # Type also supports a range of other formats including
-#'
-#'   # File path
-#'   get_location(
-#'     type = system.file("shape/nc.shp", package = "sf"),
-#'     name = "Hertford",
-#'     name_col = "NAME"
-#'   )
-#'
-#'   # Index name (if a named list of datasets, urls, or paths is passed to index)
-#'   get_location(
-#'     type = "smaller",
-#'     name = "Hertford",
-#'     name_col = "NAME",
-#'     index = list(
-#'       "smaller" = dplyr::filter(nc, AREA <= 0.10),
-#'       "larger" = dplyr::filter(nc, AREA > 0.15)
-#'     )
-#'   )
-#'
-#'   # url may require passing extra parameters to `get_location_data()`
-#'   # In this example, no location information is passed to get_location() so it warns before returning all types
-#'   get_location(
-#'     type = "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Parks/FeatureServer/0",
-#'     locationname_col = "NAME",
-#'     locationname = "Chesapeake and Ohio Canal National Historic Park"
-#'   )
-#' }
-#' }
+#' @example examples/get_location.R
 #' @rdname get_location
 #' @export
 #' @importFrom sf st_crs st_filter st_as_sf st_union
@@ -115,6 +80,9 @@ get_location <- function(type,
     type <-
       get_location_data(
         data = type,
+        # FIXME: Using name_col in both places may be an issue
+        name_col = name_col,
+        name = name,
         ...
       )
   }
@@ -183,12 +151,12 @@ get_location <- function(type,
       )
   }
 
-  params <- rlang::list2(...)
+  # params <- rlang::list2(...)
 
   if (is.null(location) && !is.null(type)) {
     location <- type
 
-    if (is.null(params$locationname_col) && (nrow(type) > 1)) {
+    if (is.null(name_col) && (nrow(type) > 1)) {
       usethis::ui_warn("Returning all locations of this type.")
     }
   }
@@ -201,8 +169,6 @@ get_location <- function(type,
     col <- name_col
   } else if (!is.null(id)) {
     col <- id_col
-  } else if (!is.null(params$locationname)) {
-    col <- locationname_col
   } else {
     col <- NULL
   }

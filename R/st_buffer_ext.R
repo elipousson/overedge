@@ -23,6 +23,9 @@
 #' @param dist_limits Numeric vector of any length (minimum and maximum values
 #'   used as lower and upper limits on distance buffer). Units must match the
 #'   provided units; defaults to NULL.
+#' @param single_side If `TRUE`, single-sided buffers are returned for linear
+#'   geometries, in which case negative dist values give buffers on the
+#'   right-hand side, positive on the left.
 #' @param ... additional parameters passed to [sf::st_buffer()]
 #' @export
 #' @importFrom sf st_is_longlat st_crs st_transform st_bbox st_buffer
@@ -32,15 +35,16 @@ st_buffer_ext <- function(x,
                           diag_ratio = NULL,
                           unit = "meter",
                           dist_limits = NULL,
+                          single_side = FALSE,
                           ...) {
-  if (is_sf_list(x, ext = TRUE)) {
-    x <-
+  if (is_sf_list(x, ext = TRUE) && !is_bbox(x) && !is_sfc(x)) {
+    x_list <-
       purrr::map(
         x,
-        ~ st_buffer_ext(x = .x, dist = dist, diag_ratio = diag_ratio, unit = unit, dist_limits = dist_limits)
+        ~ st_buffer_ext(x = .x, dist = dist, diag_ratio = diag_ratio, unit = unit, dist_limits = dist_limits, single_side = single_side)
       )
 
-    return(x)
+    return(x_list)
   }
 
   # If bbox, convert to sf
@@ -67,11 +71,10 @@ st_buffer_ext <- function(x,
       dist <- units::drop_units(dist)
     } else if (is.null(dist) && !is.null(diag_ratio)) {
       # Use the bbox diagonal distance to make proportional buffer distance
-      dist <- sf_bbox_diagdist(sf::st_bbox(x), units = FALSE) * diag_ratio
+      dist <- sf_bbox_diagdist(bbox = as_bbox(x), units = FALSE) * diag_ratio
     }
 
-    dist <-
-      convert_dist_units(dist = dist, from = unit, to = crs$units_gdal)
+    dist <- convert_dist_units(dist = dist, from = unit, to = crs$units_gdal)
 
     if (!is.null(dist_limits)) {
       dist_limits <-
@@ -104,7 +107,7 @@ st_buffer_ext <- function(x,
       }
     }
 
-    x <- sf::st_buffer(x = x, dist = dist, ...)
+    x <- sf::st_buffer(x = x, dist = dist, singleSide = single_side, ...)
 
     if (is_lonlat) {
       x <- sf::st_transform(x, lonlat_crs)

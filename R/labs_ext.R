@@ -5,7 +5,7 @@
 #'
 #' @inheritParams ggplot2::labs
 #' @param location sf or bbox object or character string
-#' @param locationname_col Column name holding name or identifier for distinct
+#' @param name_col Column name holding name or identifier for distinct
 #'   places within the simple feature collection provided to location. Not
 #'   supported for bbox objects.
 #' @param source Data source(s). Not yet used or supported by function.
@@ -17,7 +17,7 @@ labs_ext <- function(title = ggplot2::waiver(),
                      tag = ggplot2::waiver(),
                      alt = ggplot2::waiver(),
                      location = NULL,
-                     locationname_col = NULL, # Check param name
+                     name_col = NULL, # Check param name
                      source = NULL,
                      ...) {
   labs_glued <-

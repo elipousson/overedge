@@ -1,3 +1,6 @@
+#' Make map layers from location and data lists
+#'
+#' @example examples/make_location_layers.R
 #' @noRd
 make_location_layers <- function(data = NULL,
                                  location = NULL,

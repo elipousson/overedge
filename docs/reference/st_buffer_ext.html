@@ -79,6 +79,7 @@ transformed back into the original CRS after the buffer has been applied.</p>
   diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,
   unit <span class="op">=</span> <span class="st">"meter"</span>,
   dist_limits <span class="op">=</span> <span class="cn">NULL</span>,
+  single_side <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -105,6 +106,10 @@ to units matching GDAL units for x; defaults to "meter"</p></dd>
 <dd><p>Numeric vector of any length (minimum and maximum values
 used as lower and upper limits on distance buffer). Units must match the
 provided units; defaults to NULL.</p></dd>
+<dt>single_side</dt>
+<dd><p>If <code>TRUE</code>, single-sided buffers are returned for linear
+geometries, in which case negative dist values give buffers on the
+right-hand side, positive on the left.</p></dd>
 <dt>...</dt>
 <dd><p>additional parameters passed to <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer()</a></code></p></dd>
 </dl></div>

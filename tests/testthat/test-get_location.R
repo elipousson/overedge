@@ -94,8 +94,8 @@ test_that("get_location works", {
   # checkmate::expect_class(
   #  get_location(
   #    type = "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Parks/FeatureServer/0",
-  #    locationname_col = "NAME",
-  #    locationname = "Chesapeake and Ohio Canal National Historic Park"
+  #    name_col = "NAME",
+  #    name = "Chesapeake and Ohio Canal National Historic Park"
   #  ),
   #  "sf"
   # )

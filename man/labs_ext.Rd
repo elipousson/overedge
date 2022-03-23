@@ -11,7 +11,7 @@ labs_ext(
   tag = ggplot2::waiver(),
   alt = ggplot2::waiver(),
   location = NULL,
-  locationname_col = NULL,
+  name_col = NULL,
   source = NULL,
   ...
 )
@@ -33,7 +33,7 @@ See \link[ggplot2]{get_alt_text} for examples.}
 
 \item{location}{sf or bbox object or character string}
 
-\item{locationname_col}{Column name holding name or identifier for distinct
+\item{name_col}{Column name holding name or identifier for distinct
 places within the simple feature collection provided to location. Not
 supported for bbox objects.}
 

@@ -113,7 +113,6 @@ layer_location_data <-
           stat = "sf_coordinates"
         )
       }
-
     }
 
     geom <-
@@ -142,6 +141,7 @@ layer_location_data <-
       c(list(mapping = mapping, data = data), params)
     )
 
+    # FIXME: This does not seem like the best way of dealing with the default params issue
     if (params_has_nudge) {
       params$position <- NULL
     } else {

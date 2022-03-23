@@ -16,16 +16,17 @@
 #' @rdname st_transform_ext
 #' @export
 #' @importFrom sf st_transform st_crs
-st_transform_ext <- function(x,
+st_transform_ext <- function(x = NULL,
                              crs = NULL,
                              class = NULL) {
-  if (is_sf_list(x, ext = TRUE) && (nrow(x) > 1)) {
+  if (!is_bbox(x) && !is_sfc(x) && is_sf_list(x, ext = TRUE)) {
     x <-
       purrr::map(
         x,
         ~ st_transform_ext(
           x = .x,
-          crs = crs
+          crs = crs,
+          class = class
         )
       )
 
@@ -36,28 +37,33 @@ st_transform_ext <- function(x,
     is_sf(x, ext = TRUE)
   )
 
+  x_is_sf <- is_sf(x)
+  x_is_bbox <- is_bbox(x)
+
   if (!is.null(crs)) {
-    if (is_sf(crs, ext = TRUE)) {
+    is_x_same_crs <- is_same_crs(x = x, y = crs)
+
+    if (is_sf(crs, ext = TRUE) && !is_x_same_crs) {
       # if x has a different crs than the sf object passed to crs
       crs <- sf::st_crs(x = crs)
     }
 
-    if (is_bbox(x)) {
+    if (x_is_bbox) {
       # If x is a bbox
       x <- sf_bbox_transform(bbox = x, crs = crs)
-    } else if (!is_same_crs(x, crs)) {
+    } else if (!is_x_same_crs) {
       # If x is an sf or sfc object
       x <- sf::st_transform(x = x, crs = crs)
     }
   }
 
   if (!is.null(class)) {
-    if ("bbox" %in% class) {
+    if (("bbox" %in% class) && !x_is_bbox) {
       x <- sf::st_bbox(x)
-    } else if ("sf" %in% class) {
+    } else if (("sf" %in% class) && !x_is_sf) {
       if (is_bbox(x)) {
         x <- sf_bbox_to_sf(x)
-      } else if (is_sfc(x)) {
+      } else if (("sfc" %in% class) && is_sfc(x)) {
         x <- as_sf(x)
       }
     }

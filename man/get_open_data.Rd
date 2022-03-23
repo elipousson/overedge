@@ -17,8 +17,8 @@ get_open_data(
   diag_ratio = NULL,
   unit = NULL,
   asp = NULL,
-  locationname_col = NULL,
-  locationname = NULL,
+  name_col = NULL,
+  name = NULL,
   coords = c("longitude", "latitude"),
   geometry = FALSE,
   key = NULL,
@@ -37,8 +37,8 @@ get_socrata_data(
   diag_ratio = NULL,
   unit = NULL,
   asp = NULL,
-  locationname_col = NULL,
-  locationname = NULL,
+  name_col = NULL,
+  name = NULL,
   coords = c("longitude", "latitude"),
   geometry = FALSE,
   key = NULL,
@@ -84,10 +84,10 @@ to units matching GDAL units for x; defaults to "meter"}
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
-\item{locationname_col}{name of column in Socrata data with
+\item{name_col}{name of column in Socrata data with
 location names (e.g. County)}
 
-\item{locationname}{location name to return}
+\item{name}{location name to return}
 
 \item{coords}{Name(s) of column with coordinate data, Default: c("longitude",
 "latitude")}
@@ -109,15 +109,14 @@ Details on SoQL queries are found in the Socrata API documentation
 \url{https://dev.socrata.com/docs/queries/}.
 }
 \examples{
-\dontrun{
 ## Get Q2 2020 vehicle crash data for Cecil County, Maryland
 get_open_data(
   source_url = "https://opendata.maryland.gov",
   data = "65du-s3qu",
   where = "(year = '2020') AND (quarter = 'Q2')",
-  locationname_col = "county_desc",
-  locationname = "Cecil",
+  name_col = "county_desc",
+  name = "Cecil",
   key = Sys.getenv("MARYLAND_OPEN_DATA_API_KEY")
 )
-}
+
 }

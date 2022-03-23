@@ -33,6 +33,8 @@ reference:
 - title: Create, view, and combine simple feature and bounding box objects
   contents:
   - starts_with("make_location")
+  - '`make_markers`'
+  - '`number_features`'
   - starts_with("st_")
   - starts_with("mapview")
 - title: Spatial layers for ggplot2 maps

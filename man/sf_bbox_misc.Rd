@@ -27,7 +27,7 @@ sf_bbox_ydist(bbox, units = FALSE)
 
 sf_bbox_diagdist(bbox, units = FALSE)
 
-sf_bbox_transform(bbox, crs)
+sf_bbox_transform(bbox, crs = NULL)
 
 sf_bbox_to_sf(bbox, sf_col = "geometry")
 

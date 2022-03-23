@@ -62,6 +62,7 @@
     <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
     <a class="dropdown-item" href="../articles/working-sf-bbox-objects.html">Working with simple feature and bounding box objects</a>
+    <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
 </li>
       </ul>
@@ -99,12 +100,12 @@
 <span class="co"># Get UMBC from state open data on educational facilities</span>
 <span class="va">umbc</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/get_location.html">get_location</a></span><span class="op">(</span>
-   <span class="co"># location = baltimore_msa_counties,</span>
+    <span class="co"># location = baltimore_msa_counties,</span>
     type <span class="op">=</span> <span class="st">"https://geodata.md.gov/imap/rest/services/Education/MD_EducationFacilities/FeatureServer/0"</span>,
     name <span class="op">=</span> <span class="st">"University of Maryland, Baltimore County"</span>,
     name_col <span class="op">=</span> <span class="st">"sitename"</span>,
     crs <span class="op">=</span> <span class="va">crs</span>
-<span class="op">)</span>
+  <span class="op">)</span>
 <span class="co">#&gt; <span style="color: #0000BB;">Layer Type: </span><span style="color: #BB00BB;">Feature Layer</span></span>
 <span class="co">#&gt; <span style="color: #0000BB;">Geometry Type: </span><span style="color: #BB00BB;">esriGeometryPoint</span></span>
 <span class="co">#&gt; <span style="color: #0000BB;">Service Coordinate Reference System: </span><span style="color: #BB00BB;">3857</span></span>
@@ -114,8 +115,9 @@
 <span class="va">bbox_large</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/st_bbox_ext.html">st_bbox_ext</a></span><span class="op">(</span>
     x <span class="op">=</span> <span class="va">umbc</span>,
-    dist <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">8</span>,
-    unit <span class="op">=</span> <span class="st">"mile"</span><span class="op">)</span>
+    dist <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">8</span>,
+    unit <span class="op">=</span> <span class="st">"mile"</span>
+  <span class="op">)</span>
 
 <span class="co"># Check if it is a bbox</span>
 <span class="fu"><a href="../reference/is_sf.html">is_bbox</a></span><span class="op">(</span><span class="va">bbox_large</span><span class="op">)</span>
@@ -133,7 +135,7 @@
 
 <span class="co"># Check if data is sfc</span>
 <span class="fu"><a href="../reference/is_sf.html">is_sfc</a></span><span class="op">(</span><span class="va">large_sf</span><span class="op">$</span><span class="va">geometry</span><span class="op">)</span>
-<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; [1] TRUE</span>
 
 <span class="co"># Check if data is a named list of sf objects</span>
 <span class="fu"><a href="../reference/is_sf.html">is_sf_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"large_sf"</span> <span class="op">=</span> <span class="va">large_sf</span><span class="op">)</span><span class="op">)</span>
@@ -145,10 +147,10 @@
 
 <span class="co"># Additional checks include is_raster() is_sp()</span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bbox_small</span> <span class="op">&lt;-</span> 
+<code class="sourceCode R"><span class="va">bbox_small</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/st_bbox_ext.html">st_bbox_ext</a></span><span class="op">(</span>
     <span class="va">bbox_large</span>,
-    dist <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="fl">16</span>,
+    dist <span class="op">=</span> <span class="op">-</span><span class="fl">1</span> <span class="op">/</span> <span class="fl">16</span>,
     unit <span class="op">=</span> <span class="st">"mile"</span>
   <span class="op">)</span>
 
@@ -156,7 +158,7 @@
 
 <span class="va">basemap</span> <span class="op">&lt;-</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-   <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
     data <span class="op">=</span> <span class="va">bbox_large</span>,
     fill <span class="op">=</span> <span class="st">"darkgreen"</span>,
     alpha <span class="op">=</span> <span class="fl">0.5</span>
@@ -194,8 +196,7 @@
     fill <span class="op">=</span> <span class="cn">NA</span>,
     color <span class="op">=</span> <span class="st">"black"</span>,
     alpha <span class="op">=</span> <span class="fl">0.1</span>
-  <span class="op">)</span>
-<span class="co">#&gt; Coordinate system already present. Adding new coordinate system, which will replace the existing one.</span></code></pre></div>
+  <span class="op">)</span></code></pre></div>
 <p><img src="working-sf-bbox-objects_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">center</span> <span class="op">&lt;-</span>
@@ -219,25 +220,24 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bbox_stretched</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/sf_bbox_misc.html">sf_bbox_expand</a></span><span class="op">(</span>
-  bbox <span class="op">=</span> <span class="va">bbox_small</span>,
-  y_nudge <span class="op">=</span> <span class="fl">50</span>
-<span class="op">)</span>
+    bbox <span class="op">=</span> <span class="va">bbox_small</span>,
+    y_nudge <span class="op">=</span> <span class="fl">50</span>
+  <span class="op">)</span>
 
 <span class="va">basemap</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
     data <span class="op">=</span> <span class="va">bbox_stretched</span>,
     alpha <span class="op">=</span> <span class="fl">0.1</span>
-  <span class="op">)</span>
-<span class="co">#&gt; Coordinate system already present. Adding new coordinate system, which will replace the existing one.</span></code></pre></div>
+  <span class="op">)</span></code></pre></div>
 <p><img src="working-sf-bbox-objects_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">paper_sf</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/st_bbox_ext.html">st_bbox_asp</a></span><span class="op">(</span>
-  x <span class="op">=</span> <span class="va">bbox_large</span>,
-  asp <span class="op">=</span> <span class="fl">8.5</span><span class="op">/</span><span class="fl">11</span>,
-  sf <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
+    x <span class="op">=</span> <span class="va">bbox_large</span>,
+    asp <span class="op">=</span> <span class="fl">8.5</span> <span class="op">/</span> <span class="fl">11</span>,
+    class <span class="op">=</span> <span class="st">"sf"</span>
+  <span class="op">)</span>
 
 <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">paper_sf</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"geometry"</span>
 
@@ -247,8 +247,7 @@
     alpha <span class="op">=</span> <span class="fl">0.1</span>,
     fill <span class="op">=</span> <span class="st">"yellow"</span>,
     linetype <span class="op">=</span> <span class="st">"dashed"</span>
-  <span class="op">)</span>
-<span class="co">#&gt; Coordinate system already present. Adding new coordinate system, which will replace the existing one.</span></code></pre></div>
+  <span class="op">)</span></code></pre></div>
 <p><img src="working-sf-bbox-objects_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
   </main>
 </div>

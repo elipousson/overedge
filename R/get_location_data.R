@@ -191,6 +191,7 @@ get_location_data <- function(location = NULL,
 #' @name map_location_data
 #' @rdname get_location_data
 #' @param load If TRUE and class is "list", load data to local environment; defaults FALSE.
+#' @example examples/map_location_data.R
 #' @export
 #' @importFrom rlang list2
 #' @importFrom janitor make_clean_names
@@ -268,8 +269,8 @@ map_location_data <- function(location = NULL,
           trim = trim,
           from_crs = from_crs,
           crs = crs,
-          locationname_col = params$locationname_col,
-          locationname = params$locationname,
+          name_col = params$name_col,
+          name = params$name,
           index = index
         )
       )
@@ -291,8 +292,8 @@ map_location_data <- function(location = NULL,
           trim = trim,
           from_crs = from_crs,
           crs = crs,
-          locationname_col = params$locationname_col,
-          locationname = params$locationname,
+          name_col = params$name_col,
+          name = params$name,
           index = index
         )
       )
@@ -315,8 +316,8 @@ map_location_data <- function(location = NULL,
           trim = trim,
           from_crs = from_crs,
           crs = crs,
-          locationname_col = params$locationname_col,
-          locationname = params$locationname,
+          name_col = params$name_col,
+          name = params$name,
           index = index
         )
       )

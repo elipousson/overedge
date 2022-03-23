@@ -33,7 +33,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
       x <- dplyr::bind_rows(x)
     } else if (is.data.frame(x)) {
       # TODO: Need to figure out a way to pass the crs to df_to_sf
-      x <- df_to_sf(x, ...)
+      x <- df_to_sf(x, crs = crs, ...)
     }
   }
 
@@ -41,7 +41,10 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
     sf::st_geometry(x) <- sf_col
   }
 
-  x <- st_transform_ext(x, crs = crs)
+  if (!is.null(crs)) {
+    x <- sf::st_transform(x, crs = crs)
+  }
+
   return(x)
 }
 
@@ -77,7 +80,8 @@ as_bbox <- function(x, crs = NULL, ...) {
     }
   }
 
-  x <- st_transform_ext(x, crs = crs)
+  x <- sf_bbox_transform(bbox = x, crs = crs)
+
   return(x)
 }
 
@@ -93,7 +97,9 @@ as_sfc <- function(x, crs = NULL, ...) {
     x <- sf::st_as_sfc(x, ...)
   }
 
-  x <- st_transform_ext(x, crs = crs)
+  if (!is.null(crs)) {
+    x <- sf::st_transform(x, crs = crs)
+  }
 
   return(x)
 }
@@ -113,8 +119,11 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
     !is.null(x)
   )
 
-  if (!overedge::is_sf_list(x, ext = TRUE)) {
-    if ((is.data.frame(data)) && ("data" %in% names(data)) && is_sf_list(data$data)) {
+  x_is_sf <- is_sf(x)
+  x_is_sf_list <- is_sf_list(x, ext = TRUE)
+
+  if (!x_is_sf_list) {
+    if ((is.data.frame(x)) && ("data" %in% names(x)) && is_sf_list(x$data)) {
       # data frame with nested list column named data
       # produced by group_nest w/ keep_all = TRUE
 
@@ -125,7 +134,7 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
       }
 
       x <- x$data
-    } else if (overedge::is_sf(x)) {
+    } else if (x_is_sf) {
       if (is.null(col)) {
         x <- list(x) # coercible sf object in list length 1
       } else {
@@ -145,7 +154,12 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
     names(x) <- janitor::make_clean_names(nm)
   }
 
-  x <- st_transform_ext(x, crs = crs)
+  if (!is.null(crs)) {
+    # FIXME: This sets up the possibility of an error if the sf list is bounding boxes
+    if (x_is_sf || x_is_sf_list) {
+      x <- purrr::map(x, ~ sf::st_transform(.x, crs = crs))
+    }
+  }
 
   return(x)
 }

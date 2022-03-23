@@ -48,6 +48,7 @@ filtering with bounding box based on location and filtering by location name
     <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
     <a class="dropdown-item" href="../articles/working-sf-bbox-objects.html">Working with simple feature and bounding box objects</a>
+    <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -85,8 +86,8 @@ filtering with bounding box based on location and filtering by location name
   crs <span class="op">=</span> <span class="cn">NULL</span>,
   where <span class="op">=</span> <span class="cn">NULL</span>,
   coords_col <span class="op">=</span> <span class="cn">NULL</span>,
-  locationname_col <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">locationname</span>,
+  name_col <span class="op">=</span> <span class="cn">NULL</span>,
+  name <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -122,10 +123,10 @@ without modification.</p></dd>
 <dd><p>where query string passed to esri2sf, Default: NULL</p></dd>
 <dt>coords_col</dt>
 <dd><p>coordinate columns, e.g. c("longitude", "latitude")</p></dd>
-<dt>locationname_col</dt>
+<dt>name_col</dt>
 <dd><p>name of ArcGIS FeatureServer or MapServer column with
 location names for features</p></dd>
-<dt>locationname</dt>
+<dt>name</dt>
 <dd><p>location name</p></dd>
 <dt>...</dt>
 <dd><p>Additional arguments passed to <a href="https://rdrr.io/pkg/esri2sf/man/esri2sf.html" class="external-link">esri2sf::esri2df</a> or

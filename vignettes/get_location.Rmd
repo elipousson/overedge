@@ -67,8 +67,8 @@ Here is are a few examples showing how you can use `get_location()` to create ne
 If your location data is from another package, you can use the package parameters passed to `get_location_data()` to access that data even without loading the package. This approach works best when the package data uses a consistent naming scheme for columns and data to support. This makes it easy to turn the names into parameters as the example below using the [nycgeo package](https://nycgeo.mattherman.info/).
 
 ```{r get_location_package}
-# NOTE: install nycgeo from GitHub not CRAN
 # remotes::install_github("mfherman/nycgeo")
+
 get_nyc_borough <- function(name = NULL, id = NULL, type = "simple") {
   data <- "borough_sf"
   if (type == "simple") {
@@ -90,7 +90,7 @@ get_nyc_borough <- function(name = NULL, id = NULL, type = "simple") {
 get_nyc_borough("Manhattan")
 ```
 
-If your location data is sourced from an ArcGIS MapServer or FeatureServer, you can use the `locationname` and `locationname_col` parameters from the underlying `get_esri_data()` function. This avoids the need to download the full dataset every time.
+If your location data is sourced from an ArcGIS MapServer or FeatureServer, you can use the `name` and `name_col` parameters from the underlying `get_esri_data()` function. This avoids the need to download the full dataset every time.
 
 ```{r get_location_esri}
 # get_anc looks up the Advisory Neighborhood Council
@@ -101,8 +101,8 @@ get_anc <- function(name) {
 
   get_location(
     type = url,
-    locationname = toupper(name),
-    locationname_col = "name"
+    name = toupper(name),
+    name_col = "name"
   )
 }
 
@@ -116,8 +116,8 @@ Location data can also be loaded from a URL with a GeoJSON or other spatial data
 Since location supports both addresses and sf objects, you can pull individual locations without knowing the name or id of an area. For example, you can use an address:
 
 ```{r location_address}
-# NOTE: mapbaltimore is not currently available on CRAN
 # remotes::install_github("elipousson/mapbaltimore")
+
 lookup_tract <- function(address) {
   get_location(
     type = "baltimore_tracts",
@@ -179,6 +179,8 @@ district <-
     package = params$package,
     id = params$id
   )
+
+district
 ```
 
 
@@ -187,7 +189,7 @@ district <-
 You can use the get_paper function to look up one or more common paper sizes or standard image sizes:
 
 ```{r}
-paper_options <- get_paper(standard = c("Twitter", "Instagram"))
+paper_options <- get_paper(paper = NULL, standard = c("Twitter", "Instagram"))
 knitr::kable(paper_options)
 ```
 
@@ -244,7 +246,6 @@ district_bbox <-
     asp = params$asp
   )
 ```
-
 
 ```{r}
 district_trees <-

@@ -123,8 +123,8 @@ sf_bbox_diagdist <- function(bbox, units = FALSE) {
 #' @rdname sf_bbox_misc
 #' @export
 #' @importFrom sf st_crs st_transform st_bbox
-sf_bbox_transform <- function(bbox, crs) {
-  if (!is_same_crs(bbox, crs)) {
+sf_bbox_transform <- function(bbox, crs = NULL) {
+  if (!is_same_crs(bbox, crs) && !is.null(crs)) {
     bbox_sf <- sf::st_transform(sf_bbox_to_sf(bbox), crs)
     bbox <- sf::st_bbox(bbox_sf)
   }
@@ -144,7 +144,8 @@ sf_bbox_to_sf <- function(bbox, sf_col = "geometry") {
   bbox_sf <- sf::st_as_sf(sf_bbox_to_sfc(bbox))
 
   if (!is.null(sf_col)) {
-    sf::st_geometry(bbox_sf) <- sf_col
+    return(bbox_sf)
+    # sf::st_geometry(bbox_sf) <- sf_col
   }
 
   return(bbox_sf)

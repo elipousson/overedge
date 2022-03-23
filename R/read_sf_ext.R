@@ -40,6 +40,23 @@ NULL
 read_sf_path <- function(path, bbox = NULL, ...) {
   checkmate::check_file_exists(path)
 
+  params <- rlang::list2(...)
+
+  if (!("query" %in% names(params))) {
+    if (!is.null(params$name) && !is.null(params$name_col)) {
+      if (is.null(params$table)) {
+        params$table <-
+          stringr::str_extract(
+            basename(path),
+            "[:graph:]+(?=\\.)"
+          )
+      }
+
+      params$query <-
+        glue::glue("select * from {params$table} where {params$name_col} = '{params$name}'")
+    }
+  }
+
   if (!is.null(bbox)) {
     # Convert bbox to well known text
     wkt <- sf_bbox_to_wkt(bbox = bbox)
@@ -47,12 +64,12 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     data <- sf::read_sf(
       dsn = path,
       wkt_filter = wkt,
-      ...
+      query = params$query
     )
   } else {
     data <- sf::read_sf(
       dsn = path,
-      ...
+      query = params$query
     )
   }
 

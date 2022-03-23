@@ -42,6 +42,7 @@ subtitle, and caption. In progress."><!-- mathjax --><script src="https://cdnjs.
     <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
     <a class="dropdown-item" href="../articles/working-sf-bbox-objects.html">Working with simple feature and bounding box objects</a>
+    <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -73,7 +74,7 @@ subtitle, and caption. In progress.</p>
   tag <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
   alt <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
   location <span class="op">=</span> <span class="cn">NULL</span>,
-  locationname_col <span class="op">=</span> <span class="cn">NULL</span>,
+  name_col <span class="op">=</span> <span class="cn">NULL</span>,
   source <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -97,7 +98,7 @@ top-left of the plot by default.</p></dd>
 See <a href="https://ggplot2.tidyverse.org/reference/get_alt_text.html" class="external-link">get_alt_text</a> for examples.</p></dd>
 <dt>location</dt>
 <dd><p>sf or bbox object or character string</p></dd>
-<dt>locationname_col</dt>
+<dt>name_col</dt>
 <dd><p>Column name holding name or identifier for distinct
 places within the simple feature collection provided to location. Not
 supported for bbox objects.</p></dd>

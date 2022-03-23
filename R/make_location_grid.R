@@ -6,28 +6,17 @@
 #' @param location A `sf`, `sfc`, or `bbox` object, Default: `NULL`. Required.
 #' @param cols,rows Used to set n if either are not `NULL`; defaults to `NULL`.
 #'   row and id are added as columns to the grid if they are provided.
+#' @param gutter Distance in units between each column cell; gutter effectively
+#'   serves as a margin as the negative buffer is applied to all cells
+#'   (including those at the edges of the grid).
 #' @param rev If `TRUE`, id, row, and col numbers are assigned left to right and
 #'   top to bottom.
 #' @inheritParams st_bbox_ext
 #' @param n If n is NULL and square is `TRUE`, the grid is set automatically to
 #'   be 10 cells wide, Default: `NULL`
 #' @param ... Additional parameters passed to [sf::st_make_grid]
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   make_location_grid(
-#'     location = mapbaltimore::council_districts[1, ],
-#'     dist = 1,
-#'     unit = "mile",
-#'     cols = 4,
-#'     rows = 5
-#'   )
-#' }
-#' }
-#' @seealso
-#'  \code{\link[rlang]{list2}}
-#'  \code{\link[sf]{st_make_grid}},\code{\link[sf]{st_join}}
-#'  \code{\link[dplyr]{mutate}},\code{\link[dplyr]{ranking}}
+#' @example examples/make_location_grid.R
+#' @seealso [sf::st_make_grid]
 #' @rdname make_location_grid
 #' @export
 #' @importFrom rlang list2
@@ -37,10 +26,11 @@ make_location_grid <- function(location = NULL,
                                dist = NULL,
                                diag_ratio = NULL,
                                asp = NULL,
-                               unit = NULL,
+                               unit = "meter",
                                crs = NULL,
                                cols = NULL,
                                rows = NULL,
+                               gutter = 0,
                                rev = TRUE,
                                n = NULL,
                                cellsize = NULL,
@@ -99,7 +89,7 @@ make_location_grid <- function(location = NULL,
       ...
     )
 
-  grid <- as_sf(grid, sf_col = "geometry")
+  grid <- as_sf(grid)
 
   grid <- sf::st_filter(x = grid, y = bbox_sf)
 
@@ -140,6 +130,15 @@ make_location_grid <- function(location = NULL,
       grid$col <- rep(seq(cols), rows)
       grid$id <- seq(cols * rows)
     }
+  }
+
+  if (!is.null(gutter) && (gutter != 0)) {
+    grid <-
+      st_buffer_ext(
+        x = grid,
+        dist = abs(gutter) * -0.5,
+        unit = unit
+      )
   }
 
   return(grid)
