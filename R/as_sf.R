@@ -37,8 +37,8 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
     }
   }
 
-  if ((length(names(x)) == 1) && names(x) == "x") {
-    x <- dplyr::rename(x, "{sf_col}" := x)
+  if (!is.null(sf_col)) {
+    sf::st_geometry(x) <- sf_col
   }
 
   x <- st_transform_ext(x, crs = crs)

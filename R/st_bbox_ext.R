@@ -28,7 +28,7 @@ st_bbox_ext <- function(x = NULL,
                         unit = NULL,
                         crs = NULL,
                         class = "bbox") {
-  if (is_sf_list(x, ext = TRUE)) {
+  if (is_sf_list(x, ext = TRUE) && (nrow(x) > 1)) {
     x <-
       purrr::map(
         x,
@@ -50,25 +50,22 @@ st_bbox_ext <- function(x = NULL,
       unit = unit
     )
 
-  x <- st_transform_ext(x, crs)
-
   if (!is.null(asp)) {
     # Get aspect adjusted bbox
     bbox <-
       st_bbox_asp(
         x = x,
-        asp = asp
+        asp = asp,
+        class = "bbox"
       )
   } else {
     bbox <-
       sf::st_bbox(x)
   }
 
-  if ("sf" %in% class) {
-    return(sf_bbox_to_sf(bbox))
-  } else {
-    return(bbox)
-  }
+  x <- st_transform_ext(x, crs, class = class)
+
+  return(x)
 }
 
 #' @rdname st_bbox_ext
@@ -77,7 +74,7 @@ st_bbox_ext <- function(x = NULL,
 st_bbox_asp <- function(x = NULL,
                         asp = NULL,
                         class = "bbox") {
-  if (is_sf_list(x, ext = TRUE)) {
+  if (is_sf_list(x, ext = TRUE) && (nrow(x) > 1)) {
     x <- purrr::map(x, ~ st_bbox_asp(.x, asp = asp, class = class))
 
     return(x)

@@ -115,7 +115,8 @@ get_location <- function(type,
     type <-
       get_location_data(
         data = type,
-        ...)
+        ...
+      )
   }
 
   type_crs <- sf::st_crs(type)
@@ -159,7 +160,7 @@ get_location <- function(type,
         sf::st_filter(
           type,
           as_sf(location, crs = type_crs)
-          )
+        )
     }
   }
 

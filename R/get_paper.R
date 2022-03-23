@@ -240,7 +240,6 @@ get_margin <- function(margin = NULL,
                        plot_width = NULL,
                        header = 0,
                        footer = 0) {
-
   if (is.character(margin) || is.null(margin)) {
     margin <- match.arg(margin, c("none", "narrow", "standard", "extrawide", "wide"))
   }
@@ -250,7 +249,6 @@ get_margin <- function(margin = NULL,
   paper_is_df <- FALSE
 
   if (!is.null(paper) && is.character(paper)) {
-
     paper <- get_paper(paper = paper, orientation = orientation)
 
     if (!is.null(plot_width)) {
