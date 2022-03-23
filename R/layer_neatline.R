@@ -114,7 +114,7 @@ layer_neatline <- function(data = NULL,
     label_axes <- NULL
   }
 
-  if (bgcolor == "none") {
+  if (is.na(bgcolor) || bgcolor == "none") {
     panel_background <-
       ggplot2::element_blank()
 
@@ -128,7 +128,7 @@ layer_neatline <- function(data = NULL,
       ggplot2::element_rect(fill = bgcolor)
   }
 
-  if (color == "none") {
+  if (is.na(color) || color == "none") {
     panel_border <-
       ggplot2::element_blank()
   } else {
