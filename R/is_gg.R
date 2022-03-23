@@ -19,8 +19,11 @@ is_gg_layer <- function(x) {
 #' @export
 is_gg_sf_layer <- function(x) {
   is.list(x) &&
-    (any("LayerSf" %in% sapply(x[[1]], class)) ||
-      any("CoordSf" %in% sapply(x[[1]], class)))
+    ((any("LayerSf" %in% sapply(x[[1]], class)) ||
+      any("CoordSf" %in% sapply(x[[1]], class))) ||
+      (any("LayerSf" %in% sapply(x, class)) ||
+        any("CoordSf" %in% sapply(x, class)))
+    )
 }
 
 #' @name is_gg_scale

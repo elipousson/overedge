@@ -100,8 +100,6 @@ get_location <- function(type,
     is.logical(union)
   )
 
-  # FIXME: This basically assumes that if an index is provided than type is coming from the index
-  # This is fine but should be clearly documented
   if (is.list(index)) {
     if (!is.null(index$type) && is.null(type)) {
       type <- unique(index$type)
@@ -109,14 +107,16 @@ get_location <- function(type,
       # Return data from index list if provided
       type <- index[[type]]
     }
-  } else if (is.character(type) && (is.null(index))) {
-    # FIXME: Again this only calls get_location_data for type if the index is NULL
-    # If type is a string
-    # Return data if type is a file path, url, or package data
-    type <- get_location_data(data = type, ...)
   }
 
-  params <- rlang::list2(...)
+  if (is.character(type)) {
+    # If type is a string
+    # Return data if type is a file path, url, or package data
+    type <-
+      get_location_data(
+        data = type,
+        ...)
+  }
 
   type_crs <- sf::st_crs(type)
 
@@ -155,29 +155,39 @@ get_location <- function(type,
 
     # Filter sf
     if (!is.null(location) && is_sf(location, ext = TRUE)) {
-      location <- as_sf(location)
-      location <- st_transform_ext(location, crs = type_crs)
-      location <- sf::st_filter(type, location)
+      location <-
+        sf::st_filter(
+          type,
+          as_sf(location, crs = type_crs)
+          )
     }
   }
 
   if (union && (nrow(location) > 1) && !is.null(name_col)) {
     location <-
-      # FIXME: as_sf does not currently account for the possibility of a dataframe with a valid geometry column
+      # FIXME: as_sf does not currently account for the possibility of a data frame with a valid geometry column
       sf::st_as_sf(
         data.frame(
-          "{name_col}" := as.character(
+          "name" = as.character(
             knitr::combine_words(words = location[[name_col]])
           ),
           "geometry" = sf::st_union(location)
         )
       )
+
+    location <-
+      dplyr::rename(
+        location,
+        "{name_col}" := name
+      )
   }
+
+  params <- rlang::list2(...)
 
   if (is.null(location) && !is.null(type)) {
     location <- type
 
-    if (!is.null(params$locationname_col) && (nrow(type) > 1)) {
+    if (is.null(params$locationname_col) && (nrow(type) > 1)) {
       usethis::ui_warn("Returning all locations of this type.")
     }
   }

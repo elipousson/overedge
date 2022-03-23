@@ -26,7 +26,6 @@ test_that("get_location works", {
     "sf"
   )
 
-
   checkmate::expect_class(
     get_location(
       type = nc,
@@ -92,14 +91,14 @@ test_that("get_location works", {
   )
 
 
-  expect_warning(
-    get_location(
-      type = "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Parks/FeatureServer/0",
-      locationname_col = "NAME",
-      locationname = "Chesapeake and Ohio Canal National Historic Park"
-    ),
-    "Returning all locations of this type."
-  )
+  # checkmate::expect_class(
+  #  get_location(
+  #    type = "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Parks/FeatureServer/0",
+  #    locationname_col = "NAME",
+  #    locationname = "Chesapeake and Ohio Canal National Historic Park"
+  #  ),
+  #  "sf"
+  # )
 
   # Get mapbaltimore
   checkmate::expect_class(

@@ -240,16 +240,25 @@ get_margin <- function(margin = NULL,
                        plot_width = NULL,
                        header = 0,
                        footer = 0) {
-  margin <- match.arg(margin, c("none", "narrow", "standard", "extrawide", "wide"))
+
+  if (is.character(margin) || is.null(margin)) {
+    margin <- match.arg(margin, c("none", "narrow", "standard", "extrawide", "wide"))
+  }
+
   unit <- match.arg(unit, c("in", "mm", "px", "cm", "npc", "picas", "pc", "pt", "lines", "char", "native"))
 
+  paper_is_df <- FALSE
+
   if (!is.null(paper) && is.character(paper)) {
+
     paper <- get_paper(paper = paper, orientation = orientation)
 
     if (!is.null(plot_width)) {
       dist <- (paper$width - plot_width) / 2
     }
   } else if (is.data.frame(paper)) {
+    paper_is_df <- TRUE
+
     if (!any(c("width", "height", "orientation", "asp", "cols", "rows") %in% names(paper))) {
       usethis::ui_stop("The dataframe provided to paper provided does not appear to include the required columns.")
     }
@@ -314,7 +323,7 @@ get_margin <- function(margin = NULL,
     margin <- margin + grid::unit(x = c(header, 0, 0, footer), unit = unit)
   }
 
-  if (!is.data.frame(paper)) {
+  if (!paper_is_df) {
     return(margin)
   } else {
     # FIXME: This is mainly for the case of get_paper calling get_margin. It could be moved to get_paper or to a separate utility function.
@@ -405,7 +414,7 @@ get_asp <- function(asp = NULL,
                          or a margin class object.")
       }
 
-      margin <- as.numeric(margin)
+      margin <- suppressWarnings(as.numeric(margin))
 
       # Calculate width, height, and aspect ratio for text/plot/map block area
       block_width <- paper$width - (margin[[2]] + margin[[4]])
