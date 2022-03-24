@@ -9,7 +9,7 @@ reference:
   - '`read_sf_ext`'
   - '`write_sf_ext`'
   - '`read_sf_exif`'
-- title: Access spatial data using suggested packages
+- title: Access spatial data from online sources
   contents:
   - '`get_esri_data`'
   - '`get_osm_data`'

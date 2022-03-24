@@ -151,10 +151,27 @@ modify_mapping <- function(mapping = NULL, data = NULL, ...) {
   return(mapping)
 }
 
+#' Eval and parse data
+#'
 #' @noRd
-eval_data <- function(data, package = NULL) {
+use_eval_parse <- function(data, package = NULL) {
   data <- paste0(collapse = "::", c(package, data))
   eval(parse(text = data))
+}
+
+#' Apply function to data
+#'
+#' @param data Data to apply function to
+#' @param fn defaults to NULL
+#' @importFrom rlang as_function
+#' @noRd
+use_fn <- function(data, fn = NULL) {
+  if (!is.null(fn)) {
+    fn <- rlang::as_function(fn)
+    data <- fn(data)
+  }
+
+  return(data)
 }
 
 #' @importFrom ggplot2 theme_set theme_update theme_replace

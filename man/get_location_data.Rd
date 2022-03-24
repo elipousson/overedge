@@ -75,14 +75,14 @@ path. data can be the name of a data object or, if package and filetype are
 provided, a cached or external file.}
 
 \item{url}{url for FeatureServer or MapServer layer to pass to
-get_area_esri_data. url can be provided to data parameter}
+\link{get_esri_data}. url can be provided to data parameter}
 
 \item{path}{path to spatial data file supported by \link[sf:st_read]{sf::read_sf}}
 
 \item{package}{package name.}
 
-\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file
-type must be provided for extdata and cached data.}
+\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file type must be
+provided for extdata and cached data.}
 
 \item{fn}{Function to apply to data before returning.}
 
@@ -109,7 +109,8 @@ supports nested lists created by \link{make_location_data_list} (using only the
 default key names of "location" and "data"). This feature has not be fully
 tested and may result in errors or unexpected results.}
 
-\item{...}{additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg}
+\item{...}{additional parameters passed to \link{read_sf_path}, \link{read_sf_url}, or
+\link{read_sf_pkg} and \link{location_filter}}
 
 \item{load}{If TRUE and class is "list", load data to local environment; defaults FALSE.}
 }

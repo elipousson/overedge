@@ -4,13 +4,16 @@
 #' @param location A sf, sfc, or bbox object or a character string that is an
 #'   address, county GeoID, state name, abbreviation, or GeoID (dist parameters
 #'   are ignored if location is a character string).
+#' @inheritParams st_bbox_ext
 #' @param crop  If `TRUE`, data is cropped to location or bounding box
 #'   [sf::st_crop] adjusted by the `dist`, `diag_ratio`, and `asp` parameters
 #'   provided. Default TRUE.
 #' @param trim  If `TRUE`, data is trimmed to area with [sf::st_intersection].
 #'   This option ignores any `dist`, `diag_ratio`, or `asp` parameters. Default
 #'   `FALSE`.
-#' @inheritParams st_bbox_ext
+#' @param ... Additional parameters; bbox (used instead of location or adjusted
+#'   location), county and state (used with get_counties or get_states), join
+#'   (passed to [sf::st_filter])
 #' @export
 location_filter <- function(data,
                             location = NULL,
@@ -23,7 +26,7 @@ location_filter <- function(data,
                             crop = TRUE,
                             ...) {
   stopifnot(
-    is_sf(data, ext = TRUE)
+    is_sf(data) || is_sfc(data)
   )
 
   params <- rlang::list2(...)
@@ -47,53 +50,73 @@ location_filter <- function(data,
         crs = data,
         class = "bbox"
       )
-  } else if (!is_address_location) {
+  } else {
     bbox <- NULL
-  } else if (is_address_location) {
-    county_in_params <-
-      !is.null(params$county) && !is.null(params$state)
 
-    state_in_params <-
-      !is.null(params$state)
+    if (is_address_location) {
+      county_in_params <-
+        !is.null(params$county) && !is.null(params$state)
 
-    is_state_location <-
-      (location %in% c(us_states$name, us_states$abb, us_states$statefp, us_states$geoid))
+      state_in_params <-
+        !is.null(params$state)
 
-    is_county_location <-
-      (location %in% us_counties$geoid)
+      is_state_location <-
+        (location %in% c(us_states$name, us_states$abb, us_states$statefp, us_states$geoid))
 
-    if (county_in_params) {
-      # FIXME: Update with process for using county and state parameters
-    } else if (state_in_params) {
-      # FIXME: Update with process for using state parameters
-    } else if (is_county_location) {
-      if (location %in% us_counties$geoid) {
-        location <- get_counties(geoid = location, class = "sf")
+      is_county_location <-
+        (location %in% us_counties$geoid)
+
+      if (county_in_params || is_county_location) {
+        usethis::ui_info("location is a U.S. county GeoID.")
+        if (county_in_params) {
+          # FIXME: Update with process for using county and state parameters
+        } else if (is_county_location) {
+          if (location %in% us_counties$geoid) {
+            location <- get_counties(geoid = location, class = "sf")
+          }
+        }
+      } else if (state_in_params || is_state_location) {
+        usethis::ui_info("location is a U.S. state name, abbreviation, or GeoID.")
+        if (state_in_params) {
+          # FIXME: Update with process for using state parameters
+        } else if (is_state_location) {
+          if (location %in% us_states$name) {
+            location <- get_states(name = location, class = "sf")
+          } else if (location %in% us_states$abb) {
+            location <- get_states(abb = location, class = "sf")
+          } else if (location %in% us_states$statefp) {
+            location <- get_states(statefp = location, class = "sf")
+          } else if (location %in% us_states$geoid) {
+            location <- get_states(geoid = location, class = "sf")
+          }
+        }
+      } else {
+        usethis::ui_info("location is a possible address.")
+
+        # Geocode the address
+        location <-
+          tidygeocoder::geo(
+            address = location,
+            long = "lon",
+            lat = "lat"
+          )
+
+        # Convert address df to sf
+        location <- df_to_sf(location, coords = c("lon", "lat"), crs = data)
       }
-    } else if (is_state_location) {
-      if (location %in% us_states$name) {
-        location <- get_states(name = location, class = "sf")
-      } else if (location %in% us_states$abb) {
-        location <- get_states(abb = location, class = "sf")
-      } else if (location %in% us_states$statefp) {
-        location <- get_states(statefp = location, class = "sf")
-      } else if (location %in% us_states$geoid) {
-        location <- get_states(geoid = location, class = "sf")
-      }
-    } else {
-      # Geocode the address
-      location <-
-        tidygeocoder::geo(
-          address = location,
-          long = "lon",
-          lat = "lat"
-        )
 
-      # Convert address df to sf
-      location <- df_to_sf(location, coords = c("lon", "lat"), crs = data)
+      is_sf_location <- TRUE
     }
+  }
 
-    is_sf_location <- TRUE
+  stopifnot(
+    is.null(bbox) || is_bbox(bbox)
+  )
+
+  is_lonlat <- sf::st_is_longlat(data)
+
+  if (is_lonlat) {
+    suppressMessages(sf::sf_use_s2(FALSE))
   }
 
   if (is_sf_location) {
@@ -124,7 +147,19 @@ location_filter <- function(data,
       }
     }
   } else if (is_sf_location) {
-    data <- sf::st_filter(x = data, y = location)
+    if (st_geom_type(location)$POINTS) {
+      location <- st_buffer_ext(x = location, dist = 0.00000001)
+    }
+
+    if (!is.null(params$join)) {
+      data <- sf::st_filter(x = data, y = location, join = params$join)
+    } else {
+      data <- sf::st_filter(x = data, y = location)
+    }
+  }
+
+  if (is_lonlat) {
+    suppressMessages(sf::sf_use_s2(TRUE))
   }
 
   return(data)

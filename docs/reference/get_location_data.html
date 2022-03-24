@@ -146,14 +146,14 @@ path. data can be the name of a data object or, if package and filetype are
 provided, a cached or external file.</p></dd>
 <dt>url</dt>
 <dd><p>url for FeatureServer or MapServer layer to pass to
-get_area_esri_data. url can be provided to data parameter</p></dd>
+<a href="get_esri_data.html">get_esri_data</a>. url can be provided to data parameter</p></dd>
 <dt>path</dt>
 <dd><p>path to spatial data file supported by <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a></p></dd>
 <dt>package</dt>
 <dd><p>package name.</p></dd>
 <dt>filetype</dt>
-<dd><p>file type supported by <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>. The file
-type must be provided for extdata and cached data.</p></dd>
+<dd><p>file type supported by <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>. The file type must be
+provided for extdata and cached data.</p></dd>
 <dt>fn</dt>
 <dd><p>Function to apply to data before returning.</p></dd>
 <dt>crop</dt>
@@ -180,7 +180,8 @@ supports nested lists created by <a href="make_location_data_list.html">make_loc
 default key names of "location" and "data"). This feature has not be fully
 tested and may result in errors or unexpected results.</p></dd>
 <dt>...</dt>
-<dd><p>additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg</p></dd>
+<dd><p>additional parameters passed to <a href="read_sf_ext.html">read_sf_path</a>, <a href="read_sf_ext.html">read_sf_url</a>, or
+<a href="read_sf_ext.html">read_sf_pkg</a> and <a href="location_filter.html">location_filter</a></p></dd>
 <dt>load</dt>
 <dd><p>If TRUE and class is "list", load data to local environment; defaults FALSE.</p></dd>
 </dl></div>

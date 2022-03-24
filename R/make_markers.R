@@ -71,14 +71,11 @@ make_markers <- function(data,
     data <- suppressWarnings(sf::st_centroid(data))
   }
 
-  if (!is.null(fn)) {
-    if (!is.null(groupname_col)) {
-      usethis::ui_warn("Function passed to fn is being applied to grouped data.")
-    }
-
-    fn <- rlang::as_function(fn)
-    data <- fn(data)
+  if (!is.null(groupname_col) && !is.null(fn)) {
+    usethis::ui_warn("Function passed to fn is being applied to grouped data.")
   }
+
+  data <- use_fn(data, fn)
 
   return(data)
 }

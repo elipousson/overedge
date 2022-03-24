@@ -112,6 +112,10 @@ This option ignores any <code>dist</code>, <code>diag_ratio</code>, or <code>asp
 <dd><p>If <code>TRUE</code>, data is cropped to location or bounding box
 <a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">sf::st_crop</a> adjusted by the <code>dist</code>, <code>diag_ratio</code>, and <code>asp</code> parameters
 provided. Default TRUE.</p></dd>
+<dt>...</dt>
+<dd><p>Additional parameters; bbox (used instead of location or adjusted
+location), county and state (used with get_counties or get_states), join
+(passed to <a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">sf::st_filter</a>)</p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

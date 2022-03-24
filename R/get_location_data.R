@@ -20,11 +20,11 @@
 #'   path. data can be the name of a data object or, if package and filetype are
 #'   provided, a cached or external file.
 #' @param url url for FeatureServer or MapServer layer to pass to
-#'   get_area_esri_data. url can be provided to data parameter
+#'   [get_esri_data]. url can be provided to data parameter
 #' @param path path to spatial data file supported by [sf::read_sf]
 #' @param package package name.
-#' @param filetype file type supported by [sf::read_sf]. The file
-#'   type must be provided for extdata and cached data.
+#' @param filetype file type supported by [sf::read_sf]. The file type must be
+#'   provided for extdata and cached data.
 #' @param fn Function to apply to data before returning.
 #' @inheritParams location_filter
 #' @param from_crs coordinate reference system of the data.
@@ -38,7 +38,8 @@
 #'   supports nested lists created by [make_location_data_list] (using only the
 #'   default key names of "location" and "data"). This feature has not be fully
 #'   tested and may result in errors or unexpected results.
-#' @param ... additional parameters passed to read_sf_path, read_sf_url, or read_sf_pkg
+#' @param ... additional parameters passed to [read_sf_path], [read_sf_url], or
+#'   [read_sf_pkg] and [location_filter]
 #' @rdname get_location_data
 #' @export
 #' @importFrom usethis ui_yeah ui_warn
@@ -95,8 +96,6 @@ get_location_data <- function(location = NULL,
     }
   }
 
-  params <- rlang::list2(...)
-
   if (!is.null(location)) {
     # Get adjusted bounding box using any adjustment variables provided
     bbox <-
@@ -109,9 +108,9 @@ get_location_data <- function(location = NULL,
         crs = from_crs
       )
   } else {
-    # FIXME: document the option of passing a bounding box directly via the params
+    # FIXME: cannot pass the bbox via params but that is OK
     # If a bounding box is not in the params this should pass NULL but I need to double-check
-    bbox <- params$bbox
+    bbox <- NULL # params$bbox
   }
 
   if (is_bbox(data)) {
@@ -119,7 +118,7 @@ get_location_data <- function(location = NULL,
   }
 
   # Check if data is not an  sf object
-  # FIXME: The read_sf_ext function I started handles this tupe of checking and switching
+  # FIXME: The read_sf_ext function I started handles this type of checking and switching
   if (!(is_sf(data))) {
 
     # Check if data is a url
@@ -140,21 +139,20 @@ get_location_data <- function(location = NULL,
     }
   }
 
-  # FIXME: Add filter
+  # FIXME: Document how the filter works
   data <-
     location_filter(
       data = data,
       location = location,
       bbox = bbox,
       trim = trim,
-      crop = crop
+      crop = crop,
+      ...
     )
 
-  # TODO: Is the following pattern of applying fn, setting col based on ... and converting the class something that should be pulled into a separate utility function?
-  if (!is.null(fn)) {
-    fn <- rlang::as_function(fn)
-    data <- fn(data)
-  }
+  data <- use_fn(data = data, fn = fn)
+
+  params <- rlang::list2(...)
 
   if (!is.null(params$col)) {
     col <- params$col
@@ -162,6 +160,7 @@ get_location_data <- function(location = NULL,
     col <- NULL
   }
 
+  # TODO: Is the following pattern of setting col based on ... and converting the class something that should be pulled into a separate utility function?
   data <- as_sf_class(x = data, class = class, crs = crs, col = col)
 
   return(data)

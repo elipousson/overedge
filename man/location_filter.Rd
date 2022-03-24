@@ -49,6 +49,10 @@ This option ignores any \code{dist}, \code{diag_ratio}, or \code{asp} parameters
 \item{crop}{If \code{TRUE}, data is cropped to location or bounding box
 \link[sf:st_crop]{sf::st_crop} adjusted by the \code{dist}, \code{diag_ratio}, and \code{asp} parameters
 provided. Default TRUE.}
+
+\item{...}{Additional parameters; bbox (used instead of location or adjusted
+location), county and state (used with get_counties or get_states), join
+(passed to \link[sf:st_join]{sf::st_filter})}
 }
 \description{
 Filter data by location

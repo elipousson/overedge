@@ -6,15 +6,27 @@
 #' associated package. Optionally provide a bounding box to filter data (not
 #' supported for all data types).
 #'
-#' @details Reading data from a package with `read_sf_pkg`:
+#' @details Reading data from a package:
 #'
-#' [read_sf_pkg()] looks for three types of package data:
+#' [read_sf_pkg] looks for three types of package data:
 #'
-#'   = Data loaded with the package
+#'   - Data loaded with the package
 #'   - External data in the `extdata` system files folder.
 #'   - Cached data in the cache directory returned by [rappdirs::user_cache_dir]
 #'
-#' @param path A file path; used by [read_sf_path()] only
+#' @details Additional ... parameters:
+#'
+#' [read_sf_pkg] and [read_sf_download] both pass additional parameters
+#' to [read_sf_path] which supports query, name_col, name, and table. name and
+#' name_col are ignored if a query parameter is provided. If table is not
+#' provided, a expected layer name is created based on the file path.
+#'
+#' [read_sf_url] pass the where, name_col, and name for any ArcGIS FeatureServer or
+#' MapServer url (passed to [get_esri_data]) or sheet if the url is for a Google
+#' Sheet (passed to [googlesheets4::read_sheet]), or a query or wkt filter
+#' parameter if the url is some other type (passed to [sf::read_sf]).
+#'
+#' @param path A file path; used by [read_sf_path()] only.
 #' @param url A url for a spatial data file or for ArcGIS FeatureServer or
 #'   MapServer to access with [get_esri_data()]; used by [read_sf_url()] only
 #' @param data character; name of data; used by [read_sf_pkg()] only
@@ -25,9 +37,8 @@
 #' @param bbox A bounding box object; Default: `NULL`. If "bbox" is provided,
 #'   read_sf only returns features intersecting the bounding box.
 #' @param coords Character vector with coordinate values; used for
-#'   [read_sf_url()] if the "url" is a Google Sheet
-#' @param ... additional parameters passed to [sf::read_sf()]. May include query
-#'   parameter.
+#'   [read_sf_url()] if the "url" is a Google Sheet.
+#' @param ... additional parameters passed to multiple functions; see details.
 #' @name read_sf_ext
 #' @family read_write
 NULL
@@ -95,6 +106,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 #' @export
 #' @importFrom sf read_sf
 read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
+  params <- rlang::list2(...)
 
   # Check url
   check_url(url)
@@ -104,21 +116,42 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
     data <- get_esri_data(
       location = bbox,
       url = url,
-      ...
+      name_col = params$name_col,
+      name = params$name,
+      where = params$where
     )
-  } else if (check_gsheet_url(url)) {
-    data <- googlesheets4::read_sheet(ss = url, ...)
-
-    coords <- check_coords(x = data, coords = coords)
-
-    data <- df_to_sf(data, coords = coords)
   } else {
-    # TODO: Check if it is possible to use a WKT filter
-    # when reading data from a url (e.g. a hosted GeoJSON file)
-    data <- sf::read_sf(
-      dsn = url,
-      ...
-    )
+    if (check_gsheet_url(url)) {
+      data <- googlesheets4::read_sheet(ss = url, sheet = params$sheet)
+
+      coords <- check_coords(x = data, coords = coords)
+
+      data <- df_to_sf(data, coords = coords)
+    } else {
+      # FIXME: This is an awkward way to reset back to defaults
+      if (is.null(params$query)) {
+        query <- NA
+      } else {
+        query <- params$query
+      }
+
+      if (is.null(params$wkt_filter)) {
+        wkt_filter <- character(0)
+      } else {
+        wkt_filter <- params$wkt_filter
+      }
+
+      # TODO: Check if it is possible to use a WKT filter
+      # when reading data from a url (e.g. a hosted GeoJSON file)
+      data <- sf::read_sf(
+        dsn = url,
+        query = query,
+        wkt_filter = wkt_filter
+      )
+
+      # FIXME: This should be documented and maybe should be the default but optional
+      data <- sf::st_zm(data)
+    }
   }
 
   return(data)
@@ -137,7 +170,7 @@ read_sf_pkg <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
   pkg_files <- utils::data(package = package)$results[, "Item"]
 
   if (data %in% pkg_files) {
-    return(eval_data(data = data, package = package))
+    return(use_eval_parse(data = data, package = package))
   }
 
   if (stringr::str_detect(data, "\\.")) {
@@ -197,11 +230,10 @@ read_sf_download <-
     utils::download.file(
       url = url,
       destfile = destfile,
-      method = method,
-      ...
+      method = method
     )
 
-    data <- read_sf_path(path = destfile, bbox = bbox)
+    data <- read_sf_path(path = destfile, bbox = bbox, ...)
 
     return(data)
   }

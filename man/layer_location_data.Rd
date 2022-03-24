@@ -61,8 +61,8 @@ without modification.}
 
 \item{package}{package name.}
 
-\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file
-type must be provided for extdata and cached data.}
+\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file type must be
+provided for extdata and cached data.}
 
 \item{fn}{Function to apply to data before returning.}
 

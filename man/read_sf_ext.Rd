@@ -27,19 +27,18 @@ read_sf_download(
 )
 }
 \arguments{
-\item{path}{A file path; used by \code{\link[=read_sf_path]{read_sf_path()}} only}
+\item{path}{A file path; used by \code{\link[=read_sf_path]{read_sf_path()}} only.}
 
 \item{bbox}{A bounding box object; Default: \code{NULL}. If "bbox" is provided,
 read_sf only returns features intersecting the bounding box.}
 
-\item{...}{additional parameters passed to \code{\link[sf:st_read]{sf::read_sf()}}. May include query
-parameter.}
+\item{...}{additional parameters passed to multiple functions; see details.}
 
 \item{url}{A url for a spatial data file or for ArcGIS FeatureServer or
 MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by \code{\link[=read_sf_url]{read_sf_url()}} only}
 
 \item{coords}{Character vector with coordinate values; used for
-\code{\link[=read_sf_url]{read_sf_url()}} if the "url" is a Google Sheet}
+\code{\link[=read_sf_url]{read_sf_url()}} if the "url" is a Google Sheet.}
 
 \item{data}{character; name of data; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only}
 
@@ -72,15 +71,26 @@ associated package. Optionally provide a bounding box to filter data (not
 supported for all data types).
 }
 \details{
-Reading data from a package with \code{read_sf_pkg}:
+Reading data from a package:
 
-\code{\link[=read_sf_pkg]{read_sf_pkg()}} looks for three types of package data:
-
-= Data loaded with the package
+\link{read_sf_pkg} looks for three types of package data:
 \itemize{
+\item Data loaded with the package
 \item External data in the \code{extdata} system files folder.
 \item Cached data in the cache directory returned by \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}
 }
+
+Additional ... parameters:
+
+\link{read_sf_pkg} and \link{read_sf_download} both pass additional parameters
+to \link{read_sf_path} which supports query, name_col, name, and table. name and
+name_col are ignored if a query parameter is provided. If table is not
+provided, a expected layer name is created based on the file path.
+
+\link{read_sf_url} pass the where, name_col, and name for any ArcGIS FeatureServer or
+MapServer url (passed to \link{get_esri_data}) or sheet if the url is for a Google
+Sheet (passed to \link[googlesheets4:range_read]{googlesheets4::read_sheet}), or a query or wkt filter
+parameter if the url is some other type (passed to \link[sf:st_read]{sf::read_sf}).
 }
 \seealso{
 Other read_write: 
