@@ -30,6 +30,24 @@
 #'   is `TRUE`.
 #' @return A data frame with photo information or `sf` object with geometry
 #'   based on latitude and longitude of geocoded photos.
+#'
+#' @details License id options:
+#'
+#' license_id can be an integer from 0 to 10 or a corresponding license code
+#' including:
+#'
+#' - "c" (All Rights Reserved),
+#' - "by-bc-sa" (Attribution-NonCommercial-ShareAlike),
+#' - "by-nc" (Attribution-NonCommercial),
+#' - "by-nc-nd" (Attribution-NonCommercial-NoDerivs),
+#' - "by" (Attribution),
+#' - "by-sa" (Attribution-ShareAlike),
+#' - "by-nd" (Attribution-NoDerivs),
+#' - "nkc" (No known copyright restrictions),
+#' - "pd-us" (United States Government Work),
+#' - "cc0" (Public Domain Dedication),
+#' - or "pd" (Public Domain Mark).
+#'
 #' @seealso
 #'  \code{\link[FlickrAPI]{getPhotoSearch}}
 #' @rdname get_flickr_photos
@@ -73,45 +91,6 @@ get_flickr_photos <- function(api_key = NULL,
     bbox <- NULL
   }
 
-  if (geometry) {
-    # Always include geo in the extras if geometry is TRUE
-    extras <- unique(c(extras, "geo"))
-  }
-
-  if (!is.null(sort)) {
-    if (desc) {
-      dir <- "-desc"
-    } else {
-      dir <- "-asc"
-    }
-
-    sort <-
-      match.arg(
-        sort,
-        c(
-          paste0(c("date-posted", "date-taken", "interestingness"), dir),
-          "relevance"
-        )
-      )
-  }
-
-  if (!is.null(img_size)) {
-    img_size <-
-      match.arg(
-        img_size,
-        c("sq", "t", "s", "q", "m", "n", "z", "c", "l", "o"),
-        several.ok = TRUE
-      )
-
-    extras <-
-      unique(
-        c(
-          extras,
-          paste0("url_", img_size)
-        )
-      )
-  }
-
   if (length(page) > 1) {
     purrr::map_dfr(
       page,
@@ -119,7 +98,9 @@ get_flickr_photos <- function(api_key = NULL,
         api_key = api_key,
         user_id = user_id,
         tags = tags,
-        licence_id = license_id,
+        img_size = img_size,
+        geo = geometry,
+        license_id = license_id,
         sort = sort,
         bbox = bbox,
         extras = extras,
@@ -133,7 +114,9 @@ get_flickr_photos <- function(api_key = NULL,
         api_key = api_key,
         user_id = user_id,
         tags = tags,
-        licence_id = license_id,
+        img_size = img_size,
+        geo = geometry,
+        license_id = license_id,
         sort = sort,
         bbox = bbox,
         extras = extras,
@@ -142,20 +125,7 @@ get_flickr_photos <- function(api_key = NULL,
       )
   }
 
-  if (length(img_size) == 1) {
-    image_url <- paste0("url_", img_size)
-    image_height <- paste0("height_", img_size)
-    image_width <- paste0("width_", img_size)
-
-    photos <-
-      dplyr::rename(
-        photos,
-        image_url = {{ image_url }},
-        image_width = {{ image_width }},
-        image_height = {{ image_height }}
-      )
-
-    if (!is.null(orientation)) {
+    if (!is.null(orientation) && (length(img_size) == 1)) {
       orientation <-
         match.arg(
           orientation,
@@ -167,8 +137,8 @@ get_flickr_photos <- function(api_key = NULL,
         dplyr::mutate(
           photos,
           img_orientation = dplyr::case_when(
-            (image_width / image_height) > 1 ~ "landscape",
-            (image_width / image_height) < 1 ~ "portrait",
+            (img_width / img_height) > 1 ~ "landscape",
+            (img_width / img_height) < 1 ~ "portrait",
             TRUE ~ "square"
           )
         )
@@ -178,13 +148,11 @@ get_flickr_photos <- function(api_key = NULL,
           photos,
           img_orientation %in% orientation
         )
-    }
   }
 
   if (geometry) {
-    photos_sf <- df_to_sf(x = photos, coords = c("longitude", "latitude"), crs = crs)
-    return(photos_sf)
-  } else {
-    return(photos)
+    photos <- df_to_sf(x = photos, coords = c("longitude", "latitude"), crs = crs)
   }
+
+  return(photos)
 }

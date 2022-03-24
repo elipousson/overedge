@@ -121,14 +121,7 @@ isn't passed then everybody's public photos will be searched.</p></dd>
 <dd><p>A vector of tags you wish to search for.</p></dd>
 <dt>license_id</dt>
 <dd><p>The license id for photos (for possible values see the
-Flickr API method flickr.photos.licenses.getInfo). license_id can be an
-integer from 0 to 10 or a corresponding license code including "c" (All
-Rights Reserved), "by-bc-sa" (Attribution-NonCommercial-ShareAlike),
-"by-nc" (Attribution-NonCommercial), "by-nc-nd"
-(Attribution-NonCommercial-NoDerivs), "by" (Attribution), "by-sa"
-(Attribution-ShareAlike), "by-nd" (Attribution-NoDerivs), "nkc" (No known
-copyright restrictions), "pd-us" (United States Government Work), "cc0"
-(Public Domain Dedication), or "pd" (Public Domain Mark).</p></dd>
+Flickr API method flickr.photos.licenses.getInfo). See details for more information.</p></dd>
 <dt>sort</dt>
 <dd><p>Supported options include "date-posted","date-taken",
 "interestingness", or "relevance"</p></dd>
@@ -163,6 +156,22 @@ is <code>TRUE</code>.</p></dd>
     <p>A data frame with photo information or <code>sf</code> object with geometry
 based on latitude and longitude of geocoded photos.</p>
     </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>License id options:</p>
+<p>license_id can be an integer from 0 to 10 or a corresponding license code
+including:</p><ul><li><p>"c" (All Rights Reserved),</p></li>
+<li><p>"by-bc-sa" (Attribution-NonCommercial-ShareAlike),</p></li>
+<li><p>"by-nc" (Attribution-NonCommercial),</p></li>
+<li><p>"by-nc-nd" (Attribution-NonCommercial-NoDerivs),</p></li>
+<li><p>"by" (Attribution),</p></li>
+<li><p>"by-sa" (Attribution-ShareAlike),</p></li>
+<li><p>"by-nd" (Attribution-NoDerivs),</p></li>
+<li><p>"nkc" (No known copyright restrictions),</p></li>
+<li><p>"pd-us" (United States Government Work),</p></li>
+<li><p>"cc0" (Public Domain Dedication),</p></li>
+<li><p>or "pd" (Public Domain Mark).</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/FlickrAPI/man/getPhotoSearch.html" class="external-link">getPhotoSearch</a></code></p></div>
