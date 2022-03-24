@@ -68,7 +68,11 @@
 
 <span class="fu">st_center</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
+<span class="fu">st_square</span><span class="op">(</span><span class="va">x</span>, scale <span class="op">=</span> <span class="fl">1</span>, rotate <span class="op">=</span> <span class="fl">0</span>, inscribed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
 <span class="fu">st_inscribed_square</span><span class="op">(</span><span class="va">x</span>, scale <span class="op">=</span> <span class="fl">1</span>, rotate <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+
+<span class="fu">st_circle</span><span class="op">(</span><span class="va">x</span>, scale <span class="op">=</span> <span class="fl">1</span>, inscribed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="fu">st_circumscribed_circle</span><span class="op">(</span><span class="va">x</span>, scale <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
@@ -88,6 +92,8 @@
 POLYGONS, LINESTRING, and the returned types.</p></dd>
 <dt>...</dt>
 <dd><p>Additional parameters passed to <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_centroid()</a></code> by st_center</p></dd>
+<dt>inscribed</dt>
+<dd><p>If TRUE, make circle or square inscribed within x, if FALSE, make it circumscribed.</p></dd>
 <dt>check</dt>
 <dd><p>If "POINT", check if geometry type is POINT. Same for all
 available geometry types; Default: NULL</p></dd>

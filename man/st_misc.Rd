@@ -4,7 +4,9 @@
 \alias{st_misc}
 \alias{st_scale_rotate}
 \alias{st_center}
+\alias{st_square}
 \alias{st_inscribed_square}
+\alias{st_circle}
 \alias{st_circumscribed_circle}
 \alias{st_geom_type}
 \title{Modify the geometry of a simple feature or bounding box object}
@@ -13,7 +15,11 @@ st_scale_rotate(x, scale = 1, rotate = 0)
 
 st_center(x, ext = TRUE, ...)
 
+st_square(x, scale = 1, rotate = 0, inscribed = FALSE)
+
 st_inscribed_square(x, scale = 1, rotate = 0)
+
+st_circle(x, scale = 1, inscribed = FALSE)
 
 st_circumscribed_circle(x, scale = 1)
 
@@ -30,6 +36,8 @@ st_geom_type(x, ext = TRUE, check = NULL, by_geometry = FALSE)
 POLYGONS, LINESTRING, and the returned types.}
 
 \item{...}{Additional parameters passed to \code{sf::st_centroid()} by st_center}
+
+\item{inscribed}{If TRUE, make circle or square inscribed within x, if FALSE, make it circumscribed.}
 
 \item{check}{If "POINT", check if geometry type is POINT. Same for all
 available geometry types; Default: NULL}
