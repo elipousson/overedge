@@ -39,13 +39,9 @@ A numeric aspect ratio.
 Get aspect ratio from string or based on specific paper and margins
 }
 \examples{
-\dontrun{
-if (interactive()) {
-  get_asp("1:2")
+get_asp("1:2")
 
-  get_asp(11 / 17)
+get_asp(11 / 17)
 
-  get_asp(paper = "letter")
-}
-}
+get_asp(paper = "letter")
 }

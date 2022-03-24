@@ -32,7 +32,7 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
     x_coords <- x
   }
 
-  geom_type <- overedge::st_geom_type(x_coords, ext = FALSE)
+  geom_type <- is_geom_type(x_coords, ext = FALSE)
 
   if (geometry == "wkt") {
     # Convert geometry to wkt
@@ -42,7 +42,7 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
     # Convert to coordinates at centroid or as a point on surface
     # FIXME: This approach may be an issue if a sf object has mixed geometry
 
-    if (st_geom_type(x_coords, ext = FALSE) != "POINT") {
+    if (is_geom_type(x_coords, ext = FALSE) != "POINT") {
       if (geometry == "centroid") {
         # FIXME: Double check that this doesn't cause issues for sfc objects
         x_coords <- st_center(x_coords, ext = FALSE)

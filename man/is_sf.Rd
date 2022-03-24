@@ -5,10 +5,12 @@
 \alias{is_sfc}
 \alias{is_bbox}
 \alias{is_sf_list}
-\alias{is_same_crs}
 \alias{is_raster}
 \alias{is_sp}
-\title{Check the class and attributes of a simple feature object}
+\alias{is_same_crs}
+\alias{is_same_area}
+\alias{is_same_dist}
+\title{What is the class or attributes of this feature?}
 \usage{
 is_sf(x, ext = FALSE)
 
@@ -18,11 +20,15 @@ is_bbox(x)
 
 is_sf_list(x, is_named = FALSE, ext = FALSE)
 
-is_same_crs(x, y)
-
 is_raster(x)
 
 is_sp(x)
+
+is_same_crs(x, y)
+
+is_same_area(x, y)
+
+is_same_dist(x, y, dist = NULL)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
@@ -36,12 +42,13 @@ not; defaults to \code{FALSE}. (used by \link{is_sf})}
 \link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{is_same_crs})}
 }
 \description{
-Check the class and attributes of a simple feature object
+What is the class or attributes of this feature?
 }
 \details{
 \itemize{
-\item \link{is_sf}: check if x it a \code{sf} class object.
-\item \link{is_bbox}: check if x is a \code{bbox} class object.
-\item \link{is_sf_list}: check if x is a named list of \code{sf} class objects.
+\item \link{is_sf}: is x a \code{sf} class object?
+\item \link{is_bbox}: is x is a \code{bbox} class object?
+\item \link{is_sf_list}: is x is a list of \code{sf} class objects (with or without names)?
+\item 
 }
 }

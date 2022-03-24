@@ -67,7 +67,7 @@ make_markers <- function(data,
   }
 
   # Convert to POINT if any other geometry
-  if (!all(st_geom_type(data, check = c("POINT", "MULTIPOINT"))) && point) {
+  if (!all(is_geom_type(data, type = c("POINT", "MULTIPOINT"))) && point) {
     data <- suppressWarnings(sf::st_centroid(data))
   }
 

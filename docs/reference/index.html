@@ -162,9 +162,14 @@ location</dd>
 
       <dl><dt>
           
-          <code><a href="is_sf.html">is_sf()</a></code> <code><a href="is_sf.html">is_sfc()</a></code> <code><a href="is_sf.html">is_bbox()</a></code> <code><a href="is_sf.html">is_sf_list()</a></code> <code><a href="is_sf.html">is_same_crs()</a></code> <code><a href="is_sf.html">is_raster()</a></code> <code><a href="is_sf.html">is_sp()</a></code> 
+          <code><a href="is_sf.html">is_sf()</a></code> <code><a href="is_sf.html">is_sfc()</a></code> <code><a href="is_sf.html">is_bbox()</a></code> <code><a href="is_sf.html">is_sf_list()</a></code> <code><a href="is_sf.html">is_raster()</a></code> <code><a href="is_sf.html">is_sp()</a></code> <code><a href="is_sf.html">is_same_crs()</a></code> <code><a href="is_sf.html">is_same_area()</a></code> <code><a href="is_sf.html">is_same_dist()</a></code> 
         </dt>
-        <dd>Check the class and attributes of a simple feature object</dd>
+        <dd>What is the class or attributes of this feature?</dd>
+      </dl><dl><dt>
+          
+          <code><a href="is_geom_type.html">is_geom_type()</a></code> <code><a href="is_geom_type.html">is_point()</a></code> <code><a href="is_geom_type.html">is_multipoint()</a></code> <code><a href="is_geom_type.html">is_string()</a></code> <code><a href="is_geom_type.html">is_multistring()</a></code> <code><a href="is_geom_type.html">is_polygon()</a></code> <code><a href="is_geom_type.html">is_multipolygon()</a></code> 
+        </dt>
+        <dd>What geometry type is this feature?</dd>
       </dl><dl><dt>
           
           <code><a href="as_sf.html">as_sf()</a></code> <code><a href="as_sf.html">as_bbox()</a></code> <code><a href="as_sf.html">as_sfc()</a></code> <code><a href="as_sf.html">as_sf_list()</a></code> 
@@ -175,6 +180,11 @@ location</dd>
           <code><a href="sf_to_df.html">sf_to_df()</a></code> <code><a href="sf_to_df.html">df_to_sf()</a></code> <code><a href="sf_to_df.html">check_coords()</a></code> 
         </dt>
         <dd>Convert between simple feature and data frame objects</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sfc()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_expand()</a></code> 
+        </dt>
+        <dd>Measure, transform, and convert bounding boxes</dd>
       </dl><dl><dt>
           
           <code><a href="st_bbox_ext.html">st_bbox_ext()</a></code> <code><a href="st_bbox_ext.html">st_bbox_asp()</a></code> 
@@ -197,9 +207,29 @@ location</dd>
         <dd>Cast geometry to another type</dd>
       </dl><dl><dt>
           
-          <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sfc()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_expand()</a></code> 
+          <code><a href="st_bearing.html">st_bearing()</a></code> 
         </dt>
-        <dd>Measure, transform, and convert bounding boxes</dd>
+        <dd>Get bearing from simple feature objects with LINESTRING geometry</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_clip.html">st_clip()</a></code> 
+        </dt>
+        <dd>Clip the side or corner of a simple feature or bounding box object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_coords.html">st_coords()</a></code> 
+        </dt>
+        <dd>Get coordinates for a simple feature or bounding box object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_erase.html">st_erase()</a></code> 
+        </dt>
+        <dd>Erase an area of a simple feature object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_misc.html">st_scale_rotate()</a></code> <code><a href="st_misc.html">st_center()</a></code> <code><a href="st_misc.html">st_square()</a></code> <code><a href="st_misc.html">st_inscribed_square()</a></code> <code><a href="st_misc.html">st_circle()</a></code> <code><a href="st_misc.html">st_circumscribed_circle()</a></code> 
+        </dt>
+        <dd>Modify the geometry of a simple feature or bounding box object</dd>
       </dl></div><div class="section level2">
       <h2 id="create-view-and-combine-simple-feature-and-bounding-box-objects">Create, view, and combine simple feature and bounding box objects<a class="anchor" aria-label="anchor" href="#create-view-and-combine-simple-feature-and-bounding-box-objects"></a></h2>
       
@@ -236,51 +266,6 @@ location</dd>
           <code><a href="number_markers.html">number_features()</a></code> 
         </dt>
         <dd>Sort and number features</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_bbox_ext.html">st_bbox_ext()</a></code> <code><a href="st_bbox_ext.html">st_bbox_asp()</a></code> 
-        </dt>
-        <dd>Get a bounding box buffered to match an aspect ratio</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_bearing.html">st_bearing()</a></code> 
-        </dt>
-        <dd>Get bearing from simple feature objects with LINESTRING geometry</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_buffer_ext.html">st_buffer_ext()</a></code> <code><a href="st_buffer_ext.html">st_edge()</a></code> 
-        </dt>
-        <dd>Buffer a simple feature or bounding box object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_cast_ext.html">st_cast_ext()</a></code> 
-        </dt>
-        <dd>Cast geometry to another type</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_clip.html">st_clip()</a></code> 
-        </dt>
-        <dd>Clip the side or corner of a simple feature or bounding box object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_coords.html">st_coords()</a></code> 
-        </dt>
-        <dd>Get coordinates for a simple feature or bounding box object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_erase.html">st_erase()</a></code> 
-        </dt>
-        <dd>Erase an area of a simple feature object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_misc.html">st_scale_rotate()</a></code> <code><a href="st_misc.html">st_center()</a></code> <code><a href="st_misc.html">st_square()</a></code> <code><a href="st_misc.html">st_inscribed_square()</a></code> <code><a href="st_misc.html">st_circle()</a></code> <code><a href="st_misc.html">st_circumscribed_circle()</a></code> <code><a href="st_misc.html">st_geom_type()</a></code> 
-        </dt>
-        <dd>Modify the geometry of a simple feature or bounding box object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="st_transform_ext.html">st_transform_ext()</a></code> 
-        </dt>
-        <dd>Transform or convert coordinates of a simple feature or bounding box object</dd>
       </dl><dl><dt>
           
           <code><a href="mapview_ext.html">mapview_col()</a></code> <code><a href="mapview_ext.html">mapview_exif()</a></code> <code><a href="mapview_ext.html">mapview_flickr()</a></code> <code><a href="mapview_ext.html">make_img_leafpop()</a></code> 

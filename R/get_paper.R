@@ -33,16 +33,7 @@
 #' @param ... Additional parameters passed to get_margin. plot_width can only be
 #'   passed in these parameters if paper has only a single row. margin is returned as a list column.
 #' @return Data frame with one or more paper/image sizes.
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   get_paper("letter")
-#'
-#'   get_paper(paper = NULL, standard = "ISO", series = "A", size = 4)
-#'
-#'   get_paper(width = 11, height = 17)
-#' }
-#' }
+#' @example examples/get_paper.R
 #' @rdname get_paper
 #' @export
 #' @importFrom dplyr filter select mutate
@@ -213,18 +204,7 @@ get_paper <- function(paper = "letter",
 #' @inheritParams get_paper
 #' @return A \code{\link[ggplot2]{margin}} element intended for use with
 #'   \code{\link[ggplot2]{element_rect}} and the `plot.background` theme element.
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   get_margin("standard")
-#'
-#'   get_margin("none")
-#'
-#'   get_margin(dist = 25, unit = "mm")
-#'
-#'   get_margin(paper = "letter", plot_width = 5.5)
-#' }
-#' }
+#' @example examples/get_margin.R
 #' @seealso
 #'  \code{\link[ggplot2]{margin}}
 #' @rdname get_margin
@@ -361,16 +341,7 @@ get_margin <- function(margin = NULL,
 #' @param block_asp If `TRUE`, get aspect ratio of the map/plot area (not
 #'   including the margins); defaults to `FALSE`.
 #' @return A numeric aspect ratio.
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   get_asp("1:2")
-#'
-#'   get_asp(11 / 17)
-#'
-#'   get_asp(paper = "letter")
-#' }
-#' }
+#' @example examples/get_asp.R
 #' @rdname get_asp
 #' @export
 #' @importFrom stringr str_detect str_extract
@@ -405,7 +376,7 @@ get_asp <- function(asp = NULL,
         margin <- get_margin(margin = margin, paper = paper$name, orientation = orientation, unit = unit)
       } else if (is.numeric(margin)) {
         margin <- get_margin(dist = margin, unit = unit)
-      } else if (!is_class(margin, check = "margin")) {
+      } else if (!is_class(margin, classes = "margin")) {
         usethis::ui_stop("margin must be either a character string matching the margin options ('none', 'narrow', 'standard', 'wide', or 'extrawide'),
                          a numeric vector that can be passed to the dist parameter of get_margins,
                          or a margin class object.")

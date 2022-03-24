@@ -15,7 +15,7 @@
 #' @export
 #' @importFrom sf st_cast
 st_cast_ext <- function(x, to = "POINT", simplify = TRUE, ...) {
-  geom_type <- st_geom_type(x, ext = FALSE)
+  geom_type <- is_geom_type(x, ext = FALSE)
 
   if (any(geom_type %in% c("MULTIPOLYGON", "POLYGON")) && simplify) {
     repeat {
@@ -27,7 +27,7 @@ st_cast_ext <- function(x, to = "POINT", simplify = TRUE, ...) {
         )
 
       x <- sf::st_cast(x, to = type_to, warn = FALSE, ...)
-      geom_type <- st_geom_type(x, ext = FALSE)
+      geom_type <- is_geom_type(x, ext = FALSE)
 
       if (geom_type == to) break
     }
@@ -39,7 +39,7 @@ st_cast_ext <- function(x, to = "POINT", simplify = TRUE, ...) {
         )
 
       x <- sf::st_cast(x, to = type_to, warn = FALSE, ...)
-      geom_type <- st_geom_type(x, ext = FALSE)
+      geom_type <- is_geom_type(x, ext = FALSE)
 
       if (geom_type == to) break
     }

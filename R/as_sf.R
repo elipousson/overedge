@@ -57,7 +57,7 @@ as_bbox <- function(x, crs = NULL, ...) {
   # Convert objects to sf if needed
   if (!is_bbox(x)) {
     if (is_sf(x, ext = TRUE)) {
-      if (st_geom_type(x)$POINTS) {
+      if (is_geom_type(x)$POINTS) {
         x <- st_buffer_ext(x, dist = 0.00000001)
       }
 

@@ -23,20 +23,21 @@ reference:
 - title: Check, convert, or modify simple feature and bounding box objects
   contents:
   - '`is_sf`'
+  - '`is_geom_type`'
   - starts_with("as_")
   - '`sf_to_df`'
+  - starts_with("sf_bbox")
   - '`st_bbox_ext`'
   - '`st_buffer_ext`'
   - '`st_transform_ext`'
   - '`st_cast_ext`'
-  - starts_with("sf_bbox")
+  - starts_with("st_")
 - title: Create, view, and combine simple feature and bounding box objects
   contents:
   - starts_with("make_location")
   - starts_with("location_filter")
   - '`make_markers`'
   - '`number_features`'
-  - starts_with("st_")
   - starts_with("mapview")
 - title: Spatial layers for ggplot2 maps
   contents:

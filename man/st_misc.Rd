@@ -8,7 +8,6 @@
 \alias{st_inscribed_square}
 \alias{st_circle}
 \alias{st_circumscribed_circle}
-\alias{st_geom_type}
 \title{Modify the geometry of a simple feature or bounding box object}
 \usage{
 st_scale_rotate(x, scale = 1, rotate = 0)
@@ -22,31 +21,20 @@ st_inscribed_square(x, scale = 1, rotate = 0)
 st_circle(x, scale = 1, inscribed = FALSE)
 
 st_circumscribed_circle(x, scale = 1)
-
-st_geom_type(x, ext = TRUE, check = NULL, by_geometry = FALSE)
 }
 \arguments{
-\item{x}{A sf or bbox object}
+\item{x}{A sf, sfc, or bbox object}
 
 \item{scale}{numeric; scale factor, Default: 1}
 
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
 
-\item{ext}{For st_geom_type, if ext TRUE and check is NULL, return a list with checks for POINTS,
-POLYGONS, LINESTRING, and the returned types.}
+\item{ext}{If \code{TRUE}, st_center returns a list of sf, sfc, crs, and geom
+objects; defaults TRUE. If \code{FALSE}, return an sf object.}
 
 \item{...}{Additional parameters passed to \code{sf::st_centroid()} by st_center}
 
-\item{inscribed}{If TRUE, make circle or square inscribed within x, if FALSE, make it circumscribed.}
-
-\item{check}{If "POINT", check if geometry type is POINT. Same for all
-available geometry types; Default: NULL}
-
-\item{by_geometry}{Passed to sf::st_geometry_type; defaults to FALSE}
-}
-\value{
-Returns vector with all geometry types; gives warning if object uses
-multiple types.
+\item{inscribed}{If \code{TRUE}, make circle or square inscribed within x, if \code{FALSE}, make it circumscribed.}
 }
 \description{
 Support both bbox and sf objects as inputs.
@@ -54,30 +42,29 @@ Support both bbox and sf objects as inputs.
 \details{
 \itemize{
 \item Scale or rotate a simple feature or bounding box object using affine transformations
-\item Get the center point of a simple feature or bounding box object
-\item Get an approximate inscribed square within a simple feature or bounding box object
+\item Get the center point for a sf object
+\item Get a circumscribed square or approximate inscribed square in a sf object
+\item Get a circumscribed circle or incscribed circle in a sf object
 }
 
 st_inscribed_square wraps \code{sf::st_inscribed_circle()} but limits the
 circle to 1 segment per quadrant (\code{nQuadSegs} = 1) and then rotates the resulting geometry 45
 degrees to provide a (mostly) inscribed square. A different rotation value
 can be provided to change the orientation of the shape, e.g. rotate = -45 to
-return a diamond shape.
+return a diamond shape. st_square wraps \link{st_bbox_ext} with asp = 1.
 }
 \examples{
-\dontrun{
-if (interactive()) {
-  library(ggplot2)
+   library(ggplot2)
 
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-  nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)
+   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+   nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)
 
-  ggplot() +
-    geom_sf(data = nc) +
-    geom_sf(data = nc_rotated, fill = NA, color = "red")
-}
-}
+   ggplot() +
+     geom_sf(data = nc) +
+     geom_sf(data = nc_rotated, fill = NA, color = "red")
 }
 \seealso{
-\code{\link[sf]{geos_unary}}
+\itemize{
+\item \link[sf:geos_unary]{sf::geos_unary}
+}
 }

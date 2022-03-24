@@ -3,32 +3,22 @@
 #' Support both bbox and sf objects as inputs.
 #'
 #'  - Scale or rotate a simple feature or bounding box object using affine transformations
-#'  - Get the center point of a simple feature or bounding box object
-#'  - Get an approximate inscribed square within a simple feature or bounding box object
+#'  - Get the center point for a sf object
+#'  - Get a circumscribed square or approximate inscribed square in a sf object
+#'  - Get a circumscribed circle or incscribed circle in a sf object
 #'
 #' st_inscribed_square wraps `sf::st_inscribed_circle()` but limits the
 #'   circle to 1 segment per quadrant (`nQuadSegs` = 1) and then rotates the resulting geometry 45
 #'   degrees to provide a (mostly) inscribed square. A different rotation value
 #'   can be provided to change the orientation of the shape, e.g. rotate = -45 to
-#'   return a diamond shape.
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   library(ggplot2)
-#'
-#'   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-#'   nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)
-#'
-#'   ggplot() +
-#'     geom_sf(data = nc) +
-#'     geom_sf(data = nc_rotated, fill = NA, color = "red")
-#' }
-#' }
-#' @param x A sf or bbox object
+#'   return a diamond shape. st_square wraps [st_bbox_ext] with asp = 1.
+#' @example examples/st_misc.R
+#' @param x A sf, sfc, or bbox object
 #' @param scale numeric; scale factor, Default: 1
 #' @param rotate numeric; degrees to rotate (-360 to 360), Default: 0
+#' @param inscribed If `TRUE`, make circle or square inscribed within x, if `FALSE`, make it circumscribed.
 #' @seealso
-#' \code{\link[sf]{geos_unary}}
+#'  - [sf::geos_unary]
 #' @name st_misc
 #' @md
 NULL
@@ -64,104 +54,102 @@ st_center <- function(x,
                       ext = TRUE,
                       ...) {
   x <- as_sf(x)
+  centroid <- suppressWarnings(sf::st_centroid(geom, ...))
 
   if (ext) {
     crs <- sf::st_crs(x)
     geom <- sf::st_geometry(x)
-    # FIXME: There may be no difference between the geom and centroid for point data
-    centroid <- suppressWarnings(sf::st_centroid(geom, ...))
+    # FIXME: There should be no difference between the geom and centroid for point data
 
-    return(
-      list(
-        "sf" = sf::st_sf(centroid),
-        "sfc" = centroid,
-        "crs" = crs,
-        "geom" = geom # This is just the original geometry
-      )
+    center <- list(
+      "sfc" = centroid,
+      "sf" = as_sf(centroid),
+      "crs" = crs,
+      "geom" = geom # This is just the original geometry
     )
   } else {
-    suppressWarnings(sf::st_centroid(x, ...))
+    center <- centroid
   }
+
+  return(center)
 }
 
 #' @rdname st_misc
-#' @name st_inscribed_square
+#' @name st_square
 #' @export
 #' @importFrom sf st_is_longlat st_inscribed_circle st_geometry st_dimension st_set_geometry
 #' @importFrom usethis ui_stop
 #' @importFrom purrr discard
-st_inscribed_square <- function(x, scale = 1, rotate = 0) {
+st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE) {
   x <- as_sf(x)
 
-  if (sf::st_is_longlat(x)) {
-    usethis::ui_stop("st_inscribed_square does not work for data using geographic coordinates.
-                      Use sf::st_transform() to change the data to use projected coordinates to use this function.")
+  is_lonlat <- sf::st_is_longlat(x)
+
+  if (is_lonlat) {
+    crs <- sf::st_crs(x)
+    x <- sf::st_transform(x, crs = 3857)
   }
 
-  geom <- sf::st_inscribed_circle(as_sfc(x), nQuadSegs = 1)
-  geom <- purrr::discard(geom, ~ is.na(sf::st_dimension(.x)))
-  x <- sf::st_set_geometry(x, geom)
-  x <- st_scale_rotate(x, rotate = (rotate + 45), scale = scale)
+  if (inscribed) {
+    geom <- sf::st_inscribed_circle(as_sfc(x), nQuadSegs = 1)
+    geom <- purrr::discard(geom, ~ is.na(sf::st_dimension(.x)))
+    x <- sf::st_set_geometry(x, geom)
+    square <- st_scale_rotate(x, rotate = (rotate + 45), scale = scale)
+  } else {
+    x <-
+      st_bbox_ext(
+        x = x,
+        asp = 1,
+        class = "sf"
+      )
+
+    square <- st_scale_rotate(x, rotate = rotate, scale = scale)
+  }
+
+  if (is_lonlat) {
+    square <- sf::st_transform(square, crs = crs)
+  }
+
+  return(square)
+}
+
+
+#' @rdname st_misc
+#' @name st_inscribed_square
+#' @export
+st_inscribed_square <- function(x, scale = 1, rotate = 0) {
+  st_square(x = x, scale = scale, rotate = rotat, inscribed = TRUE)
+}
+
+#' @rdname st_misc
+#' @name st_circle
+#' @export
+#' @importFrom sf st_inscribed_circle
+st_circle <- function(x, scale = 1, inscribed = FALSE) {
+  if (incscribed) {
+    circle <-
+      sf::st_inscribed_circle(
+        x = as_sf(x)
+      )
+
+    circle <- st_scale_rotate(circle, scale = scale)
+  } else {
+    radius <- sf_bbox_diagdist(as_bbox(x)) / 2
+    center <- st_center(x, ext = FALSE)
+
+    circle <-
+      st_buffer_ext(
+        x = center,
+        dist = radius * scale
+      )
+  }
+
+  return(circle)
 }
 
 #' @rdname st_misc
 #' @name st_circumscribed_circle
 #' @export
 st_circumscribed_circle <- function(x, scale = 1) {
-  bbox <- as_bbox(x)
-  radius <- sf_bbox_diagdist(bbox) / 2
-
-  center <- st_center(x, ext = FALSE)
-
-  circle <-
-    st_buffer_ext(
-      x = center,
-      dist = radius * scale
-    )
-
-  return(circle)
+  st_circle(x = x, scale = scale, inscribed = FALSE)
 }
-
-
-
-#' @rdname st_misc
-#' @name st_geom_type
-#' @param ext For st_geom_type, if ext TRUE and check is NULL, return a list with checks for POINTS,
-#'   POLYGONS, LINESTRING, and the returned types.
-#' @param check If "POINT", check if geometry type is POINT. Same for all
-#'   available geometry types; Default: NULL
-#' @param by_geometry Passed to sf::st_geometry_type; defaults to FALSE
-#' @returns Returns vector with all geometry types; gives warning if object uses
-#'   multiple types.
-#' @export
-#' @importFrom sf st_geometry_type
-#' @importFrom usethis ui_warn
-st_geom_type <- function(x, ext = TRUE, check = NULL, by_geometry = FALSE) {
-  geom_type <- sf::st_geometry_type(x, by_geometry = by_geometry)
-
-  if (is.null(check) && !ext) {
-    # if (length(geom_type) > 1) {
-    # usethis::ui_warn("The sf object provded contains multiple geometry types: {geom_type}")
-    # }
-
-    return(geom_type)
-  } else if (!is.null(check)) {
-    geom_type <- unique(geom_type)
-
-    check_type <- (check %in% geom_type)
-  } else {
-    check_type <-
-      list(
-        "POINTS" = grepl("POINT$", geom_type),
-        "POLYGONS" = grepl("POLYGON$", geom_type),
-        "LINESTRINGS" = grepl("STRING$", geom_type),
-        # FIXME: This is only a partial set of geometry types
-        "TYPES" = geom_type
-      )
-  }
-
-  return(check_type)
-}
-
-# TODO: Consider adding a check_geom_type function
-# check_geom_type <- function(type, by_geometry = FALSE) {}

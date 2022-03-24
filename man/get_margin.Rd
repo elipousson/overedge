@@ -50,17 +50,13 @@ document format that is composed outside of R using a page layout application
 such as Adobe InDesign.
 }
 \examples{
-\dontrun{
-if (interactive()) {
-  get_margin("standard")
+get_margin("standard")
 
-  get_margin("none")
+get_margin("none")
 
-  get_margin(dist = 25, unit = "mm")
+get_margin(dist = 25, unit = "mm")
 
-  get_margin(paper = "letter", plot_width = 5.5)
-}
-}
+get_margin(paper = "letter", plot_width = 5.5)
 }
 \seealso{
 \code{\link[ggplot2]{margin}}

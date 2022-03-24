@@ -147,7 +147,7 @@ location_filter <- function(data,
       }
     }
   } else if (is_sf_location) {
-    if (st_geom_type(location)$POINTS) {
+    if (is_geom_type(location)$POINTS) {
       location <- st_buffer_ext(x = location, dist = 0.00000001)
     }
 
