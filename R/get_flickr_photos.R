@@ -125,29 +125,29 @@ get_flickr_photos <- function(api_key = NULL,
       )
   }
 
-    if (!is.null(orientation) && (length(img_size) == 1)) {
-      orientation <-
-        match.arg(
-          orientation,
-          c("landscape", "portrait", "square"),
-          several.ok = TRUE
-        )
+  if (!is.null(orientation) && (length(img_size) == 1)) {
+    orientation <-
+      match.arg(
+        orientation,
+        c("landscape", "portrait", "square"),
+        several.ok = TRUE
+      )
 
-      photos <-
-        dplyr::mutate(
-          photos,
-          img_orientation = dplyr::case_when(
-            (img_width / img_height) > 1 ~ "landscape",
-            (img_width / img_height) < 1 ~ "portrait",
-            TRUE ~ "square"
-          )
+    photos <-
+      dplyr::mutate(
+        photos,
+        img_orientation = dplyr::case_when(
+          (img_width / img_height) > 1 ~ "landscape",
+          (img_width / img_height) < 1 ~ "portrait",
+          TRUE ~ "square"
         )
+      )
 
-      photos <-
-        dplyr::filter(
-          photos,
-          img_orientation %in% orientation
-        )
+    photos <-
+      dplyr::filter(
+        photos,
+        img_orientation %in% orientation
+      )
   }
 
   if (geometry) {

@@ -1,4 +1,4 @@
-#' Use mapview to interactively explore data
+#' Use mapview to interactively explore spatial data
 #'
 #' A wrapper for [mapview::mapview]
 #'
@@ -15,6 +15,7 @@ NULL
 #'   those named in nm. If NULL, mapview displays the first item in the sf list;
 #'   defaults to "data".
 #' @param col Column name passed to zcol parameter, Default: NULL
+#' @inheritParams make_img_leafpop
 #' @export
 #' @importFrom mapview mapview
 mapview_col <- function(x, nm = "data", col = NULL, ...) {
@@ -43,23 +44,20 @@ mapview_col <- function(x, nm = "data", col = NULL, ...) {
 
 #' @rdname mapview_ext
 #' @name mapview_exif
-#' @inheritParams make_photo_popup
 #' @inheritParams read_sf_exif
 mapview_exif <- function(path = NULL,
                          filetype = "jpeg",
-                         popup = TRUE) {
+                         popup = TRUE,
+                         ...) {
   photos <-
     read_sf_exif(
-      path = NULL,
-      filetype = NULL,
-      bbox = NULL,
-      sort = "lon",
-      tags = NULL,
+      path = path,
+      filetype = filetype,
       ...
     )
 
-  make_photo_popup(
-    photos = photos,
+  make_img_leafpop(
+    images = photos,
     popup = popup
   )
 }
@@ -67,7 +65,6 @@ mapview_exif <- function(path = NULL,
 #' @rdname mapview_ext
 #' @name mapview_exif
 #' @inheritParams get_flickr_photos
-#' @inheritParams make_photo_popup
 mapview_flickr <- function(x = NULL,
                            user_id = NULL,
                            tags = NULL,
@@ -88,45 +85,51 @@ mapview_flickr <- function(x = NULL,
       ...
     )
 
-  make_photo_popup(
-    photos = photos,
+  make_img_leafpop(
+    images = photos,
     popup = popup
   )
 }
 
-#' Make a photo popup
-#'
-#' Utility function for [mapview_flickr] and [mapview_exif]
-#'
 #' @param popup If `TRUE`, add a popup image to a leaflet map; defaults `TRUE`.
-make_photo_popup <- function(photos,
-                                popup = TRUE) {
-
+#' @rdname mapview_ext
+#' @name make_img_leafpop
+#' @export
+make_img_leafpop <- function(images,
+                             popup = TRUE) {
   check_pkg_installed("leaflet")
   check_pkg_installed("leafpop")
 
   stopifnot(
-    all(c("img_url", "img_width", "img_height") %in% names(photos))
+    all(c("img_width", "img_height") %in% names(images)),
+    any(c("path", "img_url") %in% names(images)),
+    is_sf(images)
   )
 
   leaflet_map <-
     leaflet::addCircleMarkers(
       leaflet::addTiles(leaflet::leaflet()),
-      data = photos,
-      group = "photos")
+      data = images,
+      group = "images"
+    )
 
-  img_url <- photos$img_url
-  img_width <- photos$img_width
-  img_height <- photos$img_height
+  if ("img_url" %in% names(images)) {
+    image <- images$img_url
+  } else if ("path" %in% names(images)) {
+    image <- images$path
+  }
+
+  width <- images$img_width
+  height <- images$img_height
 
   if (popup) {
     leaflet_map <-
       leafpop::addPopupImages(
         map = leaflet_map,
-        image = img_url,
-        width = img_width,
-        height = img_height,
-        group = "photos"
+        image = image,
+        width = width,
+        height = height,
+        group = "images"
       )
   }
 

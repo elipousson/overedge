@@ -5,11 +5,12 @@
 \alias{mapview_col}
 \alias{mapview_exif}
 \alias{mapview_flickr}
-\title{Use mapview to interactively explore data}
+\alias{make_img_leafpop}
+\title{Use mapview to interactively explore spatial data}
 \usage{
 mapview_col(x, nm = "data", col = NULL, ...)
 
-mapview_exif(path = NULL, filetype = "jpeg", popup = TRUE)
+mapview_exif(path = NULL, filetype = "jpeg", popup = TRUE, ...)
 
 mapview_flickr(
   x = NULL,
@@ -21,6 +22,8 @@ mapview_flickr(
   popup = TRUE,
   ...
 )
+
+make_img_leafpop(images, popup = TRUE)
 }
 \arguments{
 \item{x}{a \code{Raster*} or \code{Spatial*} or \code{Satellite} or
@@ -45,13 +48,7 @@ defaults to "data".}
 
 \item{filetype}{file extension or file type; defaults to "jpg"}
 
-\item{popup}{either \code{logical}, \code{character vector} or a \code{list}
-of HTML strings with the popup contents, usually created from
-\code{\link[leafpop]{popupTable}}. See \code{\link{addControl}} for details.
-If \code{FALSE} or \code{NULL} no popups will be created, if \code{TRUE}
-a table with all feature attributes/columns will be created.
-If a \code{character vector} of column names, the table will only show the
-respective column entries.}
+\item{popup}{If \code{TRUE}, add a popup image to a leaflet map; defaults \code{TRUE}.}
 
 \item{user_id}{The NSID of the user who's photo to search. If this parameter
 isn't passed then everybody's public photos will be searched.}

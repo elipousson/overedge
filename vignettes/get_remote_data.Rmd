@@ -100,7 +100,7 @@ basemap +
 
 # Get data about photos from Flickr
 
-The get_flickr_photos function depends on a [development version of the FlickrAPI package](https://github.com/elipousson/FlickrAPI) so I am not currently able to render the vignette to show
+The get_flickr_photos function depends on a [development version of the FlickrAPI package](https://github.com/elipousson/FlickrAPI) so I am not currently able to render the vignette to show how it works.
 
 
 ```{r, eval = FALSE}
@@ -114,38 +114,3 @@ photos_sf <-
   )
 ```
 
-The following is an experimental function using the leafpop package to make an interactive photo map based on photos from Flickr. 
-
-```{r, eval = FALSE}
-mapview_flickr <- function(photos,
-                           img_size = "s") {
-  img_size <-
-    match.arg(
-      img_size,
-      c("sq", "t", "s", "q", "m", "n", "z", "c", "l", "o")
-    )
-
-  leaflet_map <-
-    leaflet::leaflet() %>%
-    leaflet::addTiles() %>%
-    leaflet::addCircleMarkers(data = photos, group = "photos")
-
-  img_url <- photos$img_url
-  img_width <- photos$img_width
-  img_height <- photos$img_height
-
-  photo_map <-
-    leafpop::addPopupImages(
-      map = leaflet_map,
-      image = img_url,
-      width = img_width,
-      height = img_height,
-      group = "photos"
-    )
-
-  return(photo_map)
-}
-
-
-mapview_flickr(photos = photos_sf, img_size = "s")
-```

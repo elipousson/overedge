@@ -39,7 +39,12 @@ read_sf_exif <- function(path = NULL,
     # NOTE: Are there other tags that should be included by default?
     tags <-
       c(
+        "Title",
         "ImageDescription",
+        "Keywords",
+        "Headline",
+        "Byline",
+        "Caption",
         "FileName",
         "CreateDate",
         "DateTimeOriginal",
@@ -76,6 +81,7 @@ read_sf_exif <- function(path = NULL,
     glob <- paste0("*.", filetype)
   }
 
+  # FIXME: Figure out how to append path to the end of the table not the beginning
   data <-
     suppressMessages(
       purrr::map_dfr(
@@ -118,8 +124,6 @@ read_sf_exif <- function(path = NULL,
         data,
         lon_ref = longitude_ref,
         lat_ref = latitude_ref,
-        image_direction = img_direction,
-        image_direction_ref = img_direction_ref,
         path = source_file
       )
   }
@@ -128,6 +132,9 @@ read_sf_exif <- function(path = NULL,
     data <-
       dplyr::rename(
         data,
+        description = image_description,
+        img_width = image_width,
+        img_height = image_height,
         exif_orientation = orientation
       )
 
@@ -147,9 +154,9 @@ read_sf_exif <- function(path = NULL,
           ),
         orientation =
           dplyr::case_when(
-            (image_width / image_height) > 1 ~ "landscape",
-            (image_width / image_height) < 1 ~ "portrait",
-            (image_width / image_height) == 1 ~ "square"
+            (img_width / img_height) > 1 ~ "landscape",
+            (img_width / img_height) < 1 ~ "portrait",
+            (img_width / img_height) == 1 ~ "square"
           )
       )
   }
