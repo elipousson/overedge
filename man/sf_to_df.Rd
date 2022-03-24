@@ -16,11 +16,13 @@ sf_to_df(
 
 df_to_sf(
   x,
-  crs = 4326,
+  crs = NULL,
   coords = c("lon", "lat"),
   into = NULL,
   sep = ",",
-  rev = TRUE
+  rev = TRUE,
+  coords_crs = 4326,
+  remove_coords = FALSE
 )
 
 check_coords(x = NULL, coords = NULL, rev = FALSE)

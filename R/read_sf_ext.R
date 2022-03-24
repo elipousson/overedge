@@ -69,9 +69,10 @@ read_sf_path <- function(path, bbox = NULL, ...) {
         query = params$query
       )
     } else {
-        data <- sf::read_sf(
-          dsn = path,
-          wkt_filter = wkt)
+      data <- sf::read_sf(
+        dsn = path,
+        wkt_filter = wkt
+      )
     }
   } else {
     if (!is.null(params$query)) {
@@ -81,7 +82,8 @@ read_sf_path <- function(path, bbox = NULL, ...) {
       )
     } else {
       data <- sf::read_sf(
-        dsn = path)
+        dsn = path
+      )
     }
   }
 
@@ -179,6 +181,7 @@ read_sf_download <-
            filetype = "geojson",
            prefix = "date",
            method = "auto",
+           unzip = FALSE,
            ...) {
     # TODO: Update read_sf_download to support unzipping downloads and reading files from folder
     path <- get_data_dir(path = path)

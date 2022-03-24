@@ -22,6 +22,7 @@ read_sf_download(
   filetype = "geojson",
   prefix = "date",
   method = "auto",
+  unzip = FALSE,
   ...
 )
 }

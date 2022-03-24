@@ -66,14 +66,13 @@ type must be provided for extdata and cached data.}
 
 \item{fn}{Function to apply to data before returning.}
 
-\item{crop}{If TRUE, data cropped to location or bounding box
-\link[sf:st_crop]{sf::st_crop} adjusted by the \code{dist}, \code{diag_ratio}, and \code{asp}
-parameters provided. Default TRUE.}
+\item{crop}{If \code{TRUE}, data is cropped to location or bounding box
+\link[sf:st_crop]{sf::st_crop} adjusted by the \code{dist}, \code{diag_ratio}, and \code{asp} parameters
+provided. Default TRUE.}
 
-\item{trim}{If TRUE, data trimmed to area with
-\code{\link[sf]{st_intersection}}. This option is not supported for any
-adjusted areas that use the \code{dist}, \code{diag_ratio}, or \code{asp} parameters.
-Default \code{FALSE}.}
+\item{trim}{If \code{TRUE}, data is trimmed to area with \link[sf:geos_binary_ops]{sf::st_intersection}.
+This option ignores any \code{dist}, \code{diag_ratio}, or \code{asp} parameters. Default
+\code{FALSE}.}
 
 \item{from_crs}{coordinate reference system of the data.}
 

@@ -237,7 +237,6 @@ add_metric_units <-
     "cm", "", "centimeter", "centimetre", "centimeters", "centimetres", "m/100", "length equivalent to 0.01 meter", NA, FALSE, NA
   )
 
-
 valid_units <-
   units::valid_udunits()
 
@@ -247,7 +246,7 @@ valid_units <-
 
 units_filter_cols <- c("symbol", "symbol_aliases", "name_singular", "name_singular_aliases", "name_plural", "name_plural_aliases")
 
-valid_dist_units <-
+dist_units <-
   valid_units |>
   filter(
     if_any(
@@ -256,23 +255,40 @@ valid_dist_units <-
     )
   )
 
-valid_dist_units <-
-  naniar::replace_with_na_if(valid_dist_units, is.character, ~ .x == "")
+dist_units <-
+  naniar::replace_with_na_if(dist_units, is.character, ~ .x == "")
 
 usethis::use_data(
-  valid_dist_units,
+  dist_units,
+  overwrite = TRUE
+)
+
+area_units <-
+  valid_units |>
+  filter(
+    if_any(
+      any_of(units_filter_cols),
+      ~ (.x %in% c("hectare", "acre", "acre_foot"))
+    )
+  )
+
+area_units <-
+  naniar::replace_with_na_if(area_units, is.character, ~ .x == "")
+
+usethis::use_data(
+  area_units,
   overwrite = TRUE
 )
 
 dist_unit_options <-
   unique(c(
-    valid_dist_units$name_singular,
-    valid_dist_units$symbol,
-    valid_dist_units$symbol_aliases,
-    valid_dist_units$name_singular,
-    stringr::str_split(valid_dist_units$name_singular_aliases, ", ", simplify = TRUE),
-    valid_dist_units$name_plural,
-    stringr::str_split(valid_dist_units$name_plural_aliases, ", ", simplify = TRUE)
+    dist_units$name_singular,
+    dist_units$symbol,
+    dist_units$symbol_aliases,
+    dist_units$name_singular,
+    stringr::str_split(dist_units$name_singular_aliases, ", ", simplify = TRUE),
+    dist_units$name_plural,
+    stringr::str_split(dist_units$name_plural_aliases, ", ", simplify = TRUE)
   ))
 
 
@@ -281,7 +297,6 @@ usethis::use_data(
   overwrite = TRUE,
   internal = FALSE
 )
-
 
 standard_scales <-
   tibble::tribble(
@@ -361,7 +376,6 @@ usethis::use_data(
   internal = FALSE
 )
 
-
 us_counties <-
   purrr::map_dfr(
     us_states$statefp,
@@ -377,12 +391,46 @@ us_counties <-
   janitor::clean_names("snake") %>%
   sf::st_transform(3857)
 
-nest_counties <-
-  us_counties %>% # us_counties %>%
+us_counties_census <-
+  purrr::map2_dfr(
+    us_counties$abb_state,
+    us_counties$name,
+    ~ tidycensus::get_acs(
+      geography = "county",
+      variables = "B01001_001",
+      year = 2019,
+      state = .x,
+      county = .y
+    )
+  )
+
+
+us_counties <-
+  us_counties %>%
   dplyr::left_join(
     dplyr::select(us_states, state_abb = abb, statefp),
     by = "statefp"
   ) %>%
+  dplyr::mutate(
+    name =
+      dplyr::case_when(
+        geoid == 24510 ~ "Baltimore city",
+        TRUE ~ name
+      ),
+    name_state_abb =
+      dplyr::if_else(
+        stringr::str_detect(name, "(City|city)$"),
+        paste0(name, ", ", state_abb),
+        paste0(name, " County, ", state_abb)
+      ),
+    .after = state_abb
+  )
+
+label_name_state_abb <- janitor::make_clean_names(us_counties$name_state_abb)
+
+names(us_counties$geoid) <- label_name_state_abb
+
+nest_counties <- us_counties %>%
   dplyr::group_by(geoid) %>%
   dplyr::group_nest(keep = TRUE)
 
@@ -399,6 +447,9 @@ us_counties <-
       wkt = sf::st_as_text(sf::st_as_sfc(.x))
     )
   )
+
+names(us_counties$bbox) <- label_name_state_abb
+names(us_counties$wkt) <- label_name_state_abb
 
 usethis::use_data(
   us_counties,

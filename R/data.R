@@ -70,7 +70,7 @@
 #'   \item{\code{dimensionless}}{logical indicator for dimensionless units}
 #'   \item{\code{source_xml}}{source XML}
 #' }
-"valid_dist_units"
+"dist_units"
 
 
 #' Standard map, architectural, and engineering scales

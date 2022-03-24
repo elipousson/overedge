@@ -6,9 +6,25 @@
 \alias{get_counties}
 \title{Get U.S. State and County boundary data for a location}
 \usage{
-get_states(location, dist = NULL, diag_ratio = NULL, unit = NULL, asp = NULL)
+get_states(
+  location = NULL,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = NULL,
+  asp = NULL,
+  class = "df",
+  ...
+)
 
-get_counties(location, dist = NULL, diag_ratio = NULL, unit = NULL, asp = NULL)
+get_counties(
+  location = NULL,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = NULL,
+  asp = NULL,
+  class = "df",
+  ...
+)
 }
 \arguments{
 \item{location}{sf, sfc, or bbox object convertible with as_sfc}
@@ -28,6 +44,8 @@ to units matching GDAL units for x; defaults to "meter"}
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
+
+\item{class}{Class of data to return, "df" (default), "sf", "bbox", or "sfc"}
 }
 \description{
 Get U.S. states and counties using a very fast query.

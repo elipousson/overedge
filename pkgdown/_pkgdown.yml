@@ -33,6 +33,7 @@ reference:
 - title: Create, view, and combine simple feature and bounding box objects
   contents:
   - starts_with("make_location")
+  - starts_with("location_filter")
   - '`make_markers`'
   - '`number_features`'
   - starts_with("st_")
@@ -60,6 +61,6 @@ reference:
 - title: Reference data for mapping and formatting
   contents:
   - '`map_icons`'
-  - '`valid_dist_units`'
+  - '`dist_units`'
   - '`standard_scales`'
   - '`paper_sizes`'

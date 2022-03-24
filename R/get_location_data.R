@@ -26,13 +26,7 @@
 #' @param filetype file type supported by [sf::read_sf]. The file
 #'   type must be provided for extdata and cached data.
 #' @param fn Function to apply to data before returning.
-#' @param crop  If TRUE, data cropped to location or bounding box
-#'   [sf::st_crop] adjusted by the `dist`, `diag_ratio`, and `asp`
-#'   parameters provided. Default TRUE.
-#' @param trim  If TRUE, data trimmed to area with
-#'   \code{\link[sf]{st_intersection}}. This option is not supported for any
-#'   adjusted areas that use the `dist`, `diag_ratio`, or `asp` parameters.
-#'   Default `FALSE`.
+#' @inheritParams location_filter
 #' @param from_crs coordinate reference system of the data.
 #' @param crs coordinate reference system to return
 #' @param class Class of object to return.
@@ -125,6 +119,7 @@ get_location_data <- function(location = NULL,
   }
 
   # Check if data is not an  sf object
+  # FIXME: The read_sf_ext function I started handles this tupe of checking and switching
   if (!(is_sf(data))) {
 
     # Check if data is a url
@@ -145,31 +140,15 @@ get_location_data <- function(location = NULL,
     }
   }
 
-  if (!is.null(bbox)) {
-    if (trim) {
-      # If trim, match location crs to data
-      location <- st_transform_ext(x = location, crs = data)
-      # TODO: Consider adding warning if dist/diag_ratio/asp params are provided along ith trim = TRUE
-      data <- st_erase(x = data, y = location, flip = TRUE)
-    } else {
-      # Otherwise, match bbox crs to data
-      bbox <- st_transform_ext(x = bbox, crs = data)
-
-      if (crop) {
-        data <- suppressWarnings(sf::st_crop(data, bbox))
-      } else {
-        # If no cropping, filter with bbox
-        # TODO: bounding box filtering may get different results than feature filtering - what if dist/diag_ratio/asp params are all NULL - should feature filtering be assumed in that case
-        bbox_sf <- sf_bbox_to_sf(bbox)
-
-        if (!is.null(params$join)) {
-          data <- sf::st_filter(x = data, y = bbox_sf, join = params$join)
-        } else {
-          data <- sf::st_filter(x = data, y = bbox_sf)
-        }
-      }
-    }
-  }
+  # FIXME: Add filter
+  data <-
+    location_filter(
+      data = data,
+      location = location,
+      bbox = bbox,
+      trim = trim,
+      crop = crop
+    )
 
   # TODO: Is the following pattern of applying fn, setting col based on ... and converting the class something that should be pulled into a separate utility function?
   if (!is.null(fn)) {

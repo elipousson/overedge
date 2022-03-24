@@ -135,14 +135,13 @@ type must be provided for extdata and cached data.</p></dd>
 <dt>fn</dt>
 <dd><p>Function to apply to data before returning.</p></dd>
 <dt>crop</dt>
-<dd><p>If TRUE, data cropped to location or bounding box
-<a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">sf::st_crop</a> adjusted by the <code>dist</code>, <code>diag_ratio</code>, and <code>asp</code>
-parameters provided. Default TRUE.</p></dd>
+<dd><p>If <code>TRUE</code>, data is cropped to location or bounding box
+<a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">sf::st_crop</a> adjusted by the <code>dist</code>, <code>diag_ratio</code>, and <code>asp</code> parameters
+provided. Default TRUE.</p></dd>
 <dt>trim</dt>
-<dd><p>If TRUE, data trimmed to area with
-<code><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></code>. This option is not supported for any
-adjusted areas that use the <code>dist</code>, <code>diag_ratio</code>, or <code>asp</code> parameters.
-Default <code>FALSE</code>.</p></dd>
+<dd><p>If <code>TRUE</code>, data is trimmed to area with <a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">sf::st_intersection</a>.
+This option ignores any <code>dist</code>, <code>diag_ratio</code>, or <code>asp</code> parameters. Default
+<code>FALSE</code>.</p></dd>
 <dt>from_crs</dt>
 <dd><p>coordinate reference system of the data.</p></dd>
 <dt>crs</dt>

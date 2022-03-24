@@ -109,27 +109,7 @@ get_location <- function(type,
       usethis::ui_stop("The name/id did not match any location of the type provided.")
     }
   } else {
-    # Check if location if it is a character (assume it is an address)
-    if (is.character(location)) {
-      # Geocode the address
-      location <-
-        tidygeocoder::geo(
-          address = location,
-          long = "lon",
-          lat = "lat"
-        )
-      # Convert single address df to sf
-      location <- df_to_sf(location, coords = c("lon", "lat"), crs = type_crs)
-    }
-
-    # Filter sf
-    if (!is.null(location) && is_sf(location, ext = TRUE)) {
-      location <-
-        sf::st_filter(
-          type,
-          as_sf(location, crs = type_crs)
-        )
-    }
+    location <- location_filter(data = type, location = location, trim = FALSE, crop = FALSE)
   }
 
   if (union && (nrow(location) > 1) && !is.null(name_col)) {

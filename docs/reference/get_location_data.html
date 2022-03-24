@@ -157,14 +157,13 @@ type must be provided for extdata and cached data.</p></dd>
 <dt>fn</dt>
 <dd><p>Function to apply to data before returning.</p></dd>
 <dt>crop</dt>
-<dd><p>If TRUE, data cropped to location or bounding box
-<a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">sf::st_crop</a> adjusted by the <code>dist</code>, <code>diag_ratio</code>, and <code>asp</code>
-parameters provided. Default TRUE.</p></dd>
+<dd><p>If <code>TRUE</code>, data is cropped to location or bounding box
+<a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">sf::st_crop</a> adjusted by the <code>dist</code>, <code>diag_ratio</code>, and <code>asp</code> parameters
+provided. Default TRUE.</p></dd>
 <dt>trim</dt>
-<dd><p>If TRUE, data trimmed to area with
-<code><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></code>. This option is not supported for any
-adjusted areas that use the <code>dist</code>, <code>diag_ratio</code>, or <code>asp</code> parameters.
-Default <code>FALSE</code>.</p></dd>
+<dd><p>If <code>TRUE</code>, data is trimmed to area with <a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">sf::st_intersection</a>.
+This option ignores any <code>dist</code>, <code>diag_ratio</code>, or <code>asp</code> parameters. Default
+<code>FALSE</code>.</p></dd>
 <dt>from_crs</dt>
 <dd><p>coordinate reference system of the data.</p></dd>
 <dt>crs</dt>
@@ -204,7 +203,7 @@ by make_location_data_list).</p>
 <span class="r-in">  label <span class="op">=</span> <span class="fu">mapbaltimore</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/mapbaltimore/man/council_districts.html" class="external-link">council_districts</a></span><span class="op">[</span><span class="fl">2</span>,<span class="op">]</span><span class="op">$</span><span class="va">name</span>,</span>
 <span class="r-in">  load <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if ((from == "list") || (is_sf_list(x, ext = TRUE) &amp;&amp; (nrow(x) &gt;     1))) {    x &lt;- purrr::map(x, ~st_transform_ext(x = .x, crs = crs))    return(x)}:</span> missing value where TRUE/FALSE needed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: R_GlobalEnv&gt;</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

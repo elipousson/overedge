@@ -66,11 +66,13 @@ sf_to_df <- function(x,
 #' @importFrom usethis ui_info
 #' @importFrom sf st_transform st_as_sf
 df_to_sf <- function(x,
-                     crs = 4326,
+                     crs = NULL,
                      coords = c("lon", "lat"),
                      into = NULL,
                      sep = ",",
-                     rev = TRUE) {
+                     rev = TRUE,
+                     coords_crs = 4326,
+                     remove_coords = FALSE) {
   if ((length(coords) == 1) && (length(into) == 2)) {
     into <- check_coords(x = NULL, coords = into)
 
@@ -120,13 +122,13 @@ df_to_sf <- function(x,
       x,
       coords = c(lon, lat),
       agr = "constant",
-      crs = 4326,
+      crs = coords_crs,
       stringsAsFactors = FALSE,
-      remove = FALSE
+      remove = remove_coords
     )
 
   if (!is.null(crs)) {
-    x <- sf::st_transform(x, crs)
+    x <- st_transform_ext(x = x, crs = crs, class = "sf")
   }
 
   return(x)
