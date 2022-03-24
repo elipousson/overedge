@@ -3,9 +3,24 @@
 \name{mapview_ext}
 \alias{mapview_ext}
 \alias{mapview_col}
+\alias{mapview_exif}
+\alias{mapview_flickr}
 \title{Use mapview to interactively explore data}
 \usage{
 mapview_col(x, nm = "data", col = NULL, ...)
+
+mapview_exif(path = NULL, filetype = "jpeg", popup = TRUE)
+
+mapview_flickr(
+  x = NULL,
+  user_id = NULL,
+  tags = NULL,
+  api_key = NULL,
+  img_size = "s",
+  num = 25,
+  popup = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{a \code{Raster*} or \code{Spatial*} or \code{Satellite} or
@@ -25,6 +40,30 @@ defaults to "data".}
   \describe{
     \item{\code{}}{}
   }}
+
+\item{path}{path to folder of one or more files with EXIF location metadata}
+
+\item{filetype}{file extension or file type; defaults to "jpg"}
+
+\item{popup}{either \code{logical}, \code{character vector} or a \code{list}
+of HTML strings with the popup contents, usually created from
+\code{\link[leafpop]{popupTable}}. See \code{\link{addControl}} for details.
+If \code{FALSE} or \code{NULL} no popups will be created, if \code{TRUE}
+a table with all feature attributes/columns will be created.
+If a \code{character vector} of column names, the table will only show the
+respective column entries.}
+
+\item{user_id}{The NSID of the user who's photo to search. If this parameter
+isn't passed then everybody's public photos will be searched.}
+
+\item{tags}{A vector of tags you wish to search for.}
+
+\item{api_key}{Flickr API key. If api_key is `NULL`, the function uses
+[getFlickrAPIKey()] to use the environment variable "FLICKR_API_KEY" as the
+key.}
+
+\item{img_size}{Defaults to "s" (small). Options ranging from smallest to
+largest include "sq", "t", "s", "q", "m", "n", "z", "c", "l", and "o"}
 }
 \description{
 A wrapper for \link[mapview:mapView]{mapview::mapview}

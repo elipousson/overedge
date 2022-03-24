@@ -40,3 +40,95 @@ mapview_col <- function(x, nm = "data", col = NULL, ...) {
     mapview::mapview(x, ...)
   }
 }
+
+#' @rdname mapview_ext
+#' @name mapview_exif
+#' @inheritParams make_photo_popup
+#' @inheritParams read_sf_exif
+mapview_exif <- function(path = NULL,
+                         filetype = "jpeg",
+                         popup = TRUE) {
+  photos <-
+    read_sf_exif(
+      path = NULL,
+      filetype = NULL,
+      bbox = NULL,
+      sort = "lon",
+      tags = NULL,
+      ...
+    )
+
+  make_photo_popup(
+    photos = photos,
+    popup = popup
+  )
+}
+
+#' @rdname mapview_ext
+#' @name mapview_exif
+#' @inheritParams get_flickr_photos
+#' @inheritParams make_photo_popup
+mapview_flickr <- function(x = NULL,
+                           user_id = NULL,
+                           tags = NULL,
+                           api_key = NULL,
+                           img_size = "s",
+                           num = 25,
+                           popup = TRUE,
+                           ...) {
+  photos <-
+    get_flickr_photos(
+      location = x,
+      user_id = user_id,
+      tags = tags,
+      api_key = api_key,
+      img_size = img_size,
+      per_page = num,
+      geometry = TRUE, # this is the default
+      ...
+    )
+
+  make_photo_popup(
+    photos = photos,
+    popup = popup
+  )
+}
+
+#' Make a photo popup
+#'
+#' Utility function for [mapview_flickr] and [mapview_exif]
+#'
+#' @param popup If `TRUE`, add a popup image to a leaflet map; defaults `TRUE`.
+make_photo_popup <- function(photos,
+                                popup = TRUE) {
+
+  check_pkg_installed("leaflet")
+  check_pkg_installed("leafpop")
+
+  stopifnot(
+    all(c("img_url", "img_width", "img_height") %in% names(photos))
+  )
+
+  leaflet_map <-
+    leaflet::addCircleMarkers(
+      leaflet::addTiles(leaflet::leaflet()),
+      data = photos,
+      group = "photos")
+
+  img_url <- photos$img_url
+  img_width <- photos$img_width
+  img_height <- photos$img_height
+
+  if (popup) {
+    leaflet_map <-
+      leafpop::addPopupImages(
+        map = leaflet_map,
+        image = img_url,
+        width = img_width,
+        height = img_height,
+        group = "photos"
+      )
+  }
+
+  return(leaflet_map)
+}

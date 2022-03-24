@@ -55,6 +55,8 @@ Suggests:
     lwgeom,
     osmdata,
     RSocrata,
-    mapview
+    mapview,
+    leaflet,
+    leafpop
 Config/testthat/edition: 3
 VignetteBuilder: knitr
