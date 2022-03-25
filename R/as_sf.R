@@ -25,15 +25,15 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
       x <- sf_bbox_to_sf(x, ...)
     } else if (is_sfc(x)) {
       x <- sf::st_sf(x, ...)
-    } else if (is_raster(x)) {
-      x <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...)
-    } else if (is_sp(x)) {
-      x <- sf::st_as_sf(x, ...)
     } else if (is_sf_list(x)) {
       x <- dplyr::bind_rows(x)
     } else if (is.data.frame(x)) {
       # TODO: Need to figure out a way to pass the crs to df_to_sf
       x <- df_to_sf(x, ...)
+    } else if (is_raster(x)) {
+      x <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...)
+    } else if (is_sp(x)) {
+      x <- sf::st_as_sf(x, ...)
     }
   }
 
@@ -42,6 +42,10 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
   }
 
   if (!is.null(crs)) {
+    if (is_sf(crs, ext = TRUE)) {
+      crs <- sf::st_crs(crs)
+    }
+
     x <- sf::st_transform(x, crs = crs)
   }
 
@@ -62,6 +66,10 @@ as_bbox <- function(x, crs = NULL, ...) {
       }
 
       x <- sf::st_bbox(x, ...)
+    } else if (is_sf_list(x)) {
+      x <- sf::st_bbox(dplyr::bind_rows(x))
+    } else if (is.data.frame(x)) {
+      x <- sf::st_bbox(df_to_sf(x, ...))
     } else if (is_raster(x)) {
       x <- sf::st_bbox(x, ...)
     } else if (is_sp(x)) {
@@ -73,14 +81,15 @@ as_bbox <- function(x, crs = NULL, ...) {
       ),
       crs = crs, ...
       )
-    } else if (is_sf_list(x)) {
-      x <- sf::st_bbox(dplyr::bind_rows(x))
-    } else if (is.data.frame(x)) {
-      x <- sf::st_bbox(df_to_sf(x, ...))
     }
   }
 
-  x <- sf_bbox_transform(bbox = x, crs = crs)
+  if (!is.null(crs)) {
+    if (is_sf(crs, ext = TRUE)) {
+      crs <- sf::st_crs(crs)
+    }
+    x <- sf_bbox_transform(bbox = x, crs = crs)
+  }
 
   return(x)
 }
@@ -93,11 +102,18 @@ as_bbox <- function(x, crs = NULL, ...) {
 as_sfc <- function(x, crs = NULL, ...) {
   if (is_sf(x)) {
     x <- sf::st_geometry(x, ...)
+  } else if (is_sf_list(x)) {
+    x <- sf::st_as_sfc(dplyr::bind_rows(x))
+  } else if (is.data.frame(x)) {
+    x <- sf::st_as_sfc(df_to_sf(x, ...))
   } else if (!is_sfc(x)) {
     x <- sf::st_as_sfc(x, ...)
   }
 
   if (!is.null(crs)) {
+    if (is_sf(crs, ext = TRUE)) {
+      crs <- sf::st_crs(crs)
+    }
     x <- sf::st_transform(x, crs = crs)
   }
 
@@ -155,6 +171,10 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
   }
 
   if (!is.null(crs)) {
+    if (is_sf(crs, ext = TRUE)) {
+      crs <- sf::st_crs(crs)
+    }
+
     # FIXME: This sets up the possibility of an error if the sf list is bounding boxes
     if (x_is_sf || x_is_sf_list) {
       x <- purrr::map(x, ~ sf::st_transform(.x, crs = crs))
@@ -171,16 +191,18 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
 #' @param crs coordinate reference system
 #' @noRd
 as_sf_class <- function(x, class = NULL, crs = NULL, ...) {
-  class <- match.arg(class, c("sf", "sfc", "bbox", "list"))
+  if (!is.null(class)) {
+    class <- match.arg(class, c("sf", "sfc", "bbox", "list"))
 
-  if (class == "sf") {
-    x <- as_sf(x, crs = crs, ...)
-  } else if (class == "sfc") {
-    x <- as_sfc(x, crs = crs, ...)
-  } else if (class == "bbox") {
-    x <- as_bbox(x, crs = crs, ...)
-  } else if (class == "list") {
-    x <- as_sf_list(x, crs = crs, ...)
+    if (class == "sf") {
+      x <- as_sf(x, crs = crs, ...)
+    } else if (class == "sfc") {
+      x <- as_sfc(x, crs = crs, ...)
+    } else if (class == "bbox") {
+      x <- as_bbox(x, crs = crs, ...)
+    } else if (class == "list") {
+      x <- as_sf_list(x, crs = crs, ...)
+    }
   }
 
   return(x)

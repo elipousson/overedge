@@ -17,7 +17,6 @@ NULL
 #' @param col Column name passed to zcol parameter, Default: NULL
 #' @inheritParams make_img_leafpop
 #' @export
-#' @importFrom mapview mapview
 mapview_col <- function(x, nm = "data", col = NULL, ...) {
   check_pkg_installed(pkg = "mapview")
 

@@ -5,7 +5,7 @@
 #'  - Scale or rotate a simple feature or bounding box object using affine transformations
 #'  - Get the center point for a sf object
 #'  - Get a circumscribed square or approximate inscribed square in a sf object
-#'  - Get a circumscribed circle or incscribed circle in a sf object
+#'  - Get a circumscribed circle or inscribed circle in a sf object
 #'
 #' st_inscribed_square wraps `sf::st_inscribed_circle()` but limits the
 #'   circle to 1 segment per quadrant (`nQuadSegs` = 1) and then rotates the resulting geometry 45
@@ -126,7 +126,7 @@ st_inscribed_square <- function(x, scale = 1, rotate = 0) {
 #' @export
 #' @importFrom sf st_inscribed_circle
 st_circle <- function(x, scale = 1, inscribed = FALSE) {
-  if (incscribed) {
+  if (inscribed) {
     circle <-
       sf::st_inscribed_circle(
         x = as_sf(x)

@@ -13,7 +13,6 @@
 #' @export
 #' @importFrom dplyr arrange mutate row_number
 number_features <- function(data, col = NULL, number = TRUE, sort = "lon", desc = NULL, ...) {
-  number_col <- "number"
 
   sort <- match.arg(sort, c("lon", "lat", "title", "label", names(data)))
 

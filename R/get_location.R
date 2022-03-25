@@ -86,9 +86,6 @@ get_location <- function(type,
         ...
       )
   }
-
-  type_crs <- sf::st_crs(type)
-
   # If location is not provided
   if (is.null(location)) {
     if (!is.null(name)) {
@@ -130,8 +127,6 @@ get_location <- function(type,
         "{name_col}" := name
       )
   }
-
-  # params <- rlang::list2(...)
 
   if (is.null(location) && !is.null(type)) {
     location <- type

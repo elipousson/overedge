@@ -2,6 +2,7 @@
 #'
 #' @example examples/make_location_layers.R
 #' @noRd
+#' @importFrom rlang enquo
 make_location_layers <- function(data = NULL,
                                  location = NULL,
                                  geom = NULL,
@@ -9,7 +10,7 @@ make_location_layers <- function(data = NULL,
                                  params = NULL) {
   data <- as_sf_list(data)
   location <- as_sf_list(location, nm = "location")
-  mapping <- enquo(mapping)
+  mapping <- rlang::enquo(mapping)
 
   c(
     data, location,

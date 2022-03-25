@@ -51,8 +51,7 @@ is_bbox <- function(x, null.ok = FALSE) {
 #' @param is_named If `TRUE`, check if sf list is named; defaults `FALSE`.
 #' @export
 is_sf_list <- function(x, is_named = FALSE, ext = FALSE, null.ok = FALSE) {
-  # FIXME: This will error if x is NULL and not in a list
-  is_sf <- is_sf(x, ext = TRUE, null.ok = null.ok)
+  is_sf <- is_sf(x, ext = TRUE, null.ok = FALSE)
 
   is_sf_list <- is.list(x) && all(
     vapply(
@@ -91,7 +90,16 @@ is_sp <- function(x, null.ok = FALSE) {
 #' @importFrom sf st_crs
 #' @export
 is_same_crs <- function(x, y) {
-  return(sf::st_crs(x) == sf::st_crs(y))
+
+  if (is_bbox(x)) {
+    x <- sf_bbox_to_sf(x)
+  }
+
+  if (is_bbox(y)) {
+    y <- sf_bbox_to_sf(y)
+  }
+
+  sf::st_crs(x) == sf::st_crs(y)
 }
 
 #' @name is_same_area

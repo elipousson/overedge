@@ -63,7 +63,8 @@ make_markers <- function(data,
     data <-
       dplyr::filter(data, !is.na(.data[[groupname_col]]))
 
-    data <- data %>% dplyr::group_by(.data[[groupname_col]])
+    data <-
+      dplyr::group_by(data, .data[[groupname_col]])
   }
 
   # Convert to POINT if any other geometry

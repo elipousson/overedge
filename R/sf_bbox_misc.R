@@ -306,7 +306,7 @@ sf_bbox_to_npc <- function(point,
     bbox <- sf::st_bbox(bbox)
   }
 
-  crs <- sf::st_crs(bbox)
+  # crs <- sf::st_crs(bbox)
 
   if (is_sf(marker)) {
     marker <- sf::st_coordinates(st_center(marker, ext = FALSE))

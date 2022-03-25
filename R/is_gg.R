@@ -10,6 +10,7 @@ NULL
 #' @name is_gg_layer
 #' @rdname is_gg
 #' @export
+#' @importFrom ggplot2 is.ggproto
 is_gg_layer <- function(x) {
   is.list(x) && is.ggproto(x[[1]])
 }
@@ -29,6 +30,7 @@ is_gg_sf_layer <- function(x) {
 #' @name is_gg_scale
 #' @rdname is_gg
 #' @export
+#' @importFrom ggplot2 is.ggproto
 is_gg_scale <- function(x) {
   (is_class(x, "Scale") && ggplot2::is.ggproto(x)) ||
     (is_class(x[[1]], "Scale") && ggplot2::is.ggproto(x[[1]]))
@@ -45,6 +47,7 @@ is_gg_theme <- function(x) {
 #' @name is_gg_component
 #' @rdname is_gg
 #' @export
+#' @importFrom ggplot2 is.ggproto
 is_gg_component <- function(x) {
   is.ggproto(x) || is_gg_scale(x) || is_gg_theme(x) || is_gg_sf_layer(x) || is_gg_layer(x)
 }
@@ -52,6 +55,7 @@ is_gg_component <- function(x) {
 #' @name is_gg_list
 #' @rdname is_gg
 #' @export
+#' @importFrom ggplot2 is.ggplot
 is_gg_list <- function(x) {
   all(sapply(x, ggplot2::is.ggplot))
 }
