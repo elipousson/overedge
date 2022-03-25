@@ -125,11 +125,12 @@ st_inscribed_square <- function(x, scale = 1, rotate = 0) {
 #' @name st_circle
 #' @export
 #' @importFrom sf st_inscribed_circle
-st_circle <- function(x, scale = 1, inscribed = FALSE) {
+st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0) {
   if (inscribed) {
     circle <-
       sf::st_inscribed_circle(
-        x = as_sf(x)
+        x = sf::st_union(as_sf(x)),
+        dTolerance = dTolerance
       )
 
     circle <- st_scale_rotate(circle, scale = scale)
