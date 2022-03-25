@@ -45,7 +45,7 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
 
 #' @rdname st_misc
 #' @name st_center
-#' @param ext If `TRUE`, st_center returns a list of sf, sfc, crs, and geom
+#' @param ext If `TRUE`, st_center returns a list with the centroid as a sfc object, as an sf object (with lon and lat values), the original geometry (x), and the original crs.
 #'   objects; defaults TRUE. If `FALSE`, return an sf object.
 #' @param ... Additional parameters passed to `sf::st_centroid()` by st_center
 #' @export
@@ -54,18 +54,16 @@ st_center <- function(x,
                       ext = TRUE,
                       ...) {
   x <- as_sf(x)
-  centroid <- suppressWarnings(sf::st_centroid(geom, ...))
+  geometry <- sf::st_geometry(x)
+  centroid <- suppressWarnings(sf::st_centroid(geometry, ...))
 
   if (ext) {
-    crs <- sf::st_crs(x)
-    geom <- sf::st_geometry(x)
     # FIXME: There should be no difference between the geom and centroid for point data
-
     center <- list(
       "sfc" = centroid,
-      "sf" = as_sf(centroid),
-      "crs" = crs,
-      "geom" = geom # This is just the original geometry
+      "sf" = number_features(as_sf(centroid)),
+      "x" = x, # This is just the original geometry
+      "crs" = sf::st_crs(x)
     )
   } else {
     center <- centroid
