@@ -139,9 +139,9 @@ sf_bbox_transform <- function(bbox, crs = NULL) {
 #'  - \code{\link[sfx]{st_extent}}
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom sf st_as_sf st_geometry
+#' @importFrom sf st_sf st_geometry
 sf_bbox_to_sf <- function(bbox, sf_col = "geometry") {
-  bbox_sf <- sf::st_as_sf(sf_bbox_to_sfc(bbox))
+  bbox_sf <- sf::st_sf(sf_bbox_to_sfc(bbox))
 
   if (!is.null(sf_col) && is_sf(bbox_sf)) {
     sf::st_geometry(bbox_sf) <- sf_col
