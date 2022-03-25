@@ -34,7 +34,6 @@ number_features <- function(data, col = NULL, number = TRUE, sort = "lon", desc 
       st_coords(
         data,
         geometry = "centroid",
-        crs = 4326,
         drop = FALSE
       )
   }
@@ -53,7 +52,6 @@ number_features <- function(data, col = NULL, number = TRUE, sort = "lon", desc 
     data <-
       dplyr::arrange(data, .data[[sort]], .by_group = by_group)
   }
-
 
   if (number) {
     data <-
