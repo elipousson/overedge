@@ -117,14 +117,18 @@
 #'
 #' U.S. State boundaries data downloaded with [tigris::states].
 #'
+#' The geoid and wkt columns are labelled with the state abbreviation (abb) in
+#' lower case.
+#'
 #' @format A data frame with 52 rows and 6 variables:
 #' \describe{
 #'   \item{\code{name}}{State name}
-#'   \item{\code{geoid}}{State GeoID}
-#'   \item{\code{statefp}}{State FIPS}
+#'   \item{\code{geoid}}{State GeoID (labelled)}
 #'   \item{\code{abb}}{State abbreviation (USPS)}
+#'   \item{\code{est_pop}}{Estimated state population (B01001_001), American Community Survey 5 year, 2015-2019}
+#'   \item{\code{statefp}}{State FIPS}
 #'   \item{\code{bbox}}{Bounding box}
-#'   \item{\code{wkt}}{Well known text}
+#'   \item{\code{wkt}}{Well known text (labelled)}
 #' }
 "us_states"
 
@@ -133,14 +137,21 @@
 #'
 #' U.S. County boundaries data downloaded with [tigris::counties].
 #'
+#' The geoid and wkt columns are labelled with a combination of an abbreviated
+#' county name and state abbreviation in snake case. Population estimates
+#' (est_pop) are not included for county equivalents in the U.S. Virgin Islands,
+#' Guam, Northern Mariana Islands, and American Samoa.
+#'
 #' @format A data frame with 3220 rows and 7 variables:
 #' \describe{
-#'   \item{\code{name}}{County name}
-#'   \item{\code{geoid}}{County GeoID}
+#'   \item{\code{name}}{County name (tidycensus)}
+#'   \item{\code{name_short}}{County name without state (tigris)}
+#'   \item{\code{geoid}}{County GeoID (labelled)}
+#'   \item{\code{abb_state}}{State abbreviation (USPS)}
+#'   \item{\code{est_pop}}{Estimated county population (B01001_001), American Community Survey 5 year, 2015-2019}
 #'   \item{\code{countyfp}}{County FIPS}
 #'   \item{\code{statefp}}{State FIPS}
-#'   \item{\code{abb_state}}{State abbreviation (USPS)}
 #'   \item{\code{bbox}}{Bounding box}
-#'   \item{\code{wkt}}{Well known text}
+#'   \item{\code{wkt}}{Well known text (labelled)}
 #' }
 "us_counties"
