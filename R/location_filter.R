@@ -1,4 +1,10 @@
-#' Filter data by location
+#' Filter, crop, or trim data to a location
+#'
+#' Location can be:
+#'
+#' - A sf, bbox, or sfc object
+#' - A U.S. state (name, abbreviation, or GeoID) or county (GeoID)
+#' - An address
 #'
 #' @param data Data to filter by location.
 #' @param location A sf, sfc, or bbox object or a character string that is an
@@ -26,7 +32,7 @@ location_filter <- function(data,
                             crop = TRUE,
                             ...) {
   stopifnot(
-    is_sf(data) || is_sfc(data)
+    is_sf(data, ext = TRUE)
   )
 
   params <- rlang::list2(...)
@@ -38,21 +44,13 @@ location_filter <- function(data,
   is_address_location <- (is.character(location) || us_geo_in_params)
 
   if (bbox_in_params) {
+    # Always use a bbox if provided
     bbox <- params$bbox
-  } else if (dist_in_params && is_sf_location) {
-    bbox <-
-      st_bbox_ext(
-        x = location,
-        dist = dist,
-        diag_ratio = diag_ratio,
-        asp = asp,
-        unit = units,
-        crs = data,
-        class = "bbox"
-      )
   } else {
     bbox <- NULL
+  }
 
+  if (!is_sf_location && is.character(location)) {
     if (is_address_location) {
       county_in_params <-
         !is.null(params$county) && !is.null(params$state)
@@ -67,7 +65,7 @@ location_filter <- function(data,
         (location %in% us_counties$geoid)
 
       if (county_in_params || is_county_location) {
-        usethis::ui_info("location is a U.S. county GeoID.")
+        # usethis::ui_info("location is a U.S. county GeoID.")
         if (county_in_params) {
           # FIXME: Update with process for using county and state parameters
         } else if (is_county_location) {
@@ -76,7 +74,7 @@ location_filter <- function(data,
           }
         }
       } else if (state_in_params || is_state_location) {
-        usethis::ui_info("location is a U.S. state name, abbreviation, or GeoID.")
+        # usethis::ui_info("location is a U.S. state name, abbreviation, or GeoID.")
         if (state_in_params) {
           # FIXME: Update with process for using state parameters
         } else if (is_state_location) {
@@ -91,7 +89,7 @@ location_filter <- function(data,
           }
         }
       } else {
-        usethis::ui_info("location is a possible address.")
+        # usethis::ui_info("location is a possible address.")
 
         # Geocode the address
         location <-
@@ -109,6 +107,19 @@ location_filter <- function(data,
     }
   }
 
+  if (dist_in_params && is_sf_location && is.null(bbox)) {
+    bbox <-
+      st_bbox_ext(
+        x = location,
+        dist = dist,
+        diag_ratio = diag_ratio,
+        asp = asp,
+        unit = units,
+        crs = data,
+        class = "bbox"
+      )
+  }
+
   stopifnot(
     is.null(bbox) || is_bbox(bbox)
   )
@@ -119,17 +130,32 @@ location_filter <- function(data,
     suppressMessages(sf::sf_use_s2(FALSE))
   }
 
-  if (is_sf_location) {
+  if (is_sf_location && (trim || is.null(bbox))) {
     location <- st_transform_ext(x = location, crs = data)
-  }
 
-  if (trim && is_sf_location) {
-    # If trim, match location crs to data
-    if (dist_in_params) {
-      usethis::ui_warn("The dist, diag_ratio, and/or asp parameters are ignored if trim is TRUE.")
+    if (is_point(location) || is_multipoint(location)) {
+      location <- st_buffer_ext(x = location, dist = 0.00000001)
+
+      if (trim) {
+        usethis::ui_warn("location_filter does not support trim = TRUE for POINT or MULTIPOINT geometry.")
+        trim <- FALSE
+      }
     }
 
-    data <- st_erase(x = data, y = location, flip = TRUE)
+    if (trim) {
+      # If trim, match location crs to data
+      if (dist_in_params) {
+        usethis::ui_warn("location_filter ignores the dist, diag_ratio, and/or asp parameters if trim is TRUE.")
+      }
+
+      data <- st_trim(x = data, y = location)
+    } else {
+      if (!is.null(params$join)) {
+        data <- sf::st_filter(x = data, y = location, join = params$join)
+      } else {
+        data <- sf::st_filter(x = data, y = location)
+      }
+    }
   } else if (!is.null(bbox)) {
     # Otherwise, match bbox crs to data
     bbox <- st_transform_ext(x = bbox, crs = data)
@@ -145,16 +171,6 @@ location_filter <- function(data,
       } else {
         data <- sf::st_filter(x = data, y = bbox_sf)
       }
-    }
-  } else if (is_sf_location) {
-    if (is_geom_type(location)$POINTS) {
-      location <- st_buffer_ext(x = location, dist = 0.00000001)
-    }
-
-    if (!is.null(params$join)) {
-      data <- sf::st_filter(x = data, y = location, join = params$join)
-    } else {
-      data <- sf::st_filter(x = data, y = location)
     }
   }
 
