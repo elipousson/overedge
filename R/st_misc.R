@@ -111,12 +111,11 @@ st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE) {
   return(square)
 }
 
-
 #' @rdname st_misc
 #' @name st_inscribed_square
 #' @export
 st_inscribed_square <- function(x, scale = 1, rotate = 0) {
-  st_square(x = x, scale = scale, rotate = rotat, inscribed = TRUE)
+  st_square(x = x, scale = scale, rotate = rotate, inscribed = TRUE)
 }
 
 #' @rdname st_misc
