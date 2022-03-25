@@ -56,7 +56,8 @@ number_features <- function(data, col = NULL, number = TRUE, sort = "lon", desc 
 
 
   if (number) {
-    data <- dplyr::mutate(data, number = dplyr::row_number())
+    data <-
+      dplyr::mutate(data, number = dplyr::row_number(), .before = dplyr::everything())
   }
 
   return(data)

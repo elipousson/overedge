@@ -92,7 +92,7 @@ get_nyc_borough("Manhattan")
 
 If your location data is sourced from an ArcGIS MapServer or FeatureServer, you can use the `name` and `name_col` parameters from the underlying `get_esri_data()` function. This avoids the need to download the full dataset every time.
 
-```{r get_location_esri}
+```{r get_location_esri, eval=FALSE}
 # get_anc looks up the Advisory Neighborhood Council
 # Data from Open Data DC https://opendata.dc.gov/datasets/fcfbf29074e549d8aff9b9c708179291
 

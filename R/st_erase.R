@@ -14,12 +14,13 @@
 #' @export
 #' @importFrom sf st_union st_combine st_intersection st_difference
 st_erase <- function(x, y, flip = FALSE, union = TRUE) {
-
-  if (!is_same_crs(x, y))
+  if (!is_same_crs(x, y)) {
     y <- st_transform_ext(x = y, crs = x)
+  }
 
-  if (union)
+  if (union) {
     y <- sf::st_union(sf::st_combine(y))
+  }
 
   if (flip) {
     x <- suppressMessages(suppressWarnings(sf::st_intersection(x, y)))

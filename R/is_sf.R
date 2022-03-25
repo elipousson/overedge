@@ -1,7 +1,8 @@
 #' @noRd
 is_class <- function(x, classes = NULL, null.ok = FALSE) {
-  if (is.null(x) && null.ok)
+  if (is.null(x) && null.ok) {
     return(TRUE)
+  }
 
   any(classes %in% class(x))
 }

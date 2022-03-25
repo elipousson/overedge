@@ -2,7 +2,7 @@
 % Please edit documentation in R/location_filter.R
 \name{location_filter}
 \alias{location_filter}
-\title{Filter data by location}
+\title{Filter, crop, or trim data to a location}
 \usage{
 location_filter(
   data,
@@ -55,5 +55,12 @@ location), county and state (used with get_counties or get_states), join
 (passed to \link[sf:st_join]{sf::st_filter})}
 }
 \description{
-Filter data by location
+Location can be:
+}
+\details{
+\itemize{
+\item A sf, bbox, or sfc object
+\item A U.S. state (name, abbreviation, or GeoID) or county (GeoID)
+\item An address
+}
 }

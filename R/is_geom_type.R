@@ -38,14 +38,12 @@ is_geom_type <- function(x, ext = TRUE, type = NULL, by_geometry = FALSE) {
 #' @rdname is_geom_type
 #' @export
 is_point <- function(x, by_geometry = FALSE) {
-
   is_geom_type(
     x = x,
     ext = TRUE,
     type = "POINT",
     by_geometry = by_geometry
   )
-
 }
 
 #' @name is_multipoint

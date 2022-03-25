@@ -2,9 +2,12 @@
 % Please edit documentation in R/st_erase.R
 \name{st_erase}
 \alias{st_erase}
+\alias{st_trim}
 \title{Erase an area of a simple feature object}
 \usage{
 st_erase(x, y, flip = FALSE, union = TRUE)
+
+st_trim(x, y, union = TRUE)
 }
 \arguments{
 \item{x}{sf object}
@@ -18,7 +21,7 @@ Default: FALSE}
 difference/intersection, Default: FALSE}
 }
 \description{
-An extended version of \code{sf::st_difference} that uses the flip parameter to
-optionally call \code{sf::st_intersection} and combines and unions the second
-object by default.
+An extended version of \link[sf:geos_binary_ops]{sf::st_difference} that uses the flip parameter to
+optionally call \link[sf:geos_binary_ops]{sf::st_intersection} and combines and unions the second
+object by default. \link{st_trim} is \link{st_erase} with flip set to \code{TRUE}.
 }

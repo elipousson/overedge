@@ -61,7 +61,7 @@
     <a class="dropdown-item" href="../articles/get_location.html">Get locations and location data</a>
     <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
-    <a class="dropdown-item" href="../articles/working-sf-bbox-objects.html">Working with simple feature and bounding box objects</a>
+    <a class="dropdown-item" href="../articles/working-sf-bbox.html">Working with simple feature and bounding box objects</a>
     <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
 </li>
@@ -86,7 +86,7 @@
             
       
       
-      <div class="d-none name"><code>working-sf-bbox-objects.Rmd</code></div>
+      <div class="d-none name"><code>working-sf-bbox.Rmd</code></div>
     </div>
 
     
@@ -149,12 +149,12 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bbox_small</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/st_bbox_ext.html">st_bbox_ext</a></span><span class="op">(</span>
-    <span class="va">bbox_large</span>,
+    x <span class="op">=</span> <span class="va">bbox_large</span>,
     dist <span class="op">=</span> <span class="op">-</span><span class="fl">1</span> <span class="op">/</span> <span class="fl">16</span>,
     unit <span class="op">=</span> <span class="st">"mile"</span>
   <span class="op">)</span>
 
-<span class="va">small_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf_bbox_misc.html">sf_bbox_to_sf</a></span><span class="op">(</span><span class="va">bbox_small</span><span class="op">)</span>
+<span class="va">small_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_sf.html">as_sf</a></span><span class="op">(</span><span class="va">bbox_small</span><span class="op">)</span>
 
 <span class="va">basemap</span> <span class="op">&lt;-</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -176,7 +176,7 @@
   <span class="op">)</span>
 
 <span class="va">basemap</span></code></pre></div>
-<p><img src="working-sf-bbox-objects_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="working-sf-bbox_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">small_diamond_sf</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/st_misc.html">st_inscribed_square</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bbox_small</span>, rotate <span class="op">=</span> <span class="fl">45</span><span class="op">)</span>
@@ -197,26 +197,36 @@
     color <span class="op">=</span> <span class="st">"black"</span>,
     alpha <span class="op">=</span> <span class="fl">0.1</span>
   <span class="op">)</span></code></pre></div>
-<p><img src="working-sf-bbox-objects_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="working-sf-bbox_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">center</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/st_misc.html">st_center</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bbox_large</span><span class="op">)</span>
 
 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">center</span><span class="op">)</span>
-<span class="co">#&gt; List of 4</span>
-<span class="co">#&gt;  $ sf  :Classes 'sf' and 'data.frame':   1 obs. of  1 variable:</span>
-<span class="co">#&gt;   ..$ centroid:sfc_POINT of length 1; first list element:  'XY' num [1:2] -8539713 4757981</span>
-<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "centroid"</span>
+<span class="co">#&gt; List of 5</span>
+<span class="co">#&gt;  $ sfc     :sfc_POINT of length 1; first list element:  'XY' num [1:2] -8539713 4757981</span>
+<span class="co">#&gt;  $ sf      :Classes 'sf' and 'data.frame':   1 obs. of  4 variables:</span>
+<span class="co">#&gt;   ..$ lon     : num -76.7</span>
+<span class="co">#&gt;   ..$ lat     : num 39.3</span>
+<span class="co">#&gt;   ..$ geometry:sfc_POINT of length 1; first list element:  'XY' num [1:2] -8539713 4757981</span>
+<span class="co">#&gt;   ..$ number  : int 1</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
+<span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA</span>
+<span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:3] "lon" "lat" "number"</span>
+<span class="co">#&gt;  $ geometry:sfc_POLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   ..$ : num [1:5, 1:2] -8539914 -8539512 -8539512 -8539914 -8539914 ...</span>
+<span class="co">#&gt;   ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"</span>
+<span class="co">#&gt;  $ x       :Classes 'sf' and 'data.frame':   1 obs. of  1 variable:</span>
+<span class="co">#&gt;   ..$ geometry:sfc_POLYGON of length 1; first list element: List of 1</span>
+<span class="co">#&gt;   .. ..$ : num [1:5, 1:2] -8539914 -8539512 -8539512 -8539914 -8539914 ...</span>
+<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"</span>
+<span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span>
 <span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: </span>
 <span class="co">#&gt;   .. ..- attr(*, "names")= chr(0) </span>
-<span class="co">#&gt;  $ sfc :sfc_POINT of length 1; first list element:  'XY' num [1:2] -8539713 4757981</span>
-<span class="co">#&gt;  $ crs :List of 2</span>
+<span class="co">#&gt;  $ crs     :List of 2</span>
 <span class="co">#&gt;   ..$ input: chr "EPSG:3857"</span>
 <span class="co">#&gt;   ..$ wkt  : chr "PROJCRS[\"WGS 84 / Pseudo-Mercator\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\"| __truncated__</span>
-<span class="co">#&gt;   ..- attr(*, "class")= chr "crs"</span>
-<span class="co">#&gt;  $ geom:sfc_POLYGON of length 1; first list element: List of 1</span>
-<span class="co">#&gt;   ..$ : num [1:5, 1:2] -8539914 -8539512 -8539512 -8539914 -8539914 ...</span>
-<span class="co">#&gt;   ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"</span></code></pre></div>
+<span class="co">#&gt;   ..- attr(*, "class")= chr "crs"</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bbox_stretched</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/sf_bbox_misc.html">sf_bbox_expand</a></span><span class="op">(</span>
@@ -229,7 +239,7 @@
     data <span class="op">=</span> <span class="va">bbox_stretched</span>,
     alpha <span class="op">=</span> <span class="fl">0.1</span>
   <span class="op">)</span></code></pre></div>
-<p><img src="working-sf-bbox-objects_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="working-sf-bbox_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">paper_sf</span> <span class="op">&lt;-</span>
@@ -248,7 +258,7 @@
     fill <span class="op">=</span> <span class="st">"yellow"</span>,
     linetype <span class="op">=</span> <span class="st">"dashed"</span>
   <span class="op">)</span></code></pre></div>
-<p><img src="working-sf-bbox-objects_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
+<p><img src="working-sf-bbox_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
   </main>
 </div>
 

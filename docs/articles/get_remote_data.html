@@ -61,7 +61,7 @@
     <a class="dropdown-item" href="../articles/get_location.html">Get locations and location data</a>
     <a class="dropdown-item" href="../articles/get_remote_data.html">Getting remote data and photos using API functions</a>
     <a class="dropdown-item" href="../articles/ggsave_ext.html">Map layout and themes with ggplot2 utility functions</a>
-    <a class="dropdown-item" href="../articles/working-sf-bbox-objects.html">Working with simple feature and bounding box objects</a>
+    <a class="dropdown-item" href="../articles/working-sf-bbox.html">Working with simple feature and bounding box objects</a>
     <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
 </li>
@@ -169,7 +169,7 @@
 <div class="section level2">
 <h2 id="get-data-about-photos-from-flickr">Get data about photos from Flickr<a class="anchor" aria-label="anchor" href="#get-data-about-photos-from-flickr"></a>
 </h2>
-<p>The get_flickr_photos function depends on a <a href="https://github.com/elipousson/FlickrAPI" class="external-link">development version of the FlickrAPI package</a> so I am not currently able to render the vignette to show</p>
+<p>The get_flickr_photos function depends on a <a href="https://github.com/elipousson/FlickrAPI" class="external-link">development version of the FlickrAPI package</a> so I am not currently able to render the vignette to show how it works.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">photos_sf</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/get_flickr_photos.html">get_flickr_photos</a></span><span class="op">(</span>
@@ -179,39 +179,6 @@
     orientation <span class="op">=</span> <span class="st">"landscape"</span>,
     geometry <span class="op">=</span> <span class="cn">TRUE</span> <span class="co"># this is the default</span>
   <span class="op">)</span></code></pre></div>
-<p>The following is an experimental function using the leafpop package to make an interactive photo map based on photos from Flickr.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mapview_flickr</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">photos</span>,
-                           <span class="va">img_size</span> <span class="op">=</span> <span class="st">"s"</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">img_size</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg</a></span><span class="op">(</span>
-      <span class="va">img_size</span>,
-      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sq"</span>, <span class="st">"t"</span>, <span class="st">"s"</span>, <span class="st">"q"</span>, <span class="st">"m"</span>, <span class="st">"n"</span>, <span class="st">"z"</span>, <span class="st">"c"</span>, <span class="st">"l"</span>, <span class="st">"o"</span><span class="op">)</span>
-    <span class="op">)</span>
-
-  <span class="va">leaflet_map</span> <span class="op">&lt;-</span>
-    <span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/leaflet.html" class="external-link">leaflet</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/map-layers.html" class="external-link">addTiles</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/map-layers.html" class="external-link">addCircleMarkers</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">photos</span>, group <span class="op">=</span> <span class="st">"photos"</span><span class="op">)</span>
-
-  <span class="va">img_url</span> <span class="op">&lt;-</span> <span class="va">photos</span><span class="op">$</span><span class="va">img_url</span>
-  <span class="va">img_width</span> <span class="op">&lt;-</span> <span class="va">photos</span><span class="op">$</span><span class="va">img_width</span>
-  <span class="va">img_height</span> <span class="op">&lt;-</span> <span class="va">photos</span><span class="op">$</span><span class="va">img_height</span>
-
-  <span class="va">photo_map</span> <span class="op">&lt;-</span>
-    <span class="fu">leafpop</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/leafpop/man/addPopupImages.html" class="external-link">addPopupImages</a></span><span class="op">(</span>
-      map <span class="op">=</span> <span class="va">leaflet_map</span>,
-      image <span class="op">=</span> <span class="va">img_url</span>,
-      width <span class="op">=</span> <span class="va">img_width</span>,
-      height <span class="op">=</span> <span class="va">img_height</span>,
-      group <span class="op">=</span> <span class="st">"photos"</span>
-    <span class="op">)</span>
-
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">photo_map</span><span class="op">)</span>
-<span class="op">}</span>
-
-
-<span class="fu">mapview_flickr</span><span class="op">(</span>photos <span class="op">=</span> <span class="va">photos_sf</span>, img_size <span class="op">=</span> <span class="st">"s"</span><span class="op">)</span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

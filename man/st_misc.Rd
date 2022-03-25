@@ -29,7 +29,7 @@ st_circumscribed_circle(x, scale = 1)
 
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
 
-\item{ext}{If \code{TRUE}, st_center returns a list of sf, sfc, crs, and geom
+\item{ext}{If \code{TRUE}, st_center returns a list with the centroid as a sfc object, as an sf object (with lon and lat values), the original geometry (x), and the original crs.
 objects; defaults TRUE. If \code{FALSE}, return an sf object.}
 
 \item{...}{Additional parameters passed to \code{sf::st_centroid()} by st_center}
@@ -54,14 +54,14 @@ can be provided to change the orientation of the shape, e.g. rotate = -45 to
 return a diamond shape. st_square wraps \link{st_bbox_ext} with asp = 1.
 }
 \examples{
-   library(ggplot2)
+library(ggplot2)
 
-   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-   nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)
 
-   ggplot() +
-     geom_sf(data = nc) +
-     geom_sf(data = nc_rotated, fill = NA, color = "red")
+ggplot2::ggplot() +
+  ggplot2::geom_sf(data = nc) +
+  ggplot2::geom_sf(data = nc_rotated, fill = NA, color = "red")
 }
 \seealso{
 \itemize{
