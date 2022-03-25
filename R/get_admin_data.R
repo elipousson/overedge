@@ -22,6 +22,8 @@ get_states <- function(location = NULL,
                        ...) {
   params <- rlang::list2(...)
 
+  us_states <- overedge::us_states
+
   if (!is.null(location)) {
     # Adjust bounding box
     bbox <- st_bbox_ext(
@@ -75,6 +77,8 @@ get_counties <- function(location = NULL,
                          class = "df",
                          ...) {
   params <- rlang::list2(...)
+
+  us_counties <- overedge::us_counties
 
   if (!is.null(location)) {
     # Adjust bounding box
