@@ -35,7 +35,7 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
 
   center <- st_center(x, ext = TRUE)
 
-  y <- (center$x - center$sfc) * rot(pi / (360 / (rotate * 2)))
+  y <- (center$geometry - center$sfc) * rot(pi / (360 / (rotate * 2)))
   y <- y * scale + center$sfc
 
   sf::st_geometry(x) <- y
@@ -43,6 +43,7 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
 
   return(x)
 }
+
 
 #' @rdname st_misc
 #' @name st_center
@@ -55,7 +56,7 @@ st_center <- function(x,
                       ext = TRUE,
                       ...) {
   x <- as_sf(x)
-  geometry <- sf::st_geometry(x)
+  geometry <- as_sfc(x)
   centroid <- suppressWarnings(sf::st_centroid(geometry, ...))
 
   if (ext) {
@@ -63,6 +64,7 @@ st_center <- function(x,
     center <- list(
       "sfc" = centroid,
       "sf" = number_features(as_sf(centroid)),
+      "geometry" = geometry,
       "x" = x, # This is just the original geometry
       "crs" = sf::st_crs(x)
     )
