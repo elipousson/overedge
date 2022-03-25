@@ -18,7 +18,7 @@ st_square(x, scale = 1, rotate = 0, inscribed = FALSE)
 
 st_inscribed_square(x, scale = 1, rotate = 0)
 
-st_circle(x, scale = 1, inscribed = FALSE)
+st_circle(x, scale = 1, inscribed = FALSE, dTolerance = 0)
 
 st_circumscribed_circle(x, scale = 1)
 }

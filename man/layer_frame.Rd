@@ -15,9 +15,9 @@ layer_frame(
   rotate = 0,
   inscribed = FALSE,
   color = "black",
-  fill = "white",
   size = 1,
   linetype = "solid",
+  fill = "white",
   neatline = TRUE,
   expand = FALSE,
   union = TRUE,
@@ -60,7 +60,8 @@ provided parameters.}
 \item{union}{If \code{TRUE}, union data before buffering and creating frame;
 defaults to \code{TRUE}.}
 
-\item{...}{Additional parameters to pass to \code{\link[ggplot2]{coord_sf}}.}
+\item{...}{Additional parameters passed to \link{layer_location_data}. May include
+additional fixed aesthetics (e.g. alpha) or "fn" to apply to the frame object.}
 
 \item{x}{A sf, sfc, or bbox object}
 }
