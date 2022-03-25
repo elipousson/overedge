@@ -44,7 +44,7 @@ Support both bbox and sf objects as inputs.
 \item Scale or rotate a simple feature or bounding box object using affine transformations
 \item Get the center point for a sf object
 \item Get a circumscribed square or approximate inscribed square in a sf object
-\item Get a circumscribed circle or incscribed circle in a sf object
+\item Get a circumscribed circle or inscribed circle in a sf object
 }
 
 st_inscribed_square wraps \code{sf::st_inscribed_circle()} but limits the

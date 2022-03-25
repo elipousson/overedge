@@ -34,7 +34,7 @@ theme_margin(
 theme_legend(
   position = NULL,
   justification = NULL,
-  margin = 10,
+  margin = 8,
   unit = "pt",
   inset = TRUE,
   bgcolor = "white",

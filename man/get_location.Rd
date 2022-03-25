@@ -93,15 +93,5 @@ get_location(
   )
 )
 
-# url may require passing extra parameters to `get_location_data()`
-# In this example, no location information is passed to get_location() so it warns before returning all types
-md_parks <-
-  get_location(
-  type = "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Parks/FeatureServer/0",
-  location = filter(us_states, abb == "MD")$bbox[[1]]
- # name_col = "NAME",
-#  name = "Chesapeake and Ohio Canal National Historic Park"
-)
-
 
 }
