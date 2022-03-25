@@ -193,7 +193,22 @@
   <span class="op">)</span>
 <span class="op">}</span>
 
-<span class="fu">get_anc</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"5B"</span><span class="op">)</span></code></pre></div>
+<span class="fu">get_anc</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"5B"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #0000BB;">Layer Type: </span><span style="color: #BB00BB;">Feature Layer</span></span>
+<span class="co">#&gt; <span style="color: #0000BB;">Geometry Type: </span><span style="color: #BB00BB;">esriGeometryPolygon</span></span>
+<span class="co">#&gt; <span style="color: #0000BB;">Service Coordinate Reference System: </span><span style="color: #BB00BB;">3857</span></span>
+<span class="co">#&gt; <span style="color: #0000BB;">Output Coordinate Reference System: </span><span style="color: #BB00BB;">4326</span></span>
+<span class="co">#&gt; Simple feature collection with 1 feature and 11 fields</span>
+<span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: -76.99753 ymin: 38.92135 xmax: -76.96666 ymax: 38.95024</span>
+<span class="co">#&gt; Geodetic CRS:  WGS 84</span>
+<span class="co">#&gt;   objectid anc_id                                                    web_url</span>
+<span class="co">#&gt; 1        9 ANC 5B http://anc.dc.gov/page/advisory-neighborhood-commission-5b</span>
+<span class="co">#&gt;   name shape_area shape_len                               globalid creator</span>
+<span class="co">#&gt; 1   5B          0         0 {6DBCF9C2-E269-41C6-AE4D-AC645FFC101D}      NA</span>
+<span class="co">#&gt;   created editor       edited                       geometry</span>
+<span class="co">#&gt; 1      NA  DCGIS 1.573036e+12 MULTIPOLYGON (((-76.98239 3...</span></code></pre></div>
 <p>Location data can also be loaded from a URL with a GeoJSON or other spatial data file.</p>
 </div>
 <div class="section level4">
@@ -509,12 +524,12 @@
   <span class="op">)</span>
 
 <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span><span class="va">district_trees</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="czpevyonzo" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="spphorwuxk" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#czpevyonzo .gt_table {
+#spphorwuxk .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -539,7 +554,7 @@
   border-left-color: #D3D3D3;
 }
 
-#czpevyonzo .gt_heading {
+#spphorwuxk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -551,7 +566,7 @@
   border-right-color: #D3D3D3;
 }
 
-#czpevyonzo .gt_title {
+#spphorwuxk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -561,7 +576,7 @@
   border-bottom-width: 0;
 }
 
-#czpevyonzo .gt_subtitle {
+#spphorwuxk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -571,13 +586,13 @@
   border-top-width: 0;
 }
 
-#czpevyonzo .gt_bottom_border {
+#spphorwuxk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#czpevyonzo .gt_col_headings {
+#spphorwuxk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -592,7 +607,7 @@
   border-right-color: #D3D3D3;
 }
 
-#czpevyonzo .gt_col_heading {
+#spphorwuxk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -612,7 +627,7 @@
   overflow-x: hidden;
 }
 
-#czpevyonzo .gt_column_spanner_outer {
+#spphorwuxk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -624,15 +639,15 @@
   padding-right: 4px;
 }
 
-#czpevyonzo .gt_column_spanner_outer:first-child {
+#spphorwuxk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#czpevyonzo .gt_column_spanner_outer:last-child {
+#spphorwuxk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#czpevyonzo .gt_column_spanner {
+#spphorwuxk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -644,7 +659,7 @@
   width: 100%;
 }
 
-#czpevyonzo .gt_group_heading {
+#spphorwuxk .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -666,7 +681,7 @@
   vertical-align: middle;
 }
 
-#czpevyonzo .gt_empty_group_heading {
+#spphorwuxk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -681,15 +696,15 @@
   vertical-align: middle;
 }
 
-#czpevyonzo .gt_from_md > :first-child {
+#spphorwuxk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#czpevyonzo .gt_from_md > :last-child {
+#spphorwuxk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#czpevyonzo .gt_row {
+#spphorwuxk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -708,7 +723,7 @@
   overflow-x: hidden;
 }
 
-#czpevyonzo .gt_stub {
+#spphorwuxk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -720,7 +735,7 @@
   padding-left: 12px;
 }
 
-#czpevyonzo .gt_summary_row {
+#spphorwuxk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -730,7 +745,7 @@
   padding-right: 5px;
 }
 
-#czpevyonzo .gt_first_summary_row {
+#spphorwuxk .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -740,7 +755,7 @@
   border-top-color: #D3D3D3;
 }
 
-#czpevyonzo .gt_grand_summary_row {
+#spphorwuxk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -750,7 +765,7 @@
   padding-right: 5px;
 }
 
-#czpevyonzo .gt_first_grand_summary_row {
+#spphorwuxk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -760,11 +775,11 @@
   border-top-color: #D3D3D3;
 }
 
-#czpevyonzo .gt_striped {
+#spphorwuxk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#czpevyonzo .gt_table_body {
+#spphorwuxk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -773,7 +788,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#czpevyonzo .gt_footnotes {
+#spphorwuxk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -787,13 +802,13 @@
   border-right-color: #D3D3D3;
 }
 
-#czpevyonzo .gt_footnote {
+#spphorwuxk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#czpevyonzo .gt_sourcenotes {
+#spphorwuxk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -807,41 +822,41 @@
   border-right-color: #D3D3D3;
 }
 
-#czpevyonzo .gt_sourcenote {
+#spphorwuxk .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#czpevyonzo .gt_left {
+#spphorwuxk .gt_left {
   text-align: left;
 }
 
-#czpevyonzo .gt_center {
+#spphorwuxk .gt_center {
   text-align: center;
 }
 
-#czpevyonzo .gt_right {
+#spphorwuxk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#czpevyonzo .gt_font_normal {
+#spphorwuxk .gt_font_normal {
   font-weight: normal;
 }
 
-#czpevyonzo .gt_font_bold {
+#spphorwuxk .gt_font_bold {
   font-weight: bold;
 }
 
-#czpevyonzo .gt_font_italic {
+#spphorwuxk .gt_font_italic {
   font-style: italic;
 }
 
-#czpevyonzo .gt_super {
+#spphorwuxk .gt_super {
   font-size: 65%;
 }
 
-#czpevyonzo .gt_footnote_marks {
+#spphorwuxk .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
