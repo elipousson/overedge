@@ -22,7 +22,7 @@ is_class <- function(x, classes = NULL, null.ok = FALSE) {
 #' @export
 #' @md
 is_sf <- function(x, ext = FALSE, null.ok = FALSE) {
-  if (!ext) {
+  if (ext) {
     classes <- c("sf", "sfc", "bbox")
   } else {
     classes <- "sf"
