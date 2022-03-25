@@ -61,7 +61,8 @@ provided parameters.}
 defaults to \code{TRUE}.}
 
 \item{...}{Additional parameters passed to \link{layer_location_data}. May include
-additional fixed aesthetics (e.g. alpha) or "fn" to apply to the frame object.}
+additional fixed aesthetics (e.g. alpha) or "fn" to apply to the frame
+object.}
 
 \item{x}{A sf, sfc, or bbox object}
 }

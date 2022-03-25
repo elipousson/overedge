@@ -70,10 +70,19 @@
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
     <p>A data frame with 3220 rows and 7 variables:</p><dl><dt><code>name</code></dt>
-<dd><p>County name</p></dd>
+<dd><p>County name (tidycensus)</p></dd>
+
+<dt><code>name_short</code></dt>
+<dd><p>County name without state (tigris)</p></dd>
 
 <dt><code>geoid</code></dt>
-<dd><p>County GeoID</p></dd>
+<dd><p>County GeoID (labelled)</p></dd>
+
+<dt><code>abb_state</code></dt>
+<dd><p>State abbreviation (USPS)</p></dd>
+
+<dt><code>est_pop</code></dt>
+<dd><p>Estimated county population (B01001_001), American Community Survey 5 year, 2015-2019</p></dd>
 
 <dt><code>countyfp</code></dt>
 <dd><p>County FIPS</p></dd>
@@ -81,17 +90,21 @@
 <dt><code>statefp</code></dt>
 <dd><p>State FIPS</p></dd>
 
-<dt><code>abb_state</code></dt>
-<dd><p>State abbreviation (USPS)</p></dd>
-
 <dt><code>bbox</code></dt>
 <dd><p>Bounding box</p></dd>
 
 <dt><code>wkt</code></dt>
-<dd><p>Well known text</p></dd>
+<dd><p>Well known text (labelled)</p></dd>
 
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>The geoid and wkt columns are labelled with a combination of an abbreviated
+county name and state abbreviation in snake case. Population estimates
+(est_pop) are not included for county equivalents in the U.S. Virgin Islands,
+Guam, Northern Mariana Islands, and American Samoa.</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

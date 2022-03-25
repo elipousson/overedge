@@ -7,13 +7,15 @@
 \format{
 A data frame with 3220 rows and 7 variables:
 \describe{
-\item{\code{name}}{County name}
-\item{\code{geoid}}{County GeoID}
+\item{\code{name}}{County name (tidycensus)}
+\item{\code{name_short}}{County name without state (tigris)}
+\item{\code{geoid}}{County GeoID (labelled)}
+\item{\code{abb_state}}{State abbreviation (USPS)}
+\item{\code{est_pop}}{Estimated county population (B01001_001), American Community Survey 5 year, 2015-2019}
 \item{\code{countyfp}}{County FIPS}
 \item{\code{statefp}}{State FIPS}
-\item{\code{abb_state}}{State abbreviation (USPS)}
 \item{\code{bbox}}{Bounding box}
-\item{\code{wkt}}{Well known text}
+\item{\code{wkt}}{Well known text (labelled)}
 }
 }
 \usage{
@@ -21,5 +23,11 @@ us_counties
 }
 \description{
 U.S. County boundaries data downloaded with \link[tigris:counties]{tigris::counties}.
+}
+\details{
+The geoid and wkt columns are labelled with a combination of an abbreviated
+county name and state abbreviation in snake case. Population estimates
+(est_pop) are not included for county equivalents in the U.S. Virgin Islands,
+Guam, Northern Mariana Islands, and American Samoa.
 }
 \keyword{datasets}

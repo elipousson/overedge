@@ -9,7 +9,8 @@
 #' @inheritParams st_misc
 #' @inheritParams st_buffer_ext
 #' @param ... Additional parameters passed to [layer_location_data]. May include
-#'   additional fixed aesthetics (e.g. alpha) or "fn" to apply to the frame object.
+#'   additional fixed aesthetics (e.g. alpha) or "fn" to apply to the frame
+#'   object.
 #' @name layer_frame
 #' @family layer
 #' @export

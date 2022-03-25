@@ -8,11 +8,12 @@
 A data frame with 52 rows and 6 variables:
 \describe{
 \item{\code{name}}{State name}
-\item{\code{geoid}}{State GeoID}
-\item{\code{statefp}}{State FIPS}
+\item{\code{geoid}}{State GeoID (labelled)}
 \item{\code{abb}}{State abbreviation (USPS)}
+\item{\code{est_pop}}{Estimated state population (B01001_001), American Community Survey 5 year, 2015-2019}
+\item{\code{statefp}}{State FIPS}
 \item{\code{bbox}}{Bounding box}
-\item{\code{wkt}}{Well known text}
+\item{\code{wkt}}{Well known text (labelled)}
 }
 }
 \usage{
@@ -20,5 +21,9 @@ us_states
 }
 \description{
 U.S. State boundaries data downloaded with \link[tigris:states]{tigris::states}.
+}
+\details{
+The geoid and wkt columns are labelled with the state abbreviation (abb) in
+lower case.
 }
 \keyword{datasets}
