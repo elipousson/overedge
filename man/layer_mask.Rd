@@ -62,6 +62,8 @@ Returns a mask for an area or areas as a simple feature object.
 }
 \seealso{
 Other layer: 
+\code{\link{layer_frame}()},
+\code{\link{layer_icon}()},
 \code{\link{layer_location_data}()},
 \code{\link{layer_neatline}()},
 \code{\link{layer_scaled}()}

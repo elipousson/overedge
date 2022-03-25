@@ -38,7 +38,7 @@ remotes::install_github("elipousson/overedge")
 
 ### Make icon maps with sf objects and ggplot2
 
-`geom_sf_icon` wraps `ggsvg::geom_point_svg()` to provide an convenient way to make icon maps.
+`layer_icon` wraps `ggsvg::geom_point_svg()` to provide an convenient way to make icon maps.
 
 You can create maps using a single named icon that matches one of the icons in `map_icons`.
 
@@ -56,7 +56,7 @@ nc_map <-
   geom_sf(data = nc)
 
 nc_map +
-  geom_sf_icon(data = nc, icon = "point-start", size = 8)
+  layer_icon(data = nc, icon = "point-start", size = 8)
 ```
 
 You can also use an `icon` column from the provided sf object.
@@ -65,7 +65,7 @@ You can also use an `icon` column from the provided sf object.
 nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc) / 4)
 
 nc_map +
-  geom_sf_icon(data = nc, size = 5)
+  layer_icon(data = nc, size = 5)
 ```
 
 Check `map_icons` to see all supported icon names.
@@ -88,7 +88,7 @@ nc_map +
 ### Create inscribed squares in sf objects
 
 ```{r}
-nc_squares <- st_inscribed_square(nc)
+nc_squares <- st_square(nc, inscribed = TRUE)
 
 nc_map +
   geom_sf(data = nc_squares, fill = NA, color = "red")
@@ -107,7 +107,7 @@ nc_map +
   )
 ```
 
-`layer_neatline()` can also be used to focus on a specific area of a map with the option to apply a buffer as a distance or ratio of the diagonal distance for the input data. The `label_axes` and `hide_grid` paramters will not override a set ggplot theme.
+`layer_neatline()` can also be used to focus on a specific area of a map with the option to apply a buffer as a distance or ratio of the diagonal distance for the input data. The `label_axes` and `hide_grid` parameters will not override a set ggplot theme.
 
 ```{r}
 theme_set(theme_minimal())

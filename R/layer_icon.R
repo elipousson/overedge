@@ -1,4 +1,4 @@
-#' Draw SVG icons for a simple feature object
+#' Add a SVG icons to a ggplot2 plot based on a simple feature object
 #'
 #' Use the  [ggsvg::geom_point_svg()] function to plot icons using the centroids
 #' from the input simple feature object to set the icon location.
@@ -43,7 +43,8 @@
 #' @seealso
 #'  \code{\link[ggsvg]{geom_point_svg}}
 #'  \code{\link[overedge]{map_icons}}
-#' @rdname geom_sf_icon
+#' @rdname layer_icon
+#' @family layer
 #' @export
 #' @importFrom sf st_geometry_type st_centroid st_coordinates
 #' @importFrom usethis ui_warn ui_stop
@@ -51,7 +52,7 @@
 #' @importFrom ggplot2 aes
 #' @importFrom stringr str_detect
 #' @importFrom rlang .data
-geom_sf_icon <- function(data = NULL,
+layer_icon <- function(data = NULL,
                          iconname_col = "icon",
                          icon = NULL,
                          px = NULL,
@@ -123,3 +124,9 @@ geom_sf_icon <- function(data = NULL,
     )
   }
 }
+
+#' @rdname layer_icon
+#' @name geom_sf_icon
+#' @export
+geom_sf_icon <- layer_icon
+

@@ -7,7 +7,7 @@
 #' @param label label for area (appended to data as a prefix if data is a
 #'   string)
 #' @param geom ggplot2 geom to use, Default: 'sf'. Options include "sf"
-#'   (geom_sf), "icon" (geom_sf_icon), "text" (geom_sf_text), "label"
+#'   (geom_sf), "icon" (layer_icon / geom_sf_icon), "text" (geom_sf_text), "label"
 #'   (geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".
 #' @param unit unit to adjust location by dist or diag_ratio; defaults to
 #'   "meter"
@@ -118,7 +118,7 @@ layer_location_data <-
     geom <-
       switch(geom,
         "sf" = ggplot2::geom_sf,
-        "icon" = geom_sf_icon,
+        "icon" = layer_icon,
         "text" = ggplot2::geom_sf_text,
         "label" = ggplot2::geom_sf_label,
         "text_repel" = ggrepel::geom_text_repel,

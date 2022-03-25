@@ -39,7 +39,7 @@ provided, a cached or external file.}
 string)}
 
 \item{geom}{ggplot2 geom to use, Default: 'sf'. Options include "sf"
-(geom_sf), "icon" (geom_sf_icon), "text" (geom_sf_text), "label"
+(geom_sf), "icon" (layer_icon / geom_sf_icon), "text" (geom_sf_text), "label"
 (geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".}
 
 \item{location}{sf object. If multiple areas are provided, they are unioned
@@ -95,6 +95,8 @@ set based on the name_col but values passed to mapping take precedence.
 \code{\link[ggplot2]{CoordSf}}
 
 Other layer: 
+\code{\link{layer_frame}()},
+\code{\link{layer_icon}()},
 \code{\link{layer_mask}()},
 \code{\link{layer_neatline}()},
 \code{\link{layer_scaled}()}

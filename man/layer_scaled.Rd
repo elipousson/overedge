@@ -53,6 +53,8 @@ Uses \link{layer_neatline}, \link{standard_scales}, and \link{convert_dist_scale
 }
 \seealso{
 Other layer: 
+\code{\link{layer_frame}()},
+\code{\link{layer_icon}()},
 \code{\link{layer_location_data}()},
 \code{\link{layer_mask}()},
 \code{\link{layer_neatline}()}

@@ -8,8 +8,8 @@
 \alias{is_raster}
 \alias{is_sp}
 \alias{is_same_crs}
-\alias{is_same_area}
 \alias{is_same_dist}
+\alias{is_same_area}
 \title{What is the class or spatial attributes of this feature?}
 \usage{
 is_sf(x, ext = FALSE, null.ok = FALSE)
@@ -26,9 +26,9 @@ is_sp(x, null.ok = FALSE)
 
 is_same_crs(x, y)
 
-is_same_area(x, y)
+is_same_dist(x, y, dist = NULL, diff = FALSE)
 
-is_same_dist(x, y, dist = NULL)
+is_same_area(x, y, union = FALSE, diff = FALSE)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
@@ -42,6 +42,17 @@ not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
 \item{y}{An sf object or a character or numeric object supported by
 \link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{is_same_crs})}
+
+\item{dist}{For \link{is_same_dist}, bounding box dimension to compare distances for "diagdist",
+"xdist", or "ydist"; does not currently support numeric distances; defaults
+to \code{NULL}.}
+
+\item{diff}{For \link{is_same_dist} and \link{is_same_area}, If \code{TRUE}, return the difference
+between the x and y objects. If \code{FALSE}, return \code{TRUE} or \code{FALSE} as expected;
+defaults to \code{FALSE}.}
+
+\item{union}{If \code{TRUE}, use \link[sf:geos_combine]{sf::st_union} on both x and y before comparing
+area; defaults to \code{FALSE}.}
 }
 \description{
 What is the class or spatial attributes of this feature?
@@ -49,8 +60,13 @@ What is the class or spatial attributes of this feature?
 \details{
 \itemize{
 \item \link{is_sf}: is x a \code{sf} class object?
+\item \link{is_sfc}: is x is a \code{sfc} class object?
 \item \link{is_bbox}: is x is a \code{bbox} class object?
 \item \link{is_sf_list}: is x is a list of \code{sf} class objects (with or without names)?
-\item 
+\item \link{is_raster}: is x a \code{Raster} class object?
+\item \link{is_sp}: is x a \code{Spatial} class object of any type?
+\item \link{is_same_crs}: do x and y have the same coordinate reference system?
+\item \link{is_same_dist}: do the bbox for x and bbox for y have the same x, y, or diagonal distance?
+\item \link{is_same_area}: do x and y have the same area?
 }
 }
