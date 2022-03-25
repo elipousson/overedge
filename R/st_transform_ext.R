@@ -19,7 +19,7 @@
 st_transform_ext <- function(x = NULL,
                              crs = NULL,
                              class = NULL) {
-  if (!is_bbox(x) && !is_sfc(x) && is_sf_list(x, ext = TRUE)) {
+  if (is_sf_list(x, ext = TRUE)) {
     x <-
       purrr::map(
         x,
@@ -57,17 +57,7 @@ st_transform_ext <- function(x = NULL,
     }
   }
 
-  if (!is.null(class)) {
-    if (("bbox" %in% class) && !x_is_bbox) {
-      x <- sf::st_bbox(x)
-    } else if (("sf" %in% class) && !x_is_sf) {
-      if (is_bbox(x)) {
-        x <- sf_bbox_to_sf(x)
-      } else if (("sfc" %in% class) && is_sfc(x)) {
-        x <- as_sf(x)
-      }
-    }
-  }
+  x <- as_sf_class(x, class = class)
 
   return(x)
 }
