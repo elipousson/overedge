@@ -1,3 +1,90 @@
+#' Make points
+#'
+#' Utility function for make_clip
+#'
+#' @noRd
+as_points <- function(...) {
+
+  params <- rlang::list2(...)
+
+  params <-
+    purrr::map(
+      params,
+      ~ sf::st_point(.x)
+    )
+
+  x <- rlang::exec(sf::st_as_sfc, params)
+
+  # See https://github.com/r-spatial/sf/issues/114
+  sf::st_cast(x, to = "POINT")
+}
+
+#' Get bounding box edges
+#'
+#' Utility function for make_clip
+#'
+#' @noRd
+get_edges <- function(x) {
+
+  x <- as_sf(x)
+  bbox <- as_bbox(x)
+  center <- st_center(as_sf(x), ext = TRUE)$sf
+
+  h_top <-
+    as_points(
+      c(bbox$xmin, bbox$ymax),
+      c(center$lon, bbox$ymax),
+      c(bbox$xmax, bbox$ymax)
+    )
+
+  h_middle <-
+    as_points(
+      c(bbox$xmin, center$lat),
+      c(center$lon, center$lat),
+      c(bbox$xmax, center$lat)
+    )
+
+  h_bottom <-
+    as_points(
+      c(bbox$xmin, bbox$ymin),
+      c(center$lon, bbox$ymin),
+      c(bbox$xmax, bbox$ymin)
+    )
+
+  v_left <-
+    as_points(
+      c(bbox$xmin, bbox$ymin),
+      c(bbox$xmin, center$lat),
+      c(bbox$xmin, bbox$ymax)
+    )
+
+  v_middle <-
+    as_points(
+      c(center$lon, bbox$ymin),
+      c(center$lon, center$lat),
+      c(center$lon, bbox$ymax)
+    )
+
+  v_right <-
+    as_points(
+      c(bbox$xmax, bbox$ymin),
+      c(bbox$xmax, center$lat),
+      c(bbox$xmax, bbox$ymax)
+    )
+
+  list(
+    "h" = list(
+      "top" = h_top,
+      "middle" = h_middle,
+      "bottom" = h_bottom
+    ),
+    "v" = list(
+      "left" = v_left,
+      "middle" = v_middle,
+      "right" = v_right
+    )
+  )
+}
 
 #' Clip the side or corner of a simple feature or bounding box object
 #'
@@ -51,8 +138,6 @@ st_clip <- function(x,
     }
   }
 
-  return(x)
-
   if (!is.null(keep)) {
     clip <- keep
     flip <- TRUE
@@ -61,8 +146,7 @@ st_clip <- function(x,
   if (!is.null(clip)) {
     clip <-
       make_clip(
-        bbox = sf::st_bbox(x),
-        center = st_coords(st_center(x, ext = FALSE)),
+        x = x,
         crs = sf::st_crs(x),
         clip = clip
       )
@@ -77,14 +161,14 @@ st_clip <- function(x,
 #'
 #' Utility function for st_clip
 #'
-#' @param bbox Bounding box object
+#' @param x Bounding box object
 #' @param clip Clip style
 #' @param center center (data frame or list lon and lat values)
 #' @param crs Coordinate reference system
 #' @param style Style (not currently used), Default: NULL
 #' @noRd
 #' @importFrom sf st_sf st_sfc st_convex_hull st_union
-make_clip <- function(bbox, clip, center, crs, style = NULL) {
+make_clip <- function(x, clip, crs, style = NULL) {
   clip <- match.arg(clip, c("top", "right", "bottom", "left", "topright", "bottomright", "bottomleft", "topleft"))
 
   top <- grepl("top", clip)
@@ -105,84 +189,36 @@ make_clip <- function(bbox, clip, center, crs, style = NULL) {
     }
   }
 
-  h_top <-
-    make_pts(list(
-      c(bbox$xmin, bbox$ymax),
-      c(center$lon, bbox$ymax),
-      c(bbox$xmax, bbox$ymax)
-    ))
-
-  h_middle <-
-    make_pts(list(
-      c(bbox$xmin, center$lat),
-      c(center$lon, center$lat),
-      c(bbox$xmax, center$lat)
-    ))
-
-  h_bottom <-
-    make_pts(
-      list(
-        c(bbox$xmin, bbox$ymin),
-        c(center$lon, bbox$ymin),
-        c(bbox$xmax, bbox$ymin)
-      )
-    )
-
-  v_left <-
-    make_pts(
-      list(
-        c(bbox$xmin, bbox$ymin),
-        c(bbox$xmin, center$lat),
-        c(bbox$xmin, bbox$ymax)
-      )
-    )
-
-  v_middle <-
-    make_pts(
-      list(
-        c(center$lon, bbox$ymin),
-        c(center$lon, center$lat),
-        c(center$lon, bbox$ymax)
-      )
-    )
-
-  v_right <-
-    make_pts(
-      list(
-        c(bbox$xmax, bbox$ymin),
-        c(bbox$xmax, center$lat),
-        c(bbox$xmax, bbox$ymax)
-      )
-    )
+  edges <- get_edges(x = x)
 
   if (style == "side") {
     if (top) {
-      pts <- c(h_top, h_middle)
+      pts <- c(edges$h$top, edges$h$middle)
     } else if (bottom) {
-      pts <- c(h_bottom, h_middle)
+      pts <- c(edges$h$bottom, edges$h$middle)
     } else if (left) {
-      pts <- c(v_left, v_middle)
+      pts <- c(edges$v$left, edges$v$middle)
     } else if (right) {
-      pts <- c(v_right, v_middle)
+      pts <- c(edges$v$right, edges$v$middle)
     }
   } else if (style == "corner") {
     if (top) {
-      pts <- v_middle[2:3]
+      pts <- edges$v$middle[2:3]
       if (right) {
-        pts <- c(pts, h_top[2:3], h_middle[2:3], v_right[2:3])
+        pts <- c(pts, edges$h$top[2:3], edges$h$middle[2:3], edges$v$right[2:3])
       } else if (left) {
-        pts <- c(pts, h_top[1:2], h_middle[1:2], v_left[2:3])
+        pts <- c(pts, edges$h$top[1:2], edges$h$middle[1:2], edges$v$left[2:3])
       } else {
-        pts <- c(pts, h_top[2:3], h_middle[2:3], v_right[2:3])
+        pts <- c(pts, edges$h$top[2:3], edges$h$middle[2:3], edges$v$right[2:3])
       }
     } else if (bottom) {
-      pts <- v_middle[1:2]
+      pts <- edges$v$middle[1:2]
       if (right) {
-        pts <- c(pts, h_bottom[2:3], h_middle[2:3], v_right[1:1])
+        pts <- c(pts, edges$h$bottom[2:3], edges$h$middle[2:3], edges$v$right[1:1])
       } else if (left) {
-        pts <- c(pts, h_bottom[1:2], h_middle[1:2], v_left[1:2])
+        pts <- c(pts, edges$h$bottom[1:2], edges$h$middle[1:2], edges$v$left[1:2])
       } else {
-        pts <- c(pts, h_bottom[2:3], h_middle[2:3], v_right[1:1])
+        pts <- c(pts, edges$h$bottom[2:3], edges$h$middle[2:3], edges$v$right[1:1])
       }
     }
   }
@@ -195,24 +231,4 @@ make_clip <- function(bbox, clip, center, crs, style = NULL) {
     )
 
   return(clip)
-}
-
-#' Make points
-#'
-#' Utility function for make_clip
-#'
-#' @noRd
-#' @importFrom sf st_sfc st_point st_cast
-make_pts <- function(pts) {
-  pts <- sf::st_sfc(
-    c(
-      sf::st_point(pts[[1]]),
-      sf::st_point(pts[[2]]),
-      sf::st_point(pts[[3]])
-    )
-  )
-  # See https://github.com/r-spatial/sf/issues/114
-  pts <- sf::st_cast(pts, to = "POINT")
-
-  return(pts)
 }
