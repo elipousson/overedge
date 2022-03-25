@@ -8,6 +8,8 @@
 #' @inheritParams layer_neatline
 #' @inheritParams st_misc
 #' @inheritParams st_buffer_ext
+#' @param ... Additional parameters passed to [layer_location_data]. May include
+#'   additional fixed aesthetics (e.g. alpha) or "fn" to apply to the frame object.
 #' @name layer_frame
 #' @family layer
 #' @export
@@ -20,9 +22,9 @@ layer_frame <- function(data,
                         rotate = 0,
                         inscribed = FALSE,
                         color = "black",
-                        fill = "white",
                         size = 1,
                         linetype = "solid",
+                        fill = "white",
                         neatline = TRUE,
                         expand = FALSE,
                         union = TRUE,
@@ -48,7 +50,8 @@ layer_frame <- function(data,
       geom = "sf",
       fill = fill,
       color = color,
-      linetype = linetype
+      linetype = linetype,
+      ...
     )
 
   if (neatline) {
@@ -58,8 +61,7 @@ layer_frame <- function(data,
         asp = 1,
         bgcolor = "none",
         color = "none",
-        expand = expand,
-        ...
+        expand = expand
       )
   } else {
     neatline_layer <-
