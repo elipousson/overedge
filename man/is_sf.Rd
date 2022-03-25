@@ -10,19 +10,19 @@
 \alias{is_same_crs}
 \alias{is_same_area}
 \alias{is_same_dist}
-\title{What is the class or attributes of this feature?}
+\title{What is the class or spatial attributes of this feature?}
 \usage{
-is_sf(x, ext = FALSE)
+is_sf(x, ext = FALSE, null.ok = FALSE)
 
-is_sfc(x)
+is_sfc(x, null.ok = FALSE)
 
-is_bbox(x)
+is_bbox(x, null.ok = FALSE)
 
-is_sf_list(x, is_named = FALSE, ext = FALSE)
+is_sf_list(x, is_named = FALSE, ext = FALSE, null.ok = FALSE)
 
-is_raster(x)
+is_raster(x, null.ok = FALSE)
 
-is_sp(x)
+is_sp(x, null.ok = FALSE)
 
 is_same_crs(x, y)
 
@@ -36,13 +36,15 @@ is_same_dist(x, y, dist = NULL)
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
 not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
-\item{is_named}{If TRUE, check if sf list is named; defaults FALSE}
+\item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
+
+\item{is_named}{If \code{TRUE}, check if sf list is named; defaults \code{FALSE}.}
 
 \item{y}{An sf object or a character or numeric object supported by
 \link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{is_same_crs})}
 }
 \description{
-What is the class or attributes of this feature?
+What is the class or spatial attributes of this feature?
 }
 \details{
 \itemize{

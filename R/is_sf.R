@@ -1,15 +1,19 @@
 #' @noRd
-is_class <- function(x, classes = NULL) {
-  any(check %in% class(x))
+is_class <- function(x, classes = NULL, null.ok = FALSE) {
+  if (is.null(x) && null.ok)
+    return(TRUE)
+
+  any(classes %in% class(x))
 }
 
-#' What is the class or attributes of this feature?
+#' What is the class or spatial attributes of this feature?
 #'
 #' @param x An `sf`, `sfc`, or `bbox` object.
 #' @param y An sf object or a character or numeric object supported by
 #'   [sf::st_crs] that can be compared to x. (used by [is_same_crs])
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
 #'   not; defaults to `FALSE`. (used by [is_sf])
+#' @param null.ok If `TRUE` and x is `NULL`, return `TRUE`; defaults to `FALSE`.
 #' @details
 #' - [is_sf]: is x a `sf` class object?
 #' - [is_bbox]: is x is a `bbox` class object?
@@ -17,40 +21,43 @@ is_class <- function(x, classes = NULL) {
 #' -
 #' @export
 #' @md
-is_sf <- function(x, ext = FALSE) {
+is_sf <- function(x, ext = FALSE, null.ok = FALSE) {
   if (!ext) {
-    is_class(x, classes = "sf")
+    classes <- c("sf", "sfc", "bbox")
   } else {
-    is_class(x, classes = c("sf", "sfc", "bbox"))
+    classes <- "sf"
   }
+
+  is_class(x, classes = classes, null.ok = null.ok)
 }
 
 #' @name is_sfc
 #' @rdname is_sf
 #' @export
-is_sfc <- function(x) {
-  is_class(x, classes = "sfc")
+is_sfc <- function(x, null.ok = FALSE) {
+  is_class(x, classes = "sfc", null.ok = null.ok)
 }
 
 #' @name is_bbox
 #' @rdname is_sf
 #' @export
-is_bbox <- function(x) {
-  is_class(x, classes = "bbox")
+is_bbox <- function(x, null.ok = FALSE) {
+  is_class(x, classes = "bbox", null.ok = null.ok)
 }
 
 #' @rdname is_sf
 #' @name is_sf_list
-#' @param is_named If TRUE, check if sf list is named; defaults FALSE
+#' @param is_named If `TRUE`, check if sf list is named; defaults `FALSE`.
 #' @export
-is_sf_list <- function(x, is_named = FALSE, ext = FALSE) {
-  is_sf <- is_sf(x, ext = TRUE)
+is_sf_list <- function(x, is_named = FALSE, ext = FALSE, null.ok = FALSE) {
+  # FIXME: This will error if x is NULL and not in a list
+  is_sf <- is_sf(x, ext = TRUE, null.ok = null.ok)
 
   is_sf_list <- is.list(x) && all(
     vapply(
       x,
       function(x) {
-        is_sf(x, ext = ext)
+        is_sf(x, ext = ext, null.ok = null.ok)
       },
       TRUE
     )
@@ -67,14 +74,14 @@ is_sf_list <- function(x, is_named = FALSE, ext = FALSE) {
 #' @name is_raster
 #' @rdname is_sf
 #' @export
-is_raster <- function(x) {
-  is_class(x, classes = "RasterLayer")
+is_raster <- function(x, null.ok = FALSE) {
+  is_class(x, classes = "RasterLayer", null.ok = null.ok)
 }
 
 #' @name is_sp
 #' @rdname is_sf
 #' @export
-is_sp <- function(x) {
+is_sp <- function(x, null.ok = FALSE) {
   any(grepl("Spatial", class(x)))
 }
 
