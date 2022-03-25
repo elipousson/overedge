@@ -156,136 +156,52 @@ theme_margin <- function(margin = "standard",
 #' @importFrom grid unit
 theme_legend <- function(position = NULL,
                          justification = NULL,
-                         margin = 10,
+                         margin = 8,
                          unit = "pt",
                          inset = TRUE,
                          bgcolor = "white",
                          title = list(face = "bold", align = 0),
                          method = NULL) {
 
-  # FIXME: This part needs a test
-  # If margin is not a unit object
-  if (!("unit" %in% class(margin))) {
-    # use a numeric margin as a dist
-    if (is.numeric(margin)) {
-      margin <- get_margin(dist = margin, unit = unit)
-    } else if (is.character(margin)) {
-      # use a character margin as a margin type
-      margin <- get_margin(margin = margin, unit = unit)
-    }
-  }
-
-  if (is.null(bgcolor)) {
-    bg <- ggplot2::element_blank()
-  } else {
-    bg <- ggplot2::element_rect(fill = bgcolor)
-  }
-
-  null_position <- is.null(position)
-  if (null_position || !is.numeric(position)) {
-    position <- match.arg(position, c(
-      "left", "right", "bottom", "top",
-      "topleft", "bottomleft", "topright", "bottomright", "none"
-    ))
-  }
-
   if ("none" %in% position) {
-    legend_theme <-
-      ggplot2::theme(legend.position = "none")
+    legend_theme <- ggplot2::theme(legend.position = "none")
   } else {
-    # TODO: Document that inset legends only work
-    # position <- match.arg(position, c("topleft", "bottomleft", "topright", "bottomright"))
 
-    if (inset) {
-      if (any(grepl("top", position))) {
-        y_position <- 0.95
-        y_justification <- "top"
-      } else if (any(grepl("bottom", position))) {
-        y_position <- 0.05
-        y_justification <- "bottom"
+    # TODO: Document that inset legends only work with a subset of position options
+
+    leg_pos <- make_legend_position(position = position, justification = justification, inset = inset)
+
+    leg_title <- make_legend_title(title = title)
+
+    leg_bg <- make_legend_bg(bgcolor)
+
+
+    # FIXME: This part needs a test
+    # If margin is not a unit object
+    if (!is_class(margin, classes = "unit")) {
+      # use a numeric margin as a dist
+      if (is.numeric(margin)) {
+        dist <- margin
+        margin <- NULL
       } else {
-        y_position <- 0.5
-        y_justification <- "center"
+        # use a character margin as a margin type
+
+        dist <- NULL
       }
 
-      if (any(grepl("left", position))) {
-        x_position <- 0.05
-        x_justification <- "left"
-      } else if (any(grepl("right", position))) {
-        x_position <- 0.95
-        x_justification <- "right"
-      } else {
-        x_position <- 0.5
-        x_justification <- "center"
-      }
-
-      position <- grid::unit(c(x_position, y_position), unit = "npc")
-      justification <- c(x_justification, y_justification)
-      box_justification <-
-        switch(x_justification,
-          "left" = "right",
-          "right" = "left"
-        )
-    } else {
-      justification <-
-        match.arg(
-          justification,
-          c(
-            "right", "left", "bottom", "top", "center",
-            "topleft", "bottomleft", "topright", "bottomright"
-          ),
-          several.ok = TRUE
-        )
-
-      justification <-
-        switch(justification,
-          "topright" = c("right", "top"),
-          "topleft" = c("left", "top"),
-          "bottomright" = c("right", "bottom"),
-          "bottomleft" = c("left", "bottom")
-        )
-
-      if (length(justification) == 2) {
-        if ((grepl("top", justification[[1]]) || grepl("bottom", justification[[1]]))) {
-          justification <- rev(justification)
-        }
-
-        if (null_position) {
-          position <- justification[[1]]
-        }
-      }
-
-      if (any(grepl("left", justification))) {
-        box_justification <- "right"
-      } else if (any(grepl("right", justification))) {
-        box_justification <- "left"
-      } else {
-        box_justification <- "left"
-      }
-    }
-
-    if (is.list(title) && all(c("face", "align") %in% names(title))) {
-      title <- ggplot2::element_text(face = title$face)
-      # text <- ggplot2::element_text(hjust = align)
-      align_title <- title$align
-    } else if (is.null(title)) {
-
-      # text <- ggplot2::element_text(hjust = align)
-      # FIXME: This may break
-      title <- ggplot2::element_text(face = "bold")
-      align_title <- 0 # align
+      leg_margin <- get_margin(margin = margin, dist = dist, unit = unit)
     }
 
     legend_theme <-
       ggplot2::theme(
-        legend.position = position,
-        legend.justification = justification,
-        legend.box.just = box_justification,
-        legend.margin = margin,
-        legend.background = bg,
-        legend.title = title,
-        legend.title.align = align_title # ,
-        # legend.text = text
+        legend.position = leg_pos$position,
+        legend.justification = leg_pos$justification,
+        legend.box.just = leg_pos$box_justification,
+        legend.title = leg_title$title,
+        legend.title.align = leg_title$align_title,
+        # legend.text = leg_title$text,
+        legend.margin = leg_margin,
+        legend.background = leg_bg
       )
   }
 
@@ -294,4 +210,124 @@ theme_legend <- function(position = NULL,
   } else {
     return(legend_theme)
   }
+}
+
+#' Get position, justification, and box justification for an ggplot2 legend
+#'
+#' @seealso [get_legend_position_inset]
+#'
+#' @noRd
+make_legend_position <- function(justification = NULL, position = NULL, inset = FALSE) {
+  if (is.null(position) || !is.numeric(position)) {
+    position <- match.arg(position, c(
+      "left", "right", "bottom", "top",
+      "topleft", "bottomleft", "topright", "bottomright", "none"
+    ))
+  }
+
+  if (inset) {
+    if (any(grepl("top", position))) {
+      y_position <- 0.95
+      y_justification <- "top"
+    } else if (any(grepl("bottom", position))) {
+      y_position <- 0.05
+      y_justification <- "bottom"
+    } else {
+      y_position <- 0.5
+      y_justification <- "center"
+    }
+
+    if (any(grepl("left", position))) {
+      x_position <- 0.05
+      x_justification <- "left"
+    } else if (any(grepl("right", position))) {
+      x_position <- 0.95
+      x_justification <- "right"
+    } else {
+      x_position <- 0.5
+      x_justification <- "center"
+    }
+
+    position <- grid::unit(c(x_position, y_position), unit = "npc")
+    justification <- c(x_justification, y_justification)
+    box_justification <-
+      switch(x_justification,
+        "left" = "right",
+        "right" = "left"
+      )
+  } else {
+    justification <-
+      match.arg(
+        justification,
+        c(
+          "right", "left", "bottom", "top", "center",
+          "topleft", "bottomleft", "topright", "bottomright"
+        ),
+        several.ok = TRUE
+      )
+
+    justification <-
+      switch(justification,
+        "topright" = c("right", "top"),
+        "topleft" = c("left", "top"),
+        "bottomright" = c("right", "bottom"),
+        "bottomleft" = c("left", "bottom")
+      )
+
+    if ((grepl("top", justification[[1]]) || grepl("bottom", justification[[1]]))) {
+      justification <- rev(justification)
+    }
+
+    if ((length(justification) == 2) && is.null(position)) {
+      position <- justification[[1]]
+    }
+
+    if (any(grepl("left", justification))) {
+      box_justification <- "right"
+    } else if (any(grepl("right", justification))) {
+      box_justification <- "left"
+    } else {
+      box_justification <- "left"
+    }
+  }
+
+
+  list(
+    "position" = position,
+    "justification" = justification,
+    "box_justification" = box_justification
+  )
+}
+
+
+#' Make plot background element based on background color
+#'
+#' @param bgcolor ...
+#' @noRd
+#' @importFrom ggplot2 element_blank element_rect
+make_legend_bg <- function(bgcolor) {
+  if (is.null(bgcolor)) {
+    ggplot2::element_blank()
+  } else {
+    ggplot2::element_rect(fill = bgcolor)
+  }
+}
+
+make_legend_title <- function(title) {
+  if (is.list(title) && all(c("face", "align") %in% names(title))) {
+    title <- ggplot2::element_text(face = title$face)
+    # text <- ggplot2::element_text(hjust = align)
+    align_title <- title$align
+  } else if (is.null(title)) {
+
+    # text <- ggplot2::element_text(hjust = align)
+    # FIXME: This may break
+    title <- ggplot2::element_text(face = "bold")
+    align_title <- 0 # align
+  }
+
+  list(
+    "title" = title,
+    "align_title" = align_title
+  )
 }
