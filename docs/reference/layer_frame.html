@@ -83,7 +83,14 @@
   <span class="va">...</span>
 <span class="op">)</span>
 
-<span class="fu">make_frame</span><span class="op">(</span><span class="va">x</span>, frame <span class="op">=</span> <span class="st">"circle"</span>, scale <span class="op">=</span> <span class="fl">1</span>, rotate <span class="op">=</span> <span class="fl">0</span>, inscribed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="fu">make_frame</span><span class="op">(</span>
+  <span class="va">x</span>,
+  frame <span class="op">=</span> <span class="st">"circle"</span>,
+  scale <span class="op">=</span> <span class="fl">1</span>,
+  rotate <span class="op">=</span> <span class="fl">0</span>,
+  inscribed <span class="op">=</span> <span class="cn">FALSE</span>,
+  dTolerance <span class="op">=</span> <span class="fl">0</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -138,6 +145,29 @@ object.</p></dd>
 <code><a href="layer_scaled.html">layer_scaled</a>()</code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span class="r-in">  <span class="fu">layer_frame</span><span class="op">(</span></span>
+<span class="r-in">    data <span class="op">=</span> <span class="fu">mapbaltimore</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/mapbaltimore/man/baltimore_msa_counties.html" class="external-link">baltimore_msa_counties</a></span>,</span>
+<span class="r-in">    frame <span class="op">=</span> <span class="st">"circle"</span>,</span>
+<span class="r-in">    fill <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
+<span class="r-in">    alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span class="r-in">    dist <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span class="r-in">    unit <span class="op">=</span> <span class="st">"mile"</span>,</span>
+<span class="r-in">    inscribed <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span class="r-in">  <span class="op">)</span> <span class="op">+</span></span>
+<span class="r-in">  <span class="fu"><a href="layer_location_data.html">layer_location_data</a></span><span class="op">(</span></span>
+<span class="r-in">    data <span class="op">=</span> <span class="fu">mapbaltimore</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/mapbaltimore/man/baltimore_msa_counties.html" class="external-link">baltimore_msa_counties</a></span>,</span>
+<span class="r-in">    mapping <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">name</span><span class="op">)</span>,</span>
+<span class="r-in">    alpha <span class="op">=</span> <span class="fl">0.5</span></span>
+<span class="r-in">  <span class="op">)</span> <span class="op">+</span></span>
+<span class="r-in">  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span></span>
+<span class="r-in">    fill <span class="op">=</span> <span class="st">"none"</span></span>
+<span class="r-in">  <span class="op">)</span></span>
+<span class="r-plt img"><img src="layer_frame-1.png" alt="" width="700" height="433"></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

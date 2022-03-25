@@ -11,6 +11,7 @@
 #' @param ... Additional parameters passed to [layer_location_data]. May include
 #'   additional fixed aesthetics (e.g. alpha) or "fn" to apply to the frame
 #'   object.
+#' @example examples/layer_frame.R
 #' @name layer_frame
 #' @family layer
 #' @export
@@ -83,17 +84,20 @@ make_frame <- function(x,
                        frame = "circle",
                        scale = 1,
                        rotate = 0,
-                       inscribed = FALSE) {
+                       inscribed = FALSE,
+                       dTolerance = 0) {
   stopifnot(
     is_sf(x, ext = TRUE)
   )
 
   if (frame == "circle") {
     frame <-
-      st_circle(x = x, scale = scale, inscribed = inscribed)
+      st_circle(x = x, scale = scale, inscribed = inscribed, dTolerance = dTolerance)
   } else if (frame == "square") {
     frame <-
       st_square(x = x, scale = scale, rotate = rotate, inscribed = inscribed)
+  } else {
+    frame <- x
   }
 
   frame

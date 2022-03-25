@@ -24,7 +24,14 @@ layer_frame(
   ...
 )
 
-make_frame(x, frame = "circle", scale = 1, rotate = 0, inscribed = FALSE)
+make_frame(
+  x,
+  frame = "circle",
+  scale = 1,
+  rotate = 0,
+  inscribed = FALSE,
+  dTolerance = 0
+)
 }
 \arguments{
 \item{data}{\code{sf} or \code{bbox} class object}
@@ -68,6 +75,26 @@ object.}
 }
 \description{
 Wraps \link{st_circle}, \link{st_square}, and \link{layer_neatline}.
+}
+\examples{
+ggplot2::ggplot() +
+  layer_frame(
+    data = mapbaltimore::baltimore_msa_counties,
+    frame = "circle",
+    fill = "lightblue",
+    alpha = 0.5,
+    dist = 1.5,
+    unit = "mile",
+    inscribed = FALSE
+  ) +
+  layer_location_data(
+    data = mapbaltimore::baltimore_msa_counties,
+    mapping = ggplot2::aes(fill = name),
+    alpha = 0.5
+  ) +
+  ggplot2::guides(
+    fill = "none"
+  )
 }
 \seealso{
 Other layer: 
