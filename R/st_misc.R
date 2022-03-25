@@ -35,12 +35,13 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
 
   center <- st_center(x, ext = TRUE)
 
-  y <- (center$geom - center$sfc) * rot(pi / (360 / (rotate * 2)))
+  y <- (center$x - center$sfc) * rot(pi / (360 / (rotate * 2)))
   y <- y * scale + center$sfc
 
   sf::st_geometry(x) <- y
   sf::st_crs(x) <- center$crs
-  x
+
+  return(x)
 }
 
 #' @rdname st_misc
