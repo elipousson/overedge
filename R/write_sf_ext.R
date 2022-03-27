@@ -168,6 +168,9 @@ write_sf_types <- function(data, filename = NULL, path, filetype = NULL) {
         file = path
       )
     } else if (!is.null(filetype) && (filetype == "gsheet")) {
+      filename <-
+        stringr::str_remove(filename, ".gsheet")
+
       sheet <-
         googlesheets4::gs4_create(
           name = filename # FIXME: Using the path as the name may cause issues
