@@ -28,7 +28,6 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
     } else if (is_sf_list(x)) {
       x <- dplyr::bind_rows(x)
     } else if (is.data.frame(x)) {
-      # TODO: Need to figure out a way to pass the crs to df_to_sf
       x <- df_to_sf(x, ...)
     } else if (is_raster(x)) {
       x <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...)
@@ -41,13 +40,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
     sf::st_geometry(x) <- sf_col
   }
 
-  if (!is.null(crs)) {
-    if (is_sf(crs, ext = TRUE)) {
-      crs <- sf::st_crs(crs)
-    }
-
-    x <- sf::st_transform(x, crs = crs)
-  }
+  x <- as_crs(x, crs = crs)
 
   return(x)
 }
@@ -57,6 +50,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
 #' @export
 #' @importFrom sf st_bbox st_as_sf
 #' @importFrom dplyr bind_rows
+#' @importFrom rlang has_length
 as_bbox <- function(x, crs = NULL, ...) {
   # Convert objects to sf if needed
   if (!is_bbox(x)) {
@@ -74,7 +68,7 @@ as_bbox <- function(x, crs = NULL, ...) {
       x <- sf::st_bbox(x, ...)
     } else if (is_sp(x)) {
       x <- sf::st_bbox(sf::st_as_sf(x, ...))
-    } else if (length(x) == 4) {
+    } else if (rlang::has_length(x, 4)) {
       x <- sf::st_bbox(c(
         xmin = x[1], ymin = x[2],
         xmax = x[3], ymax = x[4]
@@ -100,16 +94,20 @@ as_bbox <- function(x, crs = NULL, ...) {
 #' @export
 #' @importFrom sf st_geometry st_as_sfc
 as_sfc <- function(x, crs = NULL, ...) {
-  if (is_sf(x)) {
-    x <- sf::st_geometry(x, ...)
-  } else if (is_sf_list(x)) {
-    x <- sf::st_as_sfc(dplyr::bind_rows(x))
-  } else if (is.data.frame(x)) {
-    x <- sf::st_as_sfc(df_to_sf(x, ...))
-  } else if (!is_sfc(x)) {
-    x <- sf::st_as_sfc(x, ...)
+  if (!(is_sf(x) || is_sfc(x))) {
+    x <- as_sf(x, ...)
   }
 
+  if (is_sf(x)) {
+    x <- sf::st_geometry(x, ...)
+  }
+
+  x <- as_crs(x, crs = crs)
+
+  return(x)
+}
+
+as_crs <- function(x, crs = NULL) {
   if (!is.null(crs)) {
     if (is_sf(crs, ext = TRUE)) {
       crs <- sf::st_crs(crs)
@@ -117,7 +115,7 @@ as_sfc <- function(x, crs = NULL, ...) {
     x <- sf::st_transform(x, crs = crs)
   }
 
-  return(x)
+  x
 }
 
 #' @param nm For [as_sf_list], name(s) for sf list; defaults to "data". If col is provided, the

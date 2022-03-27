@@ -46,6 +46,8 @@ character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns th
 without modification.}
 
 \item{class}{Class of data to return, "df" (default), "sf", "bbox", or "sfc"}
+
+\item{...}{Additional parameters including GeoID}
 }
 \description{
 Get U.S. states and counties using a very fast query.

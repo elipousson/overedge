@@ -6,18 +6,14 @@
 #'
 #' @param type Type of location to return. Type can be an sf object, e.g. a data
 #'   frame with multiple neighborhoods or a character string that can be passed
-#'   to \code{get_location_data}. If index is provided, character can also be a
+#'   to [get_location_data]. If index is provided, character can also be a
 #'   character string to match the name of a list.
 #' @param name Location name to return.
 #' @param id Location id to return. id is coerced to character or numeric to
 #'   match the class of the id_col for type.
-#' @param location An address or `sf` or `bbox` object passed to
-#'   \code{\link[sf]{st_filter}}. Any valid address or addresses are geocoded
-#'   with \code{\link[tidygeocoder]{geo}}), converted to a simple feature
-#'   object, and then used as a spatial filter.
 #' @param location An address, bounding box (`bbox`), or simple feature (`sf`)
-#'   object passed to \code{\link[sf]{st_filter}}. Any valid address or
-#'   addresses are geocoded with \code{\link[tidygeocoder]{geo}}), converted to
+#'   object passed to [sf::st_filter]. Any valid address or
+#'   addresses are geocoded with [tidygeocoder::geo], converted to
 #'   a simple feature object, and then used as a spatial filter. `bbox` objects
 #'   are converted using [sf_bbox_to_sf()]. Multiple addresses are supported.
 #' @param label Label optionally added to "label" column; must be a length 1 or
@@ -29,12 +25,13 @@
 #'   id is provided.
 #' @param index Optional list used to match type to data, Default: `NULL`
 #' @param union If `TRUE`, the location geometry is unioned with
-#'   \code{\link[sf]{st_union}} and the names are combined into a single value.
+#'   [sf::st_union] and the names are combined into a single value.
 #'   Default: `FALSE`.
 #' @param crs Coordinate reference system to return; defaults to NULL which
 #'   returns data using the same coordinate reference system as the provided
 #'   type of location.
-#' @param ... Additional parameters passed to \code{get_location_data} if type
+#' @param class Class of object to return; defaults to "sf".
+#' @param ... Additional parameters passed to [get_location_data] if type
 #'   is character and index is `NULL`.
 #' @return A simple feature object from data provided to type.
 #'

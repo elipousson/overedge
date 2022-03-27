@@ -10,15 +10,17 @@
 #' @param filetype file extension or file type; defaults to "jpg"
 #' @param sort variable to sort by. Currently supports "lon" (default), "lat",
 #'   or "filename"
+#' @param tags EXIF tags to read from files. Must include GPS tags to create an
+#'   sf object.
 #' @param ... Additional EXIF tags to pass to `exiftoolr::exif_read`
 #' @family read_write
+#' @example examples/read_sf_exif.R
 #' @export
 #' @importFrom checkmate check_directory_exists
 #' @importFrom usethis ui_warn ui_stop
 #' @importFrom fs dir_ls
 #' @importFrom stringr str_extract
 #' @importFrom purrr map_dfr
-#' @importFrom exiftoolr exif_read
 #' @importFrom dplyr rename_with rename mutate case_when arrange
 #' @importFrom janitor clean_names
 #' @importFrom sf st_crs
@@ -28,7 +30,7 @@ read_sf_exif <- function(path = NULL,
                          sort = "lon",
                          tags = NULL,
                          ...) {
-  check_pkg_installed("exiftoolr")
+  is_pkg_installed("exiftoolr")
   checkmate::check_directory_exists(path)
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
@@ -202,7 +204,6 @@ read_sf_exif <- function(path = NULL,
 #'   provided fields; defaults to TRUE
 #' @export
 #' @importFrom glue glue
-#' @importFrom exiftoolr exif_call
 #' @importFrom usethis ui_done
 write_exif <- function(path = NULL,
                        filetype = NULL,
@@ -212,7 +213,7 @@ write_exif <- function(path = NULL,
                        keywords = NULL,
                        args = NULL,
                        overwrite = TRUE) {
-  check_pkg_installed("exiftoolr")
+  is_pkg_installed("exiftoolr")
 
   # FIXME: I want to implement a method that allows adding, replacing, or modifying exif
   if (is.null(args)) {

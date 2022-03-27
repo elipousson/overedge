@@ -393,12 +393,12 @@ possibly_get_state_pop <-
 
 us_states_census <-
   purrr::map_dfr(
-  us_states$statefp,
-  ~ possibly_get_state_pop(.x)
-)
+    us_states$statefp,
+    ~ possibly_get_state_pop(.x)
+  )
 
 us_states_census <-
-us_states_census %>%
+  us_states_census %>%
   dplyr::select(-c(name, variable, moe)) %>%
   dplyr::rename(est_pop = estimate)
 
@@ -501,10 +501,12 @@ us_counties <-
     est_pop = estimate
   ) %>%
   dplyr::relocate(
-    abb_state, est_pop, .after = name_short
+    abb_state, est_pop,
+    .after = name_short
   ) %>%
   dplyr::relocate(
-    name, .before = dplyr::everything()
+    name,
+    .before = dplyr::everything()
   ) %>%
   dplyr::mutate(
     name = dplyr::case_when(
@@ -516,9 +518,9 @@ us_counties <-
     )
   ) %>%
   dplyr::mutate(
-  label = stringr::str_extract(name, ".+(?=,)"),
-  label = janitor::make_clean_names(paste0(label, ", ", abb_state))
-) %>%
+    label = stringr::str_extract(name, ".+(?=,)"),
+    label = janitor::make_clean_names(paste0(label, ", ", abb_state))
+  ) %>%
   dplyr::mutate(
     label = stringr::str_replace(
       label, "_borough_", "_bor_"

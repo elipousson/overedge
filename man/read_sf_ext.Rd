@@ -62,6 +62,10 @@ date/time prefix; defaults to \code{NULL}.}
     The method can also be set through the option
     \code{"download.file.method"}: see \code{\link{options}()}.
   }
+
+\item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded, unzipped
+into a temporary directory, and then read to a file using the specified
+file type.}
 }
 \description{
 An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial

@@ -12,7 +12,6 @@ RoxygenNote: 7.1.2
 Imports: 
     checkmate,
     dplyr,
-    exiftoolr,
     fs,
     ggplot2,
     glue,
@@ -47,6 +46,7 @@ Suggests:
     gt,
     birdseyeview,
     esri2sf,
+    exiftoolr,
     FlickrAPI (>= 0.1.0.1),
     geomtextpath,
     geosphere,

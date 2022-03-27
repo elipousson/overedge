@@ -5,6 +5,7 @@
 #' @param location sf, sfc, or bbox object convertible with as_sfc
 #' @param class Class of data to return, "df" (default), "sf", "bbox", or "sfc"
 #' @inheritParams st_bbox_ext
+#' @param ... Additional parameters including GeoID
 #' @name get_admin_data
 #' @importFrom purrr map_lgl
 #' @importFrom sf st_as_sfc st_intersects

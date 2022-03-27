@@ -13,7 +13,6 @@
 #' @export
 #' @importFrom dplyr arrange mutate row_number
 number_features <- function(data, col = NULL, number = TRUE, sort = "lon", desc = NULL, ...) {
-
   sort <- match.arg(sort, c("lon", "lat", "title", "label", names(data)))
 
   # Set defaults for desc that make sense for the northern hemisphere

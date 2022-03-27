@@ -96,8 +96,9 @@ is_raster <- function(x, null.ok = FALSE) {
 #' @rdname is_sf
 #' @export
 is_sp <- function(x, null.ok = FALSE) {
-  if (is.null(x) && null.ok)
+  if (is.null(x) && null.ok) {
     return(TRUE)
+  }
 
   any(grepl("Spatial", class(x)))
 }

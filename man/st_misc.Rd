@@ -35,6 +35,12 @@ objects; defaults TRUE. If \code{FALSE}, return an sf object.}
 \item{...}{Additional parameters passed to \code{sf::st_centroid()} by st_center}
 
 \item{inscribed}{If \code{TRUE}, make circle or square inscribed within x, if \code{FALSE}, make it circumscribed.}
+
+\item{dTolerance}{numeric; tolerance parameter, specified for all or for each
+feature geometry. If you run \code{st_simplify}, the input data is
+specified with long-lat coordinates and \code{sf_use_s2()} returns
+\code{TRUE}, then the value of \code{dTolerance} must be specified in
+meters.}
 }
 \description{
 Support both bbox and sf objects as inputs.

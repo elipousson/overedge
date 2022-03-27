@@ -123,6 +123,7 @@ st_inscribed_square <- function(x, scale = 1, rotate = 0) {
 
 #' @rdname st_misc
 #' @name st_circle
+#' @inheritParams sf::st_inscribed_circle
 #' @export
 #' @importFrom sf st_inscribed_circle
 st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0) {

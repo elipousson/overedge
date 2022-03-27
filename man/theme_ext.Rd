@@ -58,6 +58,8 @@ families to the theme.}
 to match \code{font_family} and color. If \code{FALSE}, make no changes to the theme.
 Default: \code{TRUE}.}
 
+\item{hjust, vjust}{Horizontal and vertical justification.}
+
 \item{method}{Method with name of the ggplot2 geom function to use for
 modifying theme ("set", "update", or "replace"); defaults to \code{NULL}.}
 

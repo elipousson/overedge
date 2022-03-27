@@ -34,8 +34,8 @@
 #' @export
 #' @importFrom dplyr bind_cols
 st_bearing <- function(x, dir = FALSE, crs = 4326) {
-  check_pkg_installed("lwgeom")
-  check_pkg_installed("geosphere")
+  is_pkg_installed("lwgeom")
+  is_pkg_installed("geosphere")
 
   start <- sf_to_df(lwgeom::st_startpoint(x), crs = crs)
   end <- sf_to_df(lwgeom::st_endpoint(x), crs = crs)

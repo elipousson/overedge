@@ -18,7 +18,7 @@ NULL
 #' @inheritParams make_img_leafpop
 #' @export
 mapview_col <- function(x, nm = "data", col = NULL, ...) {
-  check_pkg_installed(pkg = "mapview")
+  is_pkg_installed(pkg = "mapview")
 
   if (is_sf(x, ext = TRUE)) {
     x <- as_sf(x)
@@ -96,8 +96,8 @@ mapview_flickr <- function(x = NULL,
 #' @export
 make_img_leafpop <- function(images,
                              popup = TRUE) {
-  check_pkg_installed("leaflet")
-  check_pkg_installed("leafpop")
+  is_pkg_installed("leaflet")
+  is_pkg_installed("leafpop")
 
   stopifnot(
     all(c("img_width", "img_height") %in% names(images)),

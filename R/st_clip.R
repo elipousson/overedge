@@ -4,7 +4,6 @@
 #'
 #' @noRd
 as_points <- function(...) {
-
   params <- rlang::list2(...)
 
   params <-
@@ -25,7 +24,6 @@ as_points <- function(...) {
 #'
 #' @noRd
 get_edges <- function(x) {
-
   x <- as_sf(x)
   bbox <- as_bbox(x)
   center <- st_center(as_sf(x), ext = TRUE)$sf

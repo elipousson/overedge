@@ -55,6 +55,10 @@ top to bottom.}
 \item{n}{If n is NULL and square is \code{TRUE}, the grid is set automatically to
 be 10 cells wide, Default: \code{NULL}}
 
+\item{cellsize}{target cellsize}
+
+\item{square}{logical; if \code{FALSE}, create hexagonal grid}
+
 \item{...}{Additional parameters passed to \link[sf:st_make_grid]{sf::st_make_grid}}
 }
 \description{

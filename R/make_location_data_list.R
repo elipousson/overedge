@@ -2,8 +2,8 @@
 #' Make a list of data and corresponding locations
 #'
 #' This function converts data and location into lists of sf objects using
-#' [make_sf_list]. If location_col, data_col, or col (which sets both to the
-#' same value), are provided the col is passed to [make_sf_list] to allow the
+#' [as_sf_list]. If location_col, data_col, or col (which sets both to the
+#' same value), are provided the col is passed to [as_sf_list] to allow the
 #' creation of an sf list from a sf data frame using [dplyr::group_nest()].
 #'
 #' If location and data are the same length are the same length, they are

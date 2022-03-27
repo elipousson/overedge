@@ -37,6 +37,9 @@ the crs of the bbox.}
 \item{sort}{variable to sort by. Currently supports "lon" (default), "lat",
 or "filename"}
 
+\item{tags}{EXIF tags to read from files. Must include GPS tags to create an
+sf object.}
+
 \item{...}{Additional EXIF tags to pass to \code{exiftoolr::exif_read}}
 
 \item{title}{Title to add to file metadata with exiftoolr, Default: \code{NULL}.}
@@ -63,6 +66,14 @@ Read EXIF data from folder of images.
 NA
 }
 
+\examples{
+path <- system.file("extdata", package = "overedge")
+
+read_sf_exif(
+  path = file.path(path, "photos"),
+  filetype = "jpeg"
+)
+}
 \seealso{
 Other read_write: 
 \code{\link{make_filename}()},

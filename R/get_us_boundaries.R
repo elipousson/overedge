@@ -29,8 +29,8 @@ get_us_counties <- function(location = NULL,
                             crop = FALSE,
                             trim = FALSE,
                             detailed = FALSE) {
-  check_pkg_installed("USAboundaries")
-  check_pkg_installed("USAboundariesData")
+  is_pkg_installed("USAboundaries")
+  is_pkg_installed("USAboundariesData")
 
   package <- "USAboundariesData"
 

@@ -31,7 +31,6 @@ layer_frame <- function(data,
                         expand = FALSE,
                         union = TRUE,
                         ...) {
-
   if (union) {
     data <- sf::st_union(data)
   }

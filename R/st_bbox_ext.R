@@ -8,7 +8,6 @@
 #' (1.777). The asp parameter supports both numeric values and character
 #' strings with ratios matching the format of "width:height".
 #'
-#'
 #' @param x An object sf, bbox, sfc, raster, or sp object or a data frame that
 #'   can be converted to an sf object or a list of sf, bbox, or sfc objects.
 #'   st_bbox_asp also supports vectors in the same format as a bbox object.
@@ -27,8 +26,7 @@ st_bbox_ext <- function(x = NULL,
                         asp = NULL,
                         unit = NULL,
                         crs = NULL,
-                        class = "bbox",
-                        from = NULL) {
+                        class = "bbox") {
   if (!is_sf(x, ext = TRUE) && is_sf_list(x, ext = TRUE)) {
     bbox_list <-
       purrr::map(

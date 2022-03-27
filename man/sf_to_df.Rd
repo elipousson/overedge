@@ -18,10 +18,10 @@ df_to_sf(
   x,
   crs = NULL,
   coords = c("lon", "lat"),
+  coords_crs = 4326,
   into = NULL,
   sep = ",",
   rev = TRUE,
-  coords_crs = 4326,
   remove_coords = FALSE
 )
 
@@ -29,33 +29,38 @@ check_coords(x = NULL, coords = NULL, rev = FALSE)
 }
 \arguments{
 \item{x}{A \code{sf} or \code{sfc} object or a data frame with lat/lon coordinates in a
-single column or two separated columns}
+single column or two separated columns.}
 
-\item{crs}{cCordinate reference system, Default: 4326}
+\item{crs}{Cordinate reference system to return, Default: 4326 for \link{sf_to_df} and NULL for \link{df_to_sf}}
 
 \item{coords}{Coordinate columns for input dataframe or output sf object (if
-geometry is 'centroid' or 'point') Default: c("lon", "lat")}
+geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 
 \item{geometry}{Type of geometry to include in data frame. options include
-"drop", "wkt", "centroid", "point", Default: 'centroid'}
+"drop", "wkt", "centroid", "point", Default: 'centroid'.}
 
 \item{keep_all}{If \code{FALSE}, drop all columns other than those named in
-coords, Default: \code{TRUE}}
+coords, Default: \code{TRUE}.}
+
+\item{coords_crs}{For \link{df_to_sf}, coordinate reference system used by coordinates in data frame.}
 
 \item{into}{If coords is a single column name with both longitude and
 latitude, \code{into} is used as the names of the new columns that coords is
-separated into. Passed to \code{\link[tidyr]{separate}}}
+separated into. Passed to \link[tidyr:separate]{tidyr::separate}.}
 
 \item{sep}{If coords is a single column name with both longitude and
 latitude, \code{sep} is used as the separator between coordinate values. Passed
-to \code{\link[tidyr]{separate}}}
+to \link[tidyr:separate]{tidyr::separate}.}
 
 \item{rev}{If TRUE, reverse c("lat", "lon") coords to c("lon", "lat"). check_coords only.}
+
+\item{remove_coords}{For \link{df_to_sf}, if \code{TRUE}, remove the coordinate columns after converting
+a data frame to simple feature object; defaults to \code{FALSE}.}
 }
 \value{
 \code{sf_to_df()} returns a data frame with geometry dropped or converted
 to wkt or coordinates for the centroid or point on surface; \code{df_to_sf()}
-returns a simple feature object with POINT geometry
+returns a simple feature object with POINT geometry.
 }
 \description{
 Helper function to convert a simple feature object to data frame by dropping
@@ -66,18 +71,12 @@ is a helper function used by df_to_sf to suggest the appropriate coordinate
 column names based on the column names in the provided data frame.
 }
 \examples{
-\dontrun{
-if (interactive()) {
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-  nc_df <- ggspatial::df_spatial(nc)
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+nc_df <- ggspatial::df_spatial(nc)
+df_to_sf(nc_df, coords = c("x", "y"))
+nc_df$xy <- paste(nc_df$x, nc_df$y, sep = ",")
 
-  df_to_sf(nc_df, coords = c("x", "y"))
-
-  nc_df$xy <- paste(nc_df$x, nc_df$y, sep = ",")
-
-  df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
-}
-}
+df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
 }
 \seealso{
 \code{\link[sf]{st_coordinates}}

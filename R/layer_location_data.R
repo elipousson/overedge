@@ -91,12 +91,12 @@ layer_location_data <-
 
     # Check if packages are available for text/label geoms
     if (geom %in% c("textsf", "labelsf")) {
-      check_pkg_installed("geomtextpath")
+      is_pkg_installed("geomtextpath")
     }
 
     # Check if packages are available for text/label geoms
     if (geom %in% birdseyeview_geoms) {
-      check_pkg_installed(pkg = "birdseyeview", repo = "elipousson/birdseyeview")
+      is_pkg_installed(pkg = "birdseyeview", repo = "elipousson/birdseyeview")
     }
 
     # Assign aesthetics for text/label geoms
@@ -105,7 +105,7 @@ layer_location_data <-
 
       if (geom %in% ggrepel_geoms) {
         is_repel_geom <- TRUE
-        check_pkg_installed("ggrepel")
+        is_pkg_installed("ggrepel")
         mapping <- modify_mapping(mapping = mapping, data = data)
 
         params <- c(

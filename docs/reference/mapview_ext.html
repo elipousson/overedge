@@ -112,7 +112,8 @@ defaults to "data".</p></dd>
 <dd><p>The NSID of the user who's photo to search. If this parameter
 isn't passed then everybody's public photos will be searched.</p></dd>
 <dt>tags</dt>
-<dd><p>A vector of tags you wish to search for.</p></dd>
+<dd><p>EXIF tags to read from files. Must include GPS tags to create an
+sf object.</p></dd>
 <dt>api_key</dt>
 <dd><p>Flickr API key. If api_key is `NULL`, the function uses
 [getFlickrAPIKey()] to use the environment variable "FLICKR_API_KEY" as the

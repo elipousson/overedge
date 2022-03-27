@@ -61,7 +61,7 @@ get_open_data <- function(data = NULL,
     )
   }
 
-  check_pkg_installed("RSocrata")
+  is_pkg_installed("RSocrata")
 
   # Check for an API key
   if ((is.null(key) | key == "") && !(data == "list")) {
@@ -105,14 +105,14 @@ get_open_data <- function(data = NULL,
     query <- paste0("$query=", query)
   }
 
-  if (check_url(source_url)) {
+  if (is_url(source_url)) {
     if (grepl("/dataset/", source_url) && is.null(data)) {
       url <- source_url
     } else if (!grepl("/dataset/", source_url)) {
       # Assemble url from data identifier, and select, where, and query parameters
       source_url <- gsub("/$", "", source_url)
       url <- paste0(source_url, "/resource/", data, ".json")
-      if (!is.null(select) | !is.null(where) | !is.null(query)) {
+      if (!any(c(select, where, query), is.null)) {
         url <- paste0(url, "?", paste0(c(select, where, query), collapse = "&"))
       }
     }
@@ -154,7 +154,7 @@ get_socrata_data <- function(data = NULL,
                              key = NULL,
                              from_crs = 4326,
                              crs = NULL) {
-  check_pkg_installed("RSocrata")
+  is_pkg_installed("RSocrata")
 
   get_open_data(
     data = data,

@@ -72,6 +72,12 @@ additional fixed aesthetics (e.g. alpha) or "fn" to apply to the frame
 object.}
 
 \item{x}{A sf, sfc, or bbox object}
+
+\item{dTolerance}{numeric; tolerance parameter, specified for all or for each
+feature geometry. If you run \code{st_simplify}, the input data is
+specified with long-lat coordinates and \code{sf_use_s2()} returns
+\code{TRUE}, then the value of \code{dTolerance} must be specified in
+meters.}
 }
 \description{
 Wraps \link{st_circle}, \link{st_square}, and \link{layer_neatline}.

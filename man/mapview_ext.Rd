@@ -53,7 +53,8 @@ defaults to "data".}
 \item{user_id}{The NSID of the user who's photo to search. If this parameter
 isn't passed then everybody's public photos will be searched.}
 
-\item{tags}{A vector of tags you wish to search for.}
+\item{tags}{EXIF tags to read from files. Must include GPS tags to create an
+sf object.}
 
 \item{api_key}{Flickr API key. If api_key is `NULL`, the function uses
 [getFlickrAPIKey()] to use the environment variable "FLICKR_API_KEY" as the

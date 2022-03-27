@@ -48,7 +48,7 @@ get_osm_data <- function(location = NULL,
                          enclosing = NULL,
                          nodes_only = FALSE,
                          timeout = 120) {
-  check_pkg_installed("osmdata")
+  is_pkg_installed("osmdata")
 
   if ((key == "building") && is.null(value)) {
     value <- osm_building_tags

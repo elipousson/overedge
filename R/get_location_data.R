@@ -122,7 +122,7 @@ get_location_data <- function(location = NULL,
   if (!(is_sf(data))) {
 
     # Check if data is a url
-    if (check_url(data)) {
+    if (is_url(data)) {
       url <- data
       # Check if data is a path to an existing file
     } else if (checkmate::test_file_exists(x = data)) {

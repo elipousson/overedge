@@ -53,15 +53,15 @@
 #' @importFrom stringr str_detect
 #' @importFrom rlang .data
 layer_icon <- function(data = NULL,
-                         iconname_col = "icon",
-                         icon = NULL,
-                         px = NULL,
-                         source = NULL,
-                         svg = NULL,
-                         color = "black",
-                         crs = NULL,
-                         ...) {
-  check_pkg_installed(pkg = "ggsvg", repo = "coolbutuseless/ggsvg")
+                       iconname_col = "icon",
+                       icon = NULL,
+                       px = NULL,
+                       source = NULL,
+                       svg = NULL,
+                       color = "black",
+                       crs = NULL,
+                       ...) {
+  is_pkg_installed(pkg = "ggsvg", repo = "coolbutuseless/ggsvg")
 
   if (is_sf(data)) {
     data <- sf_to_df(x = data, coords = c("lon", "lat"), keep_all = TRUE, crs = crs)
@@ -129,4 +129,3 @@ layer_icon <- function(data = NULL,
 #' @name geom_sf_icon
 #' @export
 geom_sf_icon <- layer_icon
-

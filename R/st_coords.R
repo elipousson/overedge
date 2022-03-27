@@ -26,21 +26,17 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
     is_sf(x, ext = TRUE)
   )
 
-  if (!is.null(crs)) {
-    x_coords <- st_transform_ext(x = x, crs = crs)
-  } else {
-    x_coords <- x
-  }
+  x_coords <- st_transform_ext(x = x, crs = crs)
 
   if (geometry == "wkt") {
     # Convert geometry to wkt
     x_coords <-
-      data.frame("wkt" = sf::st_as_text(as_sfc(x_coords)))
+      data.frame("wkt" = sf::st_as_text(as_sfc(x)))
   } else {
     # Convert to coordinates at centroid or as a point on surface
     # FIXME: This approach may be an issue if a sf object has mixed geometry
 
-    if (!is_point(x_coords)) {
+    if (!is_point(x)) {
       if (geometry == "centroid") {
         # FIXME: Double check that this doesn't cause issues for sfc objects
         x_coords <- st_center(x_coords, ext = FALSE)
@@ -63,10 +59,10 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
   # If x is an sfc or keep_all = FALSE return coordinates
   if (!keep_all) {
     return(x_coords)
-  } else {
-    # FIXME: What if someone passes a sf object with lon/lat columns to x?
-    x <- dplyr::bind_cols(x, x_coords)
   }
+
+  # FIXME: What if someone passes a sf object with lon/lat columns to x?
+  x <- dplyr::bind_cols(x, x_coords)
 
   if (drop) {
     x <- sf::st_drop_geometry(x)

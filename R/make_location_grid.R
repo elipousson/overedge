@@ -15,6 +15,7 @@
 #' @param n If n is NULL and square is `TRUE`, the grid is set automatically to
 #'   be 10 cells wide, Default: `NULL`
 #' @param ... Additional parameters passed to [sf::st_make_grid]
+#' @inheritParams sf::st_make_grid
 #' @example examples/make_location_grid.R
 #' @seealso [sf::st_make_grid]
 #' @rdname make_location_grid
@@ -68,16 +69,16 @@ make_location_grid <- function(location = NULL,
 
     n <- c(cols, rows)
   } else {
-    if (is.null(n) && square) {
-      n <- c(10, 10 / bbox_asp)
-    } else if ((length(n) == 1) && is.numeric(n) && square) {
+    if (is.null(n)) {
+      if (square) {
+        n <- c(10, 10 / bbox_asp)
+      } else {
+        n <- c(10, 10)
+      }
+    } else if (rlang::has_length(n, 1) && is.numeric(n) && square) {
       n <- c(n, n / bbox_asp)
-    } else if (is.null(n)) {
-      n <- c(10, 10)
     }
   }
-
-  # params <- rlang::list2(...)
 
   bbox_sf <- as_sf(bbox)
 

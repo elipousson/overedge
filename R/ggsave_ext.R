@@ -139,7 +139,7 @@ gtsave_ext <- function(gt_object,
                        filetype = NULL,
                        path = NULL,
                        ...) {
-  check_pkg_installed("gt")
+  is_pkg_installed("gt")
 
   if (is.null(filetype) && stringr::str_detect(filename, "\\.")) {
     filetype <- stringr::str_extract(filename, "(?<=\\.).+$")

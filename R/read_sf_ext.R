@@ -109,50 +109,61 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
   params <- rlang::list2(...)
 
   # Check url
-  check_url(url)
+  is_url(url)
 
   # Check MapServer or FeatureServer url
-  if (check_esri_url(url)) {
-    data <- get_esri_data(
-      location = bbox,
-      url = url,
-      name_col = params$name_col,
-      name = params$name,
-      where = params$where
-    )
+  if (is_esri_url(url)) {
+    data <-
+      get_esri_data(
+        location = bbox,
+        url = url,
+        name_col = params$name_col,
+        name = params$name,
+        where = params$where
+      )
   } else {
-    if (check_gsheet_url(url)) {
-      data <- googlesheets4::read_sheet(ss = url, sheet = params$sheet)
-
-      coords <- check_coords(x = data, coords = coords)
-
-      data <- df_to_sf(data, coords = coords)
+    if (is_gsheet(url)) {
+      data <-
+        gsheet_to_sf(ss = url, coords = coords, sheet = params$sheet)
     } else {
       # FIXME: This is an awkward way to reset back to defaults
       if (is.null(params$query)) {
-        query <- NA
-      } else {
-        query <- params$query
+        params$query <- NA
       }
 
       if (is.null(params$wkt_filter)) {
-        wkt_filter <- character(0)
-      } else {
-        wkt_filter <- params$wkt_filter
+        params$wkt_filter <- character(0)
       }
 
       # TODO: Check if it is possible to use a WKT filter
       # when reading data from a url (e.g. a hosted GeoJSON file)
       data <- sf::read_sf(
         dsn = url,
-        query = query,
-        wkt_filter = wkt_filter
+        query = params$query,
+        wkt_filter = params$wkt_filter
       )
 
       # FIXME: This should be documented and maybe should be the default but optional
       data <- sf::st_zm(data)
     }
   }
+
+  return(data)
+}
+
+#' Convert Google Sheets url to sf
+#'
+#' @noRd
+#' @importFrom googlesheets4 gs4_find read_sheet
+#' @importFrom usethis ui_todo
+gsheet_to_sf <- function(ss, coords, ask = FALSE, ...) {
+  if (ask) {
+    googlesheets4::gs4_find(readline(prompt = usethis::ui_todo("What is the name of the Google Sheet to return?")))
+  }
+
+  data <- googlesheets4::read_sheet(ss = ss, ...)
+  coords <- check_coords(x = data, coords = coords)
+  data <- df_to_sf(data, coords = coords)
 
   return(data)
 }
@@ -164,7 +175,7 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 #' @importFrom stringr str_detect
 #' @importFrom utils data
 read_sf_pkg <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
-  check_pkg_installed(package)
+  is_pkg_installed(package)
 
   # Read package data
   pkg_files <- utils::data(package = package)$results[, "Item"]
@@ -200,12 +211,15 @@ read_sf_pkg <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
 
 #' @rdname read_sf_ext
 #' @aliases read_sf_download
+#' @param unzip If `TRUE`, url must be a zip file that is downloaded, unzipped
+#'   into a temporary directory, and then read to a file using the specified
+#'   file type.
 #' @inheritParams utils::download.file
 #' @inheritParams get_data_dir
 #' @inheritParams make_filename
 #' @export
 #' @importFrom sf st_crs
-#' @importFrom utils download.file
+#' @importFrom utils download.file unzip
 read_sf_download <-
   function(url,
            bbox = NULL,
@@ -232,6 +246,25 @@ read_sf_download <-
       destfile = destfile,
       method = method
     )
+
+    if (unzip) {
+      zipdest <-
+        make_filename(
+          prefix = prefix,
+          filename = filename,
+          path = tempdir(),
+          filetype = filetype
+        )
+
+      utils::unzip(
+        zipfile = destfile,
+        exdir = tempdir(),
+        overwrite = TRUE
+      )
+
+      destfile <- zipdest
+    }
+
 
     data <- read_sf_path(path = destfile, bbox = bbox, ...)
 

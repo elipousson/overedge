@@ -1,48 +1,67 @@
-#' Check if a string is a URL
+#' Is this a URL?
 #'
 #' @noRd
-check_url <- function(x) {
+is_url <- function(x) {
   grepl(
     "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+",
     x
   )
 }
-#' Check if a string is an ArcGIS MapServer or FeatureServer URL
+#' Is this an ArcGIS MapServer or FeatureServer URL?
 #'
 #' @noRd
-check_esri_url <- function(x) {
+is_esri_url <- function(x) {
   grepl("/MapServer|/FeatureServer", x)
 }
 
-#' Check if a string is a Google Sheets URL
+#' Is this a Google Sheets URL?
 #'
 #' @noRd
-check_gsheet_url <- function(x) {
+is_gsheet <- function(x) {
   grepl(
     "^https://docs.google.com/spreadsheets/",
     x
   )
 }
 
-#' Check if objects is a ggplot2 layer
-#' @noRd
-check_geom <- function(x) {
-  is_class(x[[1]], "Layer") && is_class(x[[1]], "gg")
+as_gsheet_ss <- function() {
+
 }
 
-#' Check if package exists and prompt to install if not
+#' Is this package installed?
 #'
 #' @param package Name of a package.
 #' @param repo GitHub repository to use for the package.
 #' @importFrom rlang is_installed check_installed
 #' @noRd
-check_pkg_installed <- function(pkg, repo = NULL) {
+is_pkg_installed <- function(pkg, repo = NULL) {
   if (!rlang::is_installed(pkg = pkg)) {
     if (!is.null(repo)) {
       pkg <- repo
     }
 
     rlang::check_installed(pkg = pkg)
+  }
+}
+
+#' @noRd
+#' @importFrom usethis ui_todo
+ui_ask <- function(x) {
+  readline(prompt = usethis::ui_todo(x))
+}
+
+#' Group data by column if present
+#'
+#' @param data Data frame or simple feature object
+#' @param col Column name/value
+#' @noRd
+group_by_col <- function(data, col = NULL) {
+  if (!is.null(col) && (rlang::has_length(col, 1)) && !is.null(data)) {
+    if (rlang::has_name(data, col)) {
+      dplyr::group_by(data, .data[[col]])
+    }
+  } else {
+    data
   }
 }
 
@@ -58,21 +77,6 @@ add_col <- function(data, col = NULL) {
   }
 
   data
-}
-
-#' Group data by column if present
-#'
-#' @param data Data frame or simple feature object
-#' @param col Column name/value
-#' @noRd
-group_by_col <- function(data, col = NULL) {
-  if (!is.null(col) && (length(col) == 1) && !is.null(data)) {
-    if (col %in% names(data)) {
-      dplyr::group_by(data, .data[[col]])
-    }
-  } else {
-    data
-  }
 }
 
 #' Modify mapping for ggplot2 aesthetics

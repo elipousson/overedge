@@ -18,6 +18,7 @@
 #'   \code{\link[ggplot2]{element_text}} by theme_text), `plot.background`
 #'   (passed to \code{\link[ggplot2]{element_rect}} by theme_margin). Default:
 #'   `NA`.
+#' @param hjust,vjust Horizontal and vertical justification.
 #' @param position Legend position (“left”,“top”, “right”, “bottom”) or a
 #'   two-element numeric vector to set position using Normalized Parent
 #'   Coordinates ("npc"); defaults NULL
@@ -162,7 +163,6 @@ theme_legend <- function(position = NULL,
                          bgcolor = "white",
                          title = list(face = "bold", align = 0),
                          method = NULL) {
-
   if ("none" %in% position) {
     legend_theme <- ggplot2::theme(legend.position = "none")
   } else {
@@ -215,8 +215,12 @@ theme_legend <- function(position = NULL,
 #' Get position, justification, and box justification for an ggplot2 legend
 #'
 #' @seealso [get_legend_position_inset]
-#'
+#' @param justification defaults to `NULL`.
+#' @param position defaults to `NULL`.
+#' @param inset If `TRUE`, return an inset legend position; defaults to `FALSE`.
 #' @noRd
+#' @importFrom grid unit
+#' @importFrom rlang has_length
 make_legend_position <- function(justification = NULL, position = NULL, inset = FALSE) {
   if (is.null(position) || !is.numeric(position)) {
     position <- match.arg(position, c(
@@ -278,7 +282,7 @@ make_legend_position <- function(justification = NULL, position = NULL, inset = 
       justification <- rev(justification)
     }
 
-    if ((length(justification) == 2) && is.null(position)) {
+    if (rlang::has_length(justification, 2) && is.null(position)) {
       position <- justification[[1]]
     }
 
@@ -302,18 +306,23 @@ make_legend_position <- function(justification = NULL, position = NULL, inset = 
 
 #' Make plot background element based on background color
 #'
-#' @param bgcolor ...
+#' @param bgcolor Legend background color; defaults to `NULL`.
 #' @noRd
 #' @importFrom ggplot2 element_blank element_rect
-make_legend_bg <- function(bgcolor) {
+make_legend_bg <- function(bgcolor = NULL) {
   if (is.null(bgcolor)) {
-    ggplot2::element_blank()
+    leg_bg <- ggplot2::element_blank()
   } else {
-    ggplot2::element_rect(fill = bgcolor)
+    leg_bg <- ggplot2::element_rect(fill = bgcolor)
   }
+
+  return(leg_bg)
 }
 
-make_legend_title <- function(title) {
+#' @param title Named list with title face and alignment (e.g. list(face = "Georgia", align = "left"))
+#' @noRd
+#' @importFrom ggplot2 element_text
+make_legend_title <- function(title = NULL) {
   if (is.list(title) && all(c("face", "align") %in% names(title))) {
     title <- ggplot2::element_text(face = title$face)
     # text <- ggplot2::element_text(hjust = align)
