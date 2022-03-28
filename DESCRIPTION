@@ -30,7 +30,8 @@ Imports:
     tidyselect,
     units,
     usethis,
-    utils
+    utils,
+    cli
 Remotes:
     koki25ando/FlickrAPI,
     yonghah/esri2sf,

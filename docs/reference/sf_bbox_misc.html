@@ -100,7 +100,7 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>bbox</dt>
-<dd><p>bbox object</p></dd>
+<dd><p>A bbox object.</p></dd>
 <dt>orientation</dt>
 <dd><p>If <code>TRUE</code>, sf_bbox_asp returns a suggested orientation
 based on aspect ratio (&lt; 0.9 "portrait"; &gt; 1.1 "landscape"; else "square");
@@ -113,6 +113,9 @@ distance from and to.</p></dd>
 (default), distance functions return numeric values.</p></dd>
 <dt>crs</dt>
 <dd><p>coordinate reference system to use for query; default 4326</p></dd>
+<dt>sf_col</dt>
+<dd><p>name to use for geometry column after converting to simple
+feature object; defaults to "geometry".</p></dd>
 <dt>coords</dt>
 <dd><p>query column names with coordinates. e,g, c("X", "Y") or
 c("lat", "lon")</p></dd>

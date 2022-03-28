@@ -3,8 +3,8 @@
 #' Used with [layer_number_markers]
 #'
 #' @param data Marker data
-#' @param groupname_col Group column name, Default: `NULL`
-#' @param sort_col Sort column name, Default: 'lon'
+#' @param col Group column name, Default: `NULL`
+#' @param sort Sort column name, Default: 'lon'
 #' @param number If TRUE, number the markers, Default: `TRUE`
 #' @param desc If `TRUE`, sort descending; set to `FALSE` if sort is "lon" and
 #'   TRUE is sort is "lat" or any other value, default `NULL`

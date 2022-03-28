@@ -55,7 +55,7 @@ get_open_data <- function(data = NULL,
                           from_crs = 4326,
                           crs = NULL) {
   if (source_type != "socrata") {
-    usethis::ui_stop(
+    cli::cli_abort(
       "This function currently only supports access to Socrata open data portals.
       Other open data access options (e.g. CKAN, Flat Data) may be added in the future."
     )
@@ -65,7 +65,7 @@ get_open_data <- function(data = NULL,
 
   # Check for an API key
   if ((is.null(key) | key == "") && !(data == "list")) {
-    usethis::ui_stop("An API key is required.")
+    cli::cli_abort("An API key is required.")
   } else if (data == "list") {
     url <- source_url
     data_list <- RSocrata::ls.socrata(url = url)
@@ -117,7 +117,7 @@ get_open_data <- function(data = NULL,
       }
     }
   } else {
-    usethis::ui_stop("A valid source_url is required.")
+    cli::cli_abort("A valid source_url is required.")
   }
 
   # Download data from Socrata Open Data portal

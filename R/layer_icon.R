@@ -111,7 +111,7 @@ layer_icon <- function(data = NULL,
         ...
       )
     } else {
-      usethis::ui_stop("The provided parameters match more than one icon.
+      cli::cli_abort("The provided parameters match more than one icon.
                         Provide the `px` and/or `source` to select a single icon.")
     }
   } else if (!is.null(svg)) {

@@ -51,7 +51,7 @@ make_location_data_list <- function(data = NULL, location = NULL, key = c("locat
     location_data_list <- list(location, rep(data, len_location))
   } else {
     if (!(len_location == len_data)) {
-      usethis::ui_warning("location is length {location_len} and data is {data_len}.")
+      cli::cli_warn("location is length {location_len} and data is {data_len}.")
     }
 
     location_data_list <- list(location, data)

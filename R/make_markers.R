@@ -73,7 +73,7 @@ make_markers <- function(data,
   }
 
   if (!is.null(groupname_col) && !is.null(fn)) {
-    usethis::ui_warn("Function passed to fn is being applied to grouped data.")
+    cli::cli_warn("Function passed to fn is being applied to grouped data.")
   }
 
   data <- use_fn(data, fn)

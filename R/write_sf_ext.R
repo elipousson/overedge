@@ -138,10 +138,10 @@ write_sf_cache <- function(data,
     }
 
     if (overwrite) {
-      usethis::ui_done("Removing existing cached data.")
+      cli::cli_alert_success("Removing existing cached data.")
       file.remove(data_dir_path)
     } else {
-      usethis::ui_stop("{usethis::ui_path(filename)} was not overwritten.")
+      cli::cli_abort("{.file {filename}} was not overwritten.")
     }
   }
 

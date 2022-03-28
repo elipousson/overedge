@@ -137,7 +137,7 @@ location_filter <- function(data,
       location <- st_buffer_ext(x = location, dist = 0.00000001)
 
       if (trim) {
-        usethis::ui_warn("location_filter does not support trim = TRUE for POINT or MULTIPOINT geometry.")
+        cli::cli_warn("location_filter does not support trim = TRUE for POINT or MULTIPOINT geometry.")
         trim <- FALSE
       }
     }
@@ -145,7 +145,7 @@ location_filter <- function(data,
     if (trim) {
       # If trim, match location crs to data
       if (dist_in_params) {
-        usethis::ui_warn("location_filter ignores the dist, diag_ratio, and/or asp parameters if trim is TRUE.")
+        cli::cli_warn("location_filter ignores the dist, diag_ratio, and/or asp parameters if trim is TRUE.")
       }
 
       data <- st_trim(x = data, y = location)

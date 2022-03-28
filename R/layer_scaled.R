@@ -39,7 +39,7 @@ layer_scaled <-
     }
 
     if (!is_sf(data, ext = TRUE)) {
-      usethis::ui_stop("data must be a bounding box or simple feature object.")
+      cli::cli_abort("data must be a bounding box or simple feature object.")
     } else {
       # Get adjusted bounding box for data
       bbox <- st_bbox_ext(
@@ -60,7 +60,7 @@ layer_scaled <-
     fit_check <- (check_ydist && check_xdist)
 
     if (!clip && !fit_check) {
-      usethis::ui_stop("This data covers a larger area than can be displayed at this scale ({scale}) on this paper ({paper})")
+      cli::cli_abort("This data covers a larger area than can be displayed at this scale ({scale}) on this paper ({paper})")
     } else {
       center <- st_center(data, ext = TRUE)
       scaled_dist <- max(c(scaled_paper$width_actual, scaled_paper$height_actual)) / 2

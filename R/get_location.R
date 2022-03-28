@@ -100,7 +100,7 @@ get_location <- function(type,
     }
 
     if (!is.null(location) && (nrow(location) == 0)) {
-      usethis::ui_stop("The name/id did not match any location of the type provided.")
+      cli::cli_abort("The name/id did not match any location of the type provided.")
     }
   } else {
     location <- location_filter(data = type, location = location, trim = FALSE, crop = FALSE)
@@ -129,7 +129,7 @@ get_location <- function(type,
     location <- type
 
     if (is.null(name_col) && (nrow(type) > 1)) {
-      usethis::ui_warn("Returning all locations of this type.")
+      cli::cli_warn("Returning all locations of this type.")
     }
   }
 

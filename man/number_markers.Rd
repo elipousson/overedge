@@ -16,14 +16,14 @@ number_features(
 \arguments{
 \item{data}{Marker data}
 
+\item{col}{Group column name, Default: \code{NULL}}
+
 \item{number}{If TRUE, number the markers, Default: \code{TRUE}}
+
+\item{sort}{Sort column name, Default: 'lon'}
 
 \item{desc}{If \code{TRUE}, sort descending; set to \code{FALSE} if sort is "lon" and
 TRUE is sort is "lat" or any other value, default \code{NULL}}
-
-\item{groupname_col}{Group column name, Default: \code{NULL}}
-
-\item{sort_col}{Sort column name, Default: 'lon'}
 }
 \value{
 A sf object with a number column ordered by sort.

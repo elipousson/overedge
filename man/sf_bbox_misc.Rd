@@ -50,7 +50,7 @@ sf_bbox_contract(bbox, x_nudge = 0, y_nudge = 0)
 sf_bbox_expand(bbox, x_nudge = 0, y_nudge = 0)
 }
 \arguments{
-\item{bbox}{bbox object}
+\item{bbox}{A bbox object.}
 
 \item{orientation}{If \code{TRUE}, sf_bbox_asp returns a suggested orientation
 based on aspect ratio (< 0.9 "portrait"; > 1.1 "landscape"; else "square");
@@ -63,6 +63,9 @@ distance from and to.}
 (default), distance functions return numeric values.}
 
 \item{crs}{coordinate reference system to use for query; default 4326}
+
+\item{sf_col}{name to use for geometry column after converting to simple
+feature object; defaults to "geometry".}
 
 \item{coords}{query column names with coordinates. e,g, c("X", "Y") or
 c("lat", "lon")}

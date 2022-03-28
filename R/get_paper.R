@@ -237,7 +237,7 @@ get_margin <- function(margin = NULL,
     paper_is_df <- TRUE
 
     if (!any(c("width", "height", "orientation", "asp", "cols", "rows") %in% names(paper))) {
-      usethis::ui_stop("The dataframe provided to paper provided does not appear to include the required columns.")
+      cli::cli_abort("The dataframe provided to paper provided does not appear to include the required columns.")
     }
 
     # FIXME: get_paper only passes to get_margin if margin is a character value but the value of margin does not matter to set the dist if plot_width is provided.
@@ -360,7 +360,7 @@ get_asp <- function(asp = NULL,
         as.numeric(stringr::str_extract(asp, ".+(?=:)")) /
           as.numeric(stringr::str_extract(asp, "(?<=:).+"))
     } else if (!is.numeric(asp) && !is.null(asp)) {
-      usethis::ui_stop("{usethis::ui_value('asp')} must be numeric (e.g. 0.666) or a string representing a width to height ratio (e.g. '4:6').")
+      cli::cli_abort("{usethis::ui_value('asp')} must be numeric (e.g. 0.666) or a string representing a width to height ratio (e.g. '4:6').")
     }
   } else if (!is.null(paper) && is.null(asp)) {
     # Get aspect ratio for text/plot/map block area
@@ -377,7 +377,7 @@ get_asp <- function(asp = NULL,
       } else if (is.numeric(margin)) {
         margin <- get_margin(dist = margin, unit = unit)
       } else if (!is_class(margin, classes = "margin")) {
-        usethis::ui_stop("margin must be either a character string matching the margin options ('none', 'narrow', 'standard', 'wide', or 'extrawide'),
+        cli::cli_abort("margin must be either a character string matching the margin options ('none', 'narrow', 'standard', 'wide', or 'extrawide'),
                          a numeric vector that can be passed to the dist parameter of get_margins,
                          or a margin class object.")
       }

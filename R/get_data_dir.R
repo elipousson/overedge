@@ -22,7 +22,7 @@ get_data_dir <- function(path = NULL, package = "overedge") {
       dir.create(path = path)
       usethis::ui_done("New directory created at {usethis::ui_path(path)}")
     } else {
-      usethis::ui_stop("Please provide a different path for this file.")
+      cli::cli_abort("Please provide a different path for this file.")
     }
   }
 

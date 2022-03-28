@@ -153,11 +153,11 @@ check_coords <- function(x = NULL, coords = NULL, rev = FALSE) {
     }
 
     if (!is.null(coords) && !is.null(x_coords) && !setequal(coords, x_coords)) {
-      usethis::ui_warn("The provided coordinates do not appear to match the data.
+      cli::cli_warn("The provided coordinates do not appear to match the data.
                      Replacing coordinates with suggested values based on column names.")
       coords <- x_coords
     } else if (is.null(x_coords) && is.null(coords)) {
-      usethis::ui_warn("A pair of coordinate column names could not be determined based on the data provided.")
+      cli::cli_warn("A pair of coordinate column names could not be determined based on the data provided.")
     }
   }
 

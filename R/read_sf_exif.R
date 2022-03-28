@@ -66,7 +66,7 @@ read_sf_exif <- function(path = NULL,
     lonlat_ext_tags <- TRUE
     orientation_tags <- TRUE
   } else if (!any(grepl("GPS", tags))) {
-    usethis::ui_warn("The tags must include GPS values to create a simple feature object based on the file EXIF data.")
+    cli::cli_warn("The tags must include GPS values to create a simple feature object based on the file EXIF data.")
     check_tags <- TRUE
   }
 
@@ -75,7 +75,7 @@ read_sf_exif <- function(path = NULL,
     filetype <- unique(stringr::str_extract(dir_files, "(?<=\\.).+$"))
 
     if (length(filetype) > 1) {
-      usethis::ui_stop("The path {usethis::ui_path(path)} includes files with multiple types so a filetype parameter must be provided.")
+      cli::cli_abort("The path {usethis::ui_path(path)} includes files with multiple types so a filetype parameter must be provided.")
     }
   }
 
@@ -167,7 +167,7 @@ read_sf_exif <- function(path = NULL,
     data <-
       dplyr::arrange(data, .data[[sort]])
   } else {
-    usethis::ui_warn("The provided value for sort {usethis::ui_value(sort)} is not found in the data.")
+    cli::cli_warn("The provided value for sort {usethis::ui_value(sort)} is not found in the data.")
   }
 
   exif_crs <- 4326

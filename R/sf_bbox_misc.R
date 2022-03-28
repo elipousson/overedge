@@ -131,8 +131,9 @@ sf_bbox_transform <- function(bbox, crs = NULL) {
   return(bbox)
 }
 
-#' @param bbox bbox object
-#' @inheritParams sf::st_as_sf
+#' @param bbox A bbox object.
+#' @param sf_col name to use for geometry column after converting to simple
+#'   feature object; defaults to "geometry".
 #' @return sf object
 #' @seealso
 #'  - \code{\link[sf]{st_as_sf}},\code{\link[sf]{st_as_sfc}}
