@@ -58,6 +58,7 @@ Suggests:
     RSocrata,
     mapview,
     leaflet,
-    leafpop
+    leafpop,
+    naniar
 Config/testthat/edition: 3
 VignetteBuilder: knitr
