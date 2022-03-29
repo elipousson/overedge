@@ -93,12 +93,14 @@ get_open_data <- function(data = NULL,
     select <- paste0("$select=", select)
   }
 
-  if (!is.null(bbox)) {
-    where <- paste0("$where=", paste0(c(where, sf_bbox_to_lonlat_query(bbox = bbox, coords = coords)), collapse = " AND "))
-  } else if (!is.null(name_col) && !is.null(name)) {
-    where <- paste0("$where=", paste0(c(where, glue::glue("{name_col} like '{name}'")), collapse = " AND "))
-  } else if (!is.null(where)) {
-    where <- paste0("$where=", where)
+  if (!is.null(where)) {
+    if (!is.null(bbox)) {
+      where <- paste0("$where=", paste0(c(where, sf_bbox_to_lonlat_query(bbox = bbox, coords = coords)), collapse = " AND "))
+    } else if (!is.null(name_col) && !is.null(name)) {
+      where <- paste0("$where=", paste0(c(where, glue::glue("{name_col} like '{name}'")), collapse = " AND "))
+    } else {
+      where <- paste0("$where=", where)
+    }
   }
 
   if (!is.null(query)) {
@@ -112,7 +114,8 @@ get_open_data <- function(data = NULL,
       # Assemble url from data identifier, and select, where, and query parameters
       source_url <- gsub("/$", "", source_url)
       url <- paste0(source_url, "/resource/", data, ".json")
-      if (!any(c(select, where, query), is.null)) {
+
+      if (!any(sapply(c(select, where, query), is.null))) {
         url <- paste0(url, "?", paste0(c(select, where, query), collapse = "&"))
       }
     }
