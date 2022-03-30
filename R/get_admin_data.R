@@ -1,3 +1,38 @@
+
+#' Spatial filter with st_intersects converting wkt data
+#'
+#' @noRd
+#' @importFrom sf st_as_sfc st_intersects
+st_intersects_data <- function(x, data, wkt = TRUE, crs = 3857) {
+  x <- as_sfc(x, crs = crs)
+
+  if (wkt && (crs == 3857)) {
+    data <- sf::st_as_sfc(df$wkt, crs = 3857)
+  }
+
+  intersects <-
+    purrr::map_lgl(
+      data,
+      ~ sf::st_intersects(.x, x, sparse = FALSE)
+    )
+
+  return(intersects)
+}
+
+#' @noRd
+admin_df_as_class <- function(df, class = "df") {
+  if (class == "df") {
+    return(df)
+  } else if (class == "bbox") {
+    return(df$bbox)
+  } else if (class == "sf") {
+    df$bbox <- NULL
+    return(as_sf(df, df_crs = 3857))
+  } else if (class == "sfc") {
+    return(sf::st_as_sfc(df$wkt, crs = 3857))
+  }
+}
+
 #' @title Get U.S. State and County boundary data for a location
 #'
 #' @description Get U.S. states and counties using a very fast query.
@@ -14,6 +49,8 @@ NULL
 #' @rdname get_admin_data
 #' @name get_states
 #' @export
+#' @importFrom rlang list2
+#' @importFrom sf st_geometry st_as_sfc st_crs
 get_states <- function(location = NULL,
                        dist = NULL,
                        diag_ratio = NULL,
@@ -37,7 +74,7 @@ get_states <- function(location = NULL,
 
     matching <-
       st_intersects_data(x = bbox, data = us_states, crs = 3857)
-  } else if (!any(c(params$abb, params$name, params$statefp, params$geoid), is.null)) {
+  } else if (!any(sapply(c(params$abb, params$name, params$statefp, params$geoid), is.null))) {
     if (!is.null(params$abb)) {
       params$abb <- match.arg(params$abb, us_states$abb)
       matching <- (us_states$abb %in% params$abb)
@@ -55,16 +92,7 @@ get_states <- function(location = NULL,
 
   df <- us_states[matching, ]
 
-  if (class == "df") {
-    return(df)
-  } else if (class == "bbox") {
-    return(df$bbox)
-  } else if (class == "sf") {
-    df$geometry <- as_sfc(df$wkt)
-    return(sf::st_as_sf(df, crs = 3857))
-  } else if (class == "sfc") {
-    return(as_sfc(df$wkt))
-  }
+  admin_df_as_class(df, class = class)
 }
 
 #' @rdname get_admin_data
@@ -93,42 +121,15 @@ get_counties <- function(location = NULL,
 
     matching <-
       st_intersects_data(x = bbox, data = us_counties, crs = 3857)
-  } else if (!any(sapply(c(params$geoid), is.null))) {
-    if (!is.null(params$geoid)) {
-      params$geoid <- match.arg(params$geoid, us_counties$geoid)
-      matching <- (us_counties$geoid %in% params$geoid)
-    }
+  } else if (!is.null(params$geoid)) {
+    params$geoid <- match.arg(params$geoid, us_counties$geoid)
+    matching <- (us_counties$geoid %in% params$geoid)
+  } else if (!is.null(params$name)) {
+    params$geoid <- match.arg(params$name, us_counties$name)
+    matching <- (us_counties$name %in% params$name)
   }
 
   df <- us_counties[matching, ]
 
-  if (class == "df") {
-    return(df)
-  } else if (class == "bbox") {
-    return(df$bbox)
-  } else if (class == "sf") {
-    df$geometry <- as_sfc(df$wkt)
-    return(sf::st_as_sf(df, crs = 3857))
-  } else if (class == "sfc") {
-    return(as_sfc(df$wkt))
-  }
-}
-
-#' Spatial filter with st_intersects converting wkt data
-#'
-#' @noRd
-st_intersects_data <- function(x, data, wkt = TRUE, crs = 3857) {
-  x <- as_sfc(x, crs = crs)
-
-  if (wkt && (crs == 3857)) {
-    data <- as_sfc(data$wkt)
-  }
-
-  intersects <-
-    purrr::map_lgl(
-      data,
-      ~ sf::st_intersects(.x, x, sparse = FALSE)
-    )
-
-  return(intersects)
+  admin_df_as_class(df, class = class)
 }
