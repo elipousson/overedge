@@ -79,32 +79,8 @@ st_buffer_ext <- function(x,
     if (!is.null(dist_limits)) {
       dist_limits <-
         convert_dist_units(dist = dist_limits, from = unit, to = crs$units_gdal)
-    }
 
-    if (!is.null(dist_limits) && (length(dist_limits) >= 2) && is_class(dist_limits, "units")) {
-      min_limit <- min(dist_limits)
-      max_limit <- max(dist_limits)
-
-      check_between_dist <-
-        suppressWarnings(
-          dplyr::between(
-            dist,
-            min_limit,
-            max_limit
-          )
-        )
-
-      if (check_between_dist) {
-        usethis::ui_info("The buffer dist ({dist} {units_gdal}) is between the min/max distance limits.")
-        dist <- dist_limits[[which.min(abs(dist_limits - dist))]]
-        usethis::ui_info("Replacing with nearest distance limit ({dist} {units_gdal}).")
-      } else if (dist < min_limit) {
-        dist <- min_limit
-        usethis::ui_info("Replacing buffer dist ({num_dist} {units_gdal}) with the minimum limit ({min_limit} {units_gdal}).")
-      } else if (dist > max_limit) {
-        dist <- max_limit
-        usethis::ui_info("Replacing buffer dist ({num_dist} {units_gdal})with the maximum limit ({max_limit} {units_gdal}).")
-      }
+      dist <- limit_dist(dist = dist, dist_limits = dist_limits)
     }
 
     x <- sf::st_buffer(x = x, dist = dist, singleSide = single_side, ...)
@@ -115,6 +91,42 @@ st_buffer_ext <- function(x,
   }
 
   return(x)
+}
+
+#' Limit distance to the min/max values of dist_limits
+#'
+#' @noRd
+#' @importFrom dplyr between
+#' @importFrom cli cli_alert_info
+limit_dist <- function(dist = NULL, dist_limits = NULL) {
+
+  if (!is.null(dist_limits) && (length(dist_limits) >= 2) && is_class(dist_limits, "units")) {
+    min_limit <- min(dist_limits)
+    max_limit <- max(dist_limits)
+
+    check_between_dist <-
+      suppressWarnings(
+        dplyr::between(
+          dist,
+          min_limit,
+          max_limit
+        )
+      )
+
+    if (check_between_dist) {
+      cli::cli_alert_info("The buffer dist ({dist} {units_gdal}) is between the min/max distance limits.")
+      dist <- dist_limits[[which.min(abs(dist_limits - dist))]]
+      cli::cli_alert_info("Replacing with nearest distance limit ({dist} {units_gdal}).")
+    } else if (dist < min_limit) {
+      dist <- min_limit
+      cli::cli_alert_info("Replacing buffer dist ({num_dist} {units_gdal}) with the minimum limit ({min_limit} {units_gdal}).")
+    } else if (dist > max_limit) {
+      dist <- max_limit
+      cli::cli_alert_info("Replacing buffer dist ({num_dist} {units_gdal})with the maximum limit ({max_limit} {units_gdal}).")
+    }
+  }
+
+  return(dist)
 }
 
 #' Convert distances between different units
