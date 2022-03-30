@@ -97,7 +97,8 @@ get_open_data <- function(data = NULL,
         query = query,
         bbox = bbox,
         name_col = name_col,
-        name = name
+        name = name,
+        coords = coords
       )
   } else {
     cli::cli_abort("A valid source_url is required.")
@@ -126,7 +127,8 @@ make_socrata_url <- function(data = NULL,
                              query = NULL,
                              bbox = NULL,
                              name_col = NULL,
-                             name = NULL) {
+                             name = NULL,
+                             coords = c("longitude", "latitude")) {
 
   # Make parameter calls
   if (!is.null(select)) {

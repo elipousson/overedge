@@ -150,7 +150,7 @@ get_osm_data <- function(location = NULL,
   }
 
   if (getOption("overedge.osm_attribution", TRUE)) {
-    usethis::ui_info("Attribution is required when you use Open Street Map data.
+    cli::cli_alert_info("Attribution is required when you use Open Street Map data.
                      See {usethis::ui_value('https://www.openstreetmap.org/copyright')} for more information on the Open Database Licence.")
     options("overedge.osm_attribution" = FALSE)
   }

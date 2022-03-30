@@ -9,7 +9,8 @@
 #'   name. If the name matches multiple icons, the first match from `map_icons`
 #'   is used. You may provide a px or source value to select a different match
 #'   if needed but, in that case, all icons must use the same px or source
-#'   value. Note that the icon column should not be mapped with [ggplot2::aes()].
+#'   value. Note that the icon column should not be mapped with
+#'   [ggplot2::aes()].
 #' @param icon Icon name. Default `NULL`. If `icon` is provided, `iconname_col`
 #'   is not used.
 #' @param px Icon size in pixels. See `map_icons$px` for supported options.

@@ -27,7 +27,7 @@ admin_df_as_class <- function(df, class = "df") {
     return(df$bbox)
   } else if (class == "sf") {
     df$bbox <- NULL
-    return(as_sf(df, df_crs = 3857))
+    return(as_sf(df, from_crs = 3857))
   } else if (class == "sfc") {
     return(sf::st_as_sfc(df$wkt, crs = 3857))
   }

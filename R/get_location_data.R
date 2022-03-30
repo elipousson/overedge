@@ -119,7 +119,7 @@ get_location_data <- function(location = NULL,
 
   # Check if data is not an  sf object
   # FIXME: The read_sf_ext function I started handles this type of checking and switching
-  if (!(is_sf(data))) {
+  if (!is_sf(data)) {
 
     # Check if data is a url
     if (is_url(data)) {

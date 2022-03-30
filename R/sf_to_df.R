@@ -10,7 +10,7 @@
 #' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
 #'   single column or two separated columns.
 #' @param crs Cordinate reference system to return, Default: 4326 for [sf_to_df] and NULL for [df_to_sf]
-#' @param df_crs For [df_to_sf], coordinate reference system used by coordinates or well known text in data frame.
+#' @param from_crs For [df_to_sf], coordinate reference system used by coordinates or well known text in data frame.
 #' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'.
 #' @param coords Coordinate columns for input dataframe or output sf object (if
@@ -53,7 +53,7 @@ sf_to_df <- function(x,
 df_to_sf <- function(x,
                      crs = NULL,
                      coords = c("lon", "lat"),
-                     df_crs = 4326,
+                     from_crs = 4326,
                      into = NULL,
                      sep = ",",
                      rev = TRUE,
@@ -61,7 +61,7 @@ df_to_sf <- function(x,
   if (rlang::has_name(x, "geometry") && is_sfc(x$geometry)) {
     x <- sf::st_as_sf(x)
   } else if (rlang::has_name(x, "wkt")) {
-    sf::st_geometry(x) <- sf::st_as_sfc(x$wkt, crs = df_crs)
+    sf::st_geometry(x) <- sf::st_as_sfc(x$wkt, crs = from_crs)
     x$wkt <- NULL
   } else {
     if (rlang::has_length(coords, 1) && rlang::has_length(into, 2)) {
@@ -85,7 +85,7 @@ df_to_sf <- function(x,
     num_missing_coords <- sum(missing_coords)
 
     if (num_missing_coords > 0) {
-      usethis::ui_info("Removing {num_missing_coords} rows with missing coordinates.")
+      cli::cli_alert_info("Removing {num_missing_coords} rows with missing coordinates.")
       # Exclude rows with missing coordinates
       x <- x[!missing_coords, ]
     }
@@ -95,7 +95,7 @@ df_to_sf <- function(x,
         x,
         coords = c(lon, lat),
         agr = "constant",
-        crs = df_crs,
+        crs = from_crs,
         stringsAsFactors = FALSE,
         remove = remove_coords
       )
