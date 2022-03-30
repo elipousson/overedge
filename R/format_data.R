@@ -23,8 +23,10 @@
 #' @return Data with formatting functions applied.
 #' @rdname format_data
 #' @export
-#' @importFrom dplyr mutate across contains
+#' @importFrom dplyr mutate across rename
 #' @importFrom stringr str_trim str_squish
+#' @importFrom tibble deframe
+#' @importFrom tidyr replace_na
 format_data <- function(data,
                         var_names = NULL,
                         replace_na = NULL,
@@ -37,7 +39,7 @@ format_data <- function(data,
       dplyr::across(
         tidyselect::where(is.character),
         ~ stringr::str_trim(stringr::str_squish(.x))
-        )
+      )
     )
 
   if (!is.null(var_names)) {
@@ -69,7 +71,7 @@ format_data <- function(data,
         naniar::replace_with_na(
           data,
           replace = replace_with_na
-          )
+        )
     }
 
     if (replace_empty_char_with_na) {
@@ -91,11 +93,11 @@ format_data <- function(data,
 #' @name format_data
 #' @rdname format_data
 fix_date <- function(data) {
-    dplyr::mutate(
-      data,
-      dplyr::across(
-        dplyr::contains("date"),
-        ~ as.POSIXct(.x / 1000, origin = "1970-01-01")
-      )
+  dplyr::mutate(
+    data,
+    dplyr::across(
+      dplyr::contains("date"),
+      ~ as.POSIXct(.x / 1000, origin = "1970-01-01")
     )
+  )
 }
