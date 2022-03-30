@@ -10,7 +10,7 @@
 #' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
 #'   single column or two separated columns.
 #' @param crs Cordinate reference system to return, Default: 4326 for [sf_to_df] and NULL for [df_to_sf]
-#' @param coords_crs For [df_to_sf], coordinate reference system used by coordinates in data frame.
+#' @param df_crs For [df_to_sf], coordinate reference system used by coordinates or well known text in data frame.
 #' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'.
 #' @param coords Coordinate columns for input dataframe or output sf object (if
@@ -53,13 +53,16 @@ sf_to_df <- function(x,
 df_to_sf <- function(x,
                      crs = NULL,
                      coords = c("lon", "lat"),
-                     coords_crs = 4326,
+                     df_crs = 4326,
                      into = NULL,
                      sep = ",",
                      rev = TRUE,
                      remove_coords = FALSE) {
-  if ((rlang::has_name(x, "geometry")) && is_sfc(x$geometry)) {
+  if (rlang::has_name(x, "geometry") && is_sfc(x$geometry)) {
     x <- sf::st_as_sf(x)
+  } else if (rlang::has_name(x, "wkt")) {
+    sf::st_geometry(x) <- sf::st_as_sfc(x$wkt, crs = df_crs)
+    x$wkt <- NULL
   } else {
     if (rlang::has_length(coords, 1) && rlang::has_length(into, 2)) {
       x <- separate_coords(x = x, coords = coords, into = into, sep = sep)
@@ -92,7 +95,7 @@ df_to_sf <- function(x,
         x,
         coords = c(lon, lat),
         agr = "constant",
-        crs = coords_crs,
+        crs = df_crs,
         stringsAsFactors = FALSE,
         remove = remove_coords
       )
