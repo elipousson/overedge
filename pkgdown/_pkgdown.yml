@@ -64,5 +64,6 @@ reference:
   contents:
   - '`map_icons`'
   - '`dist_units`'
+  - '`area_units`'
   - '`standard_scales`'
   - '`paper_sizes`'
