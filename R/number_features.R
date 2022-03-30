@@ -1,6 +1,6 @@
 #' Sort and number features
 #'
-#' Used with [layer_number_markers]
+#' Used with [layer_markers]
 #'
 #' @param data Marker data
 #' @param col Group column name, Default: `NULL`

@@ -59,6 +59,7 @@ Suggests:
     mapview,
     leaflet,
     leafpop,
-    naniar
+    naniar,
+    patchwork
 Config/testthat/edition: 3
 VignetteBuilder: knitr

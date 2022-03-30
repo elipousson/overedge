@@ -194,6 +194,7 @@ map_location_data <- function(location = NULL,
                               load = FALSE,
                               index = NULL,
                               ...) {
+  # FIXME: This triggers an alert with lintr but it is used
   params <- rlang::list2(...)
 
   # FIXME: This may need some more checks to avoid passing data that would result in an error or other issue
