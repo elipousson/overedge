@@ -62,6 +62,10 @@ key.}
 
 \item{img_size}{Defaults to "s" (small). Options ranging from smallest to
 largest include "sq", "t", "s", "q", "m", "n", "z", "c", "l", and "o"}
+
+\item{num}{Number of images to display; defaults to 25. 250 is maximum using \code{\link[=get_flickr_photos]{get_flickr_photos()}}.}
+
+\item{images}{A simple feature object with columns for the image path/url, image width, and image height.}
 }
 \description{
 A wrapper for \link[mapview:mapView]{mapview::mapview}

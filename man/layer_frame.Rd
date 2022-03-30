@@ -59,6 +59,10 @@ provided.}
 
 \item{linetype}{Line type of panel border, Default: 'solid'}
 
+\item{fill}{Fill color for frame.}
+
+\item{neatline}{If TRUE, add a neatline to the returned layer.}
+
 \item{expand}{Default \code{FALSE.} If \code{TRUE}, the function adds
 \code{\link[ggplot2]{scale_y_continuous}} and
 \code{\link[ggplot2]{scale_x_continuous}} to expand the map extent to

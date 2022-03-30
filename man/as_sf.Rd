@@ -26,6 +26,8 @@ sf object.}
 \item{crs}{Coordinate reference system for \code{sf}, \code{bbox}, \code{sfc} or \code{sf} list object to
 return.}
 
+\item{sf_col}{A column name to use for the geometry column created by \link{as_sf}; defaults to "geometry".}
+
 \item{...}{Additional parameters passed to \code{\link[sf:st_bbox]{sf::st_bbox()}} when calling
 \code{\link[=as_bbox]{as_bbox()}} or passed to \code{\link[sf:sf]{sf::st_sf()}}, \code{\link[sf:st_as_sf]{sf::st_as_sf()}}, or \code{\link[=df_to_sf]{df_to_sf()}}
 for \code{\link[=as_sf]{as_sf()}} (depending on class of x)}

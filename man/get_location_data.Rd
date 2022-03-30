@@ -100,6 +100,9 @@ This option ignores any \code{dist}, \code{diag_ratio}, or \code{asp} parameters
 
 \item{class}{Class of object to return.}
 
+\item{label}{label is optionally used by \link{map_location_data} to name the data
+objects in the list returned by the function.}
+
 \item{index}{A list of possible location, data, and (optionally) package
 values. List must be named and include a value named package and package
 must be \code{NULL}, to set package based on index. If list is not NULL and

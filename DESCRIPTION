@@ -31,7 +31,8 @@ Imports:
     units,
     usethis,
     utils,
-    cli
+    cli,
+    tibble
 Remotes:
     koki25ando/FlickrAPI,
     yonghah/esri2sf,

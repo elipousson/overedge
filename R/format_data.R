@@ -37,7 +37,7 @@ format_data <- function(data,
     dplyr::mutate(
       data,
       dplyr::across(
-        tidyselect::where(is.character),
+        where(is.character),
         ~ stringr::str_trim(stringr::str_squish(.x))
       )
     )

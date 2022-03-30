@@ -8,6 +8,7 @@
 #' @param number If TRUE, number the markers, Default: `TRUE`
 #' @param desc If `TRUE`, sort descending; set to `FALSE` if sort is "lon" and
 #'   TRUE is sort is "lat" or any other value, default `NULL`
+#' @param ... Additional parameters passed to [group_by_col] if "col" is not `NULL`.
 #' @return A sf object with a number column ordered by sort.
 #' @rdname number_markers
 #' @export

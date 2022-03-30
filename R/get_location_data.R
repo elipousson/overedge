@@ -38,6 +38,8 @@
 #'   supports nested lists created by [make_location_data_list] (using only the
 #'   default key names of "location" and "data"). This feature has not be fully
 #'   tested and may result in errors or unexpected results.
+#' @param label label is optionally used by [map_location_data] to name the data
+#'   objects in the list returned by the function.
 #' @param ... additional parameters passed to [read_sf_path], [read_sf_url], or
 #'   [read_sf_pkg] and [location_filter]
 #' @rdname get_location_data

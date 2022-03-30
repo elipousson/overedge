@@ -130,7 +130,7 @@ layer_location_data <-
         "location" = birdseyeview::layer_show_location,
         "context" = birdseyeview::layer_show_context,
         "markers" = birdseyeview::layer_show_markers,
-        "numbered" = birdseyeview::layer_numbered_markers
+        "numbered" = birdseyeview::layer_number_markers
       )
 
     params_has_nudge <- any(c("nudge_x", "nudge_y") %in% names(params))

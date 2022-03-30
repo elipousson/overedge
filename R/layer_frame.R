@@ -8,6 +8,8 @@
 #' @inheritParams layer_neatline
 #' @inheritParams st_misc
 #' @inheritParams st_buffer_ext
+#' @param fill Fill color for frame.
+#' @param neatline If TRUE, add a neatline to the returned layer.
 #' @param ... Additional parameters passed to [layer_location_data]. May include
 #'   additional fixed aesthetics (e.g. alpha) or "fn" to apply to the frame
 #'   object.

@@ -22,6 +22,9 @@ is_gg_component(x)
 
 is_gg_list(x)
 }
+\arguments{
+\item{x}{A object to check if it is a ggplot object.}
+}
 \description{
 Functions for checking on if an object is a ggplot2 object and what type it
 is. These functions may be removed if alternatives can be identified in a

@@ -416,6 +416,8 @@ us_states <- us_states %>%
 names(us_states$geoid) <- tolower(us_states$abb)
 names(us_states$wkt) <- tolower(us_states$abb)
 
+textclean::replace_non_ascii(us_states)
+
 usethis::use_data(
   us_states,
   overwrite = TRUE,

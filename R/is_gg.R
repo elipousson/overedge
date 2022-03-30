@@ -9,6 +9,7 @@ NULL
 
 #' @name is_gg_layer
 #' @rdname is_gg
+#' @param x A object to check if it is a ggplot object.
 #' @export
 #' @importFrom ggplot2 is.ggproto
 is_gg_layer <- function(x) {

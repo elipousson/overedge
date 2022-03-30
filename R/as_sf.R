@@ -10,6 +10,7 @@
 #'   [as_sf_list] only supports sf objects or a data frames with a sf list
 #'   column named "data" (typically created by using [dplyr::group_nest()] on an
 #'   sf object.
+#' @param sf_col A column name to use for the geometry column created by [as_sf]; defaults to "geometry".
 #' @param crs Coordinate reference system for `sf`, `bbox`, `sfc` or `sf` list object to
 #'   return.
 #' @param ... Additional parameters passed to [sf::st_bbox()] when calling

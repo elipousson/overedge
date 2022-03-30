@@ -24,6 +24,8 @@ number_features(
 
 \item{desc}{If \code{TRUE}, sort descending; set to \code{FALSE} if sort is "lon" and
 TRUE is sort is "lat" or any other value, default \code{NULL}}
+
+\item{...}{Additional parameters passed to \link{group_by_col} if "col" is not \code{NULL}.}
 }
 \value{
 A sf object with a number column ordered by sort.

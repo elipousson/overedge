@@ -152,6 +152,7 @@ theme_margin <- function(margin = "standard",
 
 #' @rdname theme_ext
 #' @name theme_legend
+#' @param title Attributes to use for legend.title text (e.g. face and align).
 #' @export
 #' @importFrom ggplot2 element_blank element_rect theme
 #' @importFrom grid unit

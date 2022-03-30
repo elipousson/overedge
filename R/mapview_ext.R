@@ -63,6 +63,7 @@ mapview_exif <- function(path = NULL,
 
 #' @rdname mapview_ext
 #' @name mapview_exif
+#' @param num Number of images to display; defaults to 25. 250 is maximum using [get_flickr_photos()].
 #' @inheritParams get_flickr_photos
 mapview_flickr <- function(x = NULL,
                            user_id = NULL,
@@ -92,6 +93,7 @@ mapview_flickr <- function(x = NULL,
 
 #' @param popup If `TRUE`, add a popup image to a leaflet map; defaults `TRUE`.
 #' @rdname mapview_ext
+#' @param images A simple feature object with columns for the image path/url, image width, and image height.
 #' @name make_img_leafpop
 #' @export
 make_img_leafpop <- function(images,

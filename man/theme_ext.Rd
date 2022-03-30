@@ -106,6 +106,8 @@ or "bottomright", place the legend in an inset position; defaults to
 \code{TRUE}.}
 
 \item{bgcolor}{Fill color for legend background; defaults to 'white'.}
+
+\item{title}{Attributes to use for legend.title text (e.g. face and align).}
 }
 \description{
 Helper functions for modifying a ggplot theme. The "replace" and "update"
