@@ -344,8 +344,6 @@ get_margin <- function(margin = NULL,
 #' @example examples/get_asp.R
 #' @rdname get_asp
 #' @export
-#' @importFrom stringr str_detect str_extract
-#' @importFrom usethis ui_stop
 get_asp <- function(asp = NULL,
                     paper = NULL,
                     orientation = NULL,
@@ -354,40 +352,13 @@ get_asp <- function(asp = NULL,
                     block_asp = FALSE) {
   if (is.null(paper)) {
     # Check aspect ratio
-    if (is.character(asp) && grepl(":", asp)) {
-      # If asp is provided as character string (e.g. "16:9") convert to a numeric ratio
-      asp <-
-        as.numeric(stringr::str_extract(asp, ".+(?=:)")) /
-          as.numeric(stringr::str_extract(asp, "(?<=:).+"))
-    } else if (!is.numeric(asp) && !is.null(asp)) {
-      cli::cli_abort("{usethis::ui_value('asp')} must be numeric (e.g. 0.666) or a string representing a width to height ratio (e.g. '4:6').")
-    }
+    asp <- get_char_asp(asp = asp)
   } else if (!is.null(paper) && is.null(asp)) {
     # Get aspect ratio for text/plot/map block area
     paper <- get_paper(paper = paper, orientation = orientation)
 
     if (block_asp) {
-      if (is.null(unit)) {
-        unit <- paper$units
-      }
-
-      # Get margins and convert to numeric (note substitute original value of paper for paper$name)
-      if (is.character(margin)) {
-        margin <- get_margin(margin = margin, paper = paper$name, orientation = orientation, unit = unit)
-      } else if (is.numeric(margin)) {
-        margin <- get_margin(dist = margin, unit = unit)
-      } else if (!is_class(margin, classes = "margin")) {
-        cli::cli_abort("margin must be either a character string matching the margin options ('none', 'narrow', 'standard', 'wide', or 'extrawide'),
-                         a numeric vector that can be passed to the dist parameter of get_margins,
-                         or a margin class object.")
-      }
-
-      margin <- suppressWarnings(as.numeric(margin))
-
-      # Calculate width, height, and aspect ratio for text/plot/map block area
-      block_width <- paper$width - (margin[[2]] + margin[[4]])
-      block_height <- paper$height - (margin[[1]] + margin[[3]])
-      asp <- block_width / block_height
+      asp <- get_block_asp(paper = paper, margin = margin, unit = unit)
     } else {
       asp <- paper$asp
     }
@@ -396,6 +367,53 @@ get_asp <- function(asp = NULL,
   return(asp)
 }
 
+#' @noRd
+#' @importFrom stringr str_extract
+#' @importFrom cli cli_abort
+get_char_asp <- function(asp) {
+  if (is.character(asp) && grepl(":", asp)) {
+    # If asp is provided as character string (e.g. "16:9") convert to a numeric ratio
+    asp <-
+      as.numeric(stringr::str_extract(asp, ".+(?=:)")) /
+        as.numeric(stringr::str_extract(asp, "(?<=:).+"))
+  } else if (!is.numeric(asp) && !is.null(asp)) {
+    cli::cli_abort("{.field {'asp'}} must be numeric (e.g. {.val {0.666}}) or a string with a width to height ratio (e.g. {.val {'4:6'}}).")
+  }
+
+  return(asp)
+}
+
+#' @noRd
+#' @importFrom cli cli_abort
+get_block_asp <- function(paper, orientation = NULL, margin = NULL, unit = NULL) {
+  stopifnot(
+    is.data.frame(paper)
+  )
+
+  if (is.null(unit)) {
+    unit <- paper$units
+  }
+
+  # Get margins and convert to numeric (note substitute original value of paper for paper$name)
+  if (is.character(margin)) {
+    margin <- get_margin(margin = margin, paper = paper$name, orientation = orientation, unit = unit)
+  } else if (is.numeric(margin)) {
+    margin <- get_margin(dist = margin, unit = unit)
+  } else if (!is_class(margin, classes = "margin")) {
+    cli::cli_abort("{.field {'margin'}} must be either a character string matching the margin options ('none', 'narrow', 'standard', 'wide', or 'extrawide'),
+                         a numeric vector that can be passed to the dist parameter of get_margins,
+                         or a margin class object.")
+  }
+
+  margin <- suppressWarnings(as.numeric(margin))
+
+  # Calculate width, height, and aspect ratio for text/plot/map block area
+  block_width <- paper$width - (margin[[2]] + margin[[4]])
+  block_height <- paper$height - (margin[[1]] + margin[[3]])
+  asp <- block_width / block_height
+
+  return(asp)
+}
 
 #' Get standard scales and convert to scale distances
 #'
