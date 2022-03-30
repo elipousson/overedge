@@ -33,8 +33,7 @@
 #' @param crs Coordinate reference system to return.
 #' @example examples/get_open_data.R
 #' @export
-#' @importFrom usethis ui_stop
-#' @importFrom glue glue
+#' @importFrom cli cli_abort
 #' @importFrom janitor clean_names
 get_open_data <- function(data = NULL,
                           source_url = NULL,
@@ -88,6 +87,47 @@ get_open_data <- function(data = NULL,
     bbox <- NULL
   }
 
+  if (is_url(source_url)) {
+    url <-
+      make_socrata_url(
+        data = data,
+        source_url = source_url,
+        select = select,
+        where = where,
+        query = query,
+        bbox = bbox,
+        name_col = name_col,
+        name = name
+      )
+  } else {
+    cli::cli_abort("A valid source_url is required.")
+  }
+
+  # Download data from Socrata Open Data portal
+  data <-
+    as.data.frame(RSocrata::read.socrata(url = url, app_token = key))
+
+  data <-
+    janitor::clean_names(data, "snake")
+
+  if (geometry) {
+    data <- df_to_sf(x = data, coords = coords, crs = crs)
+  }
+
+  return(data)
+}
+
+#' @noRd
+#' @importFrom glue glue
+make_socrata_url <- function(data = NULL,
+                             source_url = NULL,
+                             select = NULL,
+                             where = NULL,
+                             query = NULL,
+                             bbox = NULL,
+                             name_col = NULL,
+                             name = NULL) {
+
   # Make parameter calls
   if (!is.null(select)) {
     select <- paste0("$select=", select)
@@ -107,34 +147,19 @@ get_open_data <- function(data = NULL,
     query <- paste0("$query=", query)
   }
 
-  if (is_url(source_url)) {
-    if (grepl("/dataset/", source_url) && is.null(data)) {
-      url <- source_url
-    } else if (!grepl("/dataset/", source_url)) {
-      # Assemble url from data identifier, and select, where, and query parameters
-      source_url <- gsub("/$", "", source_url)
-      url <- paste0(source_url, "/resource/", data, ".json")
+  if (grepl("/dataset/", source_url) && is.null(data)) {
+    url <- source_url
+  } else if (!grepl("/dataset/", source_url)) {
+    # Assemble url from data identifier, and select, where, and query parameters
+    source_url <- gsub("/$", "", source_url)
+    url <- paste0(source_url, "/resource/", data, ".json")
 
-      if (!any(sapply(c(select, where, query), is.null))) {
-        url <- paste0(url, "?", paste0(c(select, where, query), collapse = "&"))
-      }
+    if (!any(sapply(c(select, where, query), is.null))) {
+      url <- paste0(url, "?", paste0(c(select, where, query), collapse = "&"))
     }
-  } else {
-    cli::cli_abort("A valid source_url is required.")
   }
 
-  # Download data from Socrata Open Data portal
-  data <-
-    as.data.frame(RSocrata::read.socrata(url = url, app_token = key))
-
-  data <-
-    janitor::clean_names(data, "snake")
-
-  if (geometry) {
-    data <- df_to_sf(x = data, coords = coords, crs = crs)
-  }
-
-  return(data)
+  return(url)
 }
 
 #' @rdname get_open_data
