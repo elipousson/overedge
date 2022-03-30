@@ -45,7 +45,7 @@ make_markers <- function(data,
   } else if ((address_col %in% names(data)) && is.data.frame(data)) {
     # FIXME: Figure out how to properly quo/enquo the address column name
     data$address <- as.character(data[[address_col]])
-    data <- tidygeocoder::geocode(data, address = address, long = "lon", lat = "lat")
+    data <- tidygeocoder::geocode(data, address = address, long = "lon", lat = "lat", quiet = rlang::is_interactive())
     data <- df_to_sf(data, coords = c("lon", "lat"), crs = crs)
   }
 
