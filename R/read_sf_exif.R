@@ -259,6 +259,6 @@ write_exif <- function(path = NULL,
       )
     )
 
-    usethis::ui_done("EXIF metadata updated for {usethis::ui_path(path)}")
+    cli::cli_alert_success("EXIF metadata updated for {.file {path}}")
   }
 }

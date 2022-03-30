@@ -156,9 +156,9 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 #' @noRd
 #' @importFrom googlesheets4 gs4_find read_sheet
 #' @importFrom usethis ui_todo
-gsheet_to_sf <- function(ss, coords, ask = FALSE, ...) {
-  if (ask) {
-    googlesheets4::gs4_find(readline(prompt = usethis::ui_todo("What is the name of the Google Sheet to return?")))
+gsheet_to_sf <- function(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
+  if (ask && is.null(ss)) {
+    ss <- googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
   }
 
   data <- googlesheets4::read_sheet(ss = ss, ...)

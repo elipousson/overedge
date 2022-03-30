@@ -3,8 +3,8 @@
 #' Helper function to convert a simple feature object to data frame by dropping
 #' geometry, converting geometry to well known text, or (if the geometry type is
 #' not POINT) getting coordinates for a centroid or point on surface. If an sfc
-#' object is provided,the "drop" geometry option is not supported. check_coords
-#' is a helper function used by df_to_sf to suggest the appropriate coordinate
+#' object is provided,the "drop" geometry option is not supported. [check_coords]
+#' is a helper function used by [df_to_sf] to suggest the appropriate coordinate
 #' column names based on the column names in the provided data frame.
 #'
 #' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
@@ -25,8 +25,8 @@
 #' @param sep If coords is a single column name with both longitude and
 #'   latitude, `sep` is used as the separator between coordinate values. Passed
 #'   to [tidyr::separate].
-#' @return `sf_to_df()` returns a data frame with geometry dropped or converted
-#'   to wkt or coordinates for the centroid or point on surface; `df_to_sf()`
+#' @return [sf_to_df()] returns a data frame with geometry dropped or converted
+#'   to wkt or coordinates for the centroid or point on surface; [df_to_sf()]
 #'   returns a simple feature object with POINT geometry.
 #' @seealso \code{\link[sf]{st_coordinates}}
 #' @example examples/sf_to_df.R
@@ -139,10 +139,13 @@ separate_coords <- function(x, coords, into, sep) {
 #' @rdname sf_to_df
 #' @name df_to_sf
 #' @param rev If TRUE, reverse c("lat", "lon") coords to c("lon", "lat"). check_coords only.
+#' @export
+#' @importFrom janitor make_clean_names
 check_coords <- function(x = NULL, coords = NULL, rev = FALSE) {
   if (!is.null(x) && is.data.frame(x)) {
-    # data_names <- tolower(names(x))
     # FIXME: there may still be an issue with capitalization (at least with consistency)
+    x <- janitor::make_clean_names(x)
+
     if (rlang::has_name(x, "lon")) {
       x_coords <- c("lon", "lat")
     } else if (rlang::has_name(x, "long")) {
@@ -151,6 +154,8 @@ check_coords <- function(x = NULL, coords = NULL, rev = FALSE) {
       x_coords <- c("longitude", "latitude")
     } else if (rlang::has_name(x, "y")) {
       x_coords <- c("y", "x")
+    } else if (rlang::has_name(x, "geo_longitude")) {
+      x_coords <- c("geo_longitude", "geo_latitude")
     } else {
       x_coords <- NULL
     }

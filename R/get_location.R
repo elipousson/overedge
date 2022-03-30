@@ -100,7 +100,7 @@ get_location <- function(type,
     }
 
     if (!is.null(location) && (nrow(location) == 0)) {
-      cli::cli_abort("The name/id did not match any location of the type provided.")
+      cli::cli_abort("The name/id did not match any features of the type provided.")
     }
   } else {
     location <- location_filter(data = type, location = location, trim = FALSE, crop = FALSE)

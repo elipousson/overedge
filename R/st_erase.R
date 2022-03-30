@@ -15,12 +15,12 @@
 #' @importFrom sf st_union st_combine st_intersection st_difference
 st_erase <- function(x, y, flip = FALSE, union = TRUE) {
 
-  # is_lonlat <- sf::st_is_longlat(x)
+  is_lonlat <- sf::st_is_longlat(x)
 
-  # if (is_lonlat) {
-  #   lonlat_crs <- sf::st_crs(x)
-  #   x <- st_transform_ext(x = x, crs = 3857)
-  # }
+  if (is_lonlat) {
+    lonlat_crs <- sf::st_crs(x)
+    x <- st_transform_ext(x = x, crs = 3857)
+  }
 
   if (!is_same_crs(x, y)) {
     y <- st_transform_ext(x = y, crs = x)
@@ -36,9 +36,9 @@ st_erase <- function(x, y, flip = FALSE, union = TRUE) {
     x <- suppressWarnings(sf::st_difference(x, y))
   }
 
-  # if (is_lonlat) {
-  #   x <- st_transform_ext(x = x, crs = lonlat_crs)
-  # }
+  if (is_lonlat) {
+    x <- st_transform_ext(x = x, crs = lonlat_crs)
+  }
 
   return(x)
 }

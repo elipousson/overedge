@@ -15,12 +15,12 @@ get_data_dir <- function(path = NULL, package = "overedge") {
   }
 
   if (!checkmate::test_directory_exists(path)) {
-    if (usethis::ui_yeah(
-      "The directory {usethis::ui_path(path)} does not exist.
+    if (cli_yeah(
+      "The directory {.file {path}} does not exist.
     Do you want to create a directory at this location?"
     )) {
       dir.create(path = path)
-      usethis::ui_done("New directory created at {usethis::ui_path(path)}")
+      cli::cli_alert_success("New directory created at {.file {path}}")
     } else {
       cli::cli_abort("Please provide a different path for this file.")
     }

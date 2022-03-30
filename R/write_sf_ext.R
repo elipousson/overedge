@@ -131,9 +131,10 @@ write_sf_cache <- function(data,
 
   if (filename %in% list.files(data_dir)) {
     if (!overwrite) {
-      overwrite <- usethis::ui_yeah(
-        "A file with the same name exists in {usethis::ui_path(data_dir)}
-        Do you want to overwrite {usethis::ui_value(filename)}?"
+      overwrite <-
+        cli_yeah(
+        "A file with the same name exists in {.file {data_dir}}
+        Do you want to overwrite {.val {filename}}?"
       )
     }
 
@@ -160,7 +161,7 @@ write_sf_cache <- function(data,
 #' @importFrom googlesheets4 gs4_create write_sheet
 write_sf_types <- function(data, filename = NULL, path, filetype = NULL) {
   if (is_sf(data)) {
-    usethis::ui_done("Writing {usethis::ui_path(path)}")
+    cli::cli_alert_success("Writing {.file {path}}")
 
     if (grepl(".csv$", path) | (!is.null(filetype) && (filetype == "csv"))) {
       readr::write_csv(
@@ -188,7 +189,7 @@ write_sf_types <- function(data, filename = NULL, path, filetype = NULL) {
       )
     }
   } else if (
-    usethis::ui_yeah(
+    cli_yeah(
       "This data is not a simple feature object.
       Do you want to save the file as an RDS file?"
     )
@@ -211,7 +212,7 @@ write_sf_types <- function(data, filename = NULL, path, filetype = NULL) {
         )
     }
 
-    usethis::ui_done("Writing {usethis::ui_path(path)}")
+    cli::cli_alert_success("Writing {.file {path}}")
 
     readr::write_rds(
       x = data,
