@@ -29,5 +29,5 @@ TRUE is sort is "lat" or any other value, default \code{NULL}}
 A sf object with a number column ordered by sort.
 }
 \description{
-Used with \link{layer_number_markers}
+Used with \link{layer_markers}
 }

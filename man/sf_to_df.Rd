@@ -18,7 +18,7 @@ df_to_sf(
   x,
   crs = NULL,
   coords = c("lon", "lat"),
-  coords_crs = 4326,
+  df_crs = 4326,
   into = NULL,
   sep = ",",
   rev = TRUE,
@@ -42,7 +42,7 @@ geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 \item{keep_all}{If \code{FALSE}, drop all columns other than those named in
 coords, Default: \code{TRUE}.}
 
-\item{coords_crs}{For \link{df_to_sf}, coordinate reference system used by coordinates in data frame.}
+\item{df_crs}{For \link{df_to_sf}, coordinate reference system used by coordinates or well known text in data frame.}
 
 \item{into}{If coords is a single column name with both longitude and
 latitude, \code{into} is used as the names of the new columns that coords is
@@ -72,10 +72,16 @@ column names based on the column names in the provided data frame.
 }
 \examples{
 nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-nc_df <- ggspatial::df_spatial(nc)
-df_to_sf(nc_df, coords = c("x", "y"))
-nc_df$xy <- paste(nc_df$x, nc_df$y, sep = ",")
 
+nc_coords <-
+  suppressWarnings(sf::st_coordinates(sf::st_centroid(nc)))
+
+nc_df <-
+  dplyr::bind_cols(sf::st_drop_geometry(nc), nc_coords)
+
+nc_df <- janitor::clean_names(nc_df)
+df_to_sf(nc_df, coords = c("x", "y"), remove_coords = TRUE)
+nc_df$xy <- paste(nc_df$x, nc_df$y, sep = ",")
 df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
 }
 \seealso{
