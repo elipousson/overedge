@@ -18,7 +18,7 @@ df_to_sf(
   x,
   crs = NULL,
   coords = c("lon", "lat"),
-  df_crs = 4326,
+  from_crs = 4326,
   into = NULL,
   sep = ",",
   rev = TRUE,
@@ -42,7 +42,7 @@ geometry is 'centroid' or 'point') Default: c("lon", "lat").}
 \item{keep_all}{If \code{FALSE}, drop all columns other than those named in
 coords, Default: \code{TRUE}.}
 
-\item{df_crs}{For \link{df_to_sf}, coordinate reference system used by coordinates or well known text in data frame.}
+\item{from_crs}{For \link{df_to_sf}, coordinate reference system used by coordinates or well known text in data frame.}
 
 \item{into}{If coords is a single column name with both longitude and
 latitude, \code{into} is used as the names of the new columns that coords is

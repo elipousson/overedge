@@ -91,7 +91,7 @@ column names based on the column names in the provided data frame.</p>
   <span class="va">x</span>,
   crs <span class="op">=</span> <span class="cn">NULL</span>,
   coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>,
-  df_crs <span class="op">=</span> <span class="fl">4326</span>,
+  from_crs <span class="op">=</span> <span class="fl">4326</span>,
   into <span class="op">=</span> <span class="cn">NULL</span>,
   sep <span class="op">=</span> <span class="st">","</span>,
   rev <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -117,7 +117,7 @@ geometry is 'centroid' or 'point') Default: c("lon", "lat").</p></dd>
 <dt>keep_all</dt>
 <dd><p>If <code>FALSE</code>, drop all columns other than those named in
 coords, Default: <code>TRUE</code>.</p></dd>
-<dt>df_crs</dt>
+<dt>from_crs</dt>
 <dd><p>For df_to_sf, coordinate reference system used by coordinates or well known text in data frame.</p></dd>
 <dt>into</dt>
 <dd><p>If coords is a single column name with both longitude and

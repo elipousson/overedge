@@ -37,7 +37,8 @@ points using \code{\link[sf:geos_unary]{sf::st_centroid()}}.}
 name. If the name matches multiple icons, the first match from \code{map_icons}
 is used. You may provide a px or source value to select a different match
 if needed but, in that case, all icons must use the same px or source
-value. Note that the icon column should not be mapped with \code{\link[ggplot2:aes]{ggplot2::aes()}}.}
+value. Note that the icon column should not be mapped with
+\code{\link[ggplot2:aes]{ggplot2::aes()}}.}
 
 \item{icon}{Icon name. Default \code{NULL}. If \code{icon} is provided, \code{iconname_col}
 is not used.}
