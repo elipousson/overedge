@@ -60,21 +60,17 @@ as_bbox <- function(x, crs = NULL, ...) {
       }
 
       x <- sf::st_bbox(x, ...)
-    } else if (is_sf_list(x)) {
-      x <- sf::st_bbox(dplyr::bind_rows(x))
-    } else if (is.data.frame(x)) {
-      x <- sf::st_bbox(df_to_sf(x, ...))
-    } else if (is_raster(x)) {
-      x <- sf::st_bbox(x, ...)
-    } else if (is_sp(x)) {
-      x <- sf::st_bbox(sf::st_as_sf(x, ...))
-    } else if (rlang::has_length(x, 4)) {
+    } else if (rlang::has_length(x, 4) && all(is.numeric(x))) {
       x <- sf::st_bbox(c(
         xmin = x[1], ymin = x[2],
         xmax = x[3], ymax = x[4]
       ),
       crs = crs, ...
       )
+    } else {
+      x <- as_sf(x)
+
+      x <- sf::st_bbox(x)
     }
   }
 
