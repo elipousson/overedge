@@ -102,7 +102,9 @@ with <code><a href="make_filename.html">make_filename()</a></code> and features 
   prefix <span class="op">=</span> <span class="cn">NULL</span>,
   postfix <span class="op">=</span> <span class="cn">NULL</span>,
   filename <span class="op">=</span> <span class="cn">NULL</span>,
-  sheet <span class="op">=</span> <span class="fl">1</span>
+  sheet <span class="op">=</span> <span class="fl">1</span>,
+  ask <span class="op">=</span> <span class="cn">FALSE</span>,
+  key <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -145,6 +147,14 @@ cached files that use the same file name.</p></dd>
 for write_sf_cache; default is used when cache = TRUE for write_sf_ext)</p></dd>
 <dt>sheet</dt>
 <dd><p>Sheet to write into, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number.</p></dd>
+<dt>ask</dt>
+<dd><p>If <code>TRUE</code>, the user is prompted to make revisions to the created
+Google Sheet. When user responds to the prompt, the date is read back into
+the environment using <a href="read_sf_ext.html">read_sf_gsheet</a> and joined to the provided data with
+the column name provided to key. Defaults to <code>FALSE</code>.</p></dd>
+<dt>key</dt>
+<dd><p>If ask is <code>TRUE</code>, a key is required to join the sheet data to the
+provided data.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
