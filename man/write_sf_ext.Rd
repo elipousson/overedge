@@ -38,7 +38,9 @@ write_sf_gsheet(
   prefix = NULL,
   postfix = NULL,
   filename = NULL,
-  sheet = 1
+  sheet = 1,
+  ask = FALSE,
+  key = NULL
 )
 }
 \arguments{
@@ -78,6 +80,14 @@ cached files that use the same file name.}
 for write_sf_cache; default is used when cache = TRUE for write_sf_ext)}
 
 \item{sheet}{Sheet to write into, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number.}
+
+\item{ask}{If \code{TRUE}, the user is prompted to make revisions to the created
+Google Sheet. When user responds to the prompt, the date is read back into
+the environment using \link{read_sf_gsheet} and joined to the provided data with
+the column name provided to key. Defaults to \code{FALSE}.}
+
+\item{key}{If ask is \code{TRUE}, a key is required to join the sheet data to the
+provided data.}
 }
 \description{
 The write_sf_ext and write_sf_cache helper functions wrap the \link[sf:st_write]{sf::write_sf}

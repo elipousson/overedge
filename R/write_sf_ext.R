@@ -156,6 +156,12 @@ write_sf_cache <- function(data,
 
 #' @rdname write_sf_ext
 #' @name write_sf_gsheet
+#' @param ask If `TRUE`, the user is prompted to make revisions to the created
+#'   Google Sheet. When user responds to the prompt, the date is read back into
+#'   the environment using [read_sf_gsheet] and joined to the provided data with
+#'   the column name provided to key. Defaults to `FALSE`.
+#' @param key If ask is `TRUE`, a key is required to join the sheet data to the
+#'   provided data.
 #' @inheritParams googlesheets4::sheet_write
 #' @export
 #' @importFrom stringr str_remove
@@ -165,12 +171,14 @@ write_sf_gsheet <- function(data,
                             prefix = NULL,
                             postfix = NULL,
                             filename = NULL,
-                            sheet = 1) {
+                            sheet = 1,
+                            ask = FALSE,
+                            key = NULL) {
   is_pkg_installed("googlesheets4")
 
   if (!is.null(filename)) {
     filename <-
-      str_remove_filetype(filename, "gsheet")
+      str_remove_filetype(filename, filetype = "gsheet")
   }
 
   filename <-
@@ -190,13 +198,20 @@ write_sf_gsheet <- function(data,
       name = filename
     )
 
+  data <- sf_to_df(data)
+
   googlesheets4::write_sheet(
-    data = sf_to_df(data),
+    data = data,
     ss = ss,
     sheet = sheet
   )
-}
 
+  if (!ask) {
+    return(data)
+  }
+
+  return(join_sf_gsheet(data, ss = ss, sheet = sheet, key = key))
+}
 
 #' @noRd
 #' @importFrom usethis ui_done ui_yeah
