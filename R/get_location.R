@@ -56,7 +56,7 @@ get_location <- function(type,
                          ...) {
   stopifnot(
     is_sf(type) || is.character(type) || (is.null(type) && is.list(index)),
-    is.character(location) || is.null(location) || is_sf(location, ext = TRUE) || is.numeric(location),
+    is.character(location) || is_sf(location, ext = TRUE, null.ok = TRUE) || is.numeric(location),
     is.list(index) || is.null(index),
     is.logical(union)
   )
