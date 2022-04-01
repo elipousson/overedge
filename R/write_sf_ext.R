@@ -6,9 +6,9 @@
 #'
 #' - If the data is not an sf object, optionally save as an RDS file.
 #' - If filetype is "csv" or the filename ends in ".csv" the file is
-#' automatically converted to a dataframe using [df_to_sf()]; if filetype is
-#' "gsheet" the file is converted and turned into a new Google SHeet document
-#' (if a Google account is authorized with the googlesheets4 package).
+#' automatically converted to a dataframe using [df_to_sf()]; if file type is
+#' "gsheet" the file is converted and turned into a new Google Sheet document
+#' (if a Google account is authorized with the {googlesheets4} package using the [write_sf_gsheet()] function.).
 #' - If cache is `TRUE` use write_sf_cache to cache file after writing a copy to
 #' the path provided.
 #' - If data is a named sf list, pass the name of each sf object in the list to
@@ -133,9 +133,9 @@ write_sf_cache <- function(data,
     if (!overwrite) {
       overwrite <-
         cli_yeah(
-        "A file with the same name exists in {.file {data_dir}}
+          "A file with the same name exists in {.file {data_dir}}
         Do you want to overwrite {.val {filename}}?"
-      )
+        )
     }
 
     if (overwrite) {
@@ -154,12 +154,56 @@ write_sf_cache <- function(data,
   )
 }
 
+#' @rdname write_sf_ext
+#' @name write_sf_gsheet
+#' @inheritParams googlesheets4::sheet_write
+#' @export
+#' @importFrom stringr str_remove
+write_sf_gsheet <- function(data,
+                            name = NULL,
+                            label = NULL,
+                            prefix = NULL,
+                            postfix = NULL,
+                            filename = NULL,
+                            sheet = 1) {
+
+  is_pkg_installed("googlesheets4")
+
+  if (!is.null(filename)) {
+    filename <-
+      str_remove_filetype(filename, "gsheet")
+  }
+
+  filename <-
+    make_filename(
+      name = name,
+      label = label,
+      filetype = NULL,
+      filename = filename,
+      prefix = prefix,
+      postfix = postfix,
+      path = NULL
+    )
+
+  # FIXME: Using the path as the name may cause issues
+  ss <-
+    googlesheets4::gs4_create(
+      name = filename
+    )
+
+  googlesheets4::write_sheet(
+    data = sf_to_df(data),
+    ss = ss,
+    sheet = sheet
+  )
+}
+
+
 #' @noRd
 #' @importFrom usethis ui_done ui_yeah
 #' @importFrom readr write_csv write_rds
 #' @importFrom sf write_sf
-#' @importFrom googlesheets4 gs4_create write_sheet
-write_sf_types <- function(data, filename = NULL, path, filetype = NULL) {
+write_sf_types <- function(data, filename = NULL, path = NULL, filetype = NULL) {
   if (is_sf(data)) {
     cli::cli_alert_success("Writing {.file {path}}")
 
@@ -169,19 +213,7 @@ write_sf_types <- function(data, filename = NULL, path, filetype = NULL) {
         file = path
       )
     } else if (!is.null(filetype) && (filetype == "gsheet")) {
-      filename <-
-        stringr::str_remove(filename, ".gsheet")
-
-      sheet <-
-        googlesheets4::gs4_create(
-          name = filename # FIXME: Using the path as the name may cause issues
-        )
-
-      googlesheets4::write_sheet(
-        data = sf_to_df(data),
-        ss = sheet,
-        sheet = 1
-      )
+      write_sf_gsheet(data = data, filename = filename)
     } else {
       sf::write_sf(
         obj = data,
@@ -196,21 +228,7 @@ write_sf_types <- function(data, filename = NULL, path, filetype = NULL) {
   ) {
 
     # Remove file extension from path
-    if (!is.null(filetype)) {
-      path <-
-        sub(
-          pattern = paste0("\\.", filetype, "$"),
-          replacement = "",
-          x = path
-        )
-    } else {
-      path <-
-        sub(
-          pattern = paste0("\\.[:alpha:]+$"),
-          replacement = "",
-          x = path
-        )
-    }
+    path <- str_remove_filetype(path, filetype)
 
     cli::cli_alert_success("Writing {.file {path}}")
 

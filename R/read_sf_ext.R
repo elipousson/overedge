@@ -49,53 +49,45 @@ NULL
 #' @importFrom sf read_sf
 #' @importFrom checkmate check_file_exists
 read_sf_path <- function(path, bbox = NULL, ...) {
-  checkmate::check_file_exists(path)
+  stopifnot(
+    fs::file_exists(path)
+  )
 
   params <- rlang::list2(...)
 
-  if (!("query" %in% names(params))) {
-    if (!is.null(params$name) && !is.null(params$name_col)) {
-      if (is.null(params$table)) {
-        params$table <-
-          stringr::str_extract(
-            basename(path),
-            "[:graph:]+(?=\\.)"
-          )
-      }
+  make_query <- !rlang::has_name(params, "query") && all(rlang::has_name(params, c("name", "name_col")))
 
-      params$query <-
-        glue::glue("select * from {params$table} where {params$name_col} = '{params$name}'")
+  if (make_query) {
+    if (!rlang::has_name(params, "table")) {
+      params$table <-
+        stringr::str_extract(
+          basename(path),
+          "[:graph:]+(?=\\.)"
+        )
     }
+
+    params$query <-
+      glue::glue("select * from {params$table} where {params$name_col} = '{params$name}'")
   }
 
   if (!is.null(bbox)) {
     # Convert bbox to well known text
     wkt <- sf_bbox_to_wkt(bbox = bbox)
-    # Read external, cached, or data at path with wkt_filter
-
-    if (!is.null(params$query)) {
-      data <- sf::read_sf(
-        dsn = path,
-        wkt_filter = wkt,
-        query = params$query
-      )
-    } else {
-      data <- sf::read_sf(
-        dsn = path,
-        wkt_filter = wkt
-      )
-    }
   } else {
-    if (!is.null(params$query)) {
-      data <- sf::read_sf(
-        dsn = path,
-        query = params$query
-      )
-    } else {
-      data <- sf::read_sf(
-        dsn = path
-      )
-    }
+    wkt <- character(0)
+  }
+  # Read external, cached, or data at path with wkt_filter
+  if (!is.null(params$query)) {
+    data <- sf::read_sf(
+      dsn = path,
+      wkt_filter = wkt,
+      query = params$query
+    )
+  } else {
+    data <- sf::read_sf(
+      dsn = path,
+      wkt_filter = wkt
+    )
   }
 
   return(data)
@@ -108,8 +100,10 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
   params <- rlang::list2(...)
 
-  # Check url
-  is_url(url)
+  stopifnot(
+    # Check url
+    is_url(url)
+  )
 
   # Check MapServer or FeatureServer url
   if (is_esri_url(url)) {
@@ -121,44 +115,45 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
         name = params$name,
         where = params$where
       )
+  } else if (is_gsheet(url)) {
+    data <-
+      read_sf_gsheet(ss = url, coords = coords, sheet = params$sheet)
   } else {
-    if (is_gsheet(url)) {
-      data <-
-        gsheet_to_sf(ss = url, coords = coords, sheet = params$sheet)
-    } else {
-      # FIXME: This is an awkward way to reset back to defaults
-      if (is.null(params$query)) {
-        params$query <- NA
-      }
 
-      if (is.null(params$wkt_filter)) {
-        params$wkt_filter <- character(0)
-      }
-
-      # TODO: Check if it is possible to use a WKT filter
-      # when reading data from a url (e.g. a hosted GeoJSON file)
-      data <- sf::read_sf(
-        dsn = url,
-        query = params$query,
-        wkt_filter = params$wkt_filter
-      )
-
-      # FIXME: This should be documented and maybe should be the default but optional
-      data <- sf::st_zm(data)
+    # FIXME: This is an awkward way to reset back to defaults
+    if (is.null(params$query)) {
+      params$query <- NA
     }
+
+    if (is.null(params$wkt_filter)) {
+      params$wkt_filter <- character(0)
+    }
+
+    # TODO: Check if it is possible to use a WKT filter
+    # when reading data from a url (e.g. a hosted GeoJSON file)
+    data <- sf::read_sf(
+      dsn = url,
+      query = params$query,
+      wkt_filter = params$wkt_filter
+    )
+
+    # FIXME: This should be documented and maybe should be the default but optional
+    data <- sf::st_zm(data)
   }
 
   return(data)
 }
 
 #' Convert Google Sheets url to sf
-#'
-#' @noRd
-#' @importFrom googlesheets4 gs4_find read_sheet
-#' @importFrom usethis ui_todo
-gsheet_to_sf <- function(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
+#' @name read_sf_gsheet
+#' @rdname read_sf_ext
+#' @export
+read_sf_gsheet <- function(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
+  is_pkg_installed("googlesheets4")
+
   if (ask && is.null(ss)) {
-    ss <- googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
+    ss <-
+      googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
   }
 
   data <- googlesheets4::read_sheet(ss = ss, ...)
@@ -174,8 +169,11 @@ gsheet_to_sf <- function(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...) 
 #' @md
 #' @importFrom stringr str_detect
 #' @importFrom utils data
-read_sf_pkg <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
-  is_pkg_installed(package)
+read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
+
+  stopifnot(
+    !is.null(package) & is_pkg_installed(package)
+  )
 
   # Read package data
   pkg_files <- utils::data(package = package)$results[, "Item"]
@@ -191,7 +189,7 @@ read_sf_pkg <- function(data, bbox = NULL, package, filetype = "gpkg", ...) {
   }
 
   pkg_extdata_files <- list.files(system.file("extdata", package = package))
-  pkg_cache_dir <- get_data_dir(package = package)
+  pkg_cache_dir <- get_data_dir(path = NULL, package = package)
   pkg_cache_dir_files <- list.files(pkg_cache_dir)
 
   # Get path to external package data or data from the package user cache
