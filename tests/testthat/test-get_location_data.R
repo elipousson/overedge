@@ -39,5 +39,4 @@ test_that("get_location_data works", {
     ),
     "sf"
   )
-
 })

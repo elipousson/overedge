@@ -4,7 +4,8 @@ test_that("get_wiki_data works", {
   expect_s3_class(
     get_wiki_data(
       location = mapbaltimore::council_districts[1, ],
-      dist = 0.25, unit = "mile"),
+      dist = 0.25, unit = "mile"
+    ),
     "sf"
   )
 })

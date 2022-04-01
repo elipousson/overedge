@@ -14,7 +14,6 @@
 #' @export
 #' @importFrom sf st_union st_combine st_intersection st_difference
 st_erase <- function(x, y, flip = FALSE, union = TRUE) {
-
   is_lonlat <- sf::st_is_longlat(x)
 
   if (is_lonlat) {

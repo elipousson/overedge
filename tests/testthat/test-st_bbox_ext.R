@@ -13,5 +13,4 @@ test_that("st_bbox_ext accepts valid parameters and rejects invalid parameters",
 
   expect_equal(length(st_bbox_ext(nc_list, dist = -1500)), 100)
   expect_equal(length(st_bbox_asp(nc_list, asp = 1)), 100)
-
 })

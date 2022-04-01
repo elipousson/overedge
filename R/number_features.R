@@ -22,7 +22,6 @@ number_features <- function(data,
                             desc = NULL,
                             num_style = "arabic",
                             suffix = NULL) {
-
   if (rlang::has_name(data, "number")) {
     cli::cli_warn(
       "number_features is replacing an existing column with the name number."
@@ -87,7 +86,6 @@ sort_features <- function(data,
                           col = NULL,
                           sort = "lon",
                           desc = NULL) {
-
   coords <- c("lon", "lat")
   sort <- match.arg(sort, c(coords, names(data)))
 
@@ -101,7 +99,7 @@ sort_features <- function(data,
     }
   }
 
-  if ((sort %in% coords) && !all(rlang::has_name(data, coords))) {
+  if (all(sort %in% coords) && !all(rlang::has_name(data, coords))) {
     data <-
       st_coords(
         data,

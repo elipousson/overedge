@@ -4,6 +4,7 @@
 \alias{read_sf_ext}
 \alias{read_sf_path}
 \alias{read_sf_url}
+\alias{read_sf_gsheet}
 \alias{read_sf_pkg}
 \alias{read_sf_download}
 \title{Read spatial data in a bounding box to a simple feature object}
@@ -12,7 +13,9 @@ read_sf_path(path, bbox = NULL, ...)
 
 read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
-read_sf_pkg(data, bbox = NULL, package, filetype = "gpkg", ...)
+read_sf_gsheet(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...)
+
+read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 
 read_sf_download(
   url,

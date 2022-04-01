@@ -87,7 +87,7 @@ get_nyc_borough <- function(name = NULL, id = NULL, type = "simple") {
   )
 }
 
-get_nyc_borough("Manhattan")
+get_nyc_borough(name = "Manhattan")
 ```
 
 If your location data is sourced from an ArcGIS MapServer or FeatureServer, you can use the `name` and `name_col` parameters from the underlying `get_esri_data()` function. This avoids the need to download the full dataset every time.

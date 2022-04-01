@@ -10,7 +10,8 @@ st_clip(
   keep = NULL,
   flip = FALSE,
   dist = NULL,
-  diag_ratio = NULL
+  diag_ratio = NULL,
+  unit = "meter"
 )
 }
 \arguments{
@@ -31,6 +32,11 @@ meters. Use negative values for an inside edge or positive numbers for an
 outside edge.}
 
 \item{diag_ratio}{Alternate way to define edge distance.}
+
+\item{unit}{Units for buffer. Supported options include "meter", "foot",
+"kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
+instead of "kilometer") are also supported. Distance in units is converted
+to units matching GDAL units for x; defaults to "meter"}
 }
 \value{
 \code{sf} object clipped based on parameters

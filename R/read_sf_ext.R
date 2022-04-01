@@ -170,7 +170,6 @@ read_sf_gsheet <- function(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...
 #' @importFrom stringr str_detect
 #' @importFrom utils data
 read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
-
   stopifnot(
     !is.null(package) & is_pkg_installed(package)
   )

@@ -7,5 +7,4 @@ test_that("st_erase works", {
     ),
     "sf"
   )
-
 })

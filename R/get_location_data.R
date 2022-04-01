@@ -124,7 +124,7 @@ get_location_data <- function(location = NULL,
   if (!is_sf(data)) {
     data <-
       # dplyr::case_when(
-        # Check if data is a url
+      # Check if data is a url
 
       if (is_url(data)) {
         data <-
@@ -133,10 +133,9 @@ get_location_data <- function(location = NULL,
         data <- read_sf_path(path = data, bbox = bbox, ...)
       } else if (!is.null(package)) {
         data <- read_sf_pkg(data = data, bbox = bbox, package = package, filetype = filetype, ...)
-
       }
-        # Check if data is a path to an existing file
-      #)
+    # Check if data is a path to an existing file
+    # )
   }
 
   # FIXME: Document how the filter works

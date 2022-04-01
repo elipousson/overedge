@@ -9,8 +9,9 @@ get_wiki_data(
   dist = 100,
   diag_ratio = NULL,
   asp = NULL,
+  unit = "meter",
   radius = FALSE,
-  primary = TRUE,
+  primary = NULL,
   details = c("type", "name", "region"),
   lang = "en",
   limit = 50,
@@ -31,6 +32,11 @@ provided.}
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
+
+\item{unit}{Units for buffer. Supported options include "meter", "foot",
+"kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"
+instead of "kilometer") are also supported. Distance in units is converted
+to units matching GDAL units for x; defaults to "meter"}
 
 \item{radius}{If TRUE, use dist as a buffer around the center of the
 location.}

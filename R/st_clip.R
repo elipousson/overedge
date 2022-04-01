@@ -14,6 +14,7 @@
 #'   meters. Use negative values for an inside edge or positive numbers for an
 #'   outside edge.
 #' @param diag_ratio Alternate way to define edge distance.
+#' @inheritParams st_edge
 #' @return `sf` object clipped based on parameters
 #' @export
 #' @rdname st_clip

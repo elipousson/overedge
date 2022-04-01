@@ -57,7 +57,6 @@ layer_markers <- function(data,
   }
 
   if (number) {
-
     col <- NULL
     if (num_by_group) {
       col <- groupname_col
@@ -71,7 +70,7 @@ layer_markers <- function(data,
         desc = desc,
         num_style = num_style,
         suffix = suffix
-        )
+      )
 
     number_col <- "number"
 
@@ -83,7 +82,6 @@ layer_markers <- function(data,
   }
 
   if (!is.null(groupname_col)) {
-
     if (is_point(data) || is_multipoint(data)) {
       mapping <-
         modify_mapping(
@@ -97,7 +95,6 @@ layer_markers <- function(data,
           fill = groupname_col
         )
     }
-
   }
 
   layer_location_data(
@@ -143,16 +140,12 @@ layer_numbers <- function(data,
                           hjust = 0.5,
                           vjust = 0.5,
                           ...) {
-
-
   if ("roundrect" %in% style) {
-
     label.size <- 0.0
     label.padding <- ggplot2::unit(size / 10, "lines")
     label.r <- label.padding * 1.5
     hjust <- 0.5
     vjust <- 0.5
-
   }
 
   layer_markers(

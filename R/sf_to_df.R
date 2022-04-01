@@ -3,20 +3,25 @@
 #' Helper function to convert a simple feature object to data frame by dropping
 #' geometry, converting geometry to well known text, or (if the geometry type is
 #' not POINT) getting coordinates for a centroid or point on surface. If an sfc
-#' object is provided,the "drop" geometry option is not supported. [check_coords]
-#' is a helper function used by [df_to_sf] to suggest the appropriate coordinate
-#' column names based on the column names in the provided data frame.
+#' object is provided,the "drop" geometry option is not supported.
+#'
+#' [check_coords()] is a helper function used by [df_to_sf()] to suggest the
+#' appropriate coordinate column names based on the column names in the provided
+#' data frame.
 #'
 #' @param x A `sf` or `sfc` object or a data frame with lat/lon coordinates in a
 #'   single column or two separated columns.
-#' @param crs Cordinate reference system to return, Default: 4326 for [sf_to_df] and NULL for [df_to_sf]
-#' @param from_crs For [df_to_sf], coordinate reference system used by coordinates or well known text in data frame.
+#' @param crs Cordinate reference system to return, Default: 4326 for [sf_to_df]
+#'   and NULL for [df_to_sf]
+#' @param from_crs For [df_to_sf], coordinate reference system used by
+#'   coordinates or well known text in data frame.
 #' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'.
 #' @param coords Coordinate columns for input dataframe or output sf object (if
 #'   geometry is 'centroid' or 'point') Default: c("lon", "lat").
-#' @param remove_coords For [df_to_sf], if `TRUE`, remove the coordinate columns after converting
-#'   a data frame to simple feature object; defaults to `FALSE`.
+#' @param remove_coords For [df_to_sf], if `TRUE`, remove the coordinate columns
+#'   after converting a data frame to simple feature object; defaults to
+#'   `FALSE`.
 #' @param keep_all If `FALSE`, drop all columns other than those named in
 #'   coords, Default: `TRUE`.
 #' @param into If coords is a single column name with both longitude and
@@ -58,11 +63,10 @@ df_to_sf <- function(x,
                      sep = ",",
                      rev = TRUE,
                      remove_coords = FALSE) {
-  if (rlang::has_name(x, "geometry") && is_sfc(x$geometry)) {
-    x <- sf::st_as_sf(x)
+  if (rlang::has_name(x, "geometry")) {
+    x <- df_geom_to_sf(x)
   } else if (rlang::has_name(x, "wkt")) {
-    sf::st_geometry(x) <- sf::st_as_sfc(x$wkt, crs = from_crs)
-    x$wkt <- NULL
+    x <- df_wkt_to_sf(x, crs = from_crs)
   } else {
     if (rlang::has_length(coords, 1) && rlang::has_length(into, 2)) {
       x <- separate_coords(x = x, coords = coords, into = into, sep = sep)
@@ -71,29 +75,12 @@ df_to_sf <- function(x,
       coords <- check_coords(x = x, coords = coords, rev = rev)
     }
 
-    lon <- coords[[1]]
-    lat <- coords[[2]]
-
-    # Check that lat/lon are numeric
-    if (!is.numeric(x[[lon]]) | !is.numeric(x[[lat]])) {
-      x[[lon]] <- as.double(x[[lon]])
-      x[[lat]] <- as.double(x[[lat]])
-    }
-
-    # Check for missing coordinates
-    missing_coords <- is.na(x[[lon]] | x[[lat]])
-    num_missing_coords <- sum(missing_coords)
-
-    if (num_missing_coords > 0) {
-      cli::cli_alert_info("Removing {num_missing_coords} rows with missing coordinates.")
-      # Exclude rows with missing coordinates
-      x <- x[!missing_coords, ]
-    }
+    x <- format_coords(x, coords = coords)
 
     x <-
       sf::st_as_sf(
         x,
-        coords = c(lon, lat),
+        coords = c(coords[[1]], coords[[2]]),
         agr = "constant",
         crs = from_crs,
         stringsAsFactors = FALSE,
@@ -106,8 +93,64 @@ df_to_sf <- function(x,
   return(x)
 }
 
+
+#' @rdname sf_to_df
+#' @name df_to_sf
+#' @param rev If TRUE, reverse c("lat", "lon") coords to c("lon", "lat").
+#'   check_coords only.
+#' @export
+#' @importFrom janitor make_clean_names
+check_coords <- function(x = NULL, coords = NULL, rev = FALSE) {
+  if (!is.null(x) && is.data.frame(x)) {
+    # FIXME: there may still be an issue with capitalization (at least with consistency)
+    x <- janitor::clean_names(x)
+    x_coords <- NULL
+
+    x_coords <-
+      dplyr::case_when(
+        rlang::has_name(x, "lon") ~ c("lon", "lat"),
+        rlang::has_name(x, "long") ~ c("long", "lat"),
+        rlang::has_name(x, "longitude") ~ c("longitude", "latitude"),
+        rlang::has_name(x, "y") ~ c("y", "x"),
+        rlang::has_name(x, "geo_longitude") ~ c("geo_longitude", "geo_latitude")
+      )
+
+    if (!is.null(x_coords)) {
+      if (setequal(coords, x_coords)) {
+        return(coords)
+      }
+
+      if (!is.null(coords)) {
+        cli::cli_warn(
+          "The provided coordinates do not appear to match the data.
+        Replacing coordinates with suggested values based on column names."
+        )
+        coords <- x_coords
+      }
+    } else {
+      # FIXME: This warning may not be needed
+      cli::cli_warn("A pair of coordinate column names could not be determined based on the data provided.")
+    }
+  }
+
+  if (is.null(coords)) {
+    coords <- c("lon", "lat")
+  }
+
+  stopifnot(
+    length(coords) == 2,
+    is.character(coords) || is.numeric(coords)
+  )
+
+  # FIXME: This automatic reversal needs to be documented
+  if (rev && grepl("LAT|lat|Y|y", coords[1])) {
+    coords <- rev(coords)
+  }
+
+  return(coords)
+}
+
 #' Separate coordinates from a single combined column into two columns
-#'
 #' @noRd
 #' @importFrom tidyr separate
 #' @importFrom tidyselect all_of
@@ -136,52 +179,44 @@ separate_coords <- function(x, coords, into, sep) {
   return(x)
 }
 
-#' @rdname sf_to_df
-#' @name df_to_sf
-#' @param rev If TRUE, reverse c("lat", "lon") coords to c("lon", "lat"). check_coords only.
-#' @export
-#' @importFrom janitor make_clean_names
-check_coords <- function(x = NULL, coords = NULL, rev = FALSE) {
-  if (!is.null(x) && is.data.frame(x)) {
-    # FIXME: there may still be an issue with capitalization (at least with consistency)
-    x <- janitor::make_clean_names(x)
+#' Convert a data frame with a geometry list column to an sf object
+#' @noRd
+#' @importFrom sf st_as_sf
+df_geom_to_sf <- function(x) {
+  return(sf::st_as_sf(x))
+}
 
-    if (rlang::has_name(x, "lon")) {
-      x_coords <- c("lon", "lat")
-    } else if (rlang::has_name(x, "long")) {
-      x_coords <- c("long", "lat")
-    } else if (rlang::has_name(x, "longitude")) {
-      x_coords <- c("longitude", "latitude")
-    } else if (rlang::has_name(x, "y")) {
-      x_coords <- c("y", "x")
-    } else if (rlang::has_name(x, "geo_longitude")) {
-      x_coords <- c("geo_longitude", "geo_latitude")
-    } else {
-      x_coords <- NULL
-    }
+#' Convert a data frame with a wkt column to an sf object
+#' @noRd
+#' @importFrom sf st_geometry st_as_sfc
+df_wkt_to_sf <- function(x, crs) {
+  sf::st_geometry(x) <- sf::st_as_sfc(x$wkt, crs = crs)
+  x$wkt <- NULL
+  return(x)
+}
 
-    if (!is.null(coords) && !is.null(x_coords) && !setequal(coords, x_coords)) {
-      cli::cli_warn("The provided coordinates do not appear to match the data.
-                     Replacing coordinates with suggested values based on column names.")
-      coords <- x_coords
-    } else if (is.null(x_coords) && is.null(coords)) {
-      cli::cli_warn("A pair of coordinate column names could not be determined based on the data provided.")
-    }
+#' Format coordinates as numeric values and remove missing coordinates from data frame
+#' @noRd
+#' @importFrom cli cli_alert_info
+format_coords <- function(x, coords = c("lon", "lat")) {
+  lon <- coords[[1]]
+  lat <- coords[[2]]
+
+  # Check that lat/lon are numeric
+  if (!is.numeric(x[[lon]]) | !is.numeric(x[[lat]])) {
+    x[[lon]] <- as.double(x[[lon]])
+    x[[lat]] <- as.double(x[[lat]])
   }
 
-  if (is.null(coords)) {
-    coords <- c("lon", "lat")
-  } else {
-    stopifnot(
-      length(coords) == 2,
-      is.character(coords) || is.numeric(coords)
-    )
+  # Check for missing coordinates
+  na_coords <- is.na(x[[lon]] | x[[lat]])
+  num_na_coords <- sum(na_coords)
+
+  if (num_na_coords > 0) {
+    cli::cli_alert_info("Removing {num_na_coords} rows with missing coordinates.")
+    # Exclude rows with missing coordinates
+    x <- x[!na_coords, ]
   }
 
-  # FIXME: This automatic reversal needs to be documented
-  if (rev && grepl("LAT|lat|Y|y", coords[1])) {
-    coords <- rev(coords)
-  }
-
-  return(coords)
+  return(x)
 }

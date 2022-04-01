@@ -172,16 +172,15 @@ location_filter <- function(data,
 #'
 #' @noRd
 is_location_type <- function(location = NULL) {
-
   is_null_location <- is.null(location)
 
-    type <-
-      list(
-        "null" = is_null_location,
-        "sf" = !is_null_location && is_sf(location),
-        "sf_ext" = !is_null_location && is_sf(location, ext = TRUE),
-        "char" = !is_null_location && is.character(location)
-      )
+  type <-
+    list(
+      "null" = is_null_location,
+      "sf" = !is_null_location && is_sf(location),
+      "sf_ext" = !is_null_location && is_sf(location, ext = TRUE),
+      "char" = !is_null_location && is.character(location)
+    )
 
   if (!is_null_location && type$char) {
     c(

@@ -93,6 +93,16 @@ with <code><a href="make_filename.html">make_filename()</a></code> and features 
   filename <span class="op">=</span> <span class="cn">NULL</span>,
   prefix <span class="op">=</span> <span class="cn">NULL</span>,
   postfix <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">write_sf_gsheet</span><span class="op">(</span>
+  <span class="va">data</span>,
+  name <span class="op">=</span> <span class="cn">NULL</span>,
+  label <span class="op">=</span> <span class="cn">NULL</span>,
+  prefix <span class="op">=</span> <span class="cn">NULL</span>,
+  postfix <span class="op">=</span> <span class="cn">NULL</span>,
+  filename <span class="op">=</span> <span class="cn">NULL</span>,
+  sheet <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -133,15 +143,17 @@ cached files that use the same file name.</p></dd>
 <dd><p>cache data directory, defaults to
 <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">user_cache_dir</a></code> when data_dir is NULL. (only used
 for write_sf_cache; default is used when cache = TRUE for write_sf_ext)</p></dd>
+<dt>sheet</dt>
+<dd><p>Sheet to write into, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     
 <ul><li><p>If the data is not an sf object, optionally save as an RDS file.</p></li>
 <li><p>If filetype is "csv" or the filename ends in ".csv" the file is
-automatically converted to a dataframe using <code><a href="sf_to_df.html">df_to_sf()</a></code>; if filetype is
-"gsheet" the file is converted and turned into a new Google SHeet document
-(if a Google account is authorized with the googlesheets4 package).</p></li>
+automatically converted to a dataframe using <code><a href="sf_to_df.html">df_to_sf()</a></code>; if file type is
+"gsheet" the file is converted and turned into a new Google Sheet document
+(if a Google account is authorized with the googlesheets4 package using the <code>write_sf_gsheet()</code> function.).</p></li>
 <li><p>If cache is <code>TRUE</code> use write_sf_cache to cache file after writing a copy to
 the path provided.</p></li>
 <li><p>If data is a named sf list, pass the name of each sf object in the list to

@@ -90,7 +90,7 @@
 #'   \item{\code{comment}}{comment}
 #'   \item{\code{dimensionless}}{logical indicator for dimensionless units}
 #'   \item{\code{source_xml}}{source XML}
-#'}
+#' }
 "area_units"
 
 #' Standard map, architectural, and engineering scales

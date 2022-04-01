@@ -95,8 +95,8 @@ get_wiki_data <- function(location,
 
   if (geometry) {
 
-    #return(resp$query$geosearch)
-   return(df_to_sf(resp$query$geosearch))
+    # return(resp$query$geosearch)
+    return(df_to_sf(resp$query$geosearch))
   }
 
   return(resp$query$geosearch)

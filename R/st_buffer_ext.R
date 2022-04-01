@@ -99,7 +99,6 @@ st_buffer_ext <- function(x,
 #' @importFrom dplyr between
 #' @importFrom cli cli_alert_info
 limit_dist <- function(dist = NULL, dist_limits = NULL) {
-
   if (!is.null(dist_limits) && (length(dist_limits) >= 2) && is_class(dist_limits, "units")) {
     min_limit <- min(dist_limits)
     max_limit <- max(dist_limits)

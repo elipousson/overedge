@@ -2,34 +2,38 @@
 % Please edit documentation in R/number_features.R
 \name{number_features}
 \alias{number_features}
+\alias{sort_features}
 \title{Sort and number features}
 \usage{
 number_features(
   data,
   col = NULL,
-  number = TRUE,
   sort = "lon",
   desc = NULL,
-  ...
+  num_style = "arabic",
+  suffix = NULL
 )
+
+sort_features(data, col = NULL, sort = "lon", desc = NULL)
 }
 \arguments{
 \item{data}{Marker data}
 
 \item{col}{Group column name, Default: \code{NULL}}
 
-\item{number}{If TRUE, number the markers, Default: \code{TRUE}}
-
 \item{sort}{Sort column name, Default: 'lon'}
 
 \item{desc}{If \code{TRUE}, sort descending; set to \code{FALSE} if sort is "lon" and
 TRUE is sort is "lat" or any other value, default \code{NULL}}
 
-\item{...}{Additional parameters passed to \link{group_by_col} if "col" is not \code{NULL}.}
+\item{num_style}{Style of enumeration, either "arabic", "alph", "Alph", "roman",
+"Roman"}
+
+\item{suffix}{Character to appended to "number" column.}
 }
 \value{
 A sf object with a number column ordered by sort.
 }
 \description{
-Used with \link{layer_markers}
+Used with \code{\link[=layer_numbers]{layer_numbers()}}
 }

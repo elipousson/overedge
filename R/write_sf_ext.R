@@ -166,7 +166,6 @@ write_sf_gsheet <- function(data,
                             postfix = NULL,
                             filename = NULL,
                             sheet = 1) {
-
   is_pkg_installed("googlesheets4")
 
   if (!is.null(filename)) {

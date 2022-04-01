@@ -3,6 +3,7 @@
 \name{write_sf_ext}
 \alias{write_sf_ext}
 \alias{write_sf_cache}
+\alias{write_sf_gsheet}
 \title{Write or cache a simple feature object to a file}
 \usage{
 write_sf_ext(
@@ -28,6 +29,16 @@ write_sf_cache(
   filename = NULL,
   prefix = NULL,
   postfix = NULL
+)
+
+write_sf_gsheet(
+  data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  sheet = 1
 )
 }
 \arguments{
@@ -65,6 +76,8 @@ cached files that use the same file name.}
 \item{data_dir}{cache data directory, defaults to
 \code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL. (only used
 for write_sf_cache; default is used when cache = TRUE for write_sf_ext)}
+
+\item{sheet}{Sheet to write into, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number.}
 }
 \description{
 The write_sf_ext and write_sf_cache helper functions wrap the \link[sf:st_write]{sf::write_sf}
@@ -75,9 +88,9 @@ with \code{\link[=make_filename]{make_filename()}} and features including:
 \itemize{
 \item If the data is not an sf object, optionally save as an RDS file.
 \item If filetype is "csv" or the filename ends in ".csv" the file is
-automatically converted to a dataframe using \code{\link[=df_to_sf]{df_to_sf()}}; if filetype is
-"gsheet" the file is converted and turned into a new Google SHeet document
-(if a Google account is authorized with the googlesheets4 package).
+automatically converted to a dataframe using \code{\link[=df_to_sf]{df_to_sf()}}; if file type is
+"gsheet" the file is converted and turned into a new Google Sheet document
+(if a Google account is authorized with the {googlesheets4} package using the \code{\link[=write_sf_gsheet]{write_sf_gsheet()}} function.).
 \item If cache is \code{TRUE} use write_sf_cache to cache file after writing a copy to
 the path provided.
 \item If data is a named sf list, pass the name of each sf object in the list to
