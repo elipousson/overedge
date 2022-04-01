@@ -25,10 +25,6 @@ is_gsheet <- function(x) {
   )
 }
 
-as_gsheet_ss <- function() {
-
-}
-
 #' Is this package installed?
 #'
 #' @param package Name of a package.
@@ -57,12 +53,12 @@ ui_ask <- function(x) {
 #' @param col Column name/value
 #' @noRd
 group_by_col <- function(data, col = NULL) {
-  if (!is.null(col) && (rlang::has_length(col, 1)) && !is.null(data)) {
-    if (rlang::has_name(data, col)) {
-      dplyr::group_by(data, .data[[col]])
-    }
-  } else {
-    data
+  if (is.null(col) || is.null(data)) {
+    return(data)
+  }
+
+  if ((rlang::has_length(col, 1)) && rlang::has_name(data, col)) {
+    return(dplyr::group_by(data, .data[[col]]))
   }
 }
 
@@ -74,6 +70,7 @@ group_by_col <- function(data, col = NULL) {
 add_col <- function(data, col = NULL) {
   if (!is.null(col) && !(col %in% names(data)) && any(length(col) %in% c(nrow(data), 1))) {
     # FIXME: This is a non-standard pattern - I like it but it may or may not be appropriate and should be documented
+    # TODO: Substitute dplyr::bind_cols() instead
     data[[col]] <- col
   }
 
@@ -255,5 +252,5 @@ utils::globalVariables(c(
   "gps_latitude", "gps_longitude", "osm_building_tags", "source_file",
   "address", "asp", "block_height", "block_width", "col_width", "cols", "geometry", "gutter",
   "height", "id", "image_description", "image_height", "image_width",
-  "row_height", "rows", "width", "df", "where"
+  "row_height", "rows", "width", "df", "where", "number_col"
 ))
