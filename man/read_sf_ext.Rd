@@ -2,20 +2,22 @@
 % Please edit documentation in R/read_sf_ext.R
 \name{read_sf_ext}
 \alias{read_sf_ext}
+\alias{read_sf_pkg}
 \alias{read_sf_path}
 \alias{read_sf_url}
 \alias{read_sf_gsheet}
-\alias{read_sf_pkg}
 \alias{read_sf_download}
 \title{Read spatial data in a bounding box to a simple feature object}
 \usage{
+read_sf_ext(..., bbox = NULL)
+
+read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
+
 read_sf_path(path, bbox = NULL, ...)
 
 read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
-read_sf_gsheet(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...)
-
-read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
+read_sf_gsheet(ss, coords = c("lon", "lat"), ask = FALSE, ...)
 
 read_sf_download(
   url,
@@ -30,18 +32,10 @@ read_sf_download(
 )
 }
 \arguments{
-\item{path}{A file path; used by \code{\link[=read_sf_path]{read_sf_path()}} only.}
+\item{...}{additional parameters passed to multiple functions; see details.}
 
 \item{bbox}{A bounding box object; Default: \code{NULL}. If "bbox" is provided,
 read_sf only returns features intersecting the bounding box.}
-
-\item{...}{additional parameters passed to multiple functions; see details.}
-
-\item{url}{A url for a spatial data file or for ArcGIS FeatureServer or
-MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by \code{\link[=read_sf_url]{read_sf_url()}} only}
-
-\item{coords}{Character vector with coordinate values; used for
-\code{\link[=read_sf_url]{read_sf_url()}} if the "url" is a Google Sheet.}
 
 \item{data}{character; name of data; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only}
 
@@ -50,6 +44,14 @@ MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by 
 \item{filetype}{file type supported by \code{\link[sf:st_read]{sf::read_sf()}}., Default: 'gpkg';
 used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data is in the
 package cache directory or extdata system files.}
+
+\item{path}{A file path; used by \code{\link[=read_sf_path]{read_sf_path()}} only.}
+
+\item{url}{A url for a spatial data file or for ArcGIS FeatureServer or
+MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by \code{\link[=read_sf_url]{read_sf_url()}} only}
+
+\item{coords}{Character vector with coordinate values; used for
+\code{\link[=read_sf_url]{read_sf_url()}} if the "url" is a Google Sheet.}
 
 \item{filename}{File name; if file name is \code{NULL}, name and file type are
 both required.}
@@ -98,6 +100,10 @@ provided, a expected layer name is created based on the file path.
 MapServer url (passed to \link{get_esri_data}) or sheet if the url is for a Google
 Sheet (passed to \link[googlesheets4:range_read]{googlesheets4::read_sheet}), or a query or wkt filter
 parameter if the url is some other type (passed to \link[sf:st_read]{sf::read_sf}).
+
+\link{read_sf_ext} is a flexible function that only has bbox as a named parameters
+and all other parameters in ... are passed to one of the other overedge
+read_sf functions.
 }
 \seealso{
 Other read_write: 

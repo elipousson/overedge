@@ -77,6 +77,6 @@ read_sf_exif(
 \seealso{
 Other read_write: 
 \code{\link{make_filename}()},
-\code{\link{read_sf_ext}}
+\code{\link{read_sf_ext}()}
 }
 \concept{read_write}

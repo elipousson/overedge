@@ -46,6 +46,6 @@ A helper function to create consistent file names for plots created with
 \seealso{
 Other read_write: 
 \code{\link{read_sf_exif}()},
-\code{\link{read_sf_ext}}
+\code{\link{read_sf_ext}()}
 }
 \concept{read_write}
