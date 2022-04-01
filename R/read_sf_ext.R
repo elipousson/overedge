@@ -26,6 +26,12 @@
 #' Sheet (passed to [googlesheets4::read_sheet]), or a query or wkt filter
 #' parameter if the url is some other type (passed to [sf::read_sf]).
 #'
+#' [read_sf_ext] is a flexible function that only has bbox as a named parameters
+#' and all other parameters in ... are passed to one of the other overedge
+#' read_sf functions.
+#'
+#' @param bbox A bounding box object; Default: `NULL`. If "bbox" is provided,
+#'   read_sf only returns features intersecting the bounding box.
 #' @param path A file path; used by [read_sf_path()] only.
 #' @param url A url for a spatial data file or for ArcGIS FeatureServer or
 #'   MapServer to access with [get_esri_data()]; used by [read_sf_url()] only
@@ -34,14 +40,82 @@
 #' @param filetype file type supported by [sf::read_sf()]., Default: 'gpkg';
 #'   used by [read_sf_pkg()] only and required only if the data is in the
 #'   package cache directory or extdata system files.
-#' @param bbox A bounding box object; Default: `NULL`. If "bbox" is provided,
-#'   read_sf only returns features intersecting the bounding box.
 #' @param coords Character vector with coordinate values; used for
 #'   [read_sf_url()] if the "url" is a Google Sheet.
 #' @param ... additional parameters passed to multiple functions; see details.
 #' @name read_sf_ext
 #' @family read_write
-NULL
+#' @export
+#' @importFrom rlang list2 exec
+#' @importFrom dplyr case_when
+#' @importFrom cli cli_abort
+read_sf_ext <- function(..., bbox = NULL) {
+  params <- rlang::list2(...)
+
+  read_sf_fn <-
+    dplyr::case_when(
+      !is.null(params$package) ~ "pkg",
+      !is.null(params$ss) ~ "gsheet",
+      !is.null(params$url) ~ "url",
+      !is.null(params$filename) ~ "download",
+      !is.null(params$path) ~ "path"
+    )
+
+  read_sf_fn <-
+    switch(read_sf_fn,
+      "path" = read_sf_path,
+      "pkg" = read_sf_pkg,
+      "url" = read_sf_url,
+      "gsheet" = read_sf_gsheet,
+      "download" = read_sf_download
+    )
+
+  if (!is.function(read_sf_fn)) {
+    cli::cli_abort("The parameters provided did not match any overedge read_sf function.")
+  }
+
+  args <-
+    modify_fn_fmls(
+      params = params,
+      fn = read_sf_fn,
+      missing = TRUE
+    )
+
+  rlang::exec(read_sf_fn, !!!args)
+}
+
+#' @rdname read_sf_ext
+#' @name read_sf_pkg
+#' @export
+#' @md
+#' @importFrom utils data
+#' @importFrom cli cli_abort
+#' @importFrom dplyr case_when
+read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
+  stopifnot(
+    !is.null(package) & is_pkg_installed(package)
+  )
+
+  # Read package data
+  if (data %in% ls_pkg_data(package)) {
+    return(use_eval_parse(data = data, package = package))
+  }
+
+  filename <- str_add_filetype(data, filetype = filetype)
+
+  path <-
+    dplyr::case_when(
+      # If data is in extdata folder
+      filename %in% ls_pkg_extdata(package) ~ system.file("extdata", filename, package = package),
+      # If data is in the cache directory
+      filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(package = package), filename)
+    )
+
+  # Read data from path
+  data <- read_sf_path(path = path, bbox = bbox, ...)
+
+  return(data)
+}
 
 #' @rdname read_sf_ext
 #' @name read_sf_path
@@ -148,10 +222,10 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 #' @name read_sf_gsheet
 #' @rdname read_sf_ext
 #' @export
-read_sf_gsheet <- function(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
+read_sf_gsheet <- function(ss, coords = c("lon", "lat"), ask = FALSE, ...) {
   is_pkg_installed("googlesheets4")
 
-  if (ask && is.null(ss)) {
+  if (ask && is.missing(ss)) {
     ss <-
       googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
   }
@@ -159,39 +233,6 @@ read_sf_gsheet <- function(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...
   data <- googlesheets4::read_sheet(ss = ss, ...)
   coords <- check_coords(x = data, coords = coords)
   data <- df_to_sf(data, coords = coords)
-
-  return(data)
-}
-
-#' @rdname read_sf_ext
-#' @name read_sf_pkg
-#' @export
-#' @md
-#' @importFrom utils data
-#' @importFrom cli cli_abort
-#' @importFrom dplyr case_when
-read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
-  stopifnot(
-    !is.null(package) & is_pkg_installed(package)
-  )
-
-  # Read package data
-  if (data %in% ls_pkg_data(package)) {
-    return(use_eval_parse(data = data, package = package))
-  }
-
-  filename <- str_add_filetype(data, filetype = filetype)
-
-  path <-
-    dplyr::case_when(
-      # If data is in extdata folder
-      filename %in% ls_pkg_extdata(package) ~ system.file("extdata", filename, package = package),
-      # If data is in the cache directory
-      filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(package = package), filename)
-    )
-
-  # Read data from path
-  data <- read_sf_path(path = path, bbox = bbox, ...)
 
   return(data)
 }
@@ -257,37 +298,6 @@ read_sf_download <-
 
     return(data)
   }
-
-#' Read simple features using any of the extended methods
-#'
-#' @noRd
-read_sf_any <- function(bbox = NULL, ...) {
-  params <- rlang::list2(...)
-
-  # FIXME: Look at the updated version of layer_location_data for a preferred method to set read_fn
-  if (!is.null(params$path)) {
-    read_fn <- "read_sf_path"
-  } else if (!is.null(params$url)) {
-    read_fn <- "read_sf_url"
-  } else if (!is.null(params$data)) {
-    read_fn <- "read_sf_pkg"
-  } else if (!is.null(params$path) && is.null(params$method)) {
-    read_fn <- "read_sf_path"
-  } else if (!is.null(params$method)) {
-    read_fn <- "read_sf_download"
-  }
-
-  if (any(sapply(list(params$path, params$url, params$data), length) > 1)) {
-    args <- utils::modifyList(
-      params,
-      formals(rlang::expr(!!read_fn))
-    )
-
-    rlang::exec(rlang::expr(!!read_fn), !!!args)
-  }
-}
-
-
 
 #' Join data from a Google Sheet to a simple feature object
 #'
