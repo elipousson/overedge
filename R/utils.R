@@ -25,6 +25,22 @@ is_gsheet <- function(x) {
   )
 }
 
+#' Is the df object empty (no rows)?
+#'
+#' @noRd
+is_df_empty <- function(x, message = "This simple feature object has no rows.", quiet = FALSE) {
+
+  is_empty <- (!is.null(x) && (nrow(x) == 0))
+
+  if (is_empty && !quiet) {
+    return(cli::cli_abort(message))
+  } else if (!quiet) {
+    return(NULL)
+  }
+
+  return(is_empty)
+}
+
 #' Is this package installed?
 #'
 #' @param package Name of a package.

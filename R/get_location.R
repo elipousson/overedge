@@ -98,42 +98,13 @@ get_location <- function(type,
       }
     }
 
-    if (!is.null(location) && (nrow(location) == 0)) {
-      cli::cli_abort("The name/id did not match any features of the type provided.")
-    }
+    is_df_empty(
+      x = location,
+      message = "The name/id did not match any features of the type provided."
+      )
+
   } else {
     location <- location_filter(data = type, location = location, trim = FALSE, crop = FALSE)
-  }
-
-  if (union && (nrow(location) > 1) && !is.null(name_col)) {
-    location <-
-      # FIXME: as_sf does not currently account for the possibility of a data frame with a valid geometry column
-      sf::st_as_sf(
-        data.frame(
-          "name" = as.character(
-            knitr::combine_words(words = location[[name_col]])
-          ),
-          "geometry" = sf::st_union(location)
-        )
-      )
-
-    location <-
-      dplyr::rename(
-        location,
-        "{name_col}" := name
-      )
-  }
-
-  if (is.null(location) && !is.null(type)) {
-    location <- type
-
-    if (is.null(name_col) && (nrow(type) > 1)) {
-      cli::cli_warn("Returning all locations of this type.")
-    }
-  }
-
-  if (!is.null(label)) {
-    location$label <- label
   }
 
   if (!is.null(name)) {
@@ -144,7 +115,61 @@ get_location <- function(type,
     col <- NULL
   }
 
+  if (is.null(location) && !is.null(type)) {
+    location <- type
+
+    if (is.null(name_col) && (nrow(type) > 1)) {
+      cli::cli_warn("Returning all locations of this type.")
+    }
+  }
+
+  is_df_empty(
+    location,
+    "No location has been found. Check to make sure all parameters are correct."
+  )
+
+  if (union) {
+    location <- location_union(location, name_col = name_col)
+  }
+
+  if (!is.null(label)) {
+    location$label <- label
+  }
+
   location <- as_sf_class(x = location, class = class, crs = crs, col = col)
+
+  return(location)
+}
+
+
+#' Union location and combine name column
+#'
+#' @noRd
+#' @importFrom rlang has_name
+#' @importFrom knitr combine_words
+#' @importFrom sf st_union
+#' @importFrom dplyr rename
+location_union <- function(location = NULL, name_col = "name") {
+  # FIXME: This skips union if the name_col is missing. should it give a warning?
+  if (!is.null(location) && ((nrow(location) == 1) || !rlang::has_name(location, name_col))) {
+    return(location)
+  }
+
+  location <-
+    sf::st_as_sf(
+      data.frame(
+        "name" = as.character(
+          knitr::combine_words(words = location[[name_col]])
+        ),
+        "geometry" = sf::st_union(location)
+      )
+    )
+
+  location <-
+    dplyr::rename(
+      location,
+      "{name_col}" := name
+    )
 
   return(location)
 }
