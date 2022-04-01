@@ -1,76 +1,3 @@
-#' Is this a URL?
-#'
-#' @noRd
-is_url <- function(x) {
-  grepl(
-    "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+",
-    x
-  )
-}
-
-#' Is this an ArcGIS MapServer or FeatureServer URL?
-#'
-#' @noRd
-is_esri_url <- function(x) {
-  grepl("/MapServer|/FeatureServer", x)
-}
-
-#' Is this a Google Sheets URL?
-#'
-#' @noRd
-is_gsheet <- function(x) {
-  grepl(
-    "^https://docs.google.com/spreadsheets/",
-    x
-  )
-}
-
-#' Is the df object empty (no rows)?
-#'
-#' @noRd
-is_df_empty <- function(x, message = "This simple feature object has no rows.", quiet = FALSE) {
-
-  is_empty <- (!is.null(x) && (nrow(x) == 0))
-
-  if (is_empty && !quiet) {
-    return(cli::cli_abort(message))
-  } else if (!quiet) {
-    return(NULL)
-  }
-
-  return(is_empty)
-}
-
-#' Is this package installed?
-#'
-#' @param package Name of a package.
-#' @param repo GitHub repository to use for the package.
-#' @importFrom rlang is_installed check_installed
-#' @noRd
-is_pkg_installed <- function(pkg, repo = NULL) {
-  if (!rlang::is_installed(pkg = pkg)) {
-    if (!is.null(repo)) {
-      pkg <- repo
-    }
-
-    rlang::check_installed(pkg = pkg)
-  }
-}
-
-#' @noRd
-ls_pkg_data <- function(pkg, envir = .GlobalEnv) {
-  utils::data(package = pkg, envir = envir)$results[, "Item"]
-}
-
-#' @noRd
-ls_pkg_extdata <- function(pkg) {
-  list.files(system.file("extdata", package = pkg))
-}
-
-#' @noRd
-ls_pkg_cache <- function(pkg) {
-  list.files(get_data_dir(path = NULL, package = pkg))
-}
 
 #' Group data by column if present
 #'
@@ -178,6 +105,27 @@ modify_mapping <- function(mapping = NULL, data = NULL, ...) {
   return(mapping)
 }
 
+
+#' Modify function parameters
+#'
+#' @noRd
+modify_fn_fmls <- function(params, fn, missing = FALSE, keep.null = FALSE, ...) {
+
+  fmls <- rlang::fn_fmls(fn)
+
+  if (!missing) {
+    fmls <- purrr::discard(fmls, rlang::is_missing)
+  }
+
+  params <- c(rlang::list2(...), params)
+
+  utils::modifyList(
+    fmls,
+    params,
+    keep.null = keep.null
+  )
+}
+
 #' Eval and parse data
 #'
 #' @noRd
@@ -193,60 +141,13 @@ use_eval_parse <- function(data, package = NULL) {
 #' @importFrom rlang as_function
 #' @noRd
 use_fn <- function(data, fn = NULL) {
-  if (!is.null(fn)) {
-    fn <- rlang::as_function(fn)
-    data <- fn(data)
+  if (is.null(fn)) {
+   return(data)
   }
 
-  return(data)
+  fn <- rlang::as_function(fn)
+  fn(data)
 }
-
-#' Modified version of [usethis::ui_yeah]
-#'
-#' @noRd
-#' @importFrom glue glue_collapse glue
-#' @importFrom rlang is_interactive
-#' @importFrom cli cli_abort cli_alert
-#' @importFrom utils menu
-cli_yeah <- function(x,
-                     yes = c("Yes", "Definitely", "For sure", "Yup", "Yeah", "I agree", "Absolutely"),
-                     no = c("No way", "Not now", "Negative", "No", "Nope", "Absolutely not"),
-                     n_yes = 1,
-                     n_no = 2,
-                     shuffle = TRUE,
-                     .envir = parent.frame()) {
-  x <- glue::glue_collapse(x, "\n")
-  x <- glue::glue(x, .envir = .envir)
-
-  if (!rlang::is_interactive()) {
-    cli::cli_abort(
-      c(
-        "User input required, but session is not interactive.",
-        "Query: {x}"
-      )
-    )
-  }
-
-  n_yes <- min(n_yes, length(yes))
-  n_no <- min(n_no, length(no))
-  qs <- c(sample(yes, n_yes), sample(no, n_no))
-
-  if (shuffle) {
-    qs <- sample(qs)
-  }
-
-  cli::cli_alert(x)
-  out <- utils::menu(qs)
-  out != 0L && qs[[out]] %in% yes
-}
-
-#' @noRd
-#' @importFrom cli cli_alert
-cli_ask <- function(x, prompt = ">> ") {
-  cli::cli_alert(x)
-  readline(prompt = prompt)
-}
-
 
 utils::globalVariables(c(
   ".data", ":=", "actual_unit",
