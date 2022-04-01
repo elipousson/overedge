@@ -195,10 +195,11 @@ st_edge <- function(x,
 
   x_dist <- st_buffer_ext(x, dist = dist, diag_ratio = diag_ratio, unit = unit, ...)
 
-  if (dist > 0) {
-    x <- suppressWarnings(sf::st_difference(x_dist, x))
-  } else if (dist < 0) {
-    x <- suppressWarnings(sf::st_difference(x, x_dist))
+  # FIXME: What if dist or diag_ratio = 0?
+  if (dist > 0 | diag_ratio > 0) {
+    x <- st_erase(x_dist, x)
+  } else if (dist < 0 | diag_ratio < 0) {
+    x <- st_erase(x, x_dist)
   }
 
   return(x)
