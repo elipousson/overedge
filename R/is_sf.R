@@ -65,7 +65,13 @@ is_bbox <- function(x, null.ok = FALSE) {
 #' @param is_named If `TRUE`, check if sf list is named; defaults `FALSE`.
 #' @export
 is_sf_list <- function(x, is_named = FALSE, ext = FALSE, null.ok = FALSE) {
-  is_sf <- is_sf(x, ext = TRUE, null.ok = FALSE)
+  if (is.null(x) && null.ok) {
+    return(TRUE)
+  }
+
+  if (is_sf(x, ext = TRUE, null.ok = FALSE)) {
+    return(FALSE)
+  }
 
   is_sf_list <- is.list(x) && all(
     vapply(
@@ -79,10 +85,10 @@ is_sf_list <- function(x, is_named = FALSE, ext = FALSE, null.ok = FALSE) {
 
   if (is_named) {
     is_named <- !is.null(names(x)) && !("" %in% names(x))
-    is_sf_list && is_named && !is_sf
-  } else {
-    is_sf_list && !is_sf
+    return(is_sf_list && is_named)
   }
+
+  return(is_sf_list)
 }
 
 #' @name is_raster

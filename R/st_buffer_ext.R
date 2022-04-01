@@ -37,7 +37,7 @@ st_buffer_ext <- function(x,
                           dist_limits = NULL,
                           single_side = FALSE,
                           ...) {
-  if (!is_sf(x, ext = TRUE) && is_sf_list(x, ext = TRUE)) {
+  if (is_sf_list(x, ext = TRUE)) {
     x_list <-
       purrr::map(
         x,
