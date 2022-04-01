@@ -36,19 +36,21 @@ make_filename <- function(name = NULL,
   )
 
   if (cache) {
-    path <- get_data_dir(path = NULL)
-  } else if (!is.null(path)) {
-    path <- get_data_dir(path = path)
+    path <- NULL
   }
+
+  path <- get_data_dir(path = path)
 
   if (!is.null(filetype)) {
     filetype <- paste0(".", filetype)
-  } else if (is.null(filetype) && !is.null(filename)) {
+  } else if (!is.null(filename)) {
     filetype <- stringr::str_extract(filename, "(?<=\\.).+$")
-    filename <- stringr::str_remove(filename, paste0("\\.", filetype, "$"))
+    filename <- str_remove_filetype(filename, filetype)
   }
 
   if (is.null(filename)) {
+    filename <- name
+
     if (!is.null(label)) {
       filename <-
         str_prefix(
@@ -56,8 +58,6 @@ make_filename <- function(name = NULL,
           string = name,
           clean = TRUE
         )
-    } else {
-      filename <- name
     }
   }
 
@@ -77,6 +77,24 @@ make_filename <- function(name = NULL,
   }
 
   return(filename)
+}
+
+
+#' @noRd
+str_remove_filetype <- function(x = NULL, filetype = NULL) {
+  if (!is.null(filetype)) {
+    sub(
+      pattern = paste0("\\.", filetype, "$"),
+      replacement = "",
+      x = x
+    )
+  } else {
+    sub(
+      pattern = paste0("\\.[:alpha:]+$"),
+      replacement = "",
+      x = x
+    )
+  }
 }
 
 #' Add prefix and postfix to string
@@ -106,7 +124,7 @@ str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", 
       prefix <- gsub("^x", "", janitor::make_clean_names(Sys.Date(), sep_out = "-"))
     } else if ("time" %in% prefix) {
       prefix <- gsub("^x", "", janitor::make_clean_names(Sys.time(), sep_out = "-"))
-    } else if (!is.null(prefix) && clean) {
+    } else if (clean) {
       prefix <- janitor::make_clean_names(prefix)
     }
   }
