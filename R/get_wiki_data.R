@@ -22,8 +22,9 @@ get_wiki_data <- function(location,
                           dist = 100,
                           diag_ratio = NULL,
                           asp = NULL,
+                          unit = "meter",
                           radius = FALSE,
-                          primary = TRUE,
+                          primary = NULL,
                           details = c("type", "name", "region"),
                           lang = "en",
                           limit = 50,
@@ -38,50 +39,34 @@ get_wiki_data <- function(location,
       list = "geosearch"
     )
 
-  details <- match.arg(details, c("type", "name", "country", "region"), several.ok = TRUE)
+  stopifnot(
+    !is.null(location)
+  )
+
+  details <-
+    match.arg(details, c("type", "name", "country", "region"), several.ok = TRUE)
 
   if (limit > 500) {
     limit <- 500
   }
 
-  bbox <-
-    st_bbox_ext(
-      x = location,
-      dist = dist,
-      diag_ratio = diag_ratio,
-      asp = asp,
-      crs = 4326
-    )
-
   if (!radius) {
-    gsbbox <-
-      # top|left|bottom|right order
-      paste0(
-        c(
-          bbox["ymax"],
-          bbox["xmin"],
-          bbox["ymin"],
-          bbox["xmax"]
-        ),
-        collapse = "|"
-      )
-
     req <-
       httr2::req_url_query(
         req = req,
-        gsbbox = gsbbox
+        gsbbox = make_gsbbox(location, dist = dist, diag_ratio = diag_ratio, asp = asp, unit = unit)
       )
   } else {
     #  dist <- as.numeric(sf_bbox_diagdist(bbox, units = TRUE)) / 2
     req <-
       httr2::req_url_query(
         req = req,
-        gscoord = paste0(center$lat, "|", center$lon),
+        gscoord = make_gscoord(location),
         gsradius = dist
       )
   }
 
-  if (!primary) {
+  if (!is.null(primary)) {
     primary <- match.arg(primary, c("all", "primary", "secondary"))
 
     req <-
@@ -104,9 +89,50 @@ get_wiki_data <- function(location,
       simplifyVector = TRUE
     )
 
-  if (geometry) {
-    return(df_to_sf(resp$query$geosearch))
-  } else {
-    return(resp$query$geosearch)
+  if (rlang::has_name(resp, "error")) {
+    cli::cli_abort(resp$error$info)
   }
+
+  if (geometry) {
+
+    #return(resp$query$geosearch)
+   return(df_to_sf(resp$query$geosearch))
+  }
+
+  return(resp$query$geosearch)
+}
+
+#' Make geospatial coordinate query
+#'
+#' @noRd
+make_gscoord <- function(location, crs = 4326) {
+  # center <- st_center(location, ext = FALSE)
+  center <- st_coords(location, crs = crs)
+  paste0(center$lat, "|", center$lon)
+}
+
+#' Make geospatial bbox query
+#'
+#' @noRd
+make_gsbbox <- function(location, dist = NULL, diag_ratio = NULL, asp = NULL, unit = "meter", crs = 4326) {
+  bbox <-
+    st_bbox_ext(
+      x = location,
+      dist = dist,
+      diag_ratio = diag_ratio,
+      asp = asp,
+      unit = unit,
+      crs = crs
+    )
+
+  # top|left|bottom|right order
+  paste0(
+    c(
+      bbox["ymax"],
+      bbox["xmin"],
+      bbox["ymin"],
+      bbox["xmax"]
+    ),
+    collapse = "|"
+  )
 }
