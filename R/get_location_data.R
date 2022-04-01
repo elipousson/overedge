@@ -122,23 +122,21 @@ get_location_data <- function(location = NULL,
   # Check if data is not an  sf object
   # FIXME: The read_sf_ext function I started handles this type of checking and switching
   if (!is_sf(data)) {
+    data <-
+      # dplyr::case_when(
+        # Check if data is a url
 
-    # Check if data is a url
-    if (is_url(data)) {
-      url <- data
-      # Check if data is a path to an existing file
-    } else if (checkmate::test_file_exists(x = data)) {
-      path <- data
-    }
+      if (is_url(data)) {
+        data <-
+          read_sf_url(url = data, bbox = bbox, ...)
+      } else if (fs::file_exists(data)) {
+        data <- read_sf_path(path = data, bbox = bbox, ...)
+      } else if (!is.null(package)) {
+        data <- read_sf_pkg(data = data, bbox = bbox, package = package, filetype = filetype, ...)
 
-    # Call the appropriate read_sf function
-    if (!is.null(path)) {
-      data <- read_sf_path(path = path, bbox = bbox, ...)
-    } else if (!is.null(url)) {
-      data <- read_sf_url(url = url, bbox = bbox, ...)
-    } else if (!is.null(package)) {
-      data <- read_sf_pkg(data = data, bbox = bbox, package = package, filetype = filetype, ...)
-    }
+      }
+        # Check if data is a path to an existing file
+      #)
   }
 
   # FIXME: Document how the filter works

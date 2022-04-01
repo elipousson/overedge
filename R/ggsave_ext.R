@@ -143,7 +143,7 @@ gtsave_ext <- function(gt_object,
 
   if (is.null(filetype) && stringr::str_detect(filename, "\\.")) {
     filetype <- stringr::str_extract(filename, "(?<=\\.).+$")
-    filename <- stringr::str_remove(filename, paste0("\\.", filetype, "$"))
+    filename <- str_remove_filetype(filename, filetype)
   }
 
   filename <-

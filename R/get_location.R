@@ -39,7 +39,6 @@
 #' @rdname get_location
 #' @export
 #' @importFrom sf st_crs st_filter st_as_sf st_union
-#' @importFrom tidygeocoder geo
 #' @importFrom knitr combine_words
 #' @importFrom usethis ui_warn
 #' @importFrom rlang list2
