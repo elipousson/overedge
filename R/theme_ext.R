@@ -341,3 +341,22 @@ make_legend_title <- function(title = NULL) {
     "align_title" = align_title
   )
 }
+
+
+#' @importFrom ggplot2 theme_set theme_update theme_replace
+#' @noRd
+theme_method <- function(x, method = NULL) {
+  method <- match.arg(method, c("set", "update", "replace"))
+
+  switch(method,
+         "set" = ggplot2::theme_set(
+           x
+         ),
+         "update" = ggplot2::theme_update(
+           x
+         ),
+         "replace" = ggplot2::theme_replace(
+           x
+         )
+  )
+}

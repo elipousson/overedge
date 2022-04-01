@@ -167,37 +167,32 @@ read_sf_gsheet <- function(ss = NULL, coords = c("lon", "lat"), ask = FALSE, ...
 #' @name read_sf_pkg
 #' @export
 #' @md
-#' @importFrom stringr str_detect
 #' @importFrom utils data
+#' @importFrom cli cli_abort
+#' @importFrom dplyr case_when
 read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
   stopifnot(
     !is.null(package) & is_pkg_installed(package)
   )
 
   # Read package data
-  pkg_files <- utils::data(package = package)$results[, "Item"]
-
-  if (data %in% pkg_files) {
+  if (data %in% ls_pkg_data(package)) {
     return(use_eval_parse(data = data, package = package))
   }
 
-  if (stringr::str_detect(data, "\\.")) {
-    filename <- data
-  } else {
-    filename <- paste0(data, ".", filetype)
-  }
+  filename <- str_add_filetype(data, filetype = filetype)
 
-  pkg_extdata_files <- list.files(system.file("extdata", package = package))
-  pkg_cache_dir <- get_data_dir(path = NULL, package = package)
-  pkg_cache_dir_files <- list.files(pkg_cache_dir)
-
-  # Get path to external package data or data from the package user cache
-  if (filename %in% pkg_extdata_files) {
+  path <-
+    dplyr::case_when(
     # If data is in extdata folder
-    path <- system.file("extdata", filename, package = package)
-  } else if (filename %in% pkg_cache_dir_files) {
+    filename %in% ls_pkg_extdata(package) ~ system.file("extdata", filename, package = package),
     # If data is in the cache directory
-    path <- file.path(pkg_cache_dir, filename)
+    filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(package = package), filename),
+    TRUE ~ NULL
+  )
+
+  if (is.null(path)) {
+    cli::cli_abort("No data with the filename {filename} could be found in the {package} data, extdata, or cache directory.")
   }
 
   # Read data from path
@@ -295,4 +290,37 @@ read_sf_any <- function(bbox = NULL, ...) {
 
     rlang::exec(rlang::expr(!!read_fn), !!!args)
   }
+}
+
+
+
+#' Join data from a Google Sheet to a simple feature object
+#'
+#' @noRd
+#' @importFrom dplyr left_join
+#' @importFrom sf st_drop_geometry
+join_sf_gsheet <- function(data, ss = NULL, sheet = 1, key = NULL, suffix = c("", "_gsheet")) {
+  if (cli_yeah("Are you ready to sync from Google Sheets back to an sf object?")) {
+
+    sheet_data <-
+      sf::st_drop_geometry(
+        read_sf_gsheet(
+          ss = ss,
+          sheet = sheet,
+          ask = TRUE
+        )
+      )
+
+    if (!is.null(key)) {
+      data <-
+        dplyr::left_join(
+          sheet_data,
+          data,
+          by = key,
+          suffix = suffix
+        )
+    }
+  }
+
+  return(data)
 }

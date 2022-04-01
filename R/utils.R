@@ -42,9 +42,18 @@ is_pkg_installed <- function(pkg, repo = NULL) {
 }
 
 #' @noRd
-#' @importFrom usethis ui_todo
-ui_ask <- function(x) {
-  readline(prompt = usethis::ui_todo(x))
+ls_pkg_data <- function(pkg, envir = .GlobalEnv) {
+  utils::data(package = pkg, envir = envir)$results[, "Item"]
+}
+
+#' @noRd
+ls_pkg_extdata <- function(pkg) {
+  list.files(system.file("extdata", package = pkg))
+}
+
+#' @noRd
+ls_pkg_cache <- function(pkg) {
+  list.files(get_data_dir(path = NULL, package = pkg))
 }
 
 #' Group data by column if present
@@ -175,25 +184,6 @@ use_fn <- function(data, fn = NULL) {
 
   return(data)
 }
-
-#' @importFrom ggplot2 theme_set theme_update theme_replace
-#' @noRd
-theme_method <- function(x, method = NULL) {
-  method <- match.arg(method, c("set", "update", "replace"))
-
-  switch(method,
-    "set" = ggplot2::theme_set(
-      x
-    ),
-    "update" = ggplot2::theme_update(
-      x
-    ),
-    "replace" = ggplot2::theme_replace(
-      x
-    )
-  )
-}
-
 
 #' Modified version of [usethis::ui_yeah]
 #'
