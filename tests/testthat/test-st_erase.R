@@ -3,7 +3,7 @@ test_that("st_erase works", {
   expect_s3_class(
     st_erase(
       nc,
-      st_transform_ext(nc[2:3,], 3857)
+      st_transform_ext(nc[2:3, ], 3857)
     ),
     "sf"
   )

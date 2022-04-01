@@ -12,6 +12,7 @@ test_that("get_location_data works", {
     "sf"
   )
 
+  # FIXME: This class is broken
   expect_s3_class(
     get_location_data(
       location = get_location(
@@ -33,7 +34,7 @@ test_that("get_location_data works", {
       location = get_location(
         type = "https://raw.githubusercontent.com/baltimoreheritage/geojson/master/baltimore-city-wards-1802.geojson",
         name = "1st Ward"
-      ) ,
+      ),
       data = "https://raw.githubusercontent.com/baltimoreheritage/geojson/master/1814-baltimore-defenders.geojson",
     ),
     "sf"
