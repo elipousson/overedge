@@ -100,6 +100,9 @@ location_filter <- function(data,
       location <- get_county_location(location)
     } else {
       # FIXME: Could this be replaced with a call to make_features
+
+      is_pkg_installed("tidygeocoder")
+
       # Geocode the address
       location <-
         tidygeocoder::geo(
