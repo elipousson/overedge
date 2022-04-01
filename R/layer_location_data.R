@@ -136,10 +136,13 @@ layer_location_data <-
     params_has_nudge <- any(c("nudge_x", "nudge_y") %in% names(params))
     params_has_direction <- "direction" %in% names(params)
 
-    params <- utils::modifyList(
-      purrr::discard(rlang::fn_fmls(geom), rlang::is_missing),
-      c(list(mapping = mapping, data = data), params)
-    )
+    params <-
+      modify_fn_fmls(
+        params = params,
+        fn = geom,
+        mapping = mapping,
+        data = data,
+        keep.null = TRUE)
 
     # FIXME: This does not seem like the best way of dealing with the default params issue
     if (params_has_nudge) {
