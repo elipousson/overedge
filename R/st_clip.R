@@ -1,89 +1,3 @@
-#' Make points
-#'
-#' Utility function for make_clip
-#'
-#' @noRd
-as_points <- function(...) {
-  params <- rlang::list2(...)
-
-  params <-
-    purrr::map(
-      params,
-      ~ sf::st_point(.x)
-    )
-
-  x <- rlang::exec(sf::st_as_sfc, params)
-
-  # See https://github.com/r-spatial/sf/issues/114
-  sf::st_cast(x, to = "POINT")
-}
-
-#' Get bounding box edges
-#'
-#' Utility function for make_clip
-#'
-#' @noRd
-get_edges <- function(x) {
-  x <- as_sf(x)
-  bbox <- as_bbox(x)
-  center <- st_center(as_sf(x), ext = TRUE)$sf
-
-  h_top <-
-    as_points(
-      c(bbox$xmin, bbox$ymax),
-      c(center$lon, bbox$ymax),
-      c(bbox$xmax, bbox$ymax)
-    )
-
-  h_middle <-
-    as_points(
-      c(bbox$xmin, center$lat),
-      c(center$lon, center$lat),
-      c(bbox$xmax, center$lat)
-    )
-
-  h_bottom <-
-    as_points(
-      c(bbox$xmin, bbox$ymin),
-      c(center$lon, bbox$ymin),
-      c(bbox$xmax, bbox$ymin)
-    )
-
-  v_left <-
-    as_points(
-      c(bbox$xmin, bbox$ymin),
-      c(bbox$xmin, center$lat),
-      c(bbox$xmin, bbox$ymax)
-    )
-
-  v_middle <-
-    as_points(
-      c(center$lon, bbox$ymin),
-      c(center$lon, center$lat),
-      c(center$lon, bbox$ymax)
-    )
-
-  v_right <-
-    as_points(
-      c(bbox$xmax, bbox$ymin),
-      c(bbox$xmax, center$lat),
-      c(bbox$xmax, bbox$ymax)
-    )
-
-  list(
-    "h" = list(
-      "top" = h_top,
-      "middle" = h_middle,
-      "bottom" = h_bottom
-    ),
-    "v" = list(
-      "left" = v_left,
-      "middle" = v_middle,
-      "right" = v_right
-    )
-  )
-}
-
 #' Clip the side or corner of a simple feature or bounding box object
 #'
 #' Clip based on the corner of the object bounding box.
@@ -111,29 +25,15 @@ st_clip <- function(x,
                     keep = NULL,
                     flip = FALSE,
                     dist = NULL,
-                    diag_ratio = NULL) {
+                    diag_ratio = NULL,
+                    unit = "meter") {
 
   # If bbox, convert to sf
   x <- as_sf(x)
 
   if (!is.null(dist) || !is.null(diag_ratio)) {
-    outside_edge <-
-      (!is.null(dist) && dist > 0) || (!is.null(diag_ratio) && diag_ratio > 0)
-    inside_edge <-
-      (!is.null(dist) && dist < 0) || (!is.null(diag_ratio) && diag_ratio < 0)
-
-    x_buffer <-
-      st_buffer_ext(
-        x = x,
-        dist = dist,
-        diag_ratio = diag_ratio
-      )
-
-    if (outside_edge) {
-      x <- st_erase(x = x_buffer, y = x)
-    } else if (inside_edge) {
-      x <- st_erase(x = x, y = x_buffer)
-    }
+    x <-
+      st_edge(x = x, dist = dist, diag_ratio = diag_ratio, unit = unit)
   }
 
   if (!is.null(keep)) {
@@ -229,4 +129,90 @@ make_clip <- function(x, clip, crs, style = NULL) {
     )
 
   return(clip)
+}
+
+#' Make points
+#'
+#' Utility function for make_clip
+#'
+#' @noRd
+as_points <- function(...) {
+  params <- rlang::list2(...)
+
+  params <-
+    purrr::map(
+      params,
+      ~ sf::st_point(.x)
+    )
+
+  x <- rlang::exec(sf::st_as_sfc, params)
+
+  # See https://github.com/r-spatial/sf/issues/114
+  sf::st_cast(x, to = "POINT")
+}
+
+#' Get bounding box edges
+#'
+#' Utility function for make_clip
+#'
+#' @noRd
+get_edges <- function(x) {
+  x <- as_sf(x)
+  bbox <- as_bbox(x)
+  center <- st_center(as_sf(x), ext = TRUE)$sf
+
+  h_top <-
+    as_points(
+      c(bbox$xmin, bbox$ymax),
+      c(center$lon, bbox$ymax),
+      c(bbox$xmax, bbox$ymax)
+    )
+
+  h_middle <-
+    as_points(
+      c(bbox$xmin, center$lat),
+      c(center$lon, center$lat),
+      c(bbox$xmax, center$lat)
+    )
+
+  h_bottom <-
+    as_points(
+      c(bbox$xmin, bbox$ymin),
+      c(center$lon, bbox$ymin),
+      c(bbox$xmax, bbox$ymin)
+    )
+
+  v_left <-
+    as_points(
+      c(bbox$xmin, bbox$ymin),
+      c(bbox$xmin, center$lat),
+      c(bbox$xmin, bbox$ymax)
+    )
+
+  v_middle <-
+    as_points(
+      c(center$lon, bbox$ymin),
+      c(center$lon, center$lat),
+      c(center$lon, bbox$ymax)
+    )
+
+  v_right <-
+    as_points(
+      c(bbox$xmax, bbox$ymin),
+      c(bbox$xmax, center$lat),
+      c(bbox$xmax, bbox$ymax)
+    )
+
+  list(
+    "h" = list(
+      "top" = h_top,
+      "middle" = h_middle,
+      "bottom" = h_bottom
+    ),
+    "v" = list(
+      "left" = v_left,
+      "middle" = v_middle,
+      "right" = v_right
+    )
+  )
 }
