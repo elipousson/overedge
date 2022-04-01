@@ -184,12 +184,12 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
 
   path <-
     dplyr::case_when(
-    # If data is in extdata folder
-    filename %in% ls_pkg_extdata(package) ~ system.file("extdata", filename, package = package),
-    # If data is in the cache directory
-    filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(package = package), filename),
-    TRUE ~ NULL
-  )
+      # If data is in extdata folder
+      filename %in% ls_pkg_extdata(package) ~ system.file("extdata", filename, package = package),
+      # If data is in the cache directory
+      filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(package = package), filename),
+      TRUE ~ NULL
+    )
 
   if (is.null(path)) {
     cli::cli_abort("No data with the filename {filename} could be found in the {package} data, extdata, or cache directory.")
@@ -301,7 +301,6 @@ read_sf_any <- function(bbox = NULL, ...) {
 #' @importFrom sf st_drop_geometry
 join_sf_gsheet <- function(data, ss = NULL, sheet = 1, key = NULL, suffix = c("", "_gsheet")) {
   if (cli_yeah("Are you ready to sync from Google Sheets back to an sf object?")) {
-
     sheet_data <-
       sf::st_drop_geometry(
         read_sf_gsheet(

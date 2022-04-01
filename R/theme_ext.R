@@ -349,14 +349,14 @@ theme_method <- function(x, method = NULL) {
   method <- match.arg(method, c("set", "update", "replace"))
 
   switch(method,
-         "set" = ggplot2::theme_set(
-           x
-         ),
-         "update" = ggplot2::theme_update(
-           x
-         ),
-         "replace" = ggplot2::theme_replace(
-           x
-         )
+    "set" = ggplot2::theme_set(
+      x
+    ),
+    "update" = ggplot2::theme_update(
+      x
+    ),
+    "replace" = ggplot2::theme_replace(
+      x
+    )
   )
 }
