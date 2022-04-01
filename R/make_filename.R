@@ -81,6 +81,17 @@ make_filename <- function(name = NULL,
 
 
 #' @noRd
+#' @importFrom stringr str_detect
+str_add_filetype <- function(x, filetype = NULL) {
+  if (stringr::str_detect(x, "\\.")) {
+    return(x)
+  }
+
+  paste0(x, ".", filetype)
+}
+
+
+#' @noRd
 str_remove_filetype <- function(x = NULL, filetype = NULL) {
   if (!is.null(filetype)) {
     sub(
