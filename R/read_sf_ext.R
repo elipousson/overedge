@@ -55,10 +55,10 @@ read_sf_ext <- function(..., bbox = NULL) {
   read_sf_fn <-
     dplyr::case_when(
       !is.null(params$package) ~ "pkg",
-      !is.null(params$ss) ~ "gsheet",
+      !is.null(params$path) && is.null(params$filename) ~ "path",
       !is.null(params$url) ~ "url",
-      !is.null(params$filename) ~ "download",
-      !is.null(params$path) ~ "path"
+      !is.null(params$ss) ~ "gsheet",
+      !is.null(params$filename) ~ "download"
     )
 
   read_sf_fn <-
@@ -190,11 +190,10 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
         where = params$where
       )
   } else if (is_gsheet(url)) {
-    data <-
-      read_sf_gsheet(ss = url, coords = coords, sheet = params$sheet)
-  } else {
+    return(read_sf_gsheet(ss = url, coords = coords, sheet = params$sheet))
+  }
 
-    # FIXME: This is an awkward way to reset back to defaults
+  # FIXME: This is an awkward way to reset back to defaults
     if (is.null(params$query)) {
       params$query <- NA
     }
@@ -211,9 +210,12 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
       wkt_filter = params$wkt_filter
     )
 
+    if (!is.null(bbox)) {
+      data <- bbox_filter(data, bbox = bbox)
+    }
+
     # FIXME: This should be documented and maybe should be the default but optional
     data <- sf::st_zm(data)
-  }
 
   return(data)
 }
@@ -222,7 +224,7 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 #' @name read_sf_gsheet
 #' @rdname read_sf_ext
 #' @export
-read_sf_gsheet <- function(ss, coords = c("lon", "lat"), ask = FALSE, ...) {
+read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
   is_pkg_installed("googlesheets4")
 
   if (ask && is.missing(ss)) {
@@ -231,8 +233,14 @@ read_sf_gsheet <- function(ss, coords = c("lon", "lat"), ask = FALSE, ...) {
   }
 
   data <- googlesheets4::read_sheet(ss = ss, ...)
+
   coords <- check_coords(x = data, coords = coords)
+
   data <- df_to_sf(data, coords = coords)
+
+  if (!is.null(bbox)) {
+    data <- bbox_filter(data, bbox = bbox)
+  }
 
   return(data)
 }
@@ -250,8 +258,8 @@ read_sf_gsheet <- function(ss, coords = c("lon", "lat"), ask = FALSE, ...) {
 #' @importFrom utils download.file unzip
 read_sf_download <-
   function(url,
+           filename,
            bbox = NULL,
-           filename = NULL,
            path = NULL,
            filetype = "geojson",
            prefix = "date",

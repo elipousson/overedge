@@ -7,19 +7,17 @@ bbox_filter <- function(data, bbox = NULL, join = NULL, crop = TRUE) {
   bbox <- st_transform_ext(x = bbox, crs = data)
 
   if (crop) {
-    data <- suppressWarnings(sf::st_crop(data, bbox))
-  } else {
-    # If no cropping, filter with bbox
-    bbox_sf <- sf_bbox_to_sf(bbox)
-
-    if (!is.null(join)) {
-      data <- sf::st_filter(x = data, y = bbox_sf, join = join)
-    } else {
-      data <- sf::st_filter(x = data, y = bbox_sf)
-    }
+    return(suppressWarnings(sf::st_crop(data, bbox)))
   }
 
-  return(data)
+  # If no cropping, filter with bbox
+  bbox_sf <- sf_bbox_to_sf(bbox)
+
+  if (!is.null(join)) {
+    return(sf::st_filter(x = data, y = bbox_sf, join = join))
+  }
+
+  return(sf::st_filter(x = data, y = bbox_sf))
 }
 
 #' Filter and/or trim data using an simple feature location
@@ -40,14 +38,14 @@ sf_filter <- function(data, location, join = NULL, trim = FALSE) {
   }
 
   if (trim) {
-    data <- st_trim(x = data, y = location)
-  } else {
-    if (!is.null(join)) {
-      data <- sf::st_filter(x = data, y = location, join = join)
-    } else {
-      data <- sf::st_filter(x = data, y = location)
-    }
+    return(st_trim(x = data, y = location))
   }
+
+  if (!is.null(join)) {
+    return(sf::st_filter(x = data, y = location, join = join))
+  }
+
+  return(sf::st_filter(x = data, y = location))
 }
 
 #' Filter, crop, or trim data to a location

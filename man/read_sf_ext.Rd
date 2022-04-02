@@ -17,12 +17,12 @@ read_sf_path(path, bbox = NULL, ...)
 
 read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
-read_sf_gsheet(ss, coords = c("lon", "lat"), ask = FALSE, ...)
+read_sf_gsheet(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...)
 
 read_sf_download(
   url,
+  filename,
   bbox = NULL,
-  filename = NULL,
   path = NULL,
   filetype = "geojson",
   prefix = "date",
