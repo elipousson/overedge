@@ -109,11 +109,11 @@ modify_mapping <- function(mapping = NULL, data = NULL, ...) {
 #' Modify function parameters
 #'
 #' @noRd
-modify_fn_fmls <- function(params, fn, missing = FALSE, keep.null = FALSE, ...) {
+modify_fn_fmls <- function(params, fn, keep_missing = FALSE, keep.null = FALSE, ...) {
 
   fmls <- rlang::fn_fmls(fn)
 
-  if (!missing) {
+  if (!keep_missing) {
     fmls <- purrr::discard(fmls, rlang::is_missing)
   }
 
