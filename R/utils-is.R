@@ -29,7 +29,6 @@ is_gsheet <- function(x) {
 #'
 #' @noRd
 is_df_empty <- function(x, message = "This simple feature object has no rows.", quiet = FALSE) {
-
   is_empty <- (!is.null(x) && (nrow(x) == 0))
 
   if (is_empty && !quiet) {

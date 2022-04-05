@@ -78,10 +78,9 @@ layer_location_data <-
 
     data <- as_sf(data)
 
-    text_geoms <- c("text", "label", "textsf", "labelsf", "text_repel", "label_repel")
     ggrepel_geoms <- c("text_repel", "label_repel")
+    text_geoms <- c("text", "label", "textsf", "labelsf", ggrepel_geoms)
     birdseyeview_geoms <- c("mark", "mapbox", "location", "context", "markers", "numbered")
-    is_repel_geom <- FALSE
 
     # Match geoms
     geom <- match.arg(
@@ -89,23 +88,13 @@ layer_location_data <-
       c("sf", "icon", text_geoms, birdseyeview_geoms)
     )
 
-    # Check if packages are available for text/label geoms
-    if (geom %in% c("textsf", "labelsf")) {
-      is_pkg_installed("geomtextpath")
-    }
-
-    # Check if packages are available for text/label geoms
-    if (geom %in% birdseyeview_geoms) {
-      is_pkg_installed(pkg = "birdseyeview", repo = "elipousson/birdseyeview")
-    }
+    is_geom_pkg_installed(geom)
 
     # Assign aesthetics for text/label geoms
     if (geom %in% text_geoms) {
       mapping <- modify_mapping(mapping = mapping, label = label_col)
 
       if (geom %in% ggrepel_geoms) {
-        is_repel_geom <- TRUE
-        is_pkg_installed("ggrepel")
         mapping <- modify_mapping(mapping = mapping, data = data)
 
         params <- c(
@@ -133,8 +122,7 @@ layer_location_data <-
         "numbered" = birdseyeview::layer_number_markers
       )
 
-    params_has_nudge <- any(c("nudge_x", "nudge_y") %in% names(params))
-    params_has_direction <- "direction" %in% names(params)
+    init_params <- params
 
     params <-
       modify_fn_fmls(
@@ -142,22 +130,23 @@ layer_location_data <-
         fn = geom,
         mapping = mapping,
         data = data,
-        keep.null = TRUE)
+        keep.null = TRUE
+      )
 
     # FIXME: This does not seem like the best way of dealing with the default params issue
-    if (params_has_nudge) {
+    if (any(rlang::has_name(init_params, c("nudge_x", "nudge_y")))) {
       params$position <- NULL
     } else {
       params$nudge_x <- NULL
       params$nudge_y <- NULL
     }
 
-    if (!params_has_direction && is_repel_geom) {
+    if (!rlang::has_name(init_params, "direction") && (geom %in% ggrepel_geoms)) {
       params$direction <- "both"
     }
 
     layer <-
-      rlang::exec(geom, !!!params) # mapping = mapping, data = data
+      rlang::exec(geom, !!!params)
 
     return(layer)
   }

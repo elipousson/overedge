@@ -110,7 +110,6 @@ modify_mapping <- function(mapping = NULL, data = NULL, ...) {
 #'
 #' @noRd
 modify_fn_fmls <- function(params, fn, keep_missing = FALSE, keep.null = FALSE, ...) {
-
   fmls <- rlang::fn_fmls(fn)
 
   if (!keep_missing) {
@@ -142,7 +141,7 @@ use_eval_parse <- function(data, package = NULL) {
 #' @noRd
 use_fn <- function(data, fn = NULL) {
   if (is.null(fn)) {
-   return(data)
+    return(data)
   }
 
   fn <- rlang::as_function(fn)

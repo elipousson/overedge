@@ -72,7 +72,6 @@ st_transform_ext <- function(x = NULL,
 #' @importFrom glue glue
 #' @importFrom sf st_transform
 st_omerc <- function(x, rotate = 0) {
-
   coords <- st_coords(x, keep_all = FALSE, crs = 4326)
 
   proj <- "omerc"
