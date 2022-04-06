@@ -56,12 +56,15 @@ Suggests:
     ggrepel,
     ggsvg,
     lwgeom,
+    mapboxapi,
     osmdata,
     RSocrata,
     mapview,
     leaflet,
     leafpop,
     naniar,
-    patchwork
+    patchwork,
+    scales,
+    paletteer
 Config/testthat/edition: 3
 VignetteBuilder: knitr

@@ -60,14 +60,15 @@ scale_group_data <-
 #' @rdname scale_group_data
 #' @export
 #' @importFrom dplyr n_groups filter mutate bind_cols group_keys
-#' @importFrom scales viridis_pal
-#' @importFrom paletteer paletteer_d
 #' @importFrom tibble deframe
 group_data_pal <- function(data,
                            palette = NULL,
                            col = NULL,
                            n = NULL,
                            direction = 1) {
+  is_pkg_installed("scales")
+  is_pkg_installed("paletteer")
+
   data <-
     group_by_col(
       data = data,

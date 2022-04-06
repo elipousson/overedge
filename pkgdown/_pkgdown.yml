@@ -49,6 +49,7 @@ reference:
   - '`is_gg`'
   - '`theme_ext`'
   - '`labs_ext`'
+  - '`scale_group_data`'
   - '`ggsave_ext`'
   - '`make_filename`'
   - '`get_data_dir`'

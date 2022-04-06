@@ -2,9 +2,13 @@
 % Please edit documentation in R/st_transform_ext.R
 \name{st_transform_ext}
 \alias{st_transform_ext}
+\alias{st_transform_omerc}
+\alias{st_omerc}
 \title{Transform or convert coordinates of a simple feature or bounding box object}
 \usage{
-st_transform_ext(x = NULL, crs = NULL, class = NULL)
+st_transform_ext(x = NULL, crs = NULL, class = NULL, rotate = 0)
+
+st_omerc(x, rotate = 0)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object, a list of sf objects.}
@@ -16,6 +20,10 @@ is used to provide crs.}
 \item{class}{Class of object to return (\code{sf} or \code{bbox}). If x is an sf list,
 the returned object remains a list but may be converted to \code{bbox} if class
 = "sf".}
+
+\item{rotate}{If rotate is greater or less than 0, \link{st_transform_ext} calls
+\link{st_omerc} and returns an object with the oblique mercator projection
+passing the value of rotate to the gamma parameter of the projection.}
 }
 \value{
 An \code{sf}, \code{sfc}, or \code{bbox} object transformed to a new coordinate

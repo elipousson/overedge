@@ -14,12 +14,11 @@
 #' @inheritParams layer_neatline
 #' @param ... Additional parameter passed to [mapboxapi::layer_static_mapbox]
 #' @seealso
-#'  \code{\link[snapbox]{reexports}},\code{\link[snapbox]{layer_mapbox}}
+#' \code{\link[mapboxapi]{layer_static_mapbox}}
 #'  \code{\link[overedge]{st_transform_ext}},\code{\link[overedge]{as_sf}},\code{\link[overedge]{layer_neatline}}
 #' @rdname layer_mapbox
 #' @md
 #' @export
-#' @importFrom snapbox mapbox_gallery_moonlight
 #' @importFrom stringr str_extract
 #' @importFrom mapboxapi layer_static_mapbox
 #' @importFrom ggplot2 ggplot
