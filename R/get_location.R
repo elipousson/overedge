@@ -101,8 +101,7 @@ get_location <- function(type,
     is_df_empty(
       x = location,
       message = "The name/id did not match any features of the type provided."
-      )
-
+    )
   } else {
     location <- location_filter(data = type, location = location, trim = FALSE, crop = FALSE)
   }
