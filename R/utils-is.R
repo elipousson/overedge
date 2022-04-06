@@ -39,3 +39,25 @@ is_df_empty <- function(x, message = "This simple feature object has no rows.", 
 
   return(is_empty)
 }
+
+
+#' Is the df object a paper?
+#'
+#' @noRd
+is_df_paper <- function(x, ext = FALSE, quiet = FALSE) {
+
+  names <- c("width", "height", "orientation", "units")
+
+  if (ext) {
+    names <- c(names, "asp", "cols", "rows")
+  }
+
+  is_valid_paper <-
+    rlang::has_name(x, names)
+
+  if (!all(is_valid_paper) && !quiet) {
+    return(cli::cli_abort("The data frame provided to paper provided does not appear to the required columns."))
+  }
+
+  return(all(is_valid_paper))
+}
