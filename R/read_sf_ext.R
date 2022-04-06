@@ -122,7 +122,6 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
 #' @name read_sf_path
 #' @export
 #' @importFrom sf read_sf
-#' @importFrom checkmate check_file_exists
 read_sf_path <- function(path, bbox = NULL, ...) {
   stopifnot(
     fs::file_exists(path)

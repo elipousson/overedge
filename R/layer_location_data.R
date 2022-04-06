@@ -90,11 +90,13 @@ layer_location_data <-
 
     is_geom_pkg_installed(geom)
 
+    is_ggrepel_geom <- geom %in% ggrepel_geoms
+
     # Assign aesthetics for text/label geoms
     if (geom %in% text_geoms) {
       mapping <- modify_mapping(mapping = mapping, label = label_col)
 
-      if (geom %in% ggrepel_geoms) {
+      if (is_ggrepel_geom) {
         mapping <- modify_mapping(mapping = mapping, data = data)
 
         params <- c(
@@ -141,7 +143,7 @@ layer_location_data <-
       params$nudge_y <- NULL
     }
 
-    if (!rlang::has_name(init_params, "direction") && (geom %in% ggrepel_geoms)) {
+    if (!rlang::has_name(init_params, c("direction")) && is_ggrepel_geom) {
       params$direction <- "both"
     }
 

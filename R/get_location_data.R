@@ -45,7 +45,6 @@
 #' @rdname get_location_data
 #' @export
 #' @importFrom usethis ui_yeah ui_warn
-#' @importFrom checkmate test_class test_file_exists
 #' @importFrom sf st_crs st_crop st_transform st_intersection st_filter
 #' @importFrom rlang as_function
 get_location_data <- function(location = NULL,

@@ -16,7 +16,6 @@
 #' @family read_write
 #' @example examples/read_sf_exif.R
 #' @export
-#' @importFrom checkmate check_directory_exists
 #' @importFrom usethis ui_warn ui_stop
 #' @importFrom fs dir_ls
 #' @importFrom stringr str_extract
@@ -31,7 +30,10 @@ read_sf_exif <- function(path = NULL,
                          tags = NULL,
                          ...) {
   is_pkg_installed("exiftoolr")
-  checkmate::check_directory_exists(path)
+
+  if (!dir.exists(path)) {
+    cli::cli_abort("A valid path is required and the path provided does not exist.")
+  }
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
   # filetype <- match.arg(filetype, c("jpg", "jpeg", "png", "tiff", "pdf"))
