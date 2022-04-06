@@ -69,14 +69,6 @@ modify_mapping <- function(mapping = NULL, data = NULL, ...) {
         )
     }
 
-    if (("size" %in% names(params)) && !is.null(params$size)) {
-      mapping <-
-        utils::modifyList(
-          ggplot2::aes(size = .data[[params$size]]),
-          mapping
-        )
-    }
-
     if (("color" %in% names(params)) && !is.null(params$color)) {
       mapping <-
         utils::modifyList(
@@ -85,13 +77,6 @@ modify_mapping <- function(mapping = NULL, data = NULL, ...) {
         )
     }
 
-    if (("linetype" %in% names(params)) && !is.null(params$linetype)) {
-      mapping <-
-        utils::modifyList(
-          ggplot2::aes(linetype = .data[[params$linetype]]),
-          mapping
-        )
-    }
   }
 
   if (!is.null(data)) {
