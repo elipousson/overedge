@@ -29,8 +29,7 @@ Imports:
     usethis,
     utils,
     cli,
-    tibble,
-    mapboxapi
+    tibble
 Remotes:
     koki25ando/FlickrAPI,
     yonghah/esri2sf,

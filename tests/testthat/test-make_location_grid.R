@@ -19,5 +19,4 @@ test_that("make_location_grid works", {
     make_location_grid(nc, n = 10, square = TRUE),
     "sf"
   )
-
 })

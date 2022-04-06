@@ -66,7 +66,10 @@ get_esri_data <- function(location = NULL,
       # Get FeatureServer with geometry
       data <- esri2sf::esri2sf(
         url = url,
-        where = where, bbox = bbox, crs = crs, progress = TRUE,
+        where = where,
+        bbox = bbox,
+        crs = crs,
+        progress = TRUE,
         ...
       )
     }

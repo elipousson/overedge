@@ -101,7 +101,7 @@ get_anc <- function(name) {
 
   get_location(
     type = url,
-    name = toupper(name),
+    name = name,
     name_col = "name"
   )
 }

@@ -76,7 +76,6 @@ modify_mapping <- function(mapping = NULL, data = NULL, ...) {
           mapping
         )
     }
-
   }
 
   if (!is.null(data)) {
