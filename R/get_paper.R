@@ -60,75 +60,17 @@ get_paper <- function(paper = "letter",
   }
 
   if (is.data.frame(paper)) {
+    is_df_paper(paper, ext = FALSE)
+
     stopifnot(
-      all(c("width", "height", "orientation", "units") %in% names(paper)),
       nrow(paper) >= 1
     )
   } else if (is.character(paper)) {
-    paper <-
-      dplyr::filter(
-        overedge::paper_sizes,
-        tolower(.data$name) %in% tolower(paper)
-      )
+    paper <- get_paper_name(paper)
+  } else if (!is.null(standard)) {
+    paper <- get_paper_standard(standard = standard, series = series, size = size)
   } else {
-    has_width <- !is.null(width)
-    has_height <- !is.null(height)
-    has_standard <- !is.null(standard)
-
-    if (has_standard) {
-      paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
-      paper <- dplyr::filter(
-        overedge::paper_sizes,
-        .data$standard %in% paper_standard
-      )
-
-      if (!is.null(series)) {
-        paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"), several.ok = TRUE)
-
-        paper <- dplyr::filter(
-          paper,
-          .data$series %in% paper_series
-        )
-
-        if (!is.null(size)) {
-          paper_size <- size
-
-          paper <- dplyr::filter(
-            paper,
-            .data$size %in% paper_size
-          )
-        }
-      }
-    } else if (has_width | has_height) {
-      units <- match.arg(units, c("in", "mm", "px"))
-      paper_units <- units
-
-      if (has_width && has_height) {
-        paper_width <- width
-        paper_height <- height
-
-        paper <- dplyr::filter(
-          overedge::paper_sizes,
-          .data$width %in% paper_width,
-          .data$height %in% paper_height,
-          .data$units %in% paper_units
-        )
-      } else if (has_width) {
-        paper_width <- width
-        paper <- dplyr::filter(
-          overedge::paper_sizes,
-          .data$width %in% paper_width,
-          .data$units %in% paper_units
-        )
-      } else if (has_height) {
-        paper_height <- height
-        paper <- dplyr::filter(
-          overedge::paper_sizes,
-          .data$height %in% paper_height,
-          .data$units %in% paper_units
-        )
-      }
-    }
+    paper <- get_paper_dims(width = width, height = height)
   }
 
   paper_orientation <- unique(paper$orientation)
@@ -181,6 +123,89 @@ get_paper <- function(paper = "letter",
   return(paper)
 }
 
+#' Get paper using name
+#'
+#' @noRd
+#' @importFrom dplyr filter
+get_paper_name <- function(paper) {
+  paper <-
+    dplyr::filter(
+      overedge::paper_sizes,
+      tolower(.data$name) %in% tolower(paper)
+    )
+}
+
+#' Get paper using standard and optional series or size
+#'
+#' @noRd
+#' @importFrom dplyr filter
+get_paper_standard <- function(standard, series = NULL, size = NULL) {
+  paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
+  paper <- dplyr::filter(
+    overedge::paper_sizes,
+    .data$standard %in% paper_standard
+  )
+
+  if (!is.null(series)) {
+    paper_series <- match.arg(series, c("A", "B", "C", "Engineering", "Architecture", "EDDM"), several.ok = TRUE)
+
+    paper <- dplyr::filter(
+      paper,
+      .data$series %in% paper_series
+    )
+  }
+
+
+  if (!is.null(size)) {
+    paper_size <- size
+
+    paper <- dplyr::filter(
+      paper,
+      .data$size %in% paper_size
+    )
+  }
+
+  return(paper)
+}
+
+#' Get paper using width, height, or both
+#'
+#' @noRd
+#' @importFrom dplyr filter
+get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
+  units <- match.arg(units, c("in", "mm", "px"))
+  paper_units <- units
+
+  if (!is.null(width) && !is.null(height)) {
+    paper_width <- width
+    paper_height <- height
+
+    paper <- dplyr::filter(
+      overedge::paper_sizes,
+      .data$width %in% paper_width,
+      .data$height %in% paper_height,
+      .data$units %in% paper_units
+    )
+  } else if (!is.null(width)) {
+    paper_width <- width
+
+    paper <- dplyr::filter(
+      overedge::paper_sizes,
+      .data$width %in% paper_width,
+      .data$units %in% paper_units
+    )
+  } else if (!is.null(height)) {
+    paper_height <- height
+
+    paper <- dplyr::filter(
+      overedge::paper_sizes,
+      .data$height %in% paper_height,
+      .data$units %in% paper_units
+    )
+  }
+  return(paper)
+}
+
 #' Get margins for a ggplot2 plot or map based on style or distance
 #'
 #' This function works in combination with the [get_paper()] function to make it
@@ -225,7 +250,7 @@ get_margin <- function(margin = NULL,
 
   unit <- match.arg(unit, c("in", "mm", "px", "cm", "npc", "picas", "pc", "pt", "lines", "char", "native"))
 
-  paper_is_df <- FALSE
+  paper_is_df <- !is.null(paper) && is.data.frame(paper)
 
   if (!is.null(paper) && is.character(paper)) {
     paper <- get_paper(paper = paper, orientation = orientation)
@@ -233,12 +258,8 @@ get_margin <- function(margin = NULL,
     if (!is.null(plot_width)) {
       dist <- (paper$width - plot_width) / 2
     }
-  } else if (is.data.frame(paper)) {
-    paper_is_df <- TRUE
-
-    if (!any(c("width", "height", "orientation", "asp", "cols", "rows") %in% names(paper))) {
-      cli::cli_abort("The dataframe provided to paper provided does not appear to include the required columns.")
-    }
+  } else if (paper_is_df) {
+    is_df_paper(paper, ext = TRUE)
 
     # FIXME: get_paper only passes to get_margin if margin is a character value but the value of margin does not matter to set the dist if plot_width is provided.
     if (!is.null(plot_width) && (nrow(paper) == 1)) {
@@ -248,51 +269,16 @@ get_margin <- function(margin = NULL,
 
   if (is.null(dist)) {
     if (is.character(margin) && (margin != "auto")) {
-      if (unit == "in") {
-        margin <- switch(margin,
-          "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = unit),
-          "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = unit),
-          "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = unit),
-          "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = unit),
-          "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
-        )
-      } else if (unit == "mm") {
-        margin <- switch(margin,
-          "extrawide" = ggplot2::margin(t = 80, r = 80, b = 80, l = 80, unit = unit),
-          "wide" = ggplot2::margin(t = 60, r = 60, b = 60, l = 60, unit = unit),
-          "standard" = ggplot2::margin(t = 40, r = 40, b = 40, l = 40, unit = unit),
-          "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
-          "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
-        )
-      } else if (unit == "px" && !is.null(paper)) {
-        px_to_npc_margins <- function(px) {
-          list(
-            "t" = 1 - (px / paper$height),
-            "r" = 1 - (px / paper$width),
-            "b" = (px / paper$height),
-            "l" = (px / paper$width)
-          )
-        }
-
-        margin <- switch(margin,
-          "extrawide" = ggplot2::margin(px_to_npc_margins(120), unit = "npc"), # 1080 / 6
-          "wide" = ggplot2::margin(px_to_npc_margins(80), unit = "npc"), # 1080 / 8
-          "standard" = ggplot2::margin(px_to_npc_margins(40), unit = "npc"), # 1080 / 12
-          "narrow" = ggplot2::margin(px_to_npc_margins(20), unit = "npc"),
-          "none" = ggplot2::margin(px_to_npc_margins(0), unit = "npc")
-        )
-      }
+      margin <-
+        get_margin_type(paper = paper, type = margin, unit = unit)
     } else if (margin == "auto") {
       # TODO: implement margin settings that respond to font family and size and/or paper
       # e.g. LaTeX default is 1.5 in margin w/ 12pt text, 1.75 in for 11pt, 1.875 for 10pt
       # See https://practicaltypography.com/page-margins.html for more information on linelength and margins
     }
   } else if (unit != "px") {
-    if (length(dist) == 1) {
-      margin <- ggplot2::margin(t = dist, r = dist, b = dist, l = dist, unit = unit)
-    } else if (length(dist) == 4) {
-      margin <- ggplot2::margin(t = dist[[1]], r = dist[[2]], b = dist[[3]], l = dist[[4]], unit = unit)
-    }
+    margin <-
+      get_margin_dist(dist = dist, unit = unit)
   }
 
   # FIXME: What is this doing? I think it is
@@ -302,27 +288,92 @@ get_margin <- function(margin = NULL,
 
   if (!paper_is_df) {
     return(margin)
-  } else {
-    # FIXME: This is mainly for the case of get_paper calling get_margin. It could be moved to get_paper or to a separate utility function.
-    paper_margin <- margin
-    margin_num <- as.numeric(paper_margin)
-    margin_width <- margin_num[[2]] + margin_num[[4]]
-    margin_height <- margin_num[[1]] + margin_num[[3]]
-
-    paper <-
-      dplyr::mutate(
-        paper,
-        block_width = width - margin_width,
-        block_height = height - margin_height,
-        block_asp = block_width / block_height,
-        col_width = (block_width - gutter) / cols,
-        row_height = (block_height - gutter) / rows,
-        section_asp = col_width / row_height,
-        margin = list(paper_margin)
-      )
-
-    return(paper)
   }
+
+  return(add_margin_to_paper(paper = paper, margin = margin))
+}
+
+#' Get margin based on distance
+#'
+#' @noRd
+#' @importFrom ggplot2 margin
+get_margin_dist <- function(dist = NULL, unit = "in") {
+  if (length(dist) == 1) {
+    margin <- ggplot2::margin(t = dist, r = dist, b = dist, l = dist, unit = unit)
+  } else if (length(dist) == 4) {
+    margin <- ggplot2::margin(t = dist[[1]], r = dist[[2]], b = dist[[3]], l = dist[[4]], unit = unit)
+  }
+
+  return(margin)
+}
+
+#' Get margin based on standard type
+#'
+#' @noRd
+#' @importFrom ggplot2 margin
+get_margin_type <- function(paper = NULL, type = "none", unit = "in") {
+  if (unit == "in") {
+    margin <- switch(type,
+      "extrawide" = ggplot2::margin(t = 2, r = 2, b = 2, l = 2, unit = unit),
+      "wide" = ggplot2::margin(t = 1.5, r = 1.5, b = 1.5, l = 1.5, unit = unit),
+      "standard" = ggplot2::margin(t = 1, r = 1, b = 1, l = 1, unit = unit),
+      "narrow" = ggplot2::margin(t = 0.75, r = 0.75, b = 0.75, l = 0.75, unit = unit),
+      "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
+    )
+  } else if (unit == "mm") {
+    margin <- switch(type,
+      "extrawide" = ggplot2::margin(t = 80, r = 80, b = 80, l = 80, unit = unit),
+      "wide" = ggplot2::margin(t = 60, r = 60, b = 60, l = 60, unit = unit),
+      "standard" = ggplot2::margin(t = 40, r = 40, b = 40, l = 40, unit = unit),
+      "narrow" = ggplot2::margin(t = 20, r = 20, b = 20, l = 20, unit = unit),
+      "none" = ggplot2::margin(t = 0, r = 0, b = 0, l = 0, unit = unit)
+    )
+  } else if (unit == "px" && !is.null(paper)) {
+    px_to_npc_margins <- function(px) {
+      list(
+        "t" = 1 - (px / paper$height),
+        "r" = 1 - (px / paper$width),
+        "b" = (px / paper$height),
+        "l" = (px / paper$width)
+      )
+    }
+
+    margin <- switch(type,
+      "extrawide" = ggplot2::margin(px_to_npc_margins(120), unit = "npc"), # 1080 / 6
+      "wide" = ggplot2::margin(px_to_npc_margins(80), unit = "npc"), # 1080 / 8
+      "standard" = ggplot2::margin(px_to_npc_margins(40), unit = "npc"), # 1080 / 12
+      "narrow" = ggplot2::margin(px_to_npc_margins(20), unit = "npc"),
+      "none" = ggplot2::margin(px_to_npc_margins(0), unit = "npc")
+    )
+  }
+
+  return(margin)
+}
+
+#' Get paper with margin
+#'
+#' @noRd
+#' @importFrom dplyr mutate
+add_margin_to_paper <- function(paper = NULL, margin = NULL) {
+  # FIXME: This is mainly for the case of get_paper calling get_margin. It could be moved to get_paper or to a separate utility function.
+  paper_margin <- margin
+  margin_num <- as.numeric(paper_margin)
+  margin_width <- margin_num[[2]] + margin_num[[4]]
+  margin_height <- margin_num[[1]] + margin_num[[3]]
+
+  paper <-
+    dplyr::mutate(
+      paper,
+      block_width = width - margin_width,
+      block_height = height - margin_height,
+      block_asp = block_width / block_height,
+      col_width = (block_width - gutter) / cols,
+      row_height = (block_height - gutter) / rows,
+      section_asp = col_width / row_height,
+      margin = list(paper_margin)
+    )
+
+  return(paper)
 }
 
 #' Get aspect ratio from string or based on specific paper and margins
