@@ -1,7 +1,7 @@
 test_that("sf_to_df works", {
   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
 
-  checkmate::expect_class(
+  expect_s3_class(
     sf_to_df(x = nc, coords = c("lon", "lat")),
     "data.frame"
   )

@@ -104,7 +104,7 @@ test_that("get_location works", {
   )
 
   # FIXME: This us not working and I don't know why
-  # checkmate::expect_class(
+  # expect_s3_class(
   #  get_location(
   #    type = "https://raw.githubusercontent.com/baltimoreheritage/geojson/master/baltimore-city-wards-1802.geojson",
   #    location = "100 Holliday St, Baltimore, MD 21202"
@@ -113,7 +113,7 @@ test_that("get_location works", {
   # )
 
 
-  # checkmate::expect_class(
+  # expect_s3_class(
   #  get_location(
   #    type = "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Parks/FeatureServer/0",
   #    name_col = "NAME",
