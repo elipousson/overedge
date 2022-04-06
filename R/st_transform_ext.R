@@ -78,10 +78,6 @@ st_omerc <- function(x, rotate = 0) {
   datum <- "WGS84"
   units <- "m"
 
-  # alpha <- 0
-  # k_0 <- 0.7
-  # +alpha={alpha} +k_0={k_0}
-
   crs <-
     glue::glue(
       "+proj={proj} +lat_0={coords$lat} +lonc={coords$lon} +datum={datum} +units={units} +no_defs +gamma={rotate}"
