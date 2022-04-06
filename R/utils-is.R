@@ -45,7 +45,6 @@ is_df_empty <- function(x, message = "This simple feature object has no rows.", 
 #'
 #' @noRd
 is_df_paper <- function(x, ext = FALSE, quiet = FALSE) {
-
   names <- c("width", "height", "orientation", "units")
 
   if (ext) {

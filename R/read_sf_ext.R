@@ -101,6 +101,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
     return(use_eval_parse(data = data, package = package))
   }
 
+  # FIXME: This triggers an alert with lintr but works file
   filename <- str_add_filetype(data, filetype = filetype)
 
   path <-
@@ -194,28 +195,28 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
   }
 
   # FIXME: This is an awkward way to reset back to defaults
-    if (is.null(params$query)) {
-      params$query <- NA
-    }
+  if (is.null(params$query)) {
+    params$query <- NA
+  }
 
-    if (is.null(params$wkt_filter)) {
-      params$wkt_filter <- character(0)
-    }
+  if (is.null(params$wkt_filter)) {
+    params$wkt_filter <- character(0)
+  }
 
-    # TODO: Check if it is possible to use a WKT filter
-    # when reading data from a url (e.g. a hosted GeoJSON file)
-    data <- sf::read_sf(
-      dsn = url,
-      query = params$query,
-      wkt_filter = params$wkt_filter
-    )
+  # TODO: Check if it is possible to use a WKT filter
+  # when reading data from a url (e.g. a hosted GeoJSON file)
+  data <- sf::read_sf(
+    dsn = url,
+    query = params$query,
+    wkt_filter = params$wkt_filter
+  )
 
-    if (!is.null(bbox)) {
-      data <- bbox_filter(data, bbox = bbox)
-    }
+  if (!is.null(bbox)) {
+    data <- bbox_filter(data, bbox = bbox)
+  }
 
-    # FIXME: This should be documented and maybe should be the default but optional
-    data <- sf::st_zm(data)
+  # FIXME: This should be documented and maybe should be the default but optional
+  data <- sf::st_zm(data)
 
   return(data)
 }
