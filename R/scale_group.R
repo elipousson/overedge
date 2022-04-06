@@ -35,9 +35,6 @@ scale_group_data <-
         direction = direction
       )
 
-    scale_fill <- NULL
-    scale_color <- NULL
-
     if (any(c("color", "fill") %in% aesthetics)) {
       manual_scale <-
         ggplot2::scale_fill_manual(
