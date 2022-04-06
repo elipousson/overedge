@@ -52,33 +52,7 @@ make_location_grid <- function(location = NULL,
       crs = crs
     )
 
-  bbox_asp <- sf_bbox_asp(bbox)
-  # width <- sf_bbox_xdist(bbox)
-  # height <- sf_bbox_ydist(bbox)
-  has_cols <- !is.null(cols)
-  has_rows <- !is.null(rows)
-
-  if (has_cols || has_rows) {
-    if (!has_cols) {
-      cols <- 1
-    }
-
-    if (!has_rows) {
-      rows <- 1
-    }
-
-    n <- c(cols, rows)
-  } else {
-    if (is.null(n)) {
-      if (square) {
-        n <- c(10, 10 / bbox_asp)
-      } else {
-        n <- c(10, 10)
-      }
-    } else if (rlang::has_length(n, 1) && is.numeric(n) && square) {
-      n <- c(n, n / bbox_asp)
-    }
-  }
+  n <- get_n_value(bbox, n = n, rows = rows, cols = cols, square = square)
 
   bbox_sf <- as_sf(bbox)
 
@@ -143,4 +117,38 @@ make_location_grid <- function(location = NULL,
   }
 
   return(grid)
+}
+
+get_n_value <- function(bbox, n = NULL, cols = 1, rows = 1, base_n = 10, square = TRUE) {
+  if (!is.null(cols) || !is.null(rows)) {
+    if (is.null(cols)) {
+      cols <- 1
+    }
+
+    if (is.null(rows)) {
+      rows <- 1
+    }
+
+    return(c(cols, rows))
+  }
+
+  bbox_asp <- sf_bbox_asp(bbox)
+
+  if (!is.null(n)) {
+    if (!square) {
+      return(n)
+    }
+
+    if (rlang::has_length(n, 1) && is.numeric(n) && square) {
+      return(c(n, n / bbox_asp))
+    }
+  }
+
+  if (square) {
+    n <- c(base_n, base_n / bbox_asp)
+  } else {
+    n <- c(base_n, base_n)
+  }
+
+  return(n)
 }
