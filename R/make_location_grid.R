@@ -87,7 +87,15 @@ make_location_grid <- function(location = NULL,
     )
   }
 
-  if (has_cols || has_rows) {
+  if (!is.null(cols) || !is.null(rows)) {
+    if (is.null(cols)) {
+      cols <- 1
+    }
+
+    if (is.null(rows)) {
+      rows <- 1
+    }
+
     grid <- dplyr::mutate(
       grid,
       "col" = rep(seq(cols), rows),
@@ -119,16 +127,8 @@ make_location_grid <- function(location = NULL,
   return(grid)
 }
 
-get_n_value <- function(bbox, n = NULL, cols = 1, rows = 1, base_n = 10, square = TRUE) {
-  if (!is.null(cols) || !is.null(rows)) {
-    if (is.null(cols)) {
-      cols <- 1
-    }
-
-    if (is.null(rows)) {
-      rows <- 1
-    }
-
+get_n_value <- function(bbox, n = NULL, cols = NULL, rows = NULL, base_n = 10, square = TRUE) {
+  if (!is.null(cols) && !is.null(rows)) {
     return(c(cols, rows))
   }
 
