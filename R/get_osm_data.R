@@ -36,12 +36,12 @@
 #' @importFrom sf st_transform
 #' @importFrom usethis ui_info
 get_osm_data <- function(location = NULL,
-                         key,
-                         value = NULL,
                          dist = NULL,
                          diag_ratio = NULL,
                          unit = NULL,
                          asp = NULL,
+                         key,
+                         value = NULL,
                          crs = NULL,
                          geometry = NULL,
                          osmdata = FALSE,
@@ -50,110 +50,80 @@ get_osm_data <- function(location = NULL,
                          timeout = 120) {
   is_pkg_installed("osmdata")
 
-  if ((key == "building") && is.null(value)) {
-    value <- osm_building_tags
-  }
-
-  if (value == "all") {
-    value <- osmdata::available_tags(key)
-  }
+  value <- get_osm_value(key, value)
 
   if (is.null(enclosing)) {
-    osm_crs <- 4326
-
-    # Get adjusted bounding box if any adjustment variables provided
-    bbox_osm <-
-      st_bbox_ext(
-        x = location,
+    data <-
+      get_osm_data_bbox(
+        location = location,
         dist = dist,
         diag_ratio = diag_ratio,
         unit = unit,
         asp = asp,
-        crs = osm_crs
-      )
-
-    bbox_osm <- sf_bbox_to_sf(bbox_osm)
-
-    if (nodes_only) {
-      query <-
-        osmdata::opq(
-          bbox = bbox_osm,
-          nodes_only = nodes_only
-        )
-    } else {
-      query <-
-        try(
-          osmdata::opq(bbox = bbox_osm),
-          silent = TRUE
-        )
-    }
-
-    query <-
-      osmdata::add_osm_feature(
-        opq = query,
         key = key,
         value = value,
-        match_case = FALSE
+        crs = crs,
+        geometry = geometry,
+        osmdata = osmdata,
+        nodes_only = nodes_only
       )
   } else if (!is.null(enclosing)) {
-    enclosing <- match.arg(enclosing, c("way", "relation"))
-    coords <- sf_to_df(location)
-
-    query <-
-      try(
-        osmdata::opq_enclosing(
-          lon = coords$lon,
-          lat = coords$lat,
-          key = key,
-          value = value,
-          enclosing = enclosing
-        ),
-        silent = TRUE
+    data <-
+      get_osm_data_enclosing(
+        location = location,
+        key = key,
+        value = value,
+        enclosing = enclosing,
+        crs = crs,
+        osmdata = osmdata
       )
+  }
 
-    query <- osmdata::opq_string(opq = query)
+  if (getOption("overedge.osm_attribution", TRUE)) {
 
+    osm_copyright_url <- "https://www.openstreetmap.org/copyright"
+
+    cli::cli_alert_info(
+      "Attribution is required when using OpenStreetMap data.
+      Find more information on the Open Database License (ODbL) at {.url {osm_copyright_url}}"
+    )
+    options("overedge.osm_attribution" = FALSE)
+  }
+
+  return(data)
+}
+
+
+#' @rdname get_osm_data
+#' @name get_osm_id
+#' @param id OpenStreetMap feature id
+#' @param type type of feature with id; "node", "way", or "relation"
+#' @export
+get_osm_id <- function(id, type = "way", crs = NULL, geometry = NULL, osmdata = FALSE) {
+  is_pkg_installed("osmdata")
+
+  id <- as.character(id)
+
+  type <- match.arg(type, c("node", "way", "relation"))
+
+  if (is.null(geometry)) {
     geometry <-
-      switch(enclosing,
-        "way" = "polygon",
-        "relation" = "multipolygon"
+      switch(type,
+        "node" = "points",
+        "way" = "polygons",
+        "relation" = "multipolygons"
       )
   }
 
   data <-
-    suppressMessages(osmdata::osmdata_sf(query))
-
-  osm_geometry <-
-    match.arg(
-      geometry,
-      c(
-        "polygons",
-        "points",
-        "lines",
-        "multilines",
-        "multipolygons"
+    osmdata::osmdata_sf(
+      osmdata::opq_string(
+        osmdata::opq_osm_id(type = type, id = id)
       )
     )
 
-  if (!osmdata) {
-    data <-
-      purrr::pluck(
-        data,
-        var = paste0("osm_", osm_geometry)
-      )
-
-    if (!is.null(crs)) {
-      data <- sf::st_transform(data, crs)
-    }
-  } else {
-    data <- osmdata::unique_osmdata(data)
-  }
-
-  if (getOption("overedge.osm_attribution", TRUE)) {
-    cli::cli_alert_info("Attribution is required when you use Open Street Map data.
-                     See {usethis::ui_value('https://www.openstreetmap.org/copyright')} for more information on the Open Database Licence.")
-    options("overedge.osm_attribution" = FALSE)
-  }
+  data <-
+    get_osm_data_geometry(data, geometry = geometry, crs = crs, osmdata = osmdata)
 
   return(data)
 }
@@ -167,6 +137,7 @@ get_osm_data <- function(location = NULL,
 #' @importFrom dplyr filter between
 get_osm_boundaries <- function(location,
                                level = NULL,
+                               crs = NULL,
                                enclosing = "way",
                                osmdata = TRUE) {
   boundaries <-
@@ -186,5 +157,165 @@ get_osm_boundaries <- function(location,
       )
   }
 
+  boundaries <- janitor::clean_names(boundaries)
+
+  boundaries <- st_transform_ext(x = boundaries, crs = crs)
+
   return(boundaries)
+}
+
+
+#' Get OSM data using a bounding box for a location
+#'
+#' @noRd
+get_osm_data_bbox <- function(location = NULL,
+                              key,
+                              value,
+                              dist = NULL,
+                              diag_ratio = NULL,
+                              unit = NULL,
+                              asp = NULL,
+                              crs = NULL,
+                              geometry = NULL,
+                              nodes_only = FALSE,
+                              osmdata = FALSE) {
+  osm_crs <- 4326
+
+  # Get adjusted bounding box if any adjustment variables provided
+  bbox_osm <-
+    st_bbox_ext(
+      x = location,
+      dist = dist,
+      diag_ratio = diag_ratio,
+      unit = unit,
+      asp = asp,
+      crs = osm_crs
+    )
+
+  if (nodes_only) {
+    query <-
+      osmdata::opq(
+        bbox = bbox_osm,
+        nodes_only = nodes_only,
+        timeout = 90
+      )
+  } else {
+    query <-
+        osmdata::opq(
+          bbox = bbox_osm,
+          timeout = 90
+          )
+  }
+
+  query <-
+    osmdata::add_osm_feature(
+      opq = query,
+      key = key,
+      value = value
+    )
+
+  data <-
+    suppressMessages(osmdata::osmdata_sf(query))
+
+  data <-
+    get_osm_data_geometry(data, geometry = geometry, crs = crs, osmdata = osmdata)
+
+  return(data)
+}
+
+#' @noRd
+get_osm_data_enclosing <- function(location, key, value, enclosing = NULL, crs = NULL, osmdata = FALSE) {
+  enclosing <- match.arg(enclosing, c("way", "relation"))
+  coords <- sf_to_df(location, crs = 4326)
+
+  query <-
+    try(
+      osmdata::opq_enclosing(
+        lon = coords$lon,
+        lat = coords$lat,
+        key = key,
+        value = value,
+        enclosing = enclosing
+      ),
+      silent = TRUE
+    )
+
+  query <-
+    osmdata::opq_string(opq = query)
+
+  data <-
+    suppressMessages(osmdata::osmdata_sf(query))
+
+  geometry <-
+    switch(enclosing,
+      "way" = "polygon",
+      "relation" = "multipolygon"
+    )
+
+  data <-
+    get_osm_data_geometry(data, geometry = geometry, crs = crs, osmdata = osmdata)
+
+  return(data)
+}
+
+#' Get geometry from osmdata list
+#'
+#' @noRd
+#' @importFrom purrr pluck
+#' @importFrom sf st_transform
+#' @importFrom janitor clean_names
+get_osm_data_geometry <- function(data, geometry = NULL, crs = NULL, osmdata = FALSE) {
+  geometry <-
+    match.arg(
+      geometry,
+      c(
+        "polygons",
+        "points",
+        "lines",
+        "multilines",
+        "multipolygons"
+      )
+    )
+
+  geometry <- paste0("osm_", geometry)
+
+
+  if (!osmdata) {
+    data <-
+      purrr::pluck(
+        data,
+        var = geometry
+      )
+
+    if (!is.null(crs)) {
+      data <- sf::st_transform(data, crs)
+    }
+
+    data <- janitor::clean_names(data)
+  } else {
+    data <- osmdata::unique_osmdata(data)
+  }
+
+  return(data)
+}
+
+#' Get OSM value from osm_building_tags or osmdata::available_tags
+#'
+#' @noRd
+get_osm_value <- function(key = NULL, value = NULL) {
+  stopifnot(
+    !is.null(key)
+  )
+
+  if (value == "all") {
+    return(osmdata::available_tags(key))
+  }
+
+  if (!is.null(value)) {
+    return(value)
+  }
+
+  if (key == "building") {
+    return(osm_building_tags)
+  }
 }
