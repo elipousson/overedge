@@ -27,7 +27,7 @@ layer_mapbox <- function(data = NULL,
                          diag_ratio = NULL,
                          unit = "meter",
                          asp = NULL,
-                         map_style = "mapbox://styles/mapbox/satellite-streets-v11",
+                         style_url = "mapbox://styles/mapbox/satellite-streets-v11",
                          style_id = NULL,
                          username = NULL,
                          basemap = FALSE,
@@ -45,9 +45,9 @@ layer_mapbox <- function(data = NULL,
                          hide_grid = TRUE,
                          label_axes = "----",
                          ...) {
-  if (!is.null(map_style)) {
-    username <- stringr::str_extract(map_style, "(?<=styles/).+(?=/)")
-    style_id <- stringr::str_extract(map_style, glue::glue("(?<={username}/).+"))
+  if (!is.null(style_url)) {
+    username <- stringr::str_extract(style_url, "(?<=styles/).+(?=/)")
+    style_id <- stringr::str_extract(style_url, glue::glue("(?<={username}/).+"))
   }
 
   # Set appropriate CRS for Mapbox
