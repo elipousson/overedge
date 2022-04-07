@@ -104,6 +104,12 @@ get_osm_id <- function(id, type = "way", crs = NULL, geometry = NULL, osmdata = 
 
   id <- as.character(id)
 
+  if (length(id) > 1) {
+    data <- purrr::map_dfr(id, ~ get_osm_id(id = .x, type = type, crs = crs, geometry = geometry, osmdata = FALSE))
+
+    return(data)
+  }
+
   type <- match.arg(type, c("node", "way", "relation"))
 
   if (is.null(geometry)) {
