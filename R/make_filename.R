@@ -35,10 +35,10 @@ make_filename <- function(name = NULL,
   )
 
   if (cache) {
-    path <- NULL
+    path <- get_data_dir(path = path)
+  } else if (!is.null(path)) {
+    path <- make_data_dir(path, create = TRUE)
   }
-
-  path <- get_data_dir(path = path)
 
   if (!is.null(filetype)) {
     filetype <- paste0(".", filetype)
