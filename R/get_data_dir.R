@@ -12,7 +12,15 @@ get_data_dir <- function(path = NULL, package = "overedge") {
     path <- rappdirs::user_cache_dir(package)
   }
 
-  if (!dir.exists(path)) {
+  create_data_dir(path, create = TRUE)
+
+  path
+}
+
+#' @rdname get_data_dir
+#' @name create_data_dir
+create_data_dir <- function(path = NULL, create = TRUE) {
+  if (!dir.exists(path) && create) {
     if (cli_yeah(
       "The directory {.file {path}} does not exist.
     Do you want to create a directory at this location?"
@@ -23,6 +31,4 @@ get_data_dir <- function(path = NULL, package = "overedge") {
       cli::cli_abort("Please provide a different path for this file.")
     }
   }
-
-  path
 }

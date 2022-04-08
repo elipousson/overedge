@@ -36,7 +36,7 @@ make_filename <- function(name = NULL,
   if (cache) {
     path <- get_data_dir(path = path)
   } else if (!is.null(path)) {
-    path <- make_data_dir(path, create = TRUE)
+    path <- create_data_dir(path, create = TRUE)
   }
 
   if (!is.null(filetype)) {
