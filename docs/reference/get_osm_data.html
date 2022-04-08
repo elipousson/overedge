@@ -78,6 +78,7 @@ nodes_only parameters are not fully supported currently.</p>
   asp <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">key</span>,
   value <span class="op">=</span> <span class="cn">NULL</span>,
+  features <span class="op">=</span> <span class="cn">NULL</span>,
   crs <span class="op">=</span> <span class="cn">NULL</span>,
   geometry <span class="op">=</span> <span class="cn">NULL</span>,
   osmdata <span class="op">=</span> <span class="cn">FALSE</span>,
@@ -91,9 +92,11 @@ nodes_only parameters are not fully supported currently.</p>
 <span class="fu">get_osm_boundaries</span><span class="op">(</span>
   <span class="va">location</span>,
   level <span class="op">=</span> <span class="cn">NULL</span>,
+  lang <span class="op">=</span> <span class="st">"en"</span>,
   crs <span class="op">=</span> <span class="cn">NULL</span>,
-  enclosing <span class="op">=</span> <span class="st">"way"</span>,
-  osmdata <span class="op">=</span> <span class="cn">TRUE</span>
+  enclosing <span class="op">=</span> <span class="st">"relation"</span>,
+  geometry <span class="op">=</span> <span class="cn">NULL</span>,
+  osmdata <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
