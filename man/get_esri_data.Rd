@@ -2,6 +2,8 @@
 % Please edit documentation in R/get_esri_data.R
 \name{get_esri_data}
 \alias{get_esri_data}
+\alias{get_esri_layers}
+\alias{get_esri_metadata}
 \title{Use esri2sf to get data from an ArcGIS FeatureServer or MapServer for a
 location}
 \usage{
@@ -19,6 +21,10 @@ get_esri_data(
   name = NULL,
   ...
 )
+
+get_esri_layers(location = NULL, layers, service_url = NULL, nm = NULL, ...)
+
+get_esri_metadata(url, meta = "name", clean = TRUE)
 }
 \arguments{
 \item{location}{sf, sfc, or bbox object (or other object convertible with
@@ -57,6 +63,15 @@ location names for features}
 
 \item{...}{Additional arguments passed to \link[esri2sf:esri2sf]{esri2sf::esri2df} or
 \link[esri2sf:esri2sf]{esri2sf::esri2sf}}
+
+\item{layers}{Either a vector with URLs, a named list of urls, or a numeric vector}
+
+\item{service_url}{Base service URL with layers are located.}
+
+\item{meta}{Name of metadata list value to return from \link[esri2sf:esri2sf]{esri2sf::esrimeta}.}
+
+\item{clean}{If TRUE, use janitor::make_clean_names on the returned metadata
+value (typically used for name values).}
 }
 \description{
 Wraps the \code{\link[esri2sf]{esri2sf}} and \code{\link[esri2sf]{esri2df}}

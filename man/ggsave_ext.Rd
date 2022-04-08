@@ -2,6 +2,7 @@
 % Please edit documentation in R/ggsave_ext.R
 \name{ggsave_ext}
 \alias{ggsave_ext}
+\alias{ggsave_social}
 \alias{gtsave_ext}
 \title{Save a ggplot2 plot or gt table to file and update file EXIF metadata}
 \usage{
@@ -28,6 +29,19 @@ ggsave_ext(
   author = NULL,
   keywords = NULL,
   args = NULL,
+  ...
+)
+
+ggsave_social(
+  plot = ggplot2::last_plot(),
+  paper = "Instagram post",
+  name = NULL,
+  filename = NULL,
+  filetype = "jpeg",
+  dpi = 72,
+  width = 1080,
+  height = 1080,
+  units = "px",
   ...
 )
 

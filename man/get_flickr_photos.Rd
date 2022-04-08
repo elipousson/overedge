@@ -55,14 +55,7 @@ isn't passed then everybody's public photos will be searched.}
 \item{tags}{A vector of tags you wish to search for.}
 
 \item{license_id}{The license id for photos (for possible values see the
-Flickr API method flickr.photos.licenses.getInfo). license_id can be an
-integer from 0 to 10 or a corresponding license code including "c" (All
-Rights Reserved), "by-bc-sa" (Attribution-NonCommercial-ShareAlike),
-"by-nc" (Attribution-NonCommercial), "by-nc-nd"
-(Attribution-NonCommercial-NoDerivs), "by" (Attribution), "by-sa"
-(Attribution-ShareAlike), "by-nd" (Attribution-NoDerivs), "nkc" (No known
-copyright restrictions), "pd-us" (United States Government Work), "cc0"
-(Public Domain Dedication), or "pd" (Public Domain Mark).}
+Flickr API method flickr.photos.licenses.getInfo). See details for more information.}
 
 \item{sort}{Supported options include "date-posted","date-taken",
 "interestingness", or "relevance"}

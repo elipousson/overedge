@@ -70,7 +70,7 @@
 
 <span class="fu">is_bbox</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="fu">is_sf_list</span><span class="op">(</span><span class="va">x</span>, is_named <span class="op">=</span> <span class="cn">FALSE</span>, ext <span class="op">=</span> <span class="cn">FALSE</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu">is_sf_list</span><span class="op">(</span><span class="va">x</span>, named <span class="op">=</span> <span class="cn">FALSE</span>, ext <span class="op">=</span> <span class="cn">FALSE</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="fu">is_raster</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
@@ -80,7 +80,9 @@
 
 <span class="fu">is_same_dist</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, dist <span class="op">=</span> <span class="cn">NULL</span>, diff <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="fu">is_same_area</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, union <span class="op">=</span> <span class="cn">FALSE</span>, diff <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="fu">is_same_area</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, union <span class="op">=</span> <span class="cn">FALSE</span>, diff <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="fu">is_sf_or_what</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, return <span class="op">=</span> <span class="cn">NULL</span>, us <span class="op">=</span> <span class="cn">FALSE</span>, null.ok <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -92,8 +94,6 @@
 not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 <dt>null.ok</dt>
 <dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return <code>TRUE</code>; defaults to <code>FALSE</code>.</p></dd>
-<dt>is_named</dt>
-<dd><p>If <code>TRUE</code>, check if sf list is named; defaults <code>FALSE</code>.</p></dd>
 <dt>y</dt>
 <dd><p>An sf object or a character or numeric object supported by
 <a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs</a> that can be compared to x. (used by is_same_crs)</p></dd>
@@ -108,6 +108,8 @@ defaults to <code>FALSE</code>.</p></dd>
 <dt>union</dt>
 <dd><p>If <code>TRUE</code>, use <a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">sf::st_union</a> on both x and y before comparing
 area; defaults to <code>FALSE</code>.</p></dd>
+<dt>is_named</dt>
+<dd><p>If <code>TRUE</code>, check if sf list is named; defaults <code>FALSE</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -132,7 +134,8 @@ area; defaults to <code>FALSE</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -10,6 +10,7 @@
 \alias{is_same_crs}
 \alias{is_same_dist}
 \alias{is_same_area}
+\alias{is_sf_or_what}
 \title{What is the class or spatial attributes of this feature?}
 \usage{
 is_sf(x, ext = FALSE, null.ok = FALSE)
@@ -18,7 +19,7 @@ is_sfc(x, null.ok = FALSE)
 
 is_bbox(x, null.ok = FALSE)
 
-is_sf_list(x, is_named = FALSE, ext = FALSE, null.ok = FALSE)
+is_sf_list(x, named = FALSE, ext = FALSE, null.ok = FALSE)
 
 is_raster(x, null.ok = FALSE)
 
@@ -29,6 +30,8 @@ is_same_crs(x, y)
 is_same_dist(x, y, dist = NULL, diff = FALSE)
 
 is_same_area(x, y, union = FALSE, diff = FALSE)
+
+is_sf_or_what(x = NULL, return = NULL, us = FALSE, null.ok = TRUE)
 }
 \arguments{
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
@@ -37,8 +40,6 @@ is_same_area(x, y, union = FALSE, diff = FALSE)
 not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
 \item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
-
-\item{is_named}{If \code{TRUE}, check if sf list is named; defaults \code{FALSE}.}
 
 \item{y}{An sf object or a character or numeric object supported by
 \link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{is_same_crs})}
@@ -53,6 +54,8 @@ defaults to \code{FALSE}.}
 
 \item{union}{If \code{TRUE}, use \link[sf:geos_combine]{sf::st_union} on both x and y before comparing
 area; defaults to \code{FALSE}.}
+
+\item{is_named}{If \code{TRUE}, check if sf list is named; defaults \code{FALSE}.}
 }
 \description{
 What is the class or spatial attributes of this feature?

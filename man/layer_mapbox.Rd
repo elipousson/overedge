@@ -18,7 +18,7 @@ layer_mapbox(
   scaling_factor = "1x",
   attribution = TRUE,
   logo = TRUE,
-  access_token = Sys.getenv("MAPBOX_PUBLIC_TOKEN"),
+  access_token = NULL,
   neatline = TRUE,
   color = "black",
   bgcolor = "white",
@@ -46,18 +46,30 @@ provided.}
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
-\item{style_id}{The style ID}
+\item{style_id}{A style ID}
 
 \item{username}{A Mapbox username}
 
 \item{basemap}{If FALSE, create a standalone layer; if TRUE, the layer is
 precededed by \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} to allow use as a basemap, Default: TRUE}
 
-\item{scale}{ratio to scale the output image; `scale_ratio = 1` will return the largest possible image. defaults to 0.5}
+\item{scale}{ratio to scale the output image; `scale = 1` will return the
+largest possible image. defaults to 0.5}
 
-\item{scaling_factor}{The scaling factor of the tiles; either \code{"1x"} (the default) or \code{"2x"}}
+\item{scaling_factor}{The scaling factor of the tiles; either \code{"1x"}
+(the default) or \code{"2x"}}
 
-\item{access_token}{Your Mapbox access token; can be set with \code{mb_access_token()}.}
+\item{attribution}{Controls whether there is attribution on the image. Defaults to `TRUE`.
+Note: If attribution=false, the watermarked attribution is removed from the
+image. You still have a legal responsibility to attribute maps that use
+OpenStreetMap data, which includes most maps from Mapbox. If you specify
+attribution=false, you are legally required to include proper attribution
+elsewhere on the webpage or document.}
+
+\item{logo}{Controls whether there is a Mapbox logo on the image. Defaults to `TRUE`.}
+
+\item{access_token}{A Mapbox access token; can be set with
+\code{mb_access_token()}.}
 
 \item{neatline}{If TRUE, add a neatline matching the provided data, Default: TRUE}
 

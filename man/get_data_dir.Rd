@@ -2,9 +2,12 @@
 % Please edit documentation in R/get_data_dir.R
 \name{get_data_dir}
 \alias{get_data_dir}
+\alias{create_data_dir}
 \title{Check data directory and create if needed}
 \usage{
 get_data_dir(path = NULL, package = "overedge")
+
+create_data_dir(path = NULL, create = TRUE)
 }
 \arguments{
 \item{path}{Path to directory to use as data directory.}

@@ -4,6 +4,7 @@
 \alias{sf_to_df}
 \alias{df_to_sf}
 \alias{check_coords}
+\alias{has_coords}
 \title{Convert between simple feature and data frame objects}
 \usage{
 sf_to_df(
@@ -25,7 +26,9 @@ df_to_sf(
   remove_coords = FALSE
 )
 
-check_coords(x = NULL, coords = NULL, rev = FALSE)
+check_coords(x = NULL, coords = NULL, default = c("lon", "lat"), rev = FALSE)
+
+has_coords(x, coords = NULL, value = TRUE)
 }
 \arguments{
 \item{x}{A \code{sf} or \code{sfc} object or a data frame with lat/lon coordinates in a
@@ -60,6 +63,10 @@ check_coords only.}
 \item{remove_coords}{For \link{df_to_sf}, if \code{TRUE}, remove the coordinate columns
 after converting a data frame to simple feature object; defaults to
 \code{FALSE}.}
+
+\item{default}{c("lon", "lat").}
+
+\item{value}{If TRUE, return the value of the coordinate column names. Used by \link{has_coords}.}
 }
 \value{
 \code{\link[=sf_to_df]{sf_to_df()}} returns a data frame with geometry dropped or converted

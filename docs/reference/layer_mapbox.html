@@ -81,7 +81,7 @@ basemap and neatline to FALSE</p>
   scaling_factor <span class="op">=</span> <span class="st">"1x"</span>,
   attribution <span class="op">=</span> <span class="cn">TRUE</span>,
   logo <span class="op">=</span> <span class="cn">TRUE</span>,
-  access_token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"MAPBOX_PUBLIC_TOKEN"</span><span class="op">)</span>,
+  access_token <span class="op">=</span> <span class="cn">NULL</span>,
   neatline <span class="op">=</span> <span class="cn">TRUE</span>,
   color <span class="op">=</span> <span class="st">"black"</span>,
   bgcolor <span class="op">=</span> <span class="st">"white"</span>,
@@ -112,18 +112,30 @@ provided.</p></dd>
 character (e.g. "1:3"). If numeric, <code><a href="get_asp.html">get_asp()</a></code> returns the same value
 without modification.</p></dd>
 <dt>style_id</dt>
-<dd><p>The style ID</p></dd>
+<dd><p>A style ID</p></dd>
 <dt>username</dt>
 <dd><p>A Mapbox username</p></dd>
 <dt>basemap</dt>
 <dd><p>If FALSE, create a standalone layer; if TRUE, the layer is
 precededed by <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot2::ggplot()</a></code> to allow use as a basemap, Default: TRUE</p></dd>
 <dt>scale</dt>
-<dd><p>ratio to scale the output image; `scale_ratio = 1` will return the largest possible image. defaults to 0.5</p></dd>
+<dd><p>ratio to scale the output image; `scale = 1` will return the
+largest possible image. defaults to 0.5</p></dd>
 <dt>scaling_factor</dt>
-<dd><p>The scaling factor of the tiles; either <code>"1x"</code> (the default) or <code>"2x"</code></p></dd>
+<dd><p>The scaling factor of the tiles; either <code>"1x"</code>
+(the default) or <code>"2x"</code></p></dd>
+<dt>attribution</dt>
+<dd><p>Controls whether there is attribution on the image. Defaults to `TRUE`.
+Note: If attribution=false, the watermarked attribution is removed from the
+image. You still have a legal responsibility to attribute maps that use
+OpenStreetMap data, which includes most maps from Mapbox. If you specify
+attribution=false, you are legally required to include proper attribution
+elsewhere on the webpage or document.</p></dd>
+<dt>logo</dt>
+<dd><p>Controls whether there is a Mapbox logo on the image. Defaults to `TRUE`.</p></dd>
 <dt>access_token</dt>
-<dd><p>Your Mapbox access token; can be set with <code>mb_access_token()</code>.</p></dd>
+<dd><p>A Mapbox access token; can be set with
+<code>mb_access_token()</code>.</p></dd>
 <dt>neatline</dt>
 <dd><p>If TRUE, add a neatline matching the provided data, Default: TRUE</p></dd>
 <dt>color</dt>
@@ -167,7 +179,8 @@ Default: "mapbox://styles/mapbox/satellite-streets-v11"</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
