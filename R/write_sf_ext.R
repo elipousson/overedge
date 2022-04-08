@@ -48,7 +48,7 @@ write_sf_ext <- function(data,
                          path = NULL,
                          cache = FALSE,
                          overwrite = FALSE) {
-  if (is_sf_list(data, is_named = TRUE)) {
+  if (is_sf_list(data, named = TRUE)) {
     purrr::map(
       data,
       ~ write_sf_ext(

@@ -64,7 +64,7 @@ is_bbox <- function(x, null.ok = FALSE) {
 #' @name is_sf_list
 #' @param is_named If `TRUE`, check if sf list is named; defaults `FALSE`.
 #' @export
-is_sf_list <- function(x, is_named = FALSE, ext = FALSE, null.ok = FALSE) {
+is_sf_list <- function(x, named = FALSE, ext = FALSE, null.ok = FALSE) {
   if (is.null(x) && null.ok) {
     return(TRUE)
   }
@@ -73,22 +73,23 @@ is_sf_list <- function(x, is_named = FALSE, ext = FALSE, null.ok = FALSE) {
     return(FALSE)
   }
 
-  is_sf_list <- is.list(x) && all(
-    vapply(
-      x,
-      function(x) {
-        is_sf(x, ext = ext, null.ok = null.ok)
-      },
-      TRUE
+  is_sf_list <-
+    is.list(x) && all(
+      vapply(
+        x,
+        function(x) {
+          is_sf(x, ext = ext, null.ok = null.ok)
+        },
+        TRUE
+      )
     )
-  )
 
-  if (is_named) {
-    is_named <- !is.null(names(x)) && !("" %in% names(x))
-    return(is_sf_list && is_named)
+  if (!named) {
+    return(is_sf_list)
   }
 
-  return(is_sf_list)
+  named <- rlang::is_named(x)
+  return(is_sf_list && named)
 }
 
 #' @name is_raster
@@ -176,4 +177,63 @@ is_same_area <- function(x, y, union = FALSE, diff = FALSE) {
   }
 
   return(x_area == y_area)
+}
+
+
+#' @name is_sf_or_what
+#' @rdname  is_sf
+#' @importFrom cli cli_abort
+is_sf_or_what <- function(x = NULL, return = NULL, us = FALSE, null.ok = TRUE) {
+  # Is x a sf object, a sf/sfc/bbox object, a character string, or a state or county name/id?
+
+  is_null <- is.null(x)
+
+  if (!null.ok && is_null) {
+    cli::cli_abort("object is NULL")
+  }
+
+  type <-
+    list("null" = is_null)
+
+  if (!is_null) {
+    type <- c(
+      type,
+      list(
+        "sf" = is_sf(x),
+        "sf_ext" = is_sf(x, ext = TRUE),
+        "sf_list" = is_sf_list(x, named = FALSE),
+        "nm_sf_list" = is_sf_list(x, named = TRUE),
+        "nm_list" = rlang::is_named(x) && is.list(x),
+        "list" = is.list(x) && (is.character(x) | is.numeric(x)),
+        "chr" = is.character(x),
+        "num" = is.numeric(x)
+      )
+    )
+
+    if (type$chr && us) {
+      type <- c(
+        type,
+        list(
+          "state" = (x %in% c(us_states$name, us_states$abb, us_states$statefp, as.integer(us_states$statefp))),
+          "county" = (x %in% c(us_counties$name, us_counties$geoid, as.integer(us_counties$geoid)))
+        )
+      )
+    }
+  }
+
+  if (!is.null(return) && return == "list") {
+    return(type)
+  }
+
+  return(
+    dplyr::case_when(
+      type$null ~ "null",
+      type$nm_sf_list ~ "nm_sf_list",
+      type$sf_list ~ "sf_list",
+      type$nm_list ~ "nm_list",
+      type$list ~ "list",
+      type$chr ~ "chr",
+      type$num ~ "num"
+    )
+  )
 }

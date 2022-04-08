@@ -15,8 +15,8 @@ test_that("is_sf and as_sf functions work", {
   expect_true(is_sf(sfc, ext = TRUE))
 
   expect_true(is_sf_list(list(nc)))
-  expect_false(is_sf_list(list(nc), is_named = TRUE))
-  expect_true(is_sf_list(list("nc" = nc), is_named = TRUE))
+  expect_false(is_sf_list(list(nc), named = TRUE))
+  expect_true(is_sf_list(list("nc" = nc), named = TRUE))
   expect_s3_class(as_sf(nc), "sf")
   expect_s3_class(as_sf(bbox), "sf")
   expect_s3_class(as_sfc(bbox), "sfc")
