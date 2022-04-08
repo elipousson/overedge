@@ -177,27 +177,18 @@ map_location_data <- function(location = NULL,
   # FIXME: This triggers an alert with lintr but it is used
   params <- rlang::list2(...)
 
-  # FIXME: This may need some more checks to avoid passing data that would result in an error or other issue
-  len_location <- length(location)
-  len_data <- length(data)
+  is_data <-
+    is_sf_or_what(data)
 
-  is_char_list_location <- ((len_location > 1) && is.character(location))
-  is_list_location <- (is_sf_list(location, ext = TRUE) || is_char_list_location)
-
-  if (is_char_list_location) {
-    location <- as.list(location)
-  }
-
-  is_char_list_data <- ((len_data > 1) && is.character(data))
-  is_list_data <- (is_sf_list(data) || is_char_list_data)
-
-
-  if (is_char_list_data) {
+  if (!grepl("list", is_data) && (length(data) > 1)) {
     data <- as.list(data)
+    is_data <- "list"
 
     # FIXME: The addition of a index parameter to get_location_data should allow the use of the index as a secondary source of name data for map_location_data
-    if (is.null(names(data))) {
-      label <- janitor::make_clean_names(label)
+    if (!rlang::is_named(data)) {
+      if (!is.null(label)) {
+        label <- janitor::make_clean_names(label)
+      }
 
       data <-
         purrr::set_names(
@@ -213,10 +204,26 @@ map_location_data <- function(location = NULL,
             )
           )
         )
+
+      is_data <- "nm_list"
     }
   }
 
-  if (is_list_data) {
+  data_is_list <-
+    grepl("list", is_data)
+
+  is_location <-
+    is_sf_or_what(location)
+
+  if (!grepl("list", is_location) && (length(location) > 1)) {
+    location <- as.list(location)
+    is_location <- "list"
+  }
+
+  location_is_list <-
+    grepl("list", is_location)
+
+  if (data_is_list) {
     data <-
       purrr::map(
         data,
@@ -239,7 +246,7 @@ map_location_data <- function(location = NULL,
           index = index
         )
       )
-  } else if (is_list_location) {
+  } else if (location_is_list) {
     data <-
       purrr::map(
         location,
@@ -262,9 +269,7 @@ map_location_data <- function(location = NULL,
           index = index
         )
       )
-  } else if (is_list_data &&
-    is_list_location &&
-    (len_data == len_location)) {
+  } else if (data_is_list && location_is_list && (length(data) == length(location))) {
     data <-
       purrr::map2(
         location,
@@ -293,7 +298,7 @@ map_location_data <- function(location = NULL,
   data <- purrr::discard(data, ~ nrow(.x) == 0)
   data <- as_sf_class(x = data, class = class, crs = crs, ...)
 
-  if (load && is_sf_list(data, is_named = TRUE)) {
+  if (load && is_sf_list(data, named = TRUE)) {
     list2env(data, envir = .GlobalEnv)
   } else {
     return(data)
