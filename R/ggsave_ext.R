@@ -88,7 +88,7 @@ ggsave_ext <- function(plot = ggplot2::last_plot(),
   )
 
   if (is.null(device)) {
-    if (is.null(filetype) && stringr::str_detect(filename, "\\.")) {
+    if (is.null(filetype) && !is.null(filename) && stringr::str_detect(filename, "\\.")) {
       filetype <- stringr::str_extract(filename, "(?<=\\.).+$")
       filename <- stringr::str_remove(filename, paste0("\\.", filetype, "$"))
     }
@@ -127,6 +127,79 @@ ggsave_ext <- function(plot = ggplot2::last_plot(),
   }
 }
 
+#' @rdname ggsave_ext
+#' @name ggsave_social
+#' @export
+#' @importFrom ggplot2 last_plot
+#' @importFrom rlang list2 exec
+ggsave_social <- function(plot = ggplot2::last_plot(),
+                          paper = "Instagram post",
+                          name = NULL,
+                          filename = NULL,
+                          filetype = "jpeg",
+                          dpi = 72,
+                          width = 1080,
+                          height = 1080,
+                          units = "px",
+                          ...) {
+  social_sizes <-
+    c(
+      "Facebook cover photo",
+      "Facebook post",
+      "Facebook story",
+      "Instagram post",
+      "Instagram story",
+      "Twitter cover photo",
+      "Twitter image and link post",
+      "Twitter single image post",
+      "Twitter multiple image post"
+    )
+
+  image_size <- match.arg(paper, social_sizes)
+
+  # FIXME: Platform and format are not being used in this function yet
+  # platform <- match.arg(platform, c("Instagram", "Twitter", "Facebook"))
+  # format <- match.arg(format, c("story", "cover", "post"))
+
+  # FIXME: Is there some additional identifier that can be added to the paper_size data to allow uniqu
+  # image_size <-
+  #  get_social_image(platform = platform, format = format, width = width)
+
+  image_size <- get_paper(paper = image_size)
+
+  params <-
+    modify_fn_fmls(
+      params = rlang::list2(...),
+      fn = ggsave_ext,
+      plot = plot,
+      width = image_size$width,
+      height = image_size$height,
+      name = name,
+      filename = filename,
+      filetype = filetype,
+      units = units
+    )
+
+  rlang::exec(
+    ggsave_ext,
+    !!!params
+  )
+}
+
+#' Get social media image size matching platform and format
+#'
+#' @noRd
+get_social_image <- function(platform, format, ...) {
+  platform <- match.arg(platform, c("Instagram", "Twitter", "Facebook"))
+  format <- match.arg(format, c("story", "cover", "post"))
+
+  get_paper(
+    standard = platform,
+    size = format,
+    ...
+  )
+}
+
 #' @name gtsave_ext
 #' @rdname ggsave_ext
 #' @export
@@ -141,7 +214,7 @@ gtsave_ext <- function(gt_object,
                        ...) {
   is_pkg_installed("gt")
 
-  if (is.null(filetype) && stringr::str_detect(filename, "\\.")) {
+  if (is.null(filetype) && !is.null(filename) && stringr::str_detect(filename, "\\.")) {
     filetype <- stringr::str_extract(filename, "(?<=\\.).+$")
     filename <- str_remove_filetype(filename, filetype)
   }
