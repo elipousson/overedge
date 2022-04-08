@@ -79,7 +79,6 @@ st_center <- function(x,
 #' @name st_square
 #' @export
 #' @importFrom sf st_is_longlat st_inscribed_circle st_geometry st_dimension st_set_geometry
-#' @importFrom usethis ui_stop
 #' @importFrom purrr discard
 st_square <- function(x, scale = 1, rotate = 0, inscribed = FALSE) {
   x <- as_sf(x)

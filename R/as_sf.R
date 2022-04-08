@@ -4,15 +4,15 @@
 #' or MULTIPOINT object is passed to [as_bbox] a 0.00000001 meter buffer is
 #' applied.
 #'
-#' @param x A `sf`, `bbox`, `sfc`, `raster`, `sp`, or data frame object that
-#'   can be converted into a simple feature or bounding box object. [as_bbox()]
-#'   can also convert a vector with xmin, ymin, xmax, and ymax values.
-#'   [as_sf_list] only supports sf objects or a data frames with a sf list
-#'   column named "data" (typically created by using [dplyr::group_nest()] on an
-#'   sf object.
-#' @param sf_col A column name to use for the geometry column created by [as_sf]; defaults to "geometry".
-#' @param crs Coordinate reference system for `sf`, `bbox`, `sfc` or `sf` list object to
-#'   return.
+#' @param x A `sf`, `bbox`, `sfc`, `raster`, `sp`, or data frame object that can
+#'   be converted into a simple feature or bounding box object. [as_bbox()] can
+#'   also convert a vector with xmin, ymin, xmax, and ymax values. [as_sf_list]
+#'   only supports sf objects or a data frames with a sf list column named
+#'   "data" (typically created by using [dplyr::group_nest()] on an sf object.
+#' @param sf_col A column name to use for the geometry column created by
+#'   [as_sf]; defaults to "geometry".
+#' @param crs Coordinate reference system for `sf`, `bbox`, `sfc` or `sf` list
+#'   object to return.
 #' @param ... Additional parameters passed to [sf::st_bbox()] when calling
 #'   [as_bbox()] or passed to [sf::st_sf()], [sf::st_as_sf()], or [df_to_sf()]
 #'   for [as_sf()] (depending on class of x)
@@ -104,12 +104,18 @@ as_sfc <- function(x, crs = NULL, ...) {
   return(x)
 }
 
+#' @noRd
+#' @importFrom sf st_crs st_transform
 as_crs <- function(x, crs = NULL) {
   if (!is.null(crs)) {
     if (is_sf(crs, ext = TRUE)) {
       crs <- sf::st_crs(crs)
     }
-    x <- sf::st_transform(x, crs = crs)
+    if (is_bbox(x)) {
+      x <- sf_bbox_transform(x, crs = crs)
+    } else {
+      x <- sf::st_transform(x, crs = crs)
+    }
   }
 
   x
@@ -134,14 +140,16 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
   x_is_sf_list <- is_sf_list(x, ext = TRUE)
 
   if (!x_is_sf_list) {
-    if ((is.data.frame(x)) && ("data" %in% names(x)) && is_sf_list(x$data)) {
-      # data frame with nested list column named data
-      # produced by group_nest w/ keep_all = TRUE
+
+    # data frame with nested list column named data
+    # produced by group_nest w/ keep_all = TRUE
+    if (is.data.frame(x) && (rlang::has_name(x, "data")) && is_sf_list(x$data)) {
+      if (nm == "data") {
+        nm <- NULL
+      }
 
       if (is.character(col)) {
         nm <- dplyr::summarize(x, .data[[col]])[[1]]
-      } else if (nm == "data") {
-        nm <- NULL
       }
 
       x <- x$data
@@ -170,9 +178,10 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
       crs <- sf::st_crs(crs)
     }
 
-    # FIXME: This sets up the possibility of an error if the sf list is bounding boxes
+    # FIXME: This sets up the possibility of an error if the sf list is bounding
+    # boxes
     if (x_is_sf || x_is_sf_list) {
-      x <- purrr::map(x, ~ sf::st_transform(.x, crs = crs))
+      x <- purrr::map(x, ~ as_crs(.x, crs = crs))
     }
   }
 
@@ -182,22 +191,21 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
 #' Convert data to a different class
 #'
 #' @param data Data that can be converted to sf, sfc, bbox or a sf list object.
-#' @param class A class to convert data to; defaults to NULL (which returns "sf")
+#' @param class A class to convert data to; defaults to NULL (which returns
+#'   "sf")
 #' @param crs coordinate reference system
 #' @noRd
 as_sf_class <- function(x, class = NULL, crs = NULL, ...) {
   if (!is.null(class)) {
     class <- match.arg(class, c("sf", "sfc", "bbox", "list"))
 
-    if (class == "sf") {
-      x <- as_sf(x, crs = crs, ...)
-    } else if (class == "sfc") {
-      x <- as_sfc(x, crs = crs, ...)
-    } else if (class == "bbox") {
-      x <- as_bbox(x, crs = crs, ...)
-    } else if (class == "list") {
-      x <- as_sf_list(x, crs = crs, ...)
-    }
+    x <-
+      switch(class,
+        "sf" = as_sf(x, crs = crs, ...),
+        "sfc" = as_sfc(x, crs = crs, ...),
+        "bbox" = as_bbox(x, crs = crs, ...),
+        "list" = as_sf_list(x, crs = crs, ...)
+      )
   }
 
   return(x)

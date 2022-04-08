@@ -10,7 +10,7 @@ layer_mapbox(
   diag_ratio = NULL,
   unit = "meter",
   asp = NULL,
-  map_style = "mapbox://styles/mapbox/satellite-streets-v11",
+  style_url = "mapbox://styles/mapbox/satellite-streets-v11",
   style_id = NULL,
   username = NULL,
   basemap = FALSE,
@@ -45,9 +45,6 @@ provided.}
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
-
-\item{map_style}{Map style used to fill style_id and username parameters,
-Default: "mapbox://styles/mapbox/satellite-streets-v11"}
 
 \item{style_id}{The style ID}
 
@@ -85,6 +82,9 @@ provided parameters.}
 labels.}
 
 \item{...}{Additional parameter passed to \link[mapboxapi:layer_static_mapbox]{mapboxapi::layer_static_mapbox}}
+
+\item{map_style}{Map style used to fill style_id and username parameters,
+Default: "mapbox://styles/mapbox/satellite-streets-v11"}
 }
 \description{
 layer_mapbox works the same as make_mapbox_basemap but defaults to

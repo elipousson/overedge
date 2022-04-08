@@ -14,6 +14,7 @@ get_osm_data(
   asp = NULL,
   key,
   value = NULL,
+  features = NULL,
   crs = NULL,
   geometry = NULL,
   osmdata = FALSE,
@@ -27,9 +28,11 @@ get_osm_id(id, type = "way", crs = NULL, geometry = NULL, osmdata = FALSE)
 get_osm_boundaries(
   location,
   level = NULL,
+  lang = "en",
   crs = NULL,
-  enclosing = "way",
-  osmdata = TRUE
+  enclosing = "relation",
+  geometry = NULL,
+  osmdata = FALSE
 )
 }
 \arguments{

@@ -44,7 +44,6 @@
 #'   [read_sf_pkg] and [location_filter]
 #' @rdname get_location_data
 #' @export
-#' @importFrom usethis ui_yeah ui_warn
 #' @importFrom sf st_crs st_crop st_transform st_intersection st_filter
 #' @importFrom rlang as_function
 get_location_data <- function(location = NULL,
@@ -74,27 +73,8 @@ get_location_data <- function(location = NULL,
       stopifnot(length(package) == 1)
     }
 
-    lookup_location <- (!is.null(location) && (is.character(location) || is.numeric(location)))
-
-    # Return data from index list if provided (may include bbox, sfc, or sf objects)
-    if (lookup_location) {
-      if ("location" %in% names(index)) {
-        location <- index$location[[location]]
-      } else {
-        location <- index[[location]]
-      }
-    }
-
-    lookup_data <- (!is.null(data) && (is.character(data) || is.numeric(data)))
-
-    # Return data from index list if provided (may include character (e.g. url, file path, data name if in package), bbox, sfc, or sf objects)
-    if (lookup_data) {
-      if ("data" %in% names(index)) {
-        data <- index$data[[data]]
-      } else {
-        data <- index[[data]]
-      }
-    }
+    location <- get_index_param(index, location = location)
+    data <- get_index_param(index, data = data)
   }
 
   if (!is.null(location)) {
@@ -167,7 +147,8 @@ get_location_data <- function(location = NULL,
 
 #' @name map_location_data
 #' @rdname get_location_data
-#' @param load If TRUE and class is "list", load data to local environment; defaults FALSE.
+#' @param load If TRUE and class is "list", load data to local environment;
+#'   defaults FALSE.
 #' @example examples/map_location_data.R
 #' @export
 #' @importFrom rlang list2
@@ -223,7 +204,13 @@ map_location_data <- function(location = NULL,
           data,
           nm = purrr::map_chr(
             data,
-            ~ paste0(c(label, janitor::make_clean_names(.x)), collapse = "_")
+            ~ paste0(
+              c(
+                label,
+                janitor::make_clean_names(.x)
+              ),
+              collapse = "_"
+            )
           )
         )
     }
@@ -275,7 +262,9 @@ map_location_data <- function(location = NULL,
           index = index
         )
       )
-  } else if (is_list_data && is_list_location && (len_data == len_location)) {
+  } else if (is_list_data &&
+    is_list_location &&
+    (len_data == len_location)) {
     data <-
       purrr::map2(
         location,
@@ -309,4 +298,40 @@ map_location_data <- function(location = NULL,
   } else {
     return(data)
   }
+}
+
+
+#' Get value of location of data parameter from list index
+#'
+#' @noRd
+get_index_param <- function(index = NULL,
+                            location = NULL,
+                            data = NULL) {
+
+  # Return data from index list if provided (may include bbox, sfc, or sf
+  # objects)
+  if (!is.null(location)) {
+    if ((is.character(data) || is.numeric(data))) {
+      if ("location" %in% names(index)) {
+        location <- index$location[[location]]
+      } else {
+        location <- index[[location]]
+      }
+    }
+    return(location)
+  }
+
+  # Return data from index list if provided (may include character (e.g. url, file path, data name if in package), bbox, sfc, or sf objects)
+  if (!is.null(data)) {
+    if ((is.character(data) || is.numeric(data))) {
+      if ("data" %in% names(index)) {
+        data <- index$data[[data]]
+      } else {
+        data <- index[[data]]
+      }
+    }
+    return(data)
+  }
+
+  return(NULL)
 }

@@ -117,7 +117,6 @@ layer_markers <- function(data,
 #' @importFrom ggplot2 aes
 #' @importFrom rlang list2
 #' @importFrom purrr list_modify zap
-#' @importFrom usethis ui_stop
 #' @importFrom utils modifyList
 #' @importFrom dplyr arrange mutate row_number
 layer_numbers <- function(data,

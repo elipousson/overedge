@@ -34,7 +34,7 @@
 #' @export
 #' @importFrom purrr pluck
 #' @importFrom sf st_transform
-#' @importFrom usethis ui_info
+#' @importFrom cli cli_alert_info
 get_osm_data <- function(location = NULL,
                          dist = NULL,
                          diag_ratio = NULL,
@@ -42,6 +42,7 @@ get_osm_data <- function(location = NULL,
                          asp = NULL,
                          key,
                          value = NULL,
+                         features = NULL,
                          crs = NULL,
                          geometry = NULL,
                          osmdata = FALSE,
@@ -54,7 +55,7 @@ get_osm_data <- function(location = NULL,
 
   if (is.null(enclosing)) {
     data <-
-      get_osm_data_bbox(
+      get_osm_data_features(
         location = location,
         dist = dist,
         diag_ratio = diag_ratio,
@@ -62,6 +63,7 @@ get_osm_data <- function(location = NULL,
         asp = asp,
         key = key,
         value = value,
+        features = features,
         crs = crs,
         geometry = geometry,
         osmdata = osmdata,
@@ -75,12 +77,12 @@ get_osm_data <- function(location = NULL,
         value = value,
         enclosing = enclosing,
         crs = crs,
+        geometry = geometry,
         osmdata = osmdata
       )
   }
 
   if (getOption("overedge.osm_attribution", TRUE)) {
-
     osm_copyright_url <- "https://www.openstreetmap.org/copyright"
 
     cli::cli_alert_info(
@@ -99,6 +101,7 @@ get_osm_data <- function(location = NULL,
 #' @param id OpenStreetMap feature id
 #' @param type type of feature with id; "node", "way", or "relation"
 #' @export
+#' @importFrom purrr map_dfr
 get_osm_id <- function(id, type = "way", crs = NULL, geometry = NULL, osmdata = FALSE) {
   is_pkg_installed("osmdata")
 
@@ -141,18 +144,23 @@ get_osm_id <- function(id, type = "way", crs = NULL, geometry = NULL, osmdata = 
 #' @name get_osm_boundaries
 #' @export
 #' @importFrom dplyr filter between
+#' @importFrom janitor clean_names
 get_osm_boundaries <- function(location,
                                level = NULL,
+                               lang = "en",
                                crs = NULL,
-                               enclosing = "way",
-                               osmdata = TRUE) {
+                               enclosing = "relation",
+                               geometry = NULL,
+                               osmdata = FALSE) {
   boundaries <-
-    get_osm_data(
+    get_osm_data_enclosing(
       location = location,
       key = "boundary",
       value = "administrative",
       enclosing = enclosing,
-      osmdata = TRUE
+      crs = crs,
+      geometry = geometry,
+      osmdata = osmdata
     )
 
   if (!is.null(level)) {
@@ -165,6 +173,32 @@ get_osm_boundaries <- function(location,
 
   boundaries <- janitor::clean_names(boundaries)
 
+  boundaries_nm <- names(boundaries)
+
+  nm_prefix <-
+    c(
+      "name",
+      "official_name",
+      "short_name",
+      "alt_name",
+      "alt_short_name",
+      "old_name",
+      "old_short_name",
+      "source_name",
+      "not_official_name"
+    )
+
+  nm_cols <-
+    grep(
+      pattern = paste(paste0("^", nm_prefix), collapse = "|"),
+      x = boundaries_nm,
+      value = TRUE
+    )
+
+  drop_nm_cols <- nm_cols[!(nm_cols %in% c(nm_prefix, paste(nm_prefix, lang, sep = "_")))]
+
+  boundaries <- boundaries[, !(boundaries_nm %in% drop_nm_cols)]
+
   boundaries <- st_transform_ext(x = boundaries, crs = crs)
 
   return(boundaries)
@@ -174,17 +208,17 @@ get_osm_boundaries <- function(location,
 #' Get OSM data using a bounding box for a location
 #'
 #' @noRd
-get_osm_data_bbox <- function(location = NULL,
-                              key,
-                              value,
-                              dist = NULL,
-                              diag_ratio = NULL,
-                              unit = NULL,
-                              asp = NULL,
-                              crs = NULL,
-                              geometry = NULL,
-                              nodes_only = FALSE,
-                              osmdata = FALSE) {
+get_osm_data_features <- function(location = NULL,
+                                  key,
+                                  value,
+                                  dist = NULL,
+                                  diag_ratio = NULL,
+                                  unit = NULL,
+                                  asp = NULL,
+                                  crs = NULL,
+                                  geometry = NULL,
+                                  nodes_only = FALSE,
+                                  osmdata = FALSE) {
   osm_crs <- 4326
 
   # Get adjusted bounding box if any adjustment variables provided
@@ -207,18 +241,26 @@ get_osm_data_bbox <- function(location = NULL,
       )
   } else {
     query <-
-        osmdata::opq(
-          bbox = bbox_osm,
-          timeout = 90
-          )
+      osmdata::opq(
+        bbox = bbox_osm,
+        timeout = 90
+      )
   }
 
-  query <-
-    osmdata::add_osm_feature(
-      opq = query,
-      key = key,
-      value = value
-    )
+  if (is.null(features)) {
+    query <-
+      osmdata::add_osm_feature(
+        opq = query,
+        key = key,
+        value = value
+      )
+  } else if (is.character(features)) {
+    query <-
+      osmdata::add_osm_features(
+        opq = query,
+        features = features
+      )
+  }
 
   data <-
     suppressMessages(osmdata::osmdata_sf(query))
@@ -230,8 +272,14 @@ get_osm_data_bbox <- function(location = NULL,
 }
 
 #' @noRd
-get_osm_data_enclosing <- function(location, key, value, enclosing = NULL, crs = NULL, osmdata = FALSE) {
-  enclosing <- match.arg(enclosing, c("way", "relation"))
+get_osm_data_enclosing <- function(location,
+                                   key,
+                                   value,
+                                   enclosing = NULL,
+                                   crs = NULL,
+                                   geometry = NULL,
+                                   osmdata = FALSE) {
+  enclosing <- match.arg(enclosing, c("relation", "way"))
   coords <- sf_to_df(location, crs = 4326)
 
   query <-
@@ -252,11 +300,13 @@ get_osm_data_enclosing <- function(location, key, value, enclosing = NULL, crs =
   data <-
     suppressMessages(osmdata::osmdata_sf(query))
 
-  geometry <-
-    switch(enclosing,
-      "way" = "polygon",
-      "relation" = "multipolygon"
-    )
+  if (is.null(geometry)) {
+    geometry <-
+      switch(enclosing,
+        "relation" = "multipolygon",
+        "way" = "polygon"
+      )
+  }
 
   data <-
     get_osm_data_geometry(data, geometry = geometry, crs = crs, osmdata = osmdata)

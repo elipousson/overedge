@@ -48,7 +48,6 @@
 #' @family layer
 #' @export
 #' @importFrom sf st_geometry_type st_centroid st_coordinates
-#' @importFrom usethis ui_warn ui_stop
 #' @importFrom dplyr left_join rename bind_cols filter
 #' @importFrom ggplot2 aes
 #' @importFrom stringr str_detect
