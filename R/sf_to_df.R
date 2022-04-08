@@ -95,46 +95,37 @@ df_to_sf <- function(x,
 
 
 #' @rdname sf_to_df
-#' @name df_to_sf
+#' @name check_coords
+#' @param default c("lon", "lat").
 #' @param rev If TRUE, reverse c("lat", "lon") coords to c("lon", "lat").
 #'   check_coords only.
 #' @export
 #' @importFrom janitor make_clean_names
-check_coords <- function(x = NULL, coords = NULL, rev = FALSE) {
+check_coords <- function(x = NULL, coords = NULL, default = c("lon", "lat"), rev = FALSE) {
+
+  # If x is a data frame
   if (!is.null(x) && is.data.frame(x)) {
-    # FIXME: there may still be an issue with capitalization (at least with consistency)
-    x <- janitor::clean_names(x)
-    x_coords <- NULL
-
-    x_coords <-
-      dplyr::case_when(
-        rlang::has_name(x, "lon") ~ c("lon", "lat"),
-        rlang::has_name(x, "long") ~ c("long", "lat"),
-        rlang::has_name(x, "longitude") ~ c("longitude", "latitude"),
-        rlang::has_name(x, "y") ~ c("y", "x"),
-        rlang::has_name(x, "geo_longitude") ~ c("geo_longitude", "geo_latitude")
-      )
-
-    if (!is.null(x_coords)) {
-      if (setequal(coords, x_coords)) {
-        return(coords)
-      }
-
+    if (!has_coords(x, coords = coords, value = FALSE)) {
       if (!is.null(coords)) {
         cli::cli_warn(
-          "The provided coordinates do not appear to match the data.
-        Replacing coordinates with suggested values based on column names."
+          "The provided coordinates do not appear to match the data and no standard coordinate column names could be found.
+        Replacing coordinates with default values."
         )
-        coords <- x_coords
+
+        coords <- default
       }
     } else {
-      # FIXME: This warning may not be needed
-      cli::cli_warn("A pair of coordinate column names could not be determined based on the data provided.")
+      replace_coords <- has_coords(x, coords = coords, value = TRUE)
+
+      if (!setequal(coords, replace_coords)) {
+        coords <- replace_coords
+      }
     }
   }
 
+  # If X is NUll or not a dataframe check_coords just validates coord pairs or sets a default value
   if (is.null(coords)) {
-    coords <- c("lon", "lat")
+    coords <- default
   }
 
   stopifnot(
@@ -148,6 +139,48 @@ check_coords <- function(x = NULL, coords = NULL, rev = FALSE) {
   }
 
   return(coords)
+}
+
+#' @rdname sf_to_df
+#' @name has_coords
+#' @param value If TRUE, return the value of the coordinate column names. Used by [has_coords].
+#' @export
+#' @importFrom janitor clean_names
+#' @importFrom dplyr case_when
+#' @importFrom rlang has_name
+has_coords <- function(x, coords = NULL, value = TRUE) {
+  stopifnot(
+    !is.null(x) && is.data.frame(x)
+  )
+
+  x_nm <- names(x)
+  x <- janitor::clean_names(x)
+
+  x_coords <- NULL
+
+  x_coords <-
+    dplyr::case_when(
+      all(rlang::has_name(x, coords)) ~ coords,
+      rlang::has_name(x, "lon") ~ c("lon", "lat"),
+      rlang::has_name(x, "long") ~ c("long", "lat"),
+      rlang::has_name(x, "longitude") ~ c("longitude", "latitude"),
+      rlang::has_name(x, "y") ~ c("y", "x"),
+      rlang::has_name(x, "geo_longitude") ~ c("geo_longitude", "geo_latitude")
+    )
+
+  x_has_coords <-
+    grep(
+      paste0(x_coords, collapse = "|"),
+      x_nm,
+      ignore.case = TRUE,
+      value = value
+    )
+
+  if (value) {
+    return(x_has_coords)
+  }
+
+  return(length(x_has_coords) == length(x_coords))
 }
 
 #' Separate coordinates from a single combined column into two columns
@@ -196,6 +229,7 @@ df_wkt_to_sf <- function(x, crs) {
 }
 
 #' Format coordinates as numeric values and remove missing coordinates from data frame
+#'
 #' @noRd
 #' @importFrom cli cli_alert_info
 format_coords <- function(x, coords = c("lon", "lat")) {
