@@ -22,7 +22,6 @@
 #' @export
 #' @importFrom sf st_intersects st_join st_centroid
 #' @importFrom dplyr filter left_join group_by
-#' @importFrom usethis ui_warn
 #' @importFrom rlang as_function
 make_markers <- function(data,
                          groupname_col = NULL,

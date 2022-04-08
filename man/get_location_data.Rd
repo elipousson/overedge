@@ -115,7 +115,8 @@ tested and may result in errors or unexpected results.}
 \item{...}{additional parameters passed to \link{read_sf_path}, \link{read_sf_url}, or
 \link{read_sf_pkg} and \link{location_filter}}
 
-\item{load}{If TRUE and class is "list", load data to local environment; defaults FALSE.}
+\item{load}{If TRUE and class is "list", load data to local environment;
+defaults FALSE.}
 }
 \description{
 Returns data for a selected area or areas with an optional buffer. If both

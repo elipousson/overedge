@@ -102,7 +102,6 @@ write_sf_ext <- function(data,
 #' @rdname write_sf_ext
 #' @name write_sf_cache
 #' @export
-#' @importFrom usethis ui_yeah ui_done ui_stop
 #' @importFrom sf write_sf
 #' @importFrom readr write_rds
 write_sf_cache <- function(data,
@@ -214,7 +213,6 @@ write_sf_gsheet <- function(data,
 }
 
 #' @noRd
-#' @importFrom usethis ui_done ui_yeah
 #' @importFrom readr write_csv write_rds
 #' @importFrom sf write_sf
 write_sf_types <- function(data, filename = NULL, path = NULL, filetype = NULL) {

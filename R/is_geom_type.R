@@ -13,7 +13,6 @@
 #'   multiple types.
 #' @export
 #' @importFrom sf st_geometry_type
-#' @importFrom usethis ui_warn
 is_geom_type <- function(x, ext = TRUE, type = NULL, by_geometry = FALSE) {
   geom_type <- sf::st_geometry_type(x = x, by_geometry = by_geometry)
 

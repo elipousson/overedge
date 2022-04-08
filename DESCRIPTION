@@ -16,7 +16,6 @@ Imports:
     glue,
     httr2,
     janitor,
-    knitr,
     purrr,
     rappdirs,
     readr,
@@ -26,7 +25,6 @@ Imports:
     tidyr,
     tidyselect,
     units,
-    usethis,
     utils,
     cli,
     tibble
@@ -34,7 +32,8 @@ Remotes:
     koki25ando/FlickrAPI,
     yonghah/esri2sf,
     coolbutuseless/ggsvg,
-    elipousson/birdseyeview
+    elipousson/birdseyeview,
+    walkerke/mapboxapi
 Depends: 
     R (>= 2.10)
 LazyData: true
@@ -47,6 +46,7 @@ Suggests:
     esri2sf,
     exiftoolr,
     FlickrAPI (>= 0.1.0.1),
+    knitr,
     tidygeocoder,
     geomtextpath,
     geosphere,

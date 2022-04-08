@@ -2,17 +2,19 @@
 % Please edit documentation in R/get_osm_data.R
 \name{get_osm_data}
 \alias{get_osm_data}
+\alias{get_osm_id}
 \alias{get_osm_boundaries}
 \title{Use osmdata to get Open Street Map data for a location}
 \usage{
 get_osm_data(
   location = NULL,
-  key,
-  value = NULL,
   dist = NULL,
   diag_ratio = NULL,
   unit = NULL,
   asp = NULL,
+  key,
+  value = NULL,
+  features = NULL,
   crs = NULL,
   geometry = NULL,
   osmdata = FALSE,
@@ -21,17 +23,20 @@ get_osm_data(
   timeout = 120
 )
 
-get_osm_boundaries(location, level = NULL, enclosing = "way", osmdata = TRUE)
+get_osm_id(id, type = "way", crs = NULL, geometry = NULL, osmdata = FALSE)
+
+get_osm_boundaries(
+  location,
+  level = NULL,
+  lang = "en",
+  crs = NULL,
+  enclosing = "relation",
+  geometry = NULL,
+  osmdata = FALSE
+)
 }
 \arguments{
 \item{location}{A \code{sf}, \code{sfc}, or \code{bbox} object.}
-
-\item{key}{Feature key for overpass API query.}
-
-\item{value}{Value of the feature key; can be negated with an initial
-exclamation mark, \code{value = "!this"}, and can also be a vector, \code{value = c("this", "that")}. If \code{value = "all"} or if \code{key = "building"} the values
-passed to the osmdata package are from a preset list extracted from
-\code{\link[osmdata:available_tags]{osmdata::available_tags()}}.}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -48,6 +53,13 @@ to units matching GDAL units for x; defaults to "meter"}
 \item{asp}{Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
+
+\item{key}{Feature key for overpass API query.}
+
+\item{value}{Value of the feature key; can be negated with an initial
+exclamation mark, \code{value = "!this"}, and can also be a vector, \code{value = c("this", "that")}. If \code{value = "all"} or if \code{key = "building"} the values
+passed to the osmdata package are from a preset list extracted from
+\code{\link[osmdata:available_tags]{osmdata::available_tags()}}.}
 
 \item{crs}{Coordinate reference system for output data; if NULL, the data
 remains in the Open Street Map coordinate reference system 4326. Default:
@@ -78,6 +90,10 @@ efficient, with data returned in the \code{osm_points} list item.}
 
 \item{timeout}{It may be necessary to increase this value for large queries,
 because the server may time out before all data are delivered.}
+
+\item{id}{OpenStreetMap feature id}
+
+\item{type}{type of feature with id; "node", "way", or "relation"}
 
 \item{level}{administrative level (admin_level) of boundary to return;
 defaults to NULL. See \url{https://wiki.openstreetmap.org/wiki/Key:admin_level}

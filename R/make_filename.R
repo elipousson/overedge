@@ -21,7 +21,6 @@
 #'   [get_data_dir()]; defaults to `FALSE`.
 #' @family read_write
 #' @export
-#' @importFrom usethis ui_yeah ui_done ui_stop
 make_filename <- function(name = NULL,
                           label = NULL,
                           filetype = NULL,

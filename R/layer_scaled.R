@@ -9,7 +9,6 @@
 #' @family layer
 #' @name layer_scaled
 #' @export
-#' @importFrom usethis ui_stop
 layer_scaled <-
   function(data = NULL,
            dist = NULL,

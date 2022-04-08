@@ -423,7 +423,8 @@ get_asp <- function(asp = NULL,
 #' @importFrom cli cli_abort
 get_char_asp <- function(asp) {
   if (is.character(asp) && grepl(":", asp)) {
-    # If asp is provided as character string (e.g. "16:9") convert to a numeric ratio
+    # If asp is provided as character string (e.g. "16:9") convert to a numeric
+    # ratio
     asp <-
       as.numeric(stringr::str_extract(asp, ".+(?=:)")) /
         as.numeric(stringr::str_extract(asp, "(?<=:).+"))
@@ -508,7 +509,9 @@ get_scale <- function(scale = NULL,
 #' @param scale_unit "mm" (converted to cm by dividing by 10), "cm", "px"
 #'   (converted to inches by dividing by dpi), or "in".
 #' @param actual_unit any unit supported by convert_dist_units
-#' @param scale_factor factor for converting from scale_unit to actual_unit, e.g. if 1" = 1', the scale factor is 12. optional if scale if provided; defaults to `NULL`.
+#' @param scale_factor factor for converting from scale_unit to actual_unit,
+#'   e.g. if 1" = 1', the scale factor is 12. optional if scale if provided;
+#'   defaults to `NULL`.
 #' @param dpi dots per square inch (used as conversion factor for "px" to "in")
 #' @return dist values converted from scale_unit to actual_unit based on
 #'   scale_factor or information from standard_scales object. If paper is
@@ -563,7 +566,6 @@ convert_dist_scale <- function(dist = NULL,
 
   dist <- convert_dist_units(
     dist = dist * scale_factor,
-    # FIXME: This is a bit awkward in order to hijack
     to = actual_unit
   )
 

@@ -40,7 +40,6 @@
 #' @export
 #' @importFrom sf st_crs st_filter st_as_sf st_union
 #' @importFrom knitr combine_words
-#' @importFrom usethis ui_warn
 #' @importFrom rlang list2
 get_location <- function(type,
                          name = NULL,
@@ -145,7 +144,6 @@ get_location <- function(type,
 #'
 #' @noRd
 #' @importFrom rlang has_name
-#' @importFrom knitr combine_words
 #' @importFrom sf st_union
 #' @importFrom dplyr rename
 location_union <- function(location = NULL, name_col = "name") {
@@ -153,6 +151,8 @@ location_union <- function(location = NULL, name_col = "name") {
   if (!is.null(location) && ((nrow(location) == 1) || !rlang::has_name(location, name_col))) {
     return(location)
   }
+
+  is_pkg_installed("knitr")
 
   location <-
     sf::st_as_sf(

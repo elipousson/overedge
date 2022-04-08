@@ -7,7 +7,6 @@
 #' @param package Package name; defaults to "overedge"
 #' @export
 #' @importFrom rappdirs user_cache_dir
-#' @importFrom usethis ui_yeah ui_done
 get_data_dir <- function(path = NULL, package = "overedge") {
   if (is.null(path)) {
     path <- rappdirs::user_cache_dir(package)

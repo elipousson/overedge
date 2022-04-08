@@ -16,7 +16,6 @@
 #' @family read_write
 #' @example examples/read_sf_exif.R
 #' @export
-#' @importFrom usethis ui_warn ui_stop
 #' @importFrom fs dir_ls
 #' @importFrom stringr str_extract
 #' @importFrom purrr map_dfr
@@ -77,7 +76,7 @@ read_sf_exif <- function(path = NULL,
     filetype <- unique(stringr::str_extract(dir_files, "(?<=\\.).+$"))
 
     if (length(filetype) > 1) {
-      cli::cli_abort("The path {usethis::ui_path(path)} includes files with multiple types so a filetype parameter must be provided.")
+      cli::cli_abort("The path {.file {path}} includes files with multiple types so a filetype parameter must be provided.")
     }
   }
 
@@ -169,7 +168,7 @@ read_sf_exif <- function(path = NULL,
     data <-
       dplyr::arrange(data, .data[[sort]])
   } else {
-    cli::cli_warn("The provided value for sort {usethis::ui_value(sort)} is not found in the data.")
+    cli::cli_warn("The provided value for {.field {'sort'}} ({.val {sort}}) is not found in the data.")
   }
 
   exif_crs <- 4326
@@ -206,7 +205,6 @@ read_sf_exif <- function(path = NULL,
 #'   provided fields; defaults to TRUE
 #' @export
 #' @importFrom glue glue
-#' @importFrom usethis ui_done
 write_exif <- function(path = NULL,
                        filetype = NULL,
                        title = NULL,
