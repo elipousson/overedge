@@ -118,3 +118,70 @@ get_esri_data <- function(location = NULL,
 
   return(data)
 }
+
+#' Get multiple ArcGIS feature server layers
+#'
+#' @name get_esri_layers
+#' @rdname get_esri_data
+#' @param layers Either a vector with URLs, a named list of urls, or a numeric vector
+#' @param service_url Base service URL with layers are located.
+#' @export
+#' @importFrom dplyr case_when
+#' @importFrom  purrr map_chr
+get_esri_layers <- function(location = NULL, layers, service_url = NULL, nm = NULL, ...) {
+  is_pkg_installed(pkg = "esri2sf", repo = "yonghah/esri2sf")
+
+  type <-
+    dplyr::case_when(
+      is.numeric(layers) && !is.null(service_url) && is_esri_url(service_url) ~ "id",
+      is.list(layers) && rlang::is_named(layers) ~ "nm_list",
+      is.list(layers) ~ "list",
+      is.character(layers) ~ "url"
+    )
+
+  layer_urls <- NULL
+
+  layer_urls <-
+    switch(type,
+      "id" = paste0(service_url, "/", layers),
+      "nm_list" = as.character(layers),
+      "list" = as.character(layers),
+      "url" = layers
+    )
+
+  if (is.null(nm)) {
+    if ((type == "nm_list")) {
+      nm <- names(layers)
+    } else {
+      nm <- purrr::map_chr(layer_urls, ~ get_esri_metadata(.x))
+    }
+  }
+
+  data <- as.list(layer_urls)
+  names(data) <- nm
+
+  map_location_data(
+    location = location,
+    data = data,
+    ...
+  )
+}
+
+#' @name get_esri_metadata
+#' @rdname get_esri_data
+#' @param meta Name of metadata list value to return from [esri2sf::esrimeta].
+#' @param clean If TRUE, use janitor::make_clean_names on the returned metadata
+#'   value (typically used for name values).
+#' @export
+#' @importFrom janitor make_clean_names
+get_esri_metadata <- function(url, meta = "name", clean = TRUE) {
+  is_pkg_installed(pkg = "esri2sf", repo = "yonghah/esri2sf")
+
+  meta <- esri2sf::esrimeta(url)[[meta]]
+
+  if (clean) {
+    janitor::make_clean_names(meta)
+  } else {
+    nm
+  }
+}
