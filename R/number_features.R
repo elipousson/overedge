@@ -1,13 +1,16 @@
-#' Sort and number features
+#' Sort and number features by coordinates or distance
 #'
 #' Used with [layer_numbers()]. Supports multiple types of sorting including sorting:
 #'
 #' - by centroid coordinates ("lon", "lat") appended with [st_coords]
-#' - by one or more bounding box min or max values ("xmin", "ymin", "xmax", "ymax") appended with [st_coords_minmax]
+#' - by one or more bounding box min or max values ("xmin", "ymin", "xmax",
+#' "ymax") appended with [st_coords_minmax]
 #' - by distance from the corner, side midpoint, or center of a bounding box
 #' ("dist_xmin_ymin", "dist_xmax_ymax", "dist_xmin_ymax", "dist_xmax_ymin",
 #' "dist_xmin_ymid", "dist_xmax_ymid", "dist_xmid_ymin", "dist_xmid_ymax",
 #' "dist_xmid_ymid")
+#' - by distance to a point (or sf, sfc, or bbox object) passed to the to
+#' parameter
 #'
 #' For example, in the eastern United States, you can sort and number features
 #' from the top-left corner of the map to the bottom right by setting sort to "dist_xmin_ymax" (default).
@@ -33,6 +36,7 @@
 number_features <- function(data,
                             col = NULL,
                             sort = "dist_xmin_ymax",
+                            to = NULL,
                             desc = FALSE,
                             crs = NULL,
                             num_style = "arabic",
@@ -54,6 +58,7 @@ number_features <- function(data,
       data,
       col = col,
       sort = sort,
+      to = to,
       desc = desc,
       crs = crs
     )
@@ -107,6 +112,7 @@ int_to_alph <- function(num, suffix = NULL, base = 26) {
 sort_features <- function(data,
                           col = NULL,
                           sort = c("lon", "lat"),
+                          to = NULL,
                           desc = FALSE,
                           crs = NULL,
                           drop = FALSE) {
@@ -145,11 +151,13 @@ sort_features <- function(data,
       "dist_xmid_ymid"
     )
 
-  if (any(sort %in% c(dist_opts))) {
-    sort <- match.arg(sort, dist_opts)
+  if (any(sort %in% c(dist_opts)) | !is.null(to)) {
+    if (is.null(to)) {
+      sort <- match.arg(sort, dist_opts)
 
-    to <-
-      strsplit(sort, "_")[[1]][2:3]
+      to <-
+        strsplit(sort, "_")[[1]][2:3]
+    }
 
     data <-
       st_dist(
