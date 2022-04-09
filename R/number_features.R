@@ -1,16 +1,30 @@
 #' Sort and number features
 #'
-#' Used with [layer_numbers()]
+#' Used with [layer_numbers()]. Supports multiple types of sorting including sorting:
+#'
+#' - by centroid coordinates ("lon", "lat") appended with [st_coords]
+#' - by one or more bounding box min or max values ("xmin", "ymin", "xmax", "ymax") appended with [st_coords_minmax]
+#' - by distance from the corner, side midpoint, or center of a bounding box
+#' ("dist_xmin_ymin", "dist_xmax_ymax", "dist_xmin_ymax", "dist_xmax_ymin",
+#' "dist_xmin_ymid", "dist_xmax_ymid", "dist_xmid_ymin", "dist_xmid_ymax",
+#' "dist_xmid_ymid")
+#'
+#' For example, in the eastern United States, you can sort and number features
+#' from the top-left corner of the map to the bottom right by setting sort to "dist_xmin_ymax" (default).
+#'
+#' [number_features] also supports a range of different numbering styles
+#' designed to match the standard enumeration options available in LaTeX.
 #'
 #' @param data Marker data
 #' @param col Group column name, Default: `NULL`
-#' @param sort Sort column name, Default: 'lon'
-#' @param desc If `TRUE`, sort descending; set to `FALSE` if sort is "lon" and
-#'   TRUE is sort is "lat" or any other value, default `NULL`
-#' @param num_style Style of enumeration, either "arabic", "alph", "Alph", "roman",
-#'   "Roman"
-#' @param suffix Character to appended to "number" column.
-#' @return A sf object with a number column ordered by sort.
+#' @param sort Sort column name, Default: "dist_xmin_ymax".
+#' @param desc If `TRUE`, sort descending; default `FALSE`.
+#' @param num_style Style of enumeration, either "arabic", "alph", "Alph",
+#'   "roman", "Roman"
+#' @param suffix Character to appended to "number" column. (e.g. "." for "1." or
+#'   ":" for "1:"). Can also be a character vector with the same length as the
+#'   number column.
+#' @return A sf object with a number column ordered by sort values.
 #' @export
 #' @importFrom dplyr mutate row_number everything
 #' @importFrom utils as.roman
@@ -18,14 +32,21 @@
 #' @importFrom cli cli_warn
 number_features <- function(data,
                             col = NULL,
-                            sort = "lon",
-                            desc = NULL,
+                            sort = "dist_xmin_ymax",
+                            desc = FALSE,
+                            crs = NULL,
                             num_style = "arabic",
                             suffix = NULL) {
   if (rlang::has_name(data, "number")) {
     cli::cli_warn(
-      "number_features is replacing an existing column with the name number."
+      "number_features is moving the existing column with the name 'number' to a new column named 'orig_number'."
     )
+
+    data <-
+      dplyr::rename(
+        data,
+        orig_number = number
+      )
   }
 
   data <-
@@ -33,7 +54,8 @@ number_features <- function(data,
       data,
       col = col,
       sort = sort,
-      desc = desc
+      desc = desc,
+      crs = crs
     )
 
   data <-
@@ -81,32 +103,63 @@ int_to_alph <- function(num, suffix = NULL, base = 26) {
 #' @rdname number_features
 #' @export
 #' @importFrom rlang has_name
-#' @importFrom dplyr arrange desc
+#' @importFrom dplyr arrange desc across all_of
 sort_features <- function(data,
                           col = NULL,
-                          sort = "lon",
-                          desc = NULL) {
-  coords <- c("lon", "lat")
-  sort <- match.arg(sort, c(coords, names(data)))
+                          sort = c("lon", "lat"),
+                          desc = FALSE,
+                          crs = NULL,
+                          drop = FALSE) {
+  latlon_opts <- c("longitude", "latitude", "lon", "lat")
+  minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
 
-  # Set defaults for desc that make sense for the northern hemisphere
-  # TODO: document this or make it an option to reverse
-  if (is.null(desc)) {
-    desc <- FALSE
+  if (any(sort %in% c(latlon_opts, minmax_opts))) {
+    sort <- match.arg(sort, choices = c(latlon_opts, minmax_opts), several.ok = TRUE)
 
-    if (sort == "lat") {
-      desc <- TRUE
+    if ((sort %in% latlon_opts) && !all(rlang::has_name(data, sort))) {
+      data <-
+        st_coords(
+          data,
+          geometry = "centroid",
+          crs = crs,
+          keep_all = TRUE,
+          drop = drop
+        )
+    } else if ((sort %in% minmax_opts) && !all(rlang::has_name(data, sort))) {
+      data <-
+        st_coords_minmax(
+          data,
+          crs = crs,
+          keep_all = TRUE,
+          drop = drop
+        )
     }
   }
 
-  if (all(sort %in% coords) && !all(rlang::has_name(data, coords))) {
+  dist_opts <-
+    c(
+      "dist_xmin_ymin", "dist_xmax_ymax",
+      "dist_xmin_ymax", "dist_xmax_ymin",
+      "dist_xmin_ymid", "dist_xmax_ymid",
+      "dist_xmid_ymin", "dist_xmid_ymax",
+      "dist_xmid_ymid"
+    )
+
+  if (any(sort %in% c(dist_opts))) {
+    sort <- match.arg(sort, dist_opts)
+
+    to <-
+      strsplit(sort, "_")[[1]][2:3]
+
     data <-
-      st_coords(
+      st_dist(
         data,
-        coords = coords,
-        geometry = "centroid",
-        drop = FALSE
+        to = to,
+        keep_all = TRUE,
+        drop = drop
       )
+
+    sort <- "dist"
   }
 
   by_group <- FALSE
@@ -119,10 +172,10 @@ sort_features <- function(data,
 
   if (desc) {
     data <-
-      dplyr::arrange(data, dplyr::desc(.data[[sort]]), .by_group = by_group)
+      dplyr::arrange(data, dplyr::desc(dplyr::across(dplyr::all_of(sort))), .by_group = by_group)
   } else {
     data <-
-      dplyr::arrange(data, .data[[sort]], .by_group = by_group)
+      dplyr::arrange(data, dplyr::across(dplyr::all_of(sort)), .by_group = by_group)
   }
 
   return(data)
