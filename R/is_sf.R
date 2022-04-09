@@ -46,6 +46,13 @@ is_sf <- function(x, ext = FALSE, null.ok = FALSE) {
   is_class(x, classes = classes, null.ok = null.ok)
 }
 
+#' @name is_sfg
+#' @rdname is_sf
+#' @export
+is_sfg <- function(x, null.ok = FALSE) {
+  is_class(x, classes = "sfg", null.ok = null.ok)
+}
+
 #' @name is_sfc
 #' @rdname is_sf
 #' @export
@@ -189,7 +196,7 @@ is_sf_or_what <- function(x = NULL, return = NULL, us = FALSE, null.ok = TRUE) {
   is_null <- is.null(x)
 
   if (!null.ok && is_null) {
-    cli::cli_abort("object is NULL")
+    cli::cli_abort("is_sf_or_what found a NULL object when null.ok is FALSE")
   }
 
   type <-
@@ -206,16 +213,17 @@ is_sf_or_what <- function(x = NULL, return = NULL, us = FALSE, null.ok = TRUE) {
         "nm_list" = rlang::is_named(x) && is.list(x),
         "list" = is.list(x) && (is.character(x) | is.numeric(x)),
         "chr" = is.character(x),
-        "num" = is.numeric(x)
+        "num" = is.numeric(x),
+        "len" = length(x)
       )
     )
 
-    if (type$chr && us) {
+    if ((type$chr | type$num) && us) {
       type <- c(
         type,
         list(
-          "state" = (x %in% c(us_states$name, us_states$abb, us_states$statefp, as.integer(us_states$statefp))),
-          "county" = (x %in% c(us_counties$name, us_counties$geoid, as.integer(us_counties$geoid)))
+          "state" = (as.character(x) %in% c(us_states$name, us_states$abb, us_states$statefp, as.integer(us_states$statefp))),
+          "county" = (as.character(x) %in% c(us_counties$name, us_counties$geoid, as.integer(us_counties$geoid)))
         )
       )
     }
