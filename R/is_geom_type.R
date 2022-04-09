@@ -1,32 +1,42 @@
 #' What geometry type is this feature?
 #'
-#' A flexible wrapper for [sf::st_geometry_type].
+#' A flexible wrapper for [sf::st_geometry_type] and [sf::st_is].
 #'
 #' @name is_geom_type
 #' @param x A sf or sfc object passed to [sf::st_geometry_type]
-#' @param ext For st_geom_type, if ext TRUE and check is NULL, return a list with checks for POINTS,
-#'   POLYGONS, LINESTRING, and the returned types.
 #' @param type If "POINT", check if geometry type is POINT. Same for all
 #'   available geometry types; not case sensitive; Default: NULL
 #' @param by_geometry Passed to sf::st_geometry_type; defaults to FALSE
-#' @returns Returns vector with all geometry types; gives warning if object uses
-#'   multiple types.
+#' @param ext For st_geom_type, if ext TRUE and check is NULL, return a list with checks for POINTS,
+#'   POLYGONS, LINESTRING, and the returned types.
+#' @returns If ext is FALSE and type is NULL, returns vector with geometry types
+#'   identical to [sf::st_geometry_type]. If ext is TRUE, returns a list and, if
+#'   type is not NULL, returns a logical vector.
 #' @export
-#' @importFrom sf st_geometry_type
-is_geom_type <- function(x, ext = TRUE, type = NULL, by_geometry = FALSE) {
-  geom_type <- sf::st_geometry_type(x = x, by_geometry = by_geometry)
+#' @importFrom sf st_geometry_type st_is
+is_geom_type <- function(x, type = NULL, by_geometry = FALSE, ext = TRUE) {
+  if (!is.null(type)) {
+    geom_type <- sf::st_is(x, type)
 
-  if (!is.null(type) && ext) {
-    geom_type <- (toupper(type) %in% geom_type)
-  } else if (ext) {
+    if (!by_geometry) {
+      geom_type <- all(geom_type)
+    }
+
+    return(geom_type)
+  }
+
+  geom_type <-
+    sf::st_geometry_type(x, by_geometry = by_geometry)
+
+  if (ext) {
     geom_type <-
       list(
         "TYPES" = geom_type,
-        "POINTS" = grepl("POINT$", geom_type),
-        "POLYGONS" = grepl("POLYGON$", geom_type),
-        "LINESTRINGS" = grepl("STRING$", geom_type),
-        "COLLECTION" = geom_type %in% "GEOMETRYCOLLECTION",
-        "OTHER" = geom_type %in% c("GEOMETRY", "CIRCULARSTRING", "COMPOUNDCURVE", "CURVEPOLYGON", "MULTICURVE", "MULTISURFACE", "CURVE", "SURFACE", "POLYHEDRALSURFACE", "TIN", "TRIANGLE")
+        "POINTS" = sf::st_is(x, c("POINT", "MULTIPOINT")),
+        "POLYGONS" = sf::st_is(x, c("POLYGON", "MULTIPOLYGON")),
+        "LINESTRINGS" = sf::st_is(x, c("LINESTRING", "MULTILINESTRING")),
+        "COLLECTION" = sf::st_is(x, "GEOMETRYCOLLECTION"),
+        "OTHER" = sf::st_is(x, c("GEOMETRY", "CIRCULARSTRING", "COMPOUNDCURVE", "CURVEPOLYGON", "MULTICURVE", "MULTISURFACE", "CURVE", "SURFACE", "POLYHEDRALSURFACE", "TIN", "TRIANGLE"))
       )
   }
 
@@ -39,7 +49,6 @@ is_geom_type <- function(x, ext = TRUE, type = NULL, by_geometry = FALSE) {
 is_point <- function(x, by_geometry = FALSE) {
   is_geom_type(
     x = x,
-    ext = TRUE,
     type = "POINT",
     by_geometry = by_geometry
   )
@@ -51,32 +60,29 @@ is_point <- function(x, by_geometry = FALSE) {
 is_multipoint <- function(x, by_geometry = FALSE) {
   is_geom_type(
     x = x,
-    ext = TRUE,
     type = "MULTIPOINT",
     by_geometry = by_geometry
   )
 }
 
-#' @name is_string
+#' @name is_line
 #' @rdname is_geom_type
 #' @export
-is_string <- function(x, by_geometry = FALSE) {
+is_line <- function(x, by_geometry = FALSE) {
   is_geom_type(
     x = x,
-    ext = TRUE,
-    type = "STRING",
+    type = "LINESTRING",
     by_geometry = by_geometry
   )
 }
 
-#' @name is_multistring
+#' @name is_multiline
 #' @rdname is_geom_type
 #' @export
-is_multistring <- function(x, by_geometry = FALSE) {
+is_multiline <- function(x, by_geometry = FALSE) {
   is_geom_type(
     x = x,
-    ext = TRUE,
-    type = "MULTISTRING",
+    type = "MULTILINESTRING",
     by_geometry = by_geometry
   )
 }
@@ -87,7 +93,6 @@ is_multistring <- function(x, by_geometry = FALSE) {
 is_polygon <- function(x, by_geometry = FALSE) {
   is_geom_type(
     x = x,
-    ext = TRUE,
     type = "POLYGON",
     by_geometry = by_geometry
   )
@@ -100,7 +105,6 @@ is_polygon <- function(x, by_geometry = FALSE) {
 is_multipolygon <- function(x, by_geometry = FALSE) {
   is_geom_type(
     x = x,
-    ext = TRUE,
     type = "MULTIPOLYGON",
     by_geometry = by_geometry
   )
