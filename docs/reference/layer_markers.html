@@ -131,15 +131,16 @@ currently supported)</p></dd>
 <dd><p>If TRUE, numbers are added by group based on
 groupname_col.</p></dd>
 <dt>num_style</dt>
-<dd><p>Style of enumeration, either "arabic", "alph", "Alph", "roman",
-"Roman"</p></dd>
+<dd><p>Style of enumeration, either "arabic", "alph", "Alph",
+"roman", "Roman"</p></dd>
 <dt>suffix</dt>
-<dd><p>Character to appended to "number" column.</p></dd>
+<dd><p>Character to appended to "number" column. (e.g. "." for "1." or
+":" for "1:"). Can also be a character vector with the same length as the
+number column.</p></dd>
 <dt>sort</dt>
-<dd><p>Sort column name, Default: 'lon'</p></dd>
+<dd><p>Sort column name, Default: "dist_xmin_ymax".</p></dd>
 <dt>desc</dt>
-<dd><p>If <code>TRUE</code>, sort descending; set to <code>FALSE</code> if sort is "lon" and
-TRUE is sort is "lat" or any other value, default <code>NULL</code></p></dd>
+<dd><p>If <code>TRUE</code>, sort descending; default <code>FALSE</code>.</p></dd>
 <dt>fn</dt>
 <dd><p>Function to apply to data before results; gives warning if data is
 grouped; Default: <code>NULL</code></p></dd>
@@ -182,7 +183,8 @@ is not implemented.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

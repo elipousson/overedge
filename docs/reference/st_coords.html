@@ -77,7 +77,9 @@ surface (geometry = "surface point") instead of the centroid.</p>
   crs <span class="op">=</span> <span class="cn">NULL</span>,
   keep_all <span class="op">=</span> <span class="cn">TRUE</span>,
   drop <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span>
+
+<span class="fu">st_coords_minmax</span><span class="op">(</span><span class="va">x</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -98,6 +100,12 @@ Default: <code>TRUE</code>.</p></dd>
 <dt>drop</dt>
 <dd><p>If <code>TRUE</code> and x is an sf object, drop the geometry Default: <code>TRUE</code>.</p></dd>
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>st_coords_minmax get a bounding box for each feature (or group of features)
+appends the xmin, ymin, xmax, and ymax values for each feature to the simple
+feature object.</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
@@ -108,7 +116,8 @@ Default: <code>TRUE</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -2,6 +2,7 @@
 % Please edit documentation in R/st_coords.R
 \name{st_coords}
 \alias{st_coords}
+\alias{st_coords_minmax}
 \title{Get coordinates for a simple feature or bounding box object}
 \usage{
 st_coords(
@@ -12,6 +13,8 @@ st_coords(
   keep_all = TRUE,
   drop = TRUE
 )
+
+st_coords_minmax(x, crs = NULL, keep_all = TRUE, drop = TRUE)
 }
 \arguments{
 \item{x}{sf, bbox, or sfc object}
@@ -33,4 +36,9 @@ Default: \code{TRUE}.}
 An extended version of st_coords that supports binding coordinates to the
 object, optionally dropping the geometry, and returning wkt or a point on
 surface (geometry = "surface point") instead of the centroid.
+}
+\details{
+\link{st_coords_minmax} get a bounding box for each feature (or group of features)
+appends the xmin, ymin, xmax, and ymax values for each feature to the simple
+feature object.
 }

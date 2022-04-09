@@ -162,14 +162,20 @@ location</dd>
 
       <dl><dt>
           
-          <code><a href="is_sf.html">is_sf()</a></code> <code><a href="is_sf.html">is_sfc()</a></code> <code><a href="is_sf.html">is_bbox()</a></code> <code><a href="is_sf.html">is_sf_list()</a></code> <code><a href="is_sf.html">is_raster()</a></code> <code><a href="is_sf.html">is_sp()</a></code> <code><a href="is_sf.html">is_same_crs()</a></code> <code><a href="is_sf.html">is_same_dist()</a></code> <code><a href="is_sf.html">is_same_area()</a></code> <code><a href="is_sf.html">is_sf_or_what()</a></code> 
+          <code><a href="is_sf.html">is_sf()</a></code> <code><a href="is_sf.html">is_sfg()</a></code> <code><a href="is_sf.html">is_sfc()</a></code> <code><a href="is_sf.html">is_bbox()</a></code> <code><a href="is_sf.html">is_sf_list()</a></code> <code><a href="is_sf.html">is_raster()</a></code> <code><a href="is_sf.html">is_sp()</a></code> <code><a href="is_sf.html">is_same_crs()</a></code> <code><a href="is_sf.html">is_same_dist()</a></code> <code><a href="is_sf.html">is_same_area()</a></code> <code><a href="is_sf.html">is_sf_or_what()</a></code> 
         </dt>
         <dd>What is the class or spatial attributes of this feature?</dd>
       </dl><dl><dt>
           
-          <code><a href="is_geom_type.html">is_geom_type()</a></code> <code><a href="is_geom_type.html">is_point()</a></code> <code><a href="is_geom_type.html">is_multipoint()</a></code> <code><a href="is_geom_type.html">is_string()</a></code> <code><a href="is_geom_type.html">is_multistring()</a></code> <code><a href="is_geom_type.html">is_polygon()</a></code> <code><a href="is_geom_type.html">is_multipolygon()</a></code> 
+          <code><a href="is_geom_type.html">is_geom_type()</a></code> <code><a href="is_geom_type.html">is_point()</a></code> <code><a href="is_geom_type.html">is_multipoint()</a></code> <code><a href="is_geom_type.html">is_line()</a></code> <code><a href="is_geom_type.html">is_multiline()</a></code> <code><a href="is_geom_type.html">is_polygon()</a></code> <code><a href="is_geom_type.html">is_multipolygon()</a></code> 
         </dt>
         <dd>What geometry type is this feature?</dd>
+      </dl><dl><dt>
+          
+          <code><a href="as_points.html">as_points()</a></code> <code><a href="as_points.html">as_point()</a></code> 
+        </dt>
+        <dd>Convert a simple feature object or a numeric string to a single POINT (sfg)
+or POINT geometry set (sfc)</dd>
       </dl><dl><dt>
           
           <code><a href="as_sf.html">as_sf()</a></code> <code><a href="as_sf.html">as_bbox()</a></code> <code><a href="as_sf.html">as_sfc()</a></code> <code><a href="as_sf.html">as_sf_list()</a></code> 
@@ -182,7 +188,7 @@ location</dd>
         <dd>Convert between simple feature and data frame objects</dd>
       </dl><dl><dt>
           
-          <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sfc()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_expand()</a></code> 
+          <code><a href="sf_bbox_misc.html">sf_bbox_asp()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_point()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_dist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_xdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_ydist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_diagdist()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_transform()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sf()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_sfc()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_wkt()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_to_lonlat_query()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_shift()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_contract()</a></code> <code><a href="sf_bbox_misc.html">sf_bbox_expand()</a></code> 
         </dt>
         <dd>Measure, transform, and convert bounding boxes</dd>
       </dl><dl><dt>
@@ -217,9 +223,15 @@ location</dd>
         <dd>Clip the side or corner of a simple feature or bounding box object</dd>
       </dl><dl><dt>
           
-          <code><a href="st_coords.html">st_coords()</a></code> 
+          <code><a href="st_coords.html">st_coords()</a></code> <code><a href="st_coords.html">st_coords_minmax()</a></code> 
         </dt>
         <dd>Get coordinates for a simple feature or bounding box object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="st_dist.html">st_dist()</a></code> 
+        </dt>
+        <dd>Get distance from a simple feature object to another object or bounding box
+corner</dd>
       </dl><dl><dt>
           
           <code><a href="st_erase.html">st_erase()</a></code> <code><a href="st_erase.html">st_trim()</a></code> 
@@ -270,7 +282,7 @@ location</dd>
           
           <code><a href="number_features.html">number_features()</a></code> <code><a href="number_features.html">sort_features()</a></code> 
         </dt>
-        <dd>Sort and number features</dd>
+        <dd>Sort and number features by coordinates or distance</dd>
       </dl><dl><dt>
           
           <code><a href="mapview_ext.html">mapview_col()</a></code> <code><a href="mapview_ext.html">mapview_exif()</a></code> <code><a href="mapview_ext.html">mapview_flickr()</a></code> <code><a href="mapview_ext.html">make_img_leafpop()</a></code> 

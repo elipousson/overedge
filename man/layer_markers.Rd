@@ -66,15 +66,16 @@ currently supported)}
 \item{num_by_group}{If TRUE, numbers are added by group based on
 groupname_col.}
 
-\item{num_style}{Style of enumeration, either "arabic", "alph", "Alph", "roman",
-"Roman"}
+\item{num_style}{Style of enumeration, either "arabic", "alph", "Alph",
+"roman", "Roman"}
 
-\item{suffix}{Character to appended to "number" column.}
+\item{suffix}{Character to appended to "number" column. (e.g. "." for "1." or
+":" for "1:"). Can also be a character vector with the same length as the
+number column.}
 
-\item{sort}{Sort column name, Default: 'lon'}
+\item{sort}{Sort column name, Default: "dist_xmin_ymax".}
 
-\item{desc}{If \code{TRUE}, sort descending; set to \code{FALSE} if sort is "lon" and
-TRUE is sort is "lat" or any other value, default \code{NULL}}
+\item{desc}{If \code{TRUE}, sort descending; default \code{FALSE}.}
 
 \item{fn}{Function to apply to data before results; gives warning if data is
 grouped; Default: \code{NULL}}

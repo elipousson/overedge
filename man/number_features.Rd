@@ -3,37 +3,67 @@
 \name{number_features}
 \alias{number_features}
 \alias{sort_features}
-\title{Sort and number features}
+\title{Sort and number features by coordinates or distance}
 \usage{
 number_features(
   data,
   col = NULL,
-  sort = "lon",
-  desc = NULL,
+  sort = "dist_xmin_ymax",
+  to = NULL,
+  desc = FALSE,
+  crs = NULL,
   num_style = "arabic",
   suffix = NULL
 )
 
-sort_features(data, col = NULL, sort = "lon", desc = NULL)
+sort_features(
+  data,
+  col = NULL,
+  sort = c("lon", "lat"),
+  to = NULL,
+  desc = FALSE,
+  crs = NULL,
+  drop = FALSE
+)
 }
 \arguments{
 \item{data}{Marker data}
 
 \item{col}{Group column name, Default: \code{NULL}}
 
-\item{sort}{Sort column name, Default: 'lon'}
+\item{sort}{Sort column name, Default: "dist_xmin_ymax".}
 
-\item{desc}{If \code{TRUE}, sort descending; set to \code{FALSE} if sort is "lon" and
-TRUE is sort is "lat" or any other value, default \code{NULL}}
+\item{desc}{If \code{TRUE}, sort descending; default \code{FALSE}.}
 
-\item{num_style}{Style of enumeration, either "arabic", "alph", "Alph", "roman",
-"Roman"}
+\item{num_style}{Style of enumeration, either "arabic", "alph", "Alph",
+"roman", "Roman"}
 
-\item{suffix}{Character to appended to "number" column.}
+\item{suffix}{Character to appended to "number" column. (e.g. "." for "1." or
+":" for "1:"). Can also be a character vector with the same length as the
+number column.}
 }
 \value{
-A sf object with a number column ordered by sort.
+A sf object with a number column ordered by sort values.
 }
 \description{
-Used with \code{\link[=layer_numbers]{layer_numbers()}}
+Used with \code{\link[=layer_numbers]{layer_numbers()}}. Supports multiple types of sorting including sorting:
+}
+\details{
+\itemize{
+\item by centroid coordinates ("lon", "lat") appended with \link{st_coords}
+\item by one or more bounding box min or max values ("xmin", "ymin", "xmax",
+"ymax") appended with \link{st_coords_minmax}
+\item by distance from the corner, side midpoint, or center of a bounding box
+("dist_xmin_ymin", "dist_xmax_ymax", "dist_xmin_ymax", "dist_xmax_ymin",
+"dist_xmin_ymid", "dist_xmax_ymid", "dist_xmid_ymin", "dist_xmid_ymax",
+"dist_xmid_ymid")
+\item by distance to a point (or sf, sfc, or bbox object) passed to the to
+parameter
+}
+
+For example, in the eastern United States, you can sort and number features
+from the top-left corner of the map to the bottom right by setting sort to "dist_xmin_ymax" (default).
+
+\link{number_features} also supports a range of different numbering styles
+designed to match the standard enumeration options available in LaTeX.
 }

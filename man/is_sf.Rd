@@ -2,6 +2,7 @@
 % Please edit documentation in R/is_sf.R
 \name{is_sf}
 \alias{is_sf}
+\alias{is_sfg}
 \alias{is_sfc}
 \alias{is_bbox}
 \alias{is_sf_list}
@@ -14,6 +15,8 @@
 \title{What is the class or spatial attributes of this feature?}
 \usage{
 is_sf(x, ext = FALSE, null.ok = FALSE)
+
+is_sfg(x, null.ok = FALSE)
 
 is_sfc(x, null.ok = FALSE)
 
