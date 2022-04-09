@@ -15,6 +15,10 @@
 #' @export
 #' @importFrom sf st_geometry_type st_is
 is_geom_type <- function(x, type = NULL, by_geometry = FALSE, ext = TRUE) {
+  if (!is_sf(x, ext = TRUE) && !is_sfg(x)) {
+    return(FALSE)
+  }
+
   if (!is.null(type)) {
     geom_type <- sf::st_is(x, type)
 
