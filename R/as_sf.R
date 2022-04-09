@@ -68,9 +68,9 @@ as_bbox <- function(x, crs = NULL, ...) {
   # Convert objects to sf if needed
   x_is <-
     dplyr::case_when(
+      rlang::has_length(x, 4) && all(is.numeric(x)) ~ "num_bbox",
       is_geom_type(x, type = c("POINT", "MULTIPOINT")) ~ "sf_pt",
       is_sf(x, ext = TRUE) ~ "sf_or_sfc",
-      rlang::has_length(x, 4) && all(is.numeric(x)) ~ "num_bbox",
       TRUE ~ "other"
     )
 
