@@ -23,7 +23,8 @@ the returned object remains a list but may be converted to \code{bbox} if class
 
 \item{rotate}{If rotate is greater or less than 0, \link{st_transform_ext} calls
 \link{st_omerc} and returns an object with the oblique mercator projection
-passing the value of rotate to the gamma parameter of the projection.}
+passing the value of rotate to the gamma parameter of the projection.
+rotate must be between -45 and 45 degrees.}
 }
 \value{
 An \code{sf}, \code{sfc}, or \code{bbox} object transformed to a new coordinate

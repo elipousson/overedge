@@ -13,6 +13,7 @@
 #' @param rotate If rotate is greater or less than 0, [st_transform_ext] calls
 #'   [st_omerc] and returns an object with the oblique mercator projection
 #'   passing the value of rotate to the gamma parameter of the projection.
+#'   rotate must be between -45 and 45 degrees.
 #' @return An `sf`, `sfc`, or `bbox` object transformed to a new coordinate
 #'   reference system.
 #' @seealso \code{\link[sf]{st_transform}},\code{\link[sf]{st_crs}}
@@ -72,7 +73,13 @@ st_transform_ext <- function(x = NULL,
 #' @importFrom glue glue
 #' @importFrom sf st_transform
 st_omerc <- function(x, rotate = 0) {
-  coords <- st_coords(x, keep_all = FALSE, crs = 4326)
+
+  stopifnot(
+    dplyr::between(rotate, -45, 45)
+  )
+
+  coords <-
+    st_coords(sf::st_union(x), keep_all = FALSE, crs = 4326)
 
   proj <- "omerc"
   datum <- "WGS84"
