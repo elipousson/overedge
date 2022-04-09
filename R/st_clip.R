@@ -138,6 +138,8 @@ make_clip <- function(x, clip, crs, style = NULL) {
 #'
 #' @noRd
 get_edges <- function(x) {
+  # FIXME: Is there a way to get st_clip to work with a by_element parameter?
+  x <- sf::st_union(x)
   x <- as_sf(x)
   bbox <- as_bbox(x)
   center <- st_center(as_sf(x), ext = TRUE)$sf

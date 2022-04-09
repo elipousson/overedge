@@ -64,7 +64,7 @@ st_center <- function(x,
     center <-
       list(
         "sfc" = centroid,
-        "sf" = number_features(as_sf(centroid)),
+        "sf" = st_coords(as_sf(centroid), drop = FALSE),
         "geometry" = geometry,
         "x" = x, # This is just the original geometry
         "crs" = sf::st_crs(x)
