@@ -36,7 +36,7 @@ st_dist <- function(from, to, by_element = TRUE, units = NULL, drop = FALSE, kee
         several.ok = TRUE
       )
 
-    to <- sf_bbox_point(as_bbox(to), point = to)
+    to <- sf_bbox_point(as_bbox(x), point = to)
     to <- as_sf(to, crs = crs)
   } else if (!is_point(to)) {
     to <- st_center(to, ext = FALSE)
