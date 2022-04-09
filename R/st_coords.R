@@ -5,6 +5,10 @@
 #' object, optionally dropping the geometry, and returning wkt or a point on
 #' surface (geometry = "surface point") instead of the centroid.
 #'
+#' [st_coords_minmax] get a bounding box for each feature (or group of features)
+#' appends the xmin, ymin, xmax, and ymax values for each feature to the simple
+#' feature object.
+#'
 #' @param x sf, bbox, or sfc object
 #' @param coords Column names to use for coordinates in results, Default: NULL;
 #'   which is set to c("lon", "lat") by [check_coords]
@@ -67,6 +71,75 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
   if (drop) {
     x <- sf::st_drop_geometry(x)
   }
+
+  x <-
+    relocate_sf_col(x)
+
+  return(x)
+}
+
+#' @name st_coords_minmax
+#' @rdname st_coords
+#' @importFrom dplyr mutate row_number select bind_cols
+#' @importFrom purrr map
+#' @importFrom tibble enframe
+#' @importFrom tidyr unnest_wider
+#' @importFrom sf st_drop_geometry
+st_coords_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
+  stopifnot(
+    is_sf(x, ext = TRUE)
+  )
+
+  x <- dplyr::mutate(
+    x,
+    minmax_row_num = as.character(dplyr::row_number())
+  )
+
+  col <- "minmax_row_num"
+
+  # Get bbox for each feature (col must be unique)
+  x_bbox_list <-
+    st_bbox_ext(as_sf_list(x, col = col), crs = crs, class = "list")
+  # Drop bbox class
+
+  x_bbox_list <-
+    purrr::map(
+      x_bbox_list,
+      ~ as.numeric(.x)
+    )
+
+  x <- dplyr::select(x, -col)
+
+  minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
+
+  minmax_df <-
+    tidyr::unnest_wider(
+      tibble::enframe(x_bbox_list, value = "bbox"),
+      "bbox",
+      names_repair = ~ c(col, minmax_opts),
+      names_sep = ""
+    )
+
+  minmax_df <-
+    dplyr::select(minmax_df, -col)
+
+
+  if (!keep_all) {
+    return(minmax_df)
+  }
+
+  if (drop) {
+    x <- sf::st_drop_geometry(x)
+  }
+
+  x <-
+    dplyr::bind_cols(
+      x,
+      minmax_df
+    )
+
+  x <-
+    relocate_sf_col(x)
 
   return(x)
 }
