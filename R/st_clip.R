@@ -132,26 +132,6 @@ make_clip <- function(x, clip, crs, style = NULL) {
   return(clip)
 }
 
-#' Make points
-#'
-#' Utility function for make_clip
-#'
-#' @noRd
-as_points <- function(...) {
-  params <- rlang::list2(...)
-
-  params <-
-    purrr::map(
-      params,
-      ~ sf::st_point(.x)
-    )
-
-  x <- rlang::exec(sf::st_as_sfc, params)
-
-  # See https://github.com/r-spatial/sf/issues/114
-  sf::st_cast(x, to = "POINT")
-}
-
 #' Get bounding box edges
 #'
 #' Utility function for make_clip
