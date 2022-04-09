@@ -3,14 +3,15 @@
 #' Simple bounding box functions that you can use to:
 #'
 #' - Measure distances ([sf_bbox_dist], [sf_bbox_xdist], [sf_bbox_ydist], and [sf_bbox_diagdist])
-#' - Get an aspect ratio ([sf_bbox_asp])
+#' - Get an aspect ratio or orientation ([sf_bbox_asp]) (counts asp between 0.9 and 1.1 as "square")
+#' - Return a point from any of the corners, center, or midpoints ([sf_bbox_point])
 #' - Transform the coordinate reference system ([sf_bbox_transform])
 #' - Convert a bounding box to a SQL style query ([sf_bbox_to_lonlat_query]), well
 #' known text ([sf_bbox_to_wkt]), or a simple feature object ([sf_bbox_to_sf])
 #' - Shift, expand, or contract a bounding box ([sf_bbox_shift], [sf_bbox_expand], [sf_bbox_contract])
 #'
-#' The only functions with additional parameters are sf_bbox_to_lonlat_query and sf_bbox_dist. All
-#' other functions only take a bbox parameter.
+#' The only functions with additional parameters are sf_bbox_to_lonlat_query and
+#' sf_bbox_dist. All other functions only take a bbox parameter.
 #'
 #' @param bbox A bounding box object.
 #' @param coords query column names with coordinates. e,g, c("X", "Y") or
@@ -18,7 +19,7 @@
 #' @param crs coordinate reference system to use for query; default 4326
 #' @param from,to xy pairs (e.g. c("xmax", "ymax) defining points to measure
 #'   distance from and to.
-#' @param units If `TRUE`, distance functions return with units. If `FALSE`
+#' @param drop If `FALSE`, distance functions return with units. If `FALSE`
 #'   (default), distance functions return numeric values.
 #' @param orientation If `TRUE`, sf_bbox_asp returns a suggested orientation
 #'   based on aspect ratio (< 0.9 "portrait"; > 1.1 "landscape"; else "square");
@@ -37,72 +38,111 @@ NULL
 #' @rdname sf_bbox_misc
 #' @export
 sf_bbox_asp <- function(bbox, orientation = FALSE) {
-  xdist <- sf_bbox_xdist(bbox) # Get width
-  ydist <- sf_bbox_ydist(bbox) # Get height
+  xdist <- sf_bbox_xdist(bbox, drop = TRUE) # Get width
+  ydist <- sf_bbox_ydist(bbox, drop = TRUE) # Get height
   bbox_asp <- xdist / ydist # Get width to height aspect ratio for bbox
+
   if (!orientation) {
     return(bbox_asp)
-  } else {
-    if (bbox_asp > 1.1) {
-      bbox_orientation <- "landscape"
-    } else if (bbox_asp < 0.9) {
-      bbox_orientation <- "portrait"
-    } else {
-      bbox_orientation <- "square"
-    }
-    return(bbox_orientation)
   }
+
+  return(
+    dplyr::case_when(
+      bbox_asp > 1.1 ~ "landscape",
+      bbox_asp < 0.9 ~ "portrait",
+      TRUE ~ "square"
+    )
+  )
+}
+
+#' @name sf_bbox_point
+#' @rdname sf_bbox_misc
+#' @param point Length 2 character vector representing a coordinate pair at a
+#'   corner, midpoint, or center of the bounding box ("xmin", "ymin", "xmax",
+#'   "ymax", "xmid", "ymid")
+#' @export
+sf_bbox_point <- function(bbox, point = NULL) {
+  point <- match.arg(
+    point,
+    c("xmin", "ymin", "xmax", "ymax", "xmid", "ymid"),
+    several.ok = TRUE
+  )
+
+  if (any(c("xmid", "ymid") %in% point)) {
+    bbox <-
+      c(
+        bbox,
+        list(
+          xmid = mean(c(bbox$xmax, bbox$xmin)),
+          ymid = mean(c(bbox$ymax, bbox$ymin))
+        )
+      )
+  }
+
+  stopifnot(
+    length(point) == 2
+  )
+
+  sf::st_point(c(bbox[[point[1]]], bbox[[point[2]]]))
 }
 
 #' @name sf_bbox_dist
 #' @rdname sf_bbox_misc
 #' @export
-#' @importFrom sf st_crs st_point st_distance
-#' @importFrom units as_units drop_units
-sf_bbox_dist <- function(bbox, from, to, units = FALSE) {
+#' @importFrom sf st_distance st_point st_crs
+#' @importFrom units drop_units as_units
+sf_bbox_dist <- function(bbox, from, to, units = NULL, drop = TRUE) {
   dist <-
     sf::st_distance(
-      sf::st_point(c(bbox[[from[1]]], bbox[[from[2]]])),
-      sf::st_point(c(bbox[[to[1]]], bbox[[to[2]]]))
+      sf_bbox_point(bbox, from),
+      sf_bbox_point(bbox, to)
     )
 
   if (is_class(dist, "units")) {
     dist <- units::drop_units(dist)
-  } else {
-    dist <- as.numeric(dist)
   }
 
-  if (units) {
-    bbox_units <- sf::st_crs(bbox)$units_gdal
-    dist <- units::as_units(dist, value = bbox_units)
+  dist <- as.numeric(dist)
+
+  if (drop) {
+    return(dist)
   }
 
-  return(dist)
+  units <-
+    match.arg(units, c(sf::st_crs(bbox)$units_gdal, dist_unit_options))
+
+  convert_dist_units(
+    dist = dist,
+    from = sf::st_crs(bbox)$units_gdal,
+    to = units
+  )
 }
 
 #' @name sf_bbox_xdist
 #' @rdname sf_bbox_misc
 #' @export
-sf_bbox_xdist <- function(bbox, units = FALSE) {
+sf_bbox_xdist <- function(bbox, units = NULL, drop = TRUE) {
   # abs(bbox["xmax"] - bbox["xmin"]) # Get width
   sf_bbox_dist(
     bbox = bbox,
     from = c("xmin", "ymin"),
     to = c("xmax", "ymin"),
-    units = units
+    units = units,
+    drop = drop
   )
 }
 
 #' @name sf_bbox_ydist
 #' @rdname sf_bbox_misc
 #' @export
-sf_bbox_ydist <- function(bbox, units = FALSE) {
+sf_bbox_ydist <- function(bbox, units = NULL, drop = TRUE) {
   # abs(bbox["ymax"] - bbox["ymin"]) # Get height
   sf_bbox_dist(
     bbox = bbox,
     from = c("xmin", "ymin"),
     to = c("xmin", "ymax"),
-    units = units
+    units = units,
+    drop = drop
   )
 }
 
@@ -110,12 +150,13 @@ sf_bbox_ydist <- function(bbox, units = FALSE) {
 #' @rdname sf_bbox_misc
 #' @export
 #' @importFrom sf st_bbox st_distance st_point
-sf_bbox_diagdist <- function(bbox, units = FALSE) {
+sf_bbox_diagdist <- function(bbox, units = NULL, drop = TRUE) {
   sf_bbox_dist(
     bbox = bbox,
     from = c("xmin", "ymin"),
     to = c("xmax", "ymax"),
-    units = units
+    units = units,
+    drop = drop
   )
 }
 
@@ -124,10 +165,26 @@ sf_bbox_diagdist <- function(bbox, units = FALSE) {
 #' @export
 #' @importFrom sf st_crs st_transform st_bbox
 sf_bbox_transform <- function(bbox, crs = NULL) {
-  if (!is_same_crs(bbox, crs) && !is.null(crs)) {
-    bbox_sf <- sf::st_transform(sf_bbox_to_sf(bbox), crs)
-    bbox <- sf::st_bbox(bbox_sf)
+  if (is.null(crs)) {
+    return(bbox)
   }
+
+  if (is_sf(crs, ext = TRUE)) {
+    crs <- sf::st_crs(crs)
+  }
+
+  if (is_same_crs(bbox, crs)) {
+    return(bbox)
+  }
+
+  bbox <-
+    sf::st_bbox(
+      sf::st_transform(
+        sf_bbox_to_sf(bbox),
+        crs
+      )
+    )
+
   return(bbox)
 }
 
@@ -317,14 +374,13 @@ sf_bbox_to_npc <- function(point,
 
   xdist <-
     sf::st_distance(
-      sf::st_point(c(bbox[["xmin"]], bbox[["ymin"]])),
+      sf_bbox_point(bbox, c("xmin", "ymin")),
       sf::st_point(c(marker[1], bbox[["ymin"]]))
     )
 
-
   ydist <-
     sf::st_distance(
-      sf::st_point(c(bbox[["xmin"]], bbox[["ymin"]])),
+      sf_bbox_point(bbox, c("xmin", "ymin")),
       sf::st_point(c(bbox[["xmin"]], marker[2]))
     )
 
