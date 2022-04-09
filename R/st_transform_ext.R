@@ -46,13 +46,13 @@ st_transform_ext <- function(x = NULL,
     x <- st_omerc(x, rotate = rotate)
   }
 
-  if (is.null(crs) || is_same_crs(x = x, y = crs)) {
-    return(as_sf_class(x, class = class))
-  }
-
   # if x has a different crs than the sf object passed to crs
   if (is_sf(crs, ext = TRUE)) {
     crs <- sf::st_crs(x = crs)
+  }
+
+  if (is.null(crs) || is_same_crs(x = x, y = crs)) {
+    return(as_sf_class(x, class = class))
   }
 
   if (is_bbox(x)) {
