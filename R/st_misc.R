@@ -61,13 +61,14 @@ st_center <- function(x,
 
   if (ext) {
     # FIXME: There should be no difference between the geom and centroid for point data
-    center <- list(
-      "sfc" = centroid,
-      "sf" = number_features(as_sf(centroid)),
-      "geometry" = geometry,
-      "x" = x, # This is just the original geometry
-      "crs" = sf::st_crs(x)
-    )
+    center <-
+      list(
+        "sfc" = centroid,
+        "sf" = number_features(as_sf(centroid)),
+        "geometry" = geometry,
+        "x" = x, # This is just the original geometry
+        "crs" = sf::st_crs(x)
+      )
   } else {
     center <- centroid
   }

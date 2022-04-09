@@ -181,15 +181,15 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 
   # Check MapServer or FeatureServer url
   if (is_esri_url(url)) {
-   return(
-     get_esri_data(
+    return(
+      get_esri_data(
         location = bbox,
         url = url,
         name_col = params$name_col,
         name = params$name,
         where = params$where
       )
-   )
+    )
   } else if (is_gsheet(url)) {
     return(read_sf_gsheet(ss = url, coords = coords, sheet = params$sheet))
   }
