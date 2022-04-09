@@ -89,6 +89,17 @@ modify_mapping <- function(mapping = NULL, data = NULL, ...) {
   return(mapping)
 }
 
+#' Move geometry column after
+#'
+#' @noRd
+#' @importFrom dplyr everything relocate all_of
+relocate_sf_col <- function(x, .after = dplyr::everything()) {
+  dplyr::relocate(
+    x,
+    dplyr::all_of(attributes(x)$sf_column),
+    .after = .after
+  )
+}
 
 #' Modify function parameters
 #'
