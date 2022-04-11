@@ -175,3 +175,11 @@
 #'   \item{\code{wkt}}{Well known text (labelled)}
 #' }
 "us_counties"
+
+#' Supported distance units
+#'
+#' A vector of supported distance units pulled from [dist_units].
+#'
+#' @format A character vector with 47 names, plural names, aliases, and symbols
+#'   for distance units.
+"dist_unit_options"
