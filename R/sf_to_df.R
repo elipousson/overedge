@@ -236,7 +236,6 @@ format_coords <- function(x, coords = c("lon", "lat")) {
   lon <- coords[[1]]
   lat <- coords[[2]]
 
-  print(x)
   # Check that lat/lon are numeric
   if (any(!is.numeric(x[[lon]])) | any(!is.numeric(x[[lat]]))) {
     x[[lon]] <- as.numeric(x[[lon]])
