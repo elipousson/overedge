@@ -25,6 +25,13 @@ is_gsheet <- function(x) {
   )
 }
 
+#' Is this a unit class object?
+#'
+#' @noRd
+is_unit <- function(x) {
+  is_class(x, classes = "unit")
+}
+
 #' Is the df object empty (no rows)?
 #'
 #' @noRd
