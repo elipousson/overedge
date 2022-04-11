@@ -101,3 +101,14 @@ fix_date <- function(data) {
     )
   )
 }
+
+#' @name relocate_sf_col
+#' @rdname format_data
+#' @importFrom dplyr everything relocate all_of
+relocate_sf_col <- function(x, .after = dplyr::everything()) {
+  dplyr::relocate(
+    x,
+    dplyr::all_of(attributes(x)$sf_column),
+    .after = .after
+  )
+}
