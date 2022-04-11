@@ -62,6 +62,8 @@ st_dist <- function(from, to, by_element = TRUE, units = NULL, drop = FALSE, kee
     x_dist <- as.numeric(x_dist[[.id]])
   }
 
+  x_dist <- tibble::tibble("{.id}" := x_dist)
+
   if (!keep_all) {
     return(x_dist)
   }
