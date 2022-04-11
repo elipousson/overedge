@@ -170,7 +170,7 @@ has_coords <- function(x, coords = NULL, value = TRUE) {
 
   x_has_coords <-
     grep(
-      paste0(x_coords, collapse = "|"),
+      paste0(paste0("^", x_coords, "$"), collapse = "|"),
       x_nm,
       ignore.case = TRUE,
       value = value
@@ -236,10 +236,11 @@ format_coords <- function(x, coords = c("lon", "lat")) {
   lon <- coords[[1]]
   lat <- coords[[2]]
 
+  print(x)
   # Check that lat/lon are numeric
-  if (!is.numeric(x[[lon]]) | !is.numeric(x[[lat]])) {
-    x[[lon]] <- as.double(x[[lon]])
-    x[[lat]] <- as.double(x[[lat]])
+  if (any(!is.numeric(x[[lon]])) | any(!is.numeric(x[[lat]]))) {
+    x[[lon]] <- as.numeric(x[[lon]])
+    x[[lat]] <- as.numeric(x[[lat]])
   }
 
   # Check for missing coordinates
