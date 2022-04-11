@@ -225,10 +225,11 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 #' @name read_sf_gsheet
 #' @rdname read_sf_ext
 #' @export
+#' @importFrom rlang is_missing
 read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
   is_pkg_installed("googlesheets4")
 
-  if (ask && is.missing(ss)) {
+  if (ask && rlang::is_missing(ss)) {
     ss <-
       googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
   }
