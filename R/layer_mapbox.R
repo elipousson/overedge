@@ -20,7 +20,6 @@
 #' @md
 #' @export
 #' @importFrom stringr str_extract
-#' @importFrom mapboxapi layer_static_mapbox
 #' @importFrom ggplot2 ggplot
 layer_mapbox <- function(data = NULL,
                          dist = NULL,
@@ -45,6 +44,7 @@ layer_mapbox <- function(data = NULL,
                          hide_grid = TRUE,
                          label_axes = "----",
                          ...) {
+  is_pkg_installed("mapboxapi", repo = "walkerke/mapboxapi")
   if (!is.null(style_url)) {
     username <- stringr::str_extract(style_url, "(?<=styles/).+(?=/)")
     style_id <- stringr::str_extract(style_url, glue::glue("(?<={username}/).+"))

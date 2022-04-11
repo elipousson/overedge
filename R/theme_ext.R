@@ -169,13 +169,11 @@ theme_legend <- function(position = NULL,
   } else {
 
     # TODO: Document that inset legends only work with a subset of position options
-
     leg_pos <- make_legend_position(position = position, justification = justification, inset = inset)
 
     leg_title <- make_legend_title(title = title)
 
     leg_bg <- make_legend_bg(bgcolor)
-
 
     # FIXME: This part needs a test
     # If margin is not a unit object

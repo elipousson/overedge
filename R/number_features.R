@@ -40,7 +40,6 @@ number_features <- function(data,
                             num_style = "arabic",
                             suffix = NULL,
                             .id = "number") {
-
   data <- has_same_name_col(data, col = .id)
 
   if (!is.null(sort)) {
@@ -110,7 +109,6 @@ sort_features <- function(data,
                           desc = FALSE,
                           crs = NULL,
                           drop = FALSE) {
-
   latlon_opts <- c("longitude", "latitude", "lon", "lat")
   minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
 
@@ -155,7 +153,8 @@ sort_features <- function(data,
     } else if (any(sort %in% c(dist_opts))) {
       cli::cli_alert_danger(
         "If the {.field {'sort'}} and {.field {'to'}} are both provided,
-        the value of {.field {'sort'}} ({.val {sort}}) is ignored.")
+        the value of {.field {'sort'}} ({.val {sort}}) is ignored."
+      )
     }
 
     data <-

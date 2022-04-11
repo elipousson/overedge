@@ -22,10 +22,10 @@
 #'   overpass API call, metadata including timestamp and version numbers, and
 #'   all available geometry types; defaults to `FALSE`.
 #' @param enclosing If enclosing is "relation" or "way", use the
-#'    [osmdata::opq_enclosing()] function to query the OSM data (instead of
-#'    [osmdata::add_osm_feature()]. Defaults to `NULL`. When using enclosing, the dist,
-#'   diag_ratio, asp, and unit parameters are ignored and the center of the
-#'   provided location is used for the query. geometry is set automatically
+#'   [osmdata::opq_enclosing()] function to query the OSM data (instead of
+#'   [osmdata::add_osm_feature()]. Defaults to `NULL`. When using enclosing, the
+#'   dist, diag_ratio, asp, and unit parameters are ignored and the center of
+#'   the provided location is used for the query. geometry is set automatically
 #'   based enclosing with "relation" using "multipolygon" and "way" using
 #'   "polygon" geometry.
 #' @inheritParams osmdata::opq
@@ -218,6 +218,7 @@ get_osm_data_features <- function(location = NULL,
                                   crs = NULL,
                                   geometry = NULL,
                                   nodes_only = FALSE,
+                                  features = NULL,
                                   osmdata = FALSE) {
   osm_crs <- 4326
 

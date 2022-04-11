@@ -57,7 +57,7 @@ get_wiki_data <- function(location,
         gsbbox = make_gsbbox(location, dist = dist, diag_ratio = diag_ratio, asp = asp, unit = unit)
       )
   } else {
-    #  dist <- as.numeric(sf_bbox_diagdist(bbox, units = TRUE)) / 2
+    #  dist <- as.numeric(sf_bbox_diagdist(bbox, drop = FALSE)) / 2
     req <-
       httr2::req_url_query(
         req = req,

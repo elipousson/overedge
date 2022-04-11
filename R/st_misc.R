@@ -67,7 +67,7 @@ st_center <- function(x,
   if (ext) {
     center <-
       list(
-        "sfc" = centroid,  # sfc based on centroid
+        "sfc" = centroid, # sfc based on centroid
         "sf" = st_coords(as_sf(centroid), drop = FALSE), # sf based on centroid (won't include original cols)
         "geometry" = geometry, # original geometry (sfc)
         "x" = x, # original object

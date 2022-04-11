@@ -136,12 +136,11 @@ use_fn <- function(data, fn = NULL) {
 #' @importFrom cli cli_abort cli_alert_success
 #' @importFrom dplyr rename
 has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet = FALSE) {
-
   if (rlang::has_name(x, col)) {
     new_col <- paste0(prefix, "_", col)
 
     if (ask && !quiet) {
-      if(!cli_yeah("The provided data includes an existing column named '{col}'.
+      if (!cli_yeah("The provided data includes an existing column named '{col}'.
                    Do you want to proceed and rename this column to {new_col}?")) {
         cli::cli_abort("Please rename your column to use this function.")
       }

@@ -75,7 +75,6 @@ st_transform_ext <- function(x = NULL,
 #' @importFrom glue glue
 #' @importFrom sf st_transform
 st_omerc <- function(x, rotate = 0) {
-
   if (!dplyr::between(rotate, -45, 45)) {
     cli::cli_alert_warning("st_omerc may have an error with rotate values greater than or less than 45")
   }

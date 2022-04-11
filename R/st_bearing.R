@@ -83,12 +83,10 @@ get_start_end_line <- function(x) {
     purrr::map2(
       pts$start,
       pts$end,
-      ~ sf::st_combine(
+      ~ sf::st_cast(sf::st_combine(
         c(.x, .y)
-      ) %>% sf::st_cast("LINESTRING")
-    ) # %>%
-  #   dplyr::bind_rows() %>%
-  #  as_sf()
+      ), "LINESTRING")
+    )
 
   return(pts_combined)
 }

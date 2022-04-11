@@ -13,7 +13,8 @@
 #'   currently supported)
 #' @inheritParams number_features
 #' @param style Style; defaults to `NULL` for [layer_markers()] (supports
-#'   "facet"); defaults to "roundrect" for [layer_markers()] when numbered = TRUE,
+#'   "facet"); defaults to "roundrect" for [layer_markers()] when numbered =
+#'   TRUE,
 #' @param ... Additional parameters passed to [layer_group_data()]
 #' @return ggplot2 layers
 #' @examples

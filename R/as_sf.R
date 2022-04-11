@@ -142,10 +142,10 @@ as_crs <- function(x, crs = NULL, ...) {
   sf::st_transform(x, crs = crs, ...)
 }
 
-#' @param nm For [as_sf_list], name(s) for sf list; defaults to "data". If col is provided, the
-#'   values of the grouping column are used as names.
-#' @param col For [as_sf_list], the name of the column used to group data if x is a sf object or used
-#'   to group and nest data before passing to x.
+#' @param nm For [as_sf_list], name(s) for sf list; defaults to "data". If col
+#'   is provided, the values of the grouping column are used as names.
+#' @param col For [as_sf_list], the name of the column used to group data if x
+#'   is a sf object or used to group and nest data before passing to x.
 #' @name as_sf_list
 #' @rdname as_sf
 #' @export

@@ -39,7 +39,6 @@
 #' @rdname get_location
 #' @export
 #' @importFrom sf st_crs st_filter st_as_sf st_union
-#' @importFrom knitr combine_words
 #' @importFrom rlang list2
 get_location <- function(type,
                          name = NULL,
