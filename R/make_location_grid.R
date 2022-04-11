@@ -32,14 +32,17 @@ make_location_grid <- function(location = NULL,
                                cols = NULL,
                                rows = NULL,
                                gutter = 0,
-                               rev = TRUE,
+                               desc = FALSE,
                                n = NULL,
                                cellsize = NULL,
-                               square = TRUE,
-                               ...) {
+                               what = NULL,
+                               style = "rect",
+                               .id = "id") {
   stopifnot(
     !is.null(location)
   )
+
+  style <- match.arg(style, c("rect", "square", "hex", "flat_top_hex", "circle", "circle_offset"))
 
   # Get adjusted bounding box using any adjustment variables provided
   bbox <-
@@ -52,67 +55,61 @@ make_location_grid <- function(location = NULL,
       crs = crs
     )
 
-  n <- get_n_value(bbox, n = n, rows = rows, cols = cols, square = square)
+  params <-
+    get_grid_params(
+      bbox = bbox,
+      cellsize = cellsize,
+      unit = unit,
+      n = n,
+      what = what,
+      cols = cols,
+      rows = rows,
+      style = style
+    )
 
   bbox_sf <- as_sf(bbox)
 
   grid <-
     sf::st_make_grid(
       x = bbox_sf,
-      n = n,
-      square = square,
-      ...
+      cellsize = params$cellsize,
+      n = params$n,
+      what = params$what,
+      square = params$square,
+      flat_topped = params$flat_topped
     )
 
   grid <- as_sf(grid)
 
   grid <- sf::st_filter(x = grid, y = bbox_sf)
 
-  grid <- dplyr::mutate(
-    grid,
-    "id" = dplyr::row_number(),
-    .before = geometry
-  )
-
-  if (rev) {
-    grid <- dplyr::arrange(
-      grid,
-      dplyr::desc(id)
-    )
-
-    grid <- dplyr::mutate(
-      grid,
-      id = dplyr::row_number(),
-      .before = geometry
-    )
-  }
-
-  if (!is.null(cols) || !is.null(rows)) {
-    if (is.null(cols)) {
-      cols <- 1
-    }
-
-    if (is.null(rows)) {
-      rows <- 1
-    }
-
-    grid <- dplyr::mutate(
-      grid,
-      "col" = rep(seq(cols), rows),
-      "row" = sort(rep(seq(rows), cols)),
-      .before = geometry
-    )
-
-    if (rev) {
-      grid <- dplyr::arrange(
+  if (style %in% c("rect", "square", "circle")) {
+    grid <-
+      dplyr::mutate(
         grid,
-        row,
-        dplyr::desc(col)
+        col = rep(sort(seq(params$cols), decreasing = desc), params$rows),
+        row = sort(rep(seq(params$rows), params$cols), decreasing = !desc)
       )
 
-      grid$col <- rep(seq(cols), rows)
-      grid$id <- seq(cols * rows)
-    }
+    grid <-
+      dplyr::arrange(grid, row, col)
+  }
+
+  grid <-
+    dplyr::mutate(
+      grid,
+      "{.id}" := dplyr::row_number(),
+      .before = dplyr::everything()
+    )
+
+  grid <- relocate_sf_col(grid)
+
+  if (style %in% c("circle", "circle_offset")) {
+    grid <-
+      st_buffer_ext(
+        grid,
+        dist = (sf_bbox_xdist(bbox) / params$cols) / 2
+      )
   }
 
   if (!is.null(gutter) && (gutter != 0)) {
@@ -127,28 +124,91 @@ make_location_grid <- function(location = NULL,
   return(grid)
 }
 
-get_n_value <- function(bbox, n = NULL, cols = NULL, rows = NULL, base_n = 10, square = TRUE) {
-  if (!is.null(cols) && !is.null(rows)) {
-    return(c(cols, rows))
+#' @noRd
+get_grid_params <- function(bbox,
+                            cellsize = NULL,
+                            unit = NULL,
+                            n = NULL,
+                            what = NULL,
+                            cols = NULL,
+                            rows = NULL,
+                            base = 10,
+                            style = NULL) {
+  what <- match.arg(what, c("polygons", "corners", "centers"))
+  style <- match.arg(style, c("rect", "square", "hex", "flat_top_hex", "circle", "circle_offset"))
+
+  if (!is.null(cellsize)) {
+    if (rlang::has_length(n, 1)) {
+      cellsize <- rep(cellsize, 2)
+    }
+
+    if (!is.null(cols) && is_longer(cols * cellsize[1], sf_bbox_xdist(bbox))) {
+      cli::cli_alert_danger("The cellsize will not fit within the width of the bounding box with the number of columns requested.")
+    }
+
+    if (!is.null(rows) && is_longer(rows * cellsize[2], sf_bbox_ydist(bbox))) {
+      cli::cli_alert_danger("The specified cellsize will not fit within the height of the bounding box with the number of rows requested.")
+    }
   }
 
   bbox_asp <- sf_bbox_asp(bbox)
 
-  if (!is.null(n)) {
-    if (!square) {
-      return(n)
-    }
-
-    if (rlang::has_length(n, 1) && is.numeric(n) && square) {
-      return(c(n, n / bbox_asp))
-    }
+  if (is.null(n) && is.null(cols) && is.null(rows)) {
+    cols <- base
+    rows <- base
   }
 
-  if (square) {
-    n <- c(base_n, base_n / bbox_asp)
+  if (is.null(n) && !is.null(cellsize)) {
+    diff_bbox <- as.numeric(c(diff(bbox[c(1, 3)]), diff(bbox[c(2, 4)])))
+    n <- diff_bbox / cellsize
+  }
+
+  if (is.null(n) && is.null(cellsize)) {
+    n <-
+      dplyr::case_when(
+        (!is.null(cols) && (style == "square")) ~ c(cols, cols / bbox_asp),
+        (!is.null(cols) && is.null(rows)) ~ c(cols, cols),
+        (!is.null(cols) && !is.null(rows)) ~ c(cols, rows)
+      )
+
+    n <-
+      dplyr::case_when(
+        (is.null(cols) && !is.null(rows) && (style == "square")) ~ c(rows * bbox_asp, rows),
+        (is.null(cols) && !is.null(rows)) ~ c(rows, rows),
+        TRUE ~ n
+      )
+
+    if (style %in% c("hex", "flat_top_hex")) {
+      cli::cli_alert_info("rows and columns do not work consistently with hexagon grids.")
+    }
+  } else if (!is.null(n)) {
+    n <-
+      dplyr::case_when(
+        rlang::has_length(n, 1) && (style == "square") ~ c(n, n / sf_bbox_asp(bbox)),
+        rlang::has_length(n, 1) ~ c(n, n)
+      )
+  }
+
+  if (is.null(cellsize)) {
+    diff_bbox <- as.numeric(c(diff(bbox[c(1, 3)]), diff(bbox[c(2, 4)])))
+    cellsize <- diff_bbox / unique(n)
+  }
+
+  if (style %in% c("rect", "square", "circle")) {
+    square <- TRUE
+  } else if (style %in% c("hex", "flat_top_hex", "circle_offset")) {
+    square <- FALSE
+  }
+
+  if (style == "flat_top_hex") {
+    flat_topped <- TRUE
   } else {
-    n <- c(base_n, base_n)
+    flat_topped <- FALSE
   }
 
-  return(n)
+  if (style %in% c("circle", "circle_offset")) {
+    what <- "centers"
+  }
+
+  list(cellsize = cellsize, n = n, cols = n[1], rows = n[2], square = square, what = what, flat_topped = flat_topped)
 }

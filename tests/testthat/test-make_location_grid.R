@@ -16,7 +16,7 @@ test_that("make_location_grid works", {
   )
 
   expect_s3_class(
-    make_location_grid(nc, n = 10, square = TRUE),
+    make_location_grid(nc, n = 10, style = "square"),
     "sf"
   )
 })
