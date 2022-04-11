@@ -111,4 +111,11 @@ sf_bbox_dist. All other functions only take a bbox parameter.
 \item \code{\link[sf]{st_as_sf}},\code{\link[sf]{st_as_sfc}}
 \item \code{\link[sfx]{st_extent}}
 }
+
+Other dist: 
+\code{\link{convert_dist_scale}()},
+\code{\link{convert_dist_units}()},
+\code{\link{is_dist_units}()},
+\code{\link{st_dist}()}
 }
+\concept{dist}

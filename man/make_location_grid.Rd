@@ -50,21 +50,27 @@ row and id are added as columns to the grid if they are provided.}
 serves as a margin as the negative buffer is applied to all cells
 (including those at the edges of the grid).}
 
+\item{desc}{If TRUE, reverse standard order of cell id numbering; defaults FALSE}
+
 \item{n}{If n is NULL and square is \code{TRUE}, the grid is set automatically to
 be 10 cells wide, Default: \code{NULL}}
 
 \item{cellsize}{target cellsize}
 
-\item{what}{character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}}
+\item{what}{"polygons", "corners", "centers"; set to centers automatically if
+style is "circle", "circle_offset" but a buffer is applied to return
+circular polygons.}
 
-\item{rev}{If \code{TRUE}, id, row, and col numbers are assigned left to right and
-top to bottom.}
+\item{style}{Style of cell to return with options including "rect", "square",
+"hex", "flat_top_hex", "circle", "circle_offset"}
 
-\item{...}{Additional parameters passed to \link[sf:st_make_grid]{sf::st_make_grid}}
+\item{.id}{A name to use for the cell id column.}
+
+\item{base}{default value used for n if cols, rows, and cellsize are all NULL.}
 }
 \description{
 Create a grid with an id column and optionally a set number of columns and
-rows.
+rows. This documentation is incomplete the function may change.
 }
 \examples{
 # Make a 4 by 5 grid covering a mile buffer around a location

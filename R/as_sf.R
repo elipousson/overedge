@@ -119,6 +119,9 @@ as_sfc <- function(x, crs = NULL, ...) {
   return(x)
 }
 
+#' Lightweight alternative to st_transform_ext that assumes x is a sf or sfc
+#' object
+#'
 #' @noRd
 #' @importFrom sf st_crs st_transform
 as_crs <- function(x, crs = NULL, ...) {
@@ -142,12 +145,12 @@ as_crs <- function(x, crs = NULL, ...) {
   sf::st_transform(x, crs = crs, ...)
 }
 
+#' @name as_sf_list
+#' @rdname as_sf
 #' @param nm For [as_sf_list], name(s) for sf list; defaults to "data". If col
 #'   is provided, the values of the grouping column are used as names.
 #' @param col For [as_sf_list], the name of the column used to group data if x
 #'   is a sf object or used to group and nest data before passing to x.
-#' @name as_sf_list
-#' @rdname as_sf
 #' @export
 #' @importFrom dplyr summarize group_keys group_nest
 #' @importFrom janitor make_clean_names
@@ -215,6 +218,8 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
 #' @param class A class to convert data to; defaults to NULL (which returns
 #'   "sf")
 #' @param crs coordinate reference system
+#' @param ... Additional parameters passed to [as_sf], [as_sfc], [as_bbox], or
+#'   [as_sf_list]
 #' @noRd
 as_sf_class <- function(x, class = NULL, crs = NULL, ...) {
   if (is.null(class)) {
@@ -241,9 +246,22 @@ as_sf_class <- function(x, class = NULL, crs = NULL, ...) {
 #' Works with sf, sfc, and bbox objects using [sf::st_centroid]. Works with
 #' [sf_bbox_point]
 #'
+#' For [as_point], ... is passed to [sf::st_centroid] if ... is a sf, sfc,
+#' or bbox object, [sf_bbox_point] includes a bbox object and a string
+#' indicating the requested point position, or [sf::st_point] if ... includes a
+#' numeric vector.
+#'
+#' For [as_points] parameters are passed to as_point using [purrr::map] and then
+#' converted to sfc using [sf::st_as_sfc]. The ... parameters must include a
+#' crs, otherwise the crs will be NA for the resulting sfc object.
+#'
 #' @rdname as_points
 #' @name as_point
+#' @param ... See details.
 #' @export
+#' @importFrom rlang list2 has_name
+#' @importFrom purrr map
+#' @importFrom sf st_as_sfc st_cast
 as_points <- function(...) {
   params <- rlang::list2(...)
 
@@ -272,6 +290,8 @@ as_points <- function(...) {
 #' @rdname as_points
 #' @name as_point
 #' @export
+#' @importFrom rlang list2 exec
+#' @importFrom sf st_union st_centroid st_point
 as_point <- function(...) {
   params <-
     rlang::list2(...)

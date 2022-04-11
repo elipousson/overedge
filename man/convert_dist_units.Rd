@@ -9,7 +9,8 @@ convert_dist_units(dist, from = NULL, to = "meter")
 \arguments{
 \item{dist}{Numeric or units}
 
-\item{from}{Existing unit for dist, Default: NULL. If dist is a units object, the numerator is used as "from"}
+\item{from}{Existing unit for dist, Default: NULL. If dist is a units object,
+the numerator is used as "from"}
 
 \item{to}{Unit to convert distance to, Default: 'meter'}
 }
@@ -19,3 +20,11 @@ Object created by \code{\link[units:units]{units::set_units()}}
 \description{
 Convert distances between different units
 }
+\seealso{
+Other dist: 
+\code{\link{convert_dist_scale}()},
+\code{\link{is_dist_units}()},
+\code{\link{sf_bbox_misc}},
+\code{\link{st_dist}()}
+}
+\concept{dist}

@@ -13,6 +13,9 @@ create_data_dir(path = NULL, create = TRUE)
 \item{path}{Path to directory to use as data directory.}
 
 \item{package}{Package name; defaults to "overedge"}
+
+\item{create}{For \link{create_data_dir}, if TRUE and directory does not exist at
+the path, prompt user to create directory. Defaults to TRUE.}
 }
 \description{
 A utility function that wraps \link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir}.

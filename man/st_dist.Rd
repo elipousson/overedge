@@ -36,3 +36,11 @@ xy pair using the following options: "xmin", "ymin", "xmax", "ymax",
 Get distance from a simple feature object to another object or bounding box
 corner
 }
+\seealso{
+Other dist: 
+\code{\link{convert_dist_scale}()},
+\code{\link{convert_dist_units}()},
+\code{\link{is_dist_units}()},
+\code{\link{sf_bbox_misc}}
+}
+\concept{dist}

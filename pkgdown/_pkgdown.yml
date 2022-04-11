@@ -24,7 +24,8 @@ reference:
   contents:
   - '`is_sf`'
   - '`is_geom_type`'
-  - starts_with("as_")
+  - starts_with("as_point")
+  - starts_with("as_sf")
   - '`sf_to_df`'
   - starts_with("sf_bbox")
   - '`st_bbox_ext`'
@@ -55,16 +56,17 @@ reference:
   - '`get_data_dir`'
 - title: Unit and formatting utilities
   contents:
+  - starts_with("is_dist")
+  - starts_with("convert_dist")
   - '`get_paper`'
   - '`get_margin`'
   - '`get_scale`'
-  - '`convert_dist_scale`'
-  - '`convert_dist_units`'
   - '`get_asp`'
 - title: Reference data for mapping and formatting
   contents:
   - '`map_icons`'
   - '`dist_units`'
+  - '`dist_unit_options`'
   - '`area_units`'
   - '`standard_scales`'
   - '`paper_sizes`'

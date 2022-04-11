@@ -22,6 +22,7 @@ get_data_dir <- function(path = NULL, package = "overedge") {
 #' @param create For [create_data_dir], if TRUE and directory does not exist at
 #'   the path, prompt user to create directory. Defaults to TRUE.
 #' @export
+#' @importFrom cli cli_alert_success cli_abort
 create_data_dir <- function(path = NULL, create = TRUE) {
   if (!dir.exists(path) && create) {
     if (cli_yeah(

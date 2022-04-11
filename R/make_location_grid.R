@@ -1,28 +1,32 @@
 #' Make a grid over a location bounding box
 #'
 #' Create a grid with an id column and optionally a set number of columns and
-#' rows.
+#' rows. This documentation is incomplete the function may change.
 #'
 #' @param location A `sf`, `sfc`, or `bbox` object, Default: `NULL`. Required.
-#' @param cols,rows Used to set n if either are not `NULL`; defaults to `NULL`.
-#'   row and id are added as columns to the grid if they are provided.
-#' @param gutter Distance in units between each column cell; gutter effectively
-#'   serves as a margin as the negative buffer is applied to all cells
-#'   (including those at the edges of the grid).
-#' @param rev If `TRUE`, id, row, and col numbers are assigned left to right and
-#'   top to bottom.
 #' @inheritParams st_bbox_ext
 #' @param n If n is NULL and square is `TRUE`, the grid is set automatically to
 #'   be 10 cells wide, Default: `NULL`
-#' @param ... Additional parameters passed to [sf::st_make_grid]
+#' @param what "polygons", "corners", "centers"; set to centers automatically if
+#'   style is "circle", "circle_offset" but a buffer is applied to return
+#'   circular polygons.
+#' @param cols,rows Used to set n if either are not `NULL`; defaults to `NULL`.
+#'   row and id are added as columns to the grid if they are provided.
+#' @param base default value used for n if cols, rows, and cellsize are all NULL.
+#' @param gutter Distance in units between each column cell; gutter effectively
+#'   serves as a margin as the negative buffer is applied to all cells
+#'   (including those at the edges of the grid).
+#' @param desc If TRUE, reverse standard order of cell id numbering; defaults FALSE
+#' @param style Style of cell to return with options including "rect", "square",
+#'   "hex", "flat_top_hex", "circle", "circle_offset"
+#' @param .id A name to use for the cell id column.
 #' @inheritParams sf::st_make_grid
 #' @example examples/make_location_grid.R
 #' @seealso [sf::st_make_grid]
 #' @rdname make_location_grid
 #' @export
-#' @importFrom rlang list2
 #' @importFrom sf st_make_grid st_filter
-#' @importFrom dplyr mutate row_number
+#' @importFrom dplyr mutate arrange row_number everything
 make_location_grid <- function(location = NULL,
                                dist = NULL,
                                diag_ratio = NULL,
@@ -124,7 +128,12 @@ make_location_grid <- function(location = NULL,
   return(grid)
 }
 
+#' Get parameters for make_location_grid
+#'
 #' @noRd
+#' @importFrom rlang has_length
+#' @importFrom cli cli_alert_danger cli_alert_info
+#' @importFrom dplyr case_when
 get_grid_params <- function(bbox,
                             cellsize = NULL,
                             unit = NULL,

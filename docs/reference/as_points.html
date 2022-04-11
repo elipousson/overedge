@@ -75,8 +75,24 @@ or POINT geometry set (sfc)</h1>
 <span class="fu">as_point</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <dl><dt>...</dt>
+<dd><p>See details.</p></dd>
+</dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>For as_point, ... is passed to <a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_centroid</a> if ... is a sf, sfc,
+or bbox object, <a href="sf_bbox_misc.html">sf_bbox_point</a> includes a bbox object and a string
+indicating the requested point position, or <a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">sf::st_point</a> if ... includes a
+numeric vector.</p>
+<p>For as_points parameters are passed to as_point using <a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map</a> and then
+converted to sfc using <a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">sf::st_as_sfc</a>. The ... parameters must include a
+crs, otherwise the crs will be NA for the resulting sfc object.</p>
+    </div>
 
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="copyright">
