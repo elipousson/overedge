@@ -11,7 +11,8 @@ st_dist(
   by_element = TRUE,
   units = NULL,
   drop = FALSE,
-  keep_all = TRUE
+  keep_all = TRUE,
+  .id = "dist"
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ xy pair using the following options: "xmin", "ymin", "xmax", "ymax",
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
 
 \item{units}{Unit to convert distance to, Default: NULL}
+
+\item{drop}{If TRUE, drop units from the distance returned; defaults to FALSE.}
 
 \item{keep_all}{If FALSE, return dist but not original sf, Default: TRUE}
 }

@@ -76,7 +76,8 @@ corner</p>
   by_element <span class="op">=</span> <span class="cn">TRUE</span>,
   units <span class="op">=</span> <span class="cn">NULL</span>,
   drop <span class="op">=</span> <span class="cn">FALSE</span>,
-  keep_all <span class="op">=</span> <span class="cn">TRUE</span>
+  keep_all <span class="op">=</span> <span class="cn">TRUE</span>,
+  .id <span class="op">=</span> <span class="st">"dist"</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -94,6 +95,8 @@ xy pair using the following options: "xmin", "ymin", "xmax", "ymax",
 <dd><p>logical; if <code>TRUE</code>, return a vector with distance between the first elements of <code>x</code> and <code>y</code>, the second, etc. if <code>FALSE</code>, return the dense matrix with all pairwise distances.</p></dd>
 <dt>units</dt>
 <dd><p>Unit to convert distance to, Default: NULL</p></dd>
+<dt>drop</dt>
+<dd><p>If TRUE, drop units from the distance returned; defaults to FALSE.</p></dd>
 <dt>keep_all</dt>
 <dd><p>If FALSE, return dist but not original sf, Default: TRUE</p></dd>
 </dl></div>

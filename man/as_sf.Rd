@@ -32,11 +32,11 @@ object to return.}
 \code{\link[=as_bbox]{as_bbox()}} or passed to \code{\link[sf:sf]{sf::st_sf()}}, \code{\link[sf:st_as_sf]{sf::st_as_sf()}}, or \code{\link[=df_to_sf]{df_to_sf()}}
 for \code{\link[=as_sf]{as_sf()}} (depending on class of x)}
 
-\item{nm}{For \link{as_sf_list}, name(s) for sf list; defaults to "data". If col is provided, the
-values of the grouping column are used as names.}
+\item{nm}{For \link{as_sf_list}, name(s) for sf list; defaults to "data". If col
+is provided, the values of the grouping column are used as names.}
 
-\item{col}{For \link{as_sf_list}, the name of the column used to group data if x is a sf object or used
-to group and nest data before passing to x.}
+\item{col}{For \link{as_sf_list}, the name of the column used to group data if x
+is a sf object or used to group and nest data before passing to x.}
 }
 \description{
 Both functions will pass a NULL value without returning an error. If a POINT

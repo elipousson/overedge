@@ -3,6 +3,7 @@
 \name{format_data}
 \alias{format_data}
 \alias{fix_date}
+\alias{relocate_sf_col}
 \title{Format data using common approaches}
 \usage{
 format_data(
@@ -15,6 +16,8 @@ format_data(
 )
 
 fix_date(data)
+
+relocate_sf_col(x, .after = dplyr::everything())
 }
 \arguments{
 \item{data}{A tibble or data frame object}

@@ -51,7 +51,8 @@ provided.}
 
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
 
-\item{inscribed}{If \code{TRUE}, make circle or square inscribed within x, if \code{FALSE}, make it circumscribed.}
+\item{inscribed}{If \code{TRUE}, make circle or square inscribed within x, if
+\code{FALSE}, make it circumscribed.}
 
 \item{color}{Color of panel border, Default: 'black'}
 

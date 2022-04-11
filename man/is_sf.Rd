@@ -9,7 +9,6 @@
 \alias{is_raster}
 \alias{is_sp}
 \alias{is_same_crs}
-\alias{is_same_dist}
 \alias{is_same_area}
 \alias{is_sf_or_what}
 \title{What is the class or spatial attributes of this feature?}
@@ -30,8 +29,6 @@ is_sp(x, null.ok = FALSE)
 
 is_same_crs(x, y)
 
-is_same_dist(x, y, dist = NULL, diff = FALSE)
-
 is_same_area(x, y, union = FALSE, diff = FALSE)
 
 is_sf_or_what(x = NULL, return = NULL, us = FALSE, null.ok = TRUE)
@@ -47,16 +44,16 @@ not; defaults to \code{FALSE}. (used by \link{is_sf})}
 \item{y}{An sf object or a character or numeric object supported by
 \link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{is_same_crs})}
 
-\item{dist}{For \link{is_same_dist}, bounding box dimension to compare distances for "diagdist",
-"xdist", or "ydist"; does not currently support numeric distances; defaults
-to \code{NULL}.}
+\item{union}{If \code{TRUE}, use \link[sf:geos_combine]{sf::st_union} on both x and y before comparing
+area; defaults to \code{FALSE}.}
 
 \item{diff}{For \link{is_same_dist} and \link{is_same_area}, If \code{TRUE}, return the difference
 between the x and y objects. If \code{FALSE}, return \code{TRUE} or \code{FALSE} as expected;
 defaults to \code{FALSE}.}
 
-\item{union}{If \code{TRUE}, use \link[sf:geos_combine]{sf::st_union} on both x and y before comparing
-area; defaults to \code{FALSE}.}
+\item{dist}{For \link{is_same_dist}, bounding box dimension to compare distances for "diagdist",
+"xdist", or "ydist"; does not currently support numeric distances; defaults
+to \code{NULL}.}
 
 \item{is_named}{If \code{TRUE}, check if sf list is named; defaults \code{FALSE}.}
 }

@@ -14,11 +14,12 @@ make_location_grid(
   cols = NULL,
   rows = NULL,
   gutter = 0,
-  rev = TRUE,
+  desc = FALSE,
   n = NULL,
   cellsize = NULL,
-  square = TRUE,
-  ...
+  what = NULL,
+  style = "rect",
+  .id = "id"
 )
 }
 \arguments{
@@ -49,15 +50,15 @@ row and id are added as columns to the grid if they are provided.}
 serves as a margin as the negative buffer is applied to all cells
 (including those at the edges of the grid).}
 
-\item{rev}{If \code{TRUE}, id, row, and col numbers are assigned left to right and
-top to bottom.}
-
 \item{n}{If n is NULL and square is \code{TRUE}, the grid is set automatically to
 be 10 cells wide, Default: \code{NULL}}
 
 \item{cellsize}{target cellsize}
 
-\item{square}{logical; if \code{FALSE}, create hexagonal grid}
+\item{what}{character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}}
+
+\item{rev}{If \code{TRUE}, id, row, and col numbers are assigned left to right and
+top to bottom.}
 
 \item{...}{Additional parameters passed to \link[sf:st_make_grid]{sf::st_make_grid}}
 }

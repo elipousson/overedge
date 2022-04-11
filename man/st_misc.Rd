@@ -29,12 +29,15 @@ st_circumscribed_circle(x, scale = 1)
 
 \item{rotate}{numeric; degrees to rotate (-360 to 360), Default: 0}
 
-\item{ext}{If \code{TRUE}, st_center returns a list with the centroid as a sfc object, as an sf object (with lon and lat values), the original geometry (x), and the original crs.
-objects; defaults TRUE. If \code{FALSE}, return an sf object.}
+\item{ext}{If \code{TRUE}, st_center returns a list with the centroid as a sfc
+object, as an sf object (with lon and lat values), the original geometry
+(x), and the original crs. objects; defaults TRUE. If \code{FALSE}, return an sf
+object.}
 
 \item{...}{Additional parameters passed to \code{sf::st_centroid()} by st_center}
 
-\item{inscribed}{If \code{TRUE}, make circle or square inscribed within x, if \code{FALSE}, make it circumscribed.}
+\item{inscribed}{If \code{TRUE}, make circle or square inscribed within x, if
+\code{FALSE}, make it circumscribed.}
 
 \item{dTolerance}{numeric; tolerance parameter, specified for all or for each
 feature geometry. If you run \code{st_simplify}, the input data is
@@ -47,17 +50,19 @@ Support both bbox and sf objects as inputs.
 }
 \details{
 \itemize{
-\item Scale or rotate a simple feature or bounding box object using affine transformations
+\item Scale or rotate a simple feature or bounding box object using affine
+transformations
 \item Get the center point for a sf object
 \item Get a circumscribed square or approximate inscribed square in a sf object
 \item Get a circumscribed circle or inscribed circle in a sf object
 }
 
-st_inscribed_square wraps \code{sf::st_inscribed_circle()} but limits the
-circle to 1 segment per quadrant (\code{nQuadSegs} = 1) and then rotates the resulting geometry 45
-degrees to provide a (mostly) inscribed square. A different rotation value
-can be provided to change the orientation of the shape, e.g. rotate = -45 to
-return a diamond shape. st_square wraps \link{st_bbox_ext} with asp = 1.
+st_inscribed_square wraps \code{sf::st_inscribed_circle()} but limits the circle
+to 1 segment per quadrant (\code{nQuadSegs} = 1) and then rotates the resulting
+geometry 45 degrees to provide a (mostly) inscribed square. A different
+rotation value can be provided to change the orientation of the shape, e.g.
+rotate = -45 to return a diamond shape. st_square wraps \link{st_bbox_ext} with
+asp = 1.
 }
 \examples{
 library(ggplot2)

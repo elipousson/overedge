@@ -75,9 +75,9 @@ all available geometry types; defaults to \code{FALSE}.}
 
 \item{enclosing}{If enclosing is "relation" or "way", use the
 \code{\link[osmdata:opq_enclosing]{osmdata::opq_enclosing()}} function to query the OSM data (instead of
-\code{\link[osmdata:add_osm_feature]{osmdata::add_osm_feature()}}. Defaults to \code{NULL}. When using enclosing, the dist,
-diag_ratio, asp, and unit parameters are ignored and the center of the
-provided location is used for the query. geometry is set automatically
+\code{\link[osmdata:add_osm_feature]{osmdata::add_osm_feature()}}. Defaults to \code{NULL}. When using enclosing, the
+dist, diag_ratio, asp, and unit parameters are ignored and the center of
+the provided location is used for the query. geometry is set automatically
 based enclosing with "relation" using "multipolygon" and "way" using
 "polygon" geometry.}
 

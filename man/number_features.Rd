@@ -13,7 +13,8 @@ number_features(
   desc = FALSE,
   crs = NULL,
   num_style = "arabic",
-  suffix = NULL
+  suffix = NULL,
+  .id = "number"
 )
 
 sort_features(

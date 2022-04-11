@@ -77,11 +77,12 @@ rows.</p>
   cols <span class="op">=</span> <span class="cn">NULL</span>,
   rows <span class="op">=</span> <span class="cn">NULL</span>,
   gutter <span class="op">=</span> <span class="fl">0</span>,
-  rev <span class="op">=</span> <span class="cn">TRUE</span>,
+  desc <span class="op">=</span> <span class="cn">FALSE</span>,
   n <span class="op">=</span> <span class="cn">NULL</span>,
   cellsize <span class="op">=</span> <span class="cn">NULL</span>,
-  square <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
+  what <span class="op">=</span> <span class="cn">NULL</span>,
+  style <span class="op">=</span> <span class="st">"rect"</span>,
+  .id <span class="op">=</span> <span class="st">"id"</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -114,16 +115,16 @@ row and id are added as columns to the grid if they are provided.</p></dd>
 <dd><p>Distance in units between each column cell; gutter effectively
 serves as a margin as the negative buffer is applied to all cells
 (including those at the edges of the grid).</p></dd>
-<dt>rev</dt>
-<dd><p>If <code>TRUE</code>, id, row, and col numbers are assigned left to right and
-top to bottom.</p></dd>
 <dt>n</dt>
 <dd><p>If n is NULL and square is <code>TRUE</code>, the grid is set automatically to
 be 10 cells wide, Default: <code>NULL</code></p></dd>
 <dt>cellsize</dt>
 <dd><p>target cellsize</p></dd>
-<dt>square</dt>
-<dd><p>logical; if <code>FALSE</code>, create hexagonal grid</p></dd>
+<dt>what</dt>
+<dd><p>character; one of: <code>"polygons"</code>, <code>"corners"</code>, or <code>"centers"</code></p></dd>
+<dt>rev</dt>
+<dd><p>If <code>TRUE</code>, id, row, and col numbers are assigned left to right and
+top to bottom.</p></dd>
 <dt>...</dt>
 <dd><p>Additional parameters passed to <a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">sf::st_make_grid</a></p></dd>
 </dl></div>
