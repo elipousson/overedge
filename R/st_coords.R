@@ -33,6 +33,7 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
   x_coords <- st_transform_ext(x = x, crs = crs)
 
   if (geometry == "wkt") {
+    x <- has_same_name_col(x, "wkt", quiet = TRUE)
     # Convert geometry to wkt
     x_coords <-
       data.frame("wkt" = sf::st_as_text(as_sfc(x)))
@@ -52,6 +53,9 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
     x_coords <- as.data.frame(sf::st_coordinates(x_coords))
     coords <- check_coords(coords = coords)
 
+    x <- has_same_name_col(x, coords[1], quiet = TRUE)
+    x <- has_same_name_col(x, coords[2], quiet = TRUE)
+
     x_coords <-
       dplyr::select(
         x_coords,
@@ -65,7 +69,6 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
     return(x_coords)
   }
 
-  # FIXME: What if someone passes a sf object with lon/lat columns to x?
   x <- dplyr::bind_cols(x, x_coords)
 
   if (drop) {

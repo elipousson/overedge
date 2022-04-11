@@ -89,18 +89,6 @@ modify_mapping <- function(mapping = NULL, data = NULL, ...) {
   return(mapping)
 }
 
-#' Move geometry column after
-#'
-#' @noRd
-#' @importFrom dplyr everything relocate all_of
-relocate_sf_col <- function(x, .after = dplyr::everything()) {
-  dplyr::relocate(
-    x,
-    dplyr::all_of(attributes(x)$sf_column),
-    .after = .after
-  )
-}
-
 #' Modify function parameters
 #'
 #' @noRd
@@ -141,6 +129,38 @@ use_fn <- function(data, fn = NULL) {
 
   fn <- rlang::as_function(fn)
   fn(data)
+}
+
+#' @noRd
+#' @importFrom rlang has_name
+#' @importFrom cli cli_abort cli_alert_success
+#' @importFrom dplyr rename
+has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet = FALSE) {
+
+  if (rlang::has_name(x, col)) {
+    new_col <- paste0(prefix, "_", col)
+
+    if (ask && !quiet) {
+      if(!cli_yeah("The provided data includes an existing column named '{col}'.
+                   Do you want to proceed and rename this column to {new_col}?")) {
+        cli::cli_abort("Please rename your column to use this function.")
+      }
+    }
+
+    if (!quiet) {
+      cli::cli_alert_success(
+        "The existing column '{col}' to '{new_col}' to avoid overwriting any existing values."
+      )
+    }
+
+    x <-
+      dplyr::rename(
+        x,
+        "{new_col}" := col
+      )
+  }
+
+  return(x)
 }
 
 utils::globalVariables(c(
