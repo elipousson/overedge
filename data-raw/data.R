@@ -283,14 +283,15 @@ usethis::use_data(
 dist_unit_options <-
   unique(c(
     dist_units$name_singular,
-    dist_units$symbol,
-    dist_units$symbol_aliases,
-    dist_units$name_singular,
-    stringr::str_split(dist_units$name_singular_aliases, ", ", simplify = TRUE),
     dist_units$name_plural,
-    stringr::str_split(dist_units$name_plural_aliases, ", ", simplify = TRUE)
+    stringr::str_split(dist_units$name_singular_aliases, ", ", simplify = TRUE),
+    stringr::str_split(dist_units$name_plural_aliases, ", ", simplify = TRUE),
+    dist_units$symbol,
+    dist_units$symbol_aliases
   ))
 
+dist_unit_options <- dist_unit_options[!is.na(dist_unit_options)]
+dist_unit_options <- dist_unit_options[dist_unit_options != ""]
 
 usethis::use_data(
   dist_unit_options,
