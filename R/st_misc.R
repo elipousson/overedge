@@ -2,21 +2,24 @@
 #'
 #' Support both bbox and sf objects as inputs.
 #'
-#'  - Scale or rotate a simple feature or bounding box object using affine transformations
+#'  - Scale or rotate a simple feature or bounding box object using affine
+#'  transformations
 #'  - Get the center point for a sf object
 #'  - Get a circumscribed square or approximate inscribed square in a sf object
 #'  - Get a circumscribed circle or inscribed circle in a sf object
 #'
-#' st_inscribed_square wraps `sf::st_inscribed_circle()` but limits the
-#'   circle to 1 segment per quadrant (`nQuadSegs` = 1) and then rotates the resulting geometry 45
-#'   degrees to provide a (mostly) inscribed square. A different rotation value
-#'   can be provided to change the orientation of the shape, e.g. rotate = -45 to
-#'   return a diamond shape. st_square wraps [st_bbox_ext] with asp = 1.
+#' st_inscribed_square wraps `sf::st_inscribed_circle()` but limits the circle
+#' to 1 segment per quadrant (`nQuadSegs` = 1) and then rotates the resulting
+#' geometry 45 degrees to provide a (mostly) inscribed square. A different
+#' rotation value can be provided to change the orientation of the shape, e.g.
+#' rotate = -45 to return a diamond shape. st_square wraps [st_bbox_ext] with
+#' asp = 1.
 #' @example examples/st_misc.R
 #' @param x A sf, sfc, or bbox object
 #' @param scale numeric; scale factor, Default: 1
 #' @param rotate numeric; degrees to rotate (-360 to 360), Default: 0
-#' @param inscribed If `TRUE`, make circle or square inscribed within x, if `FALSE`, make it circumscribed.
+#' @param inscribed If `TRUE`, make circle or square inscribed within x, if
+#'   `FALSE`, make it circumscribed.
 #' @seealso
 #'  - [sf::geos_unary]
 #' @name st_misc
@@ -47,8 +50,10 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
 
 #' @rdname st_misc
 #' @name st_center
-#' @param ext If `TRUE`, st_center returns a list with the centroid as a sfc object, as an sf object (with lon and lat values), the original geometry (x), and the original crs.
-#'   objects; defaults TRUE. If `FALSE`, return an sf object.
+#' @param ext If `TRUE`, st_center returns a list with the centroid as a sfc
+#'   object, as an sf object (with lon and lat values), the original geometry
+#'   (x), and the original crs. objects; defaults TRUE. If `FALSE`, return an sf
+#'   object.
 #' @param ... Additional parameters passed to `sf::st_centroid()` by st_center
 #' @export
 #' @importFrom sf st_crs st_geometry st_centroid st_sf
@@ -60,14 +65,13 @@ st_center <- function(x,
   centroid <- suppressWarnings(sf::st_centroid(geometry, ...))
 
   if (ext) {
-    # FIXME: There should be no difference between the geom and centroid for point data
     center <-
       list(
-        "sfc" = centroid,
-        "sf" = st_coords(as_sf(centroid), drop = FALSE),
-        "geometry" = geometry,
-        "x" = x, # This is just the original geometry
-        "crs" = sf::st_crs(x)
+        "sfc" = centroid,  # sfc based on centroid
+        "sf" = st_coords(as_sf(centroid), drop = FALSE), # sf based on centroid (won't include original cols)
+        "geometry" = geometry, # original geometry (sfc)
+        "x" = x, # original object
+        "crs" = sf::st_crs(x) # original crs
       )
   } else {
     center <- centroid
