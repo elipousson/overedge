@@ -13,6 +13,7 @@
 #' @inheritParams sf::st_distance
 #' @rdname st_dist
 #' @export
+#' @family dist
 #' @importFrom sf st_centroid st_distance
 #' @importFrom dplyr bind_cols
 st_dist <- function(from, to, by_element = TRUE, units = NULL, drop = FALSE, keep_all = TRUE, .id = "dist") {

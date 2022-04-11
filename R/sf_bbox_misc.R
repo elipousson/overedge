@@ -30,7 +30,7 @@
 #' @param dir If "in", contract the `bbox` by x_nudge and y_nudge. If "out",
 #'   expand the bbox by x_nudge and y_nudge. If dir is not `NULL`; absolute
 #'   values are used for x_nudge and y_nudge. Defaults to `NULL`.
-#' @md
+#' @family dist
 #' @name sf_bbox_misc
 NULL
 
