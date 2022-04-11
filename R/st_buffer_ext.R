@@ -64,14 +64,14 @@ st_buffer_ext <- function(x,
     # Get crs and rename gdal units to match options for set_units
     crs <- sf::st_crs(x)
 
-    if (is_class(dist, "units")) {
+    if (is_units(dist)) {
       if (is.null(unit)) {
-        unit <- as.character(units(dist)$numerator)
+        unit <- get_dist_units(dist)
       }
       dist <- units::drop_units(dist)
     } else if (is.null(dist) && !is.null(diag_ratio)) {
       # Use the bbox diagonal distance to make proportional buffer distance
-      dist <- sf_bbox_diagdist(bbox = as_bbox(x), units = FALSE) * diag_ratio
+      dist <- sf_bbox_diagdist(bbox = as_bbox(x), drop = TRUE) * diag_ratio
     }
 
     dist <- convert_dist_units(dist = dist, from = unit, to = crs$units_gdal)
@@ -128,58 +128,6 @@ limit_dist <- function(dist = NULL, dist_limits = NULL) {
   return(dist)
 }
 
-#' Convert distances between different units
-#'
-#'
-#' @param dist Numeric or units
-#' @param from Existing unit for dist, Default: NULL. If dist is a units object, the numerator is used as "from"
-#' @param to Unit to convert distance to, Default: 'meter'
-#' @return Object created by [units::set_units()]
-#' @rdname convert_dist_units
-#' @export
-#' @importFrom units set_units
-convert_dist_units <- function(dist,
-                               from = NULL,
-                               to = "meter") {
-  dist_is_units <- is_class(dist, "units")
-
-  stopifnot(
-    is.numeric(dist) || dist_is_units
-  )
-
-  if (dist_is_units) {
-    from <- as.character(units(dist)$numerator)
-  }
-
-  if (!is.null(from)) {
-    from <- match.arg(from, dist_unit_options)
-
-    if (!dist_is_units) {
-      from <- gsub(" ", "_", from)
-      dist <-
-        units::set_units(
-          x = dist,
-          value = from,
-          mode = "standard"
-        )
-    }
-  }
-
-  if (!is.null(to)) {
-    to <- gsub(" ", "_", to)
-    to <- match.arg(to, dist_unit_options)
-
-    dist <-
-      units::set_units(
-        x = dist,
-        value = to,
-        mode = "standard"
-      )
-  }
-
-  return(dist)
-}
-
 #' @rdname st_buffer_ext
 #' @name st_edge
 #' @importFrom sf st_difference
@@ -192,7 +140,8 @@ st_edge <- function(x,
   # If bbox, convert to sf
   x <- as_sf(x)
 
-  x_dist <- st_buffer_ext(x, dist = dist, diag_ratio = diag_ratio, unit = unit, ...)
+  x_dist <-
+    st_buffer_ext(x, dist = dist, diag_ratio = diag_ratio, unit = unit, ...)
 
   # FIXME: What if dist or diag_ratio = 0?
   if (dist > 0 | diag_ratio > 0) {

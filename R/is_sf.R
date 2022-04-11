@@ -125,46 +125,6 @@ is_same_crs <- function(x, y) {
   sf::st_crs(x) == sf::st_crs(y)
 }
 
-#' @name is_same_dist
-#' @rdname  is_sf
-#' @importFrom sf st_area
-#' @export
-is_same_dist <- function(x, y, dist = NULL, diff = FALSE) {
-  if (is.character(dist)) {
-    x <- as_bbox(x)
-    y <- as_bbox(x)
-
-    dist <- match.arg(dist, c("diagdist", "xdist", "ydist"))
-
-    x_dist <-
-      switch(dist,
-        # FIXME: Is this going to work or is there a tolerance factor needed?
-        "diagdist" = sf_bbox_diagdist(x),
-        "xdist" = sf_bbox_xdist(x),
-        "ydist" = sf_bbox_ydist(x)
-      )
-
-
-    y_dist <-
-      switch(dist,
-        # FIXME: Is this going to work or is there a tolerance factor needed?
-        "diagdist" = sf_bbox_diagdist(y),
-        "xdist" = sf_bbox_xdist(y),
-        "ydist" = sf_bbox_ydist(y)
-      )
-  } else if (is.numeric(dist)) {
-    # FIXME: Add support for comparing distance between X and Y to a numeric distance
-    # sf::st_distance()
-    # convert_dist_units(dist, to = )
-  }
-
-  if (diff) {
-    return(x_dist - y_dist)
-  }
-
-  return(x_dist == y_dist)
-}
-
 
 #' @name is_same_area
 #' @rdname  is_sf
