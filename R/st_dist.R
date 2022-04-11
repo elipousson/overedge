@@ -8,13 +8,14 @@
 #'   xy pair using the following options: "xmin", "ymin", "xmax", "ymax",
 #'   "xmid", "ymid".
 #' @param units Unit to convert distance to, Default: NULL
+#' @param drop If TRUE, drop units from the distance returned; defaults to FALSE.
 #' @param keep_all If FALSE, return dist but not original sf, Default: TRUE
 #' @inheritParams sf::st_distance
 #' @rdname st_dist
 #' @export
 #' @importFrom sf st_centroid st_distance
 #' @importFrom dplyr bind_cols
-st_dist <- function(from, to, by_element = TRUE, units = NULL, drop = FALSE, keep_all = TRUE) {
+st_dist <- function(from, to, by_element = TRUE, units = NULL, drop = FALSE, keep_all = TRUE, .id = "dist") {
   stopifnot(
     is_sf(from, ext = TRUE),
     is_sf(to, ext = TRUE) || is.character(to)
@@ -54,8 +55,10 @@ st_dist <- function(from, to, by_element = TRUE, units = NULL, drop = FALSE, kee
       )
   }
 
+  x_dist <- tibble::tibble("{.id}" := x_dist)
+
   if (drop) {
-    x_dist <- as.numeric(x_dist)
+    x_dist <- as.numeric(x_dist[[.id]])
   }
 
   if (!keep_all) {
@@ -65,7 +68,7 @@ st_dist <- function(from, to, by_element = TRUE, units = NULL, drop = FALSE, kee
   x <-
     dplyr::bind_cols(
       x,
-      "dist" = x_dist
+      x_dist
     )
 
   x <-

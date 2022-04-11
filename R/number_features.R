@@ -31,8 +31,6 @@
 #' @export
 #' @importFrom dplyr mutate row_number everything
 #' @importFrom utils as.roman
-#' @importFrom rlang has_name
-#' @importFrom cli cli_warn
 number_features <- function(data,
                             col = NULL,
                             sort = "dist_xmin_ymax",
@@ -40,33 +38,27 @@ number_features <- function(data,
                             desc = FALSE,
                             crs = NULL,
                             num_style = "arabic",
-                            suffix = NULL) {
-  if (rlang::has_name(data, "number")) {
-    cli::cli_warn(
-      "number_features is moving the existing column with the name 'number' to a new column named 'orig_number'."
-    )
+                            suffix = NULL,
+                            .id = "number") {
 
+  data <- has_same_name_col(data, col = .id)
+
+  if (!is.null(sort)) {
     data <-
-      dplyr::rename(
+      sort_features(
         data,
-        orig_number = number
+        col = col,
+        sort = sort,
+        to = to,
+        desc = desc,
+        crs = crs
       )
   }
 
   data <-
-    sort_features(
-      data,
-      col = col,
-      sort = sort,
-      to = to,
-      desc = desc,
-      crs = crs
-    )
-
-  data <-
     dplyr::mutate(
       data,
-      number = dplyr::row_number(),
+      "{.id}" := dplyr::row_number(),
       .before = dplyr::everything()
     )
 
@@ -74,13 +66,15 @@ number_features <- function(data,
 
   data$number <- switch(num_style,
     "arabic" = data$number,
-    "alph" = tolower(sapply(data$number, int_to_alph)),
-    "Alph" = toupper(sapply(data$number, int_to_alph)),
-    "roman" = tolower(utils::as.roman(data$number)),
-    "Roman" = toupper(utils::as.roman(data$number))
+    "alph" = tolower(sapply(data[[.id]], int_to_alph)),
+    "Alph" = toupper(sapply(data[[.id]], int_to_alph)),
+    "roman" = tolower(utils::as.roman(data[[.id]])),
+    "Roman" = toupper(utils::as.roman(data[[.id]]))
   )
 
-  data$number <- paste0(data$number, suffix)
+  if (!is.null(suffix)) {
+    data[[.id]] <- paste0(data[[.id]], suffix)
+  }
 
   return(data)
 }
@@ -116,6 +110,7 @@ sort_features <- function(data,
                           desc = FALSE,
                           crs = NULL,
                           drop = FALSE) {
+
   latlon_opts <- c("longitude", "latitude", "lon", "lat")
   minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
 
@@ -153,10 +148,14 @@ sort_features <- function(data,
 
   if (any(sort %in% c(dist_opts)) | !is.null(to)) {
     if (is.null(to)) {
-      sort <- match.arg(sort, dist_opts)
-
+      # FIXME: Shouldn't this split the sort string first and then match to the options?
+      sort <- match.arg(sort, dist_opts, several.ok = FALSE)
       to <-
         strsplit(sort, "_")[[1]][2:3]
+    } else if (any(sort %in% c(dist_opts))) {
+      cli::cli_alert_danger(
+        "If the {.field {'sort'}} and {.field {'to'}} are both provided,
+        the value of {.field {'sort'}} ({.val {sort}}) is ignored.")
     }
 
     data <-
