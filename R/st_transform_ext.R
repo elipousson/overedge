@@ -70,13 +70,15 @@ st_transform_ext <- function(x = NULL,
 #' @name st_transform_omerc
 #' @rdname st_transform_ext
 #' @export
+#' @importFrom dplyr between
+#' @importFrom cli cli_alert_warning
 #' @importFrom glue glue
 #' @importFrom sf st_transform
 st_omerc <- function(x, rotate = 0) {
 
-  stopifnot(
-    dplyr::between(rotate, -45, 45)
-  )
+  if (!dplyr::between(rotate, -45, 45)) {
+    cli::cli_alert_warning("st_omerc may have an error with rotate values greater than or less than 45")
+  }
 
   coords <-
     st_coords(sf::st_union(x), keep_all = FALSE, crs = 4326)
