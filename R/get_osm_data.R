@@ -140,6 +140,9 @@ get_osm_id <- function(id, type = "way", crs = NULL, geometry = NULL, osmdata = 
 #' @param level administrative level (admin_level) of boundary to return;
 #'   defaults to NULL. See <https://wiki.openstreetmap.org/wiki/Key:admin_level>
 #'   for more information. Only used for get_osm_boundaries.
+#' @param lang Language for boundary names to include in resulting data frame
+#'   (e.g. "en" for English or "es" for Spanish). Default language names should
+#'   always be included in results. Defaults to "en".
 #' @rdname get_osm_data
 #' @name get_osm_boundaries
 #' @export
