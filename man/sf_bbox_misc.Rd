@@ -66,6 +66,8 @@ corner, midpoint, or center of the bounding box ("xmin", "ymin", "xmax",
 \item{from, to}{xy pairs (e.g. c("xmax", "ymax) defining points to measure
 distance from and to.}
 
+\item{units}{The units to return for sf_bbox_dist. Defaults to NULL.}
+
 \item{drop}{If \code{FALSE}, distance functions return with units. If \code{FALSE}
 (default), distance functions return numeric values.}
 

@@ -224,6 +224,9 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 #' Convert Google Sheets url to sf
 #' @name read_sf_gsheet
 #' @rdname read_sf_ext
+#' @inheritParams googlesheets4::read_sheet
+#' @param ask If `TRUE`, ask for the name of the Google Sheet to read if ss is
+#'   not provided to [read_sf_gsheet].
 #' @export
 #' @importFrom rlang is_missing
 read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {

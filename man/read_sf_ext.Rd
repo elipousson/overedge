@@ -53,6 +53,21 @@ MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by 
 \item{coords}{Character vector with coordinate values; used for
 \code{\link[=read_sf_url]{read_sf_url()}} if the "url" is a Google Sheet.}
 
+\item{ss}{Something that identifies a Google Sheet:
+\itemize{
+\item its file id as a string or \code{\link[googledrive:as_id]{drive_id}}
+\item a URL from which we can recover the id
+\item a one-row \code{\link[googledrive:dribble]{dribble}}, which is how googledrive
+represents Drive files
+\item an instance of \code{googlesheets4_spreadsheet}, which is what \code{\link[googlesheets4:gs4_get]{gs4_get()}}
+returns
+}
+
+Processed through \code{\link[googlesheets4:sheets_id]{as_sheets_id()}}.}
+
+\item{ask}{If \code{TRUE}, ask for the name of the Google Sheet to read if ss is
+not provided to \link{read_sf_gsheet}.}
+
 \item{filename}{File name; if file name is \code{NULL}, name and file type are
 both required.}
 

@@ -88,6 +88,7 @@ sf_bbox_point <- function(bbox, point = NULL) {
 
 #' @name sf_bbox_dist
 #' @rdname sf_bbox_misc
+#' @param units The units to return for sf_bbox_dist. Defaults to NULL.
 #' @export
 #' @importFrom sf st_distance st_point st_crs
 #' @importFrom units drop_units as_units
