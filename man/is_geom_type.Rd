@@ -32,8 +32,8 @@ available geometry types; not case sensitive; Default: NULL}
 
 \item{by_geometry}{Passed to sf::st_geometry_type; defaults to FALSE}
 
-\item{ext}{For st_geom_type, if ext TRUE and check is NULL, return a list with checks for POINTS,
-POLYGONS, LINESTRING, and the returned types.}
+\item{ext}{For st_geom_type, if ext TRUE and check is NULL, return a list
+with checks for POINTS, POLYGONS, LINESTRING, and the returned types.}
 }
 \value{
 If ext is FALSE and type is NULL, returns vector with geometry types

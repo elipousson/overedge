@@ -57,8 +57,8 @@ separated into. Passed to \link[tidyr:separate]{tidyr::separate}.}
 latitude, \code{sep} is used as the separator between coordinate values. Passed
 to \link[tidyr:separate]{tidyr::separate}.}
 
-\item{rev}{If TRUE, reverse c("lat", "lon") coords to c("lon", "lat").
-check_coords only.}
+\item{rev}{If \code{TRUE}, reverse c("lat", "lon") coords to c("lon", "lat").
+\link{check_coords} only.}
 
 \item{remove_coords}{For \link{df_to_sf}, if \code{TRUE}, remove the coordinate columns
 after converting a data frame to simple feature object; defaults to

@@ -126,7 +126,7 @@ separated into. Passed to <a href="https://tidyr.tidyverse.org/reference/separat
 latitude, <code>sep</code> is used as the separator between coordinate values. Passed
 to <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">tidyr::separate</a>.</p></dd>
 <dt>rev</dt>
-<dd><p>If TRUE, reverse c("lat", "lon") coords to c("lon", "lat").
+<dd><p>If <code>TRUE</code>, reverse c("lat", "lon") coords to c("lon", "lat").
 check_coords only.</p></dd>
 <dt>remove_coords</dt>
 <dd><p>For df_to_sf, if <code>TRUE</code>, remove the coordinate columns
@@ -175,10 +175,35 @@ data frame.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">nc_df</span> <span class="op">&lt;-</span> <span class="fu">janitor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/janitor/man/clean_names.html" class="external-link">clean_names</a></span><span class="op">(</span><span class="va">nc_df</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">df_to_sf</span><span class="op">(</span><span class="va">nc_df</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, remove_coords <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The provided coordinates do not appear to match the data and no standard</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> coordinate column names could be found. Replacing coordinates with default</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> values.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in `[[&lt;-.data.frame`(`*tmp*`, lon, value = numeric(0)):</span> replacement has 0 rows, data has 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Attribute-geometry relationship: 14 constant, 0 aggregate, 0 identity</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.05986 ymin: 34.07671 xmax: -75.8095 ymax: 36.49111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First 10 features:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     area perimeter cnty cnty_id        name  fips fipsno cress_id bir74 sid74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.114     1.442 1825    1825        Ashe 37009  37009        5  1091     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.061     1.231 1827    1827   Alleghany 37005  37005        3   487     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.143     1.630 1828    1828       Surry 37171  37171       86  3188     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.070     2.968 1831    1831   Currituck 37053  37053       27   508     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.153     2.206 1832    1832 Northampton 37131  37131       66  1421     9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.097     1.670 1833    1833    Hertford 37091  37091       46  1452     7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.062     1.547 1834    1834      Camden 37029  37029       15   286     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.091     1.284 1835    1835       Gates 37073  37073       37   420     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.118     1.421 1836    1836      Warren 37185  37185       93   968     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.124     1.428 1837    1837      Stokes 37169  37169       85  1612     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    nwbir74 bir79 sid79 nwbir79                   geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       10  1364     0      19  POINT (-81.49823 36.4314)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       10   542     3      12 POINT (-81.12513 36.49111)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      208  3616     6     260 POINT (-80.68573 36.41252)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      123   830     2     145 POINT (-76.02719 36.40714)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     1066  1606     3    1197 POINT (-77.41046 36.42236)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      954  1838     5    1237 POINT (-76.99472 36.36142)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      115   350     2     139 POINT (-76.23402 36.40122)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      254   594     2     371 POINT (-76.70446 36.44428)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      748  1190     2     844 POINT (-78.11042 36.39693)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     160  2038     5     176 POINT (-80.23429 36.40042)</span>
 <span class="r-in"><span class="va">nc_df</span><span class="op">$</span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">nc_df</span><span class="op">$</span><span class="va">x</span>, <span class="va">nc_df</span><span class="op">$</span><span class="va">y</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">df_to_sf</span><span class="op">(</span><span class="va">nc_df</span>, coords <span class="op">=</span> <span class="st">"xy"</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 18 fields</span>

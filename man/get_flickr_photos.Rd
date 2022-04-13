@@ -91,7 +91,8 @@ based on latitude and longitude of geocoded photos.
 }
 \description{
 Set API key using \code{FlickrAPI::set_flickr_api_key()} or pass to the api_key
-parameter. Currently relies on fork of package at \url{https://github.com/elipousson/FlickrAPI}
+parameter. Currently relies on fork of package at
+\url{https://github.com/elipousson/FlickrAPI}
 }
 \details{
 License id options:

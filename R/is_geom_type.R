@@ -7,8 +7,8 @@
 #' @param type If "POINT", check if geometry type is POINT. Same for all
 #'   available geometry types; not case sensitive; Default: NULL
 #' @param by_geometry Passed to sf::st_geometry_type; defaults to FALSE
-#' @param ext For st_geom_type, if ext TRUE and check is NULL, return a list with checks for POINTS,
-#'   POLYGONS, LINESTRING, and the returned types.
+#' @param ext For st_geom_type, if ext TRUE and check is NULL, return a list
+#'   with checks for POINTS, POLYGONS, LINESTRING, and the returned types.
 #' @returns If ext is FALSE and type is NULL, returns vector with geometry types
 #'   identical to [sf::st_geometry_type]. If ext is TRUE, returns a list and, if
 #'   type is not NULL, returns a logical vector.
@@ -40,7 +40,10 @@ is_geom_type <- function(x, type = NULL, by_geometry = FALSE, ext = TRUE) {
         "POLYGONS" = sf::st_is(x, c("POLYGON", "MULTIPOLYGON")),
         "LINESTRINGS" = sf::st_is(x, c("LINESTRING", "MULTILINESTRING")),
         "COLLECTION" = sf::st_is(x, "GEOMETRYCOLLECTION"),
-        "OTHER" = sf::st_is(x, c("GEOMETRY", "CIRCULARSTRING", "COMPOUNDCURVE", "CURVEPOLYGON", "MULTICURVE", "MULTISURFACE", "CURVE", "SURFACE", "POLYHEDRALSURFACE", "TIN", "TRIANGLE"))
+        "OTHER" = sf::st_is(x, c("GEOMETRY", "CIRCULARSTRING", "COMPOUNDCURVE",
+                                 "CURVEPOLYGON", "MULTICURVE", "MULTISURFACE",
+                                 "CURVE", "SURFACE", "POLYHEDRALSURFACE",
+                                 "TIN", "TRIANGLE"))
       )
   }
 

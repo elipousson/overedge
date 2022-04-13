@@ -42,8 +42,17 @@ sf_to_df <- function(x,
                      coords = c("lon", "lat"),
                      geometry = "centroid",
                      keep_all = TRUE) {
-  x <- st_transform_ext(x, crs = crs)
-  x <- get_coords(x, geometry = geometry, coords = coords, keep_all = keep_all, drop = TRUE)
+  x <-
+    st_transform_ext(x, crs = crs)
+
+  x <-
+    get_coords(
+      x,
+      geometry = geometry,
+      coords = coords,
+      keep_all = keep_all,
+      drop = TRUE
+      )
   return(x)
 }
 
@@ -88,7 +97,8 @@ df_to_sf <- function(x,
       )
   }
 
-  x <- st_transform_ext(x = x, crs = crs, class = "sf")
+  x <-
+    st_transform_ext(x = x, crs = crs, class = "sf")
 
   return(x)
 }
@@ -97,8 +107,8 @@ df_to_sf <- function(x,
 #' @rdname sf_to_df
 #' @name check_coords
 #' @param default c("lon", "lat").
-#' @param rev If TRUE, reverse c("lat", "lon") coords to c("lon", "lat").
-#'   check_coords only.
+#' @param rev If `TRUE`, reverse c("lat", "lon") coords to c("lon", "lat").
+#'   [check_coords] only.
 #' @export
 #' @importFrom janitor make_clean_names
 check_coords <- function(x = NULL, coords = NULL, default = c("lon", "lat"), rev = FALSE) {

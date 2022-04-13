@@ -64,7 +64,8 @@ location names for features}
 \item{...}{Additional arguments passed to \link[esri2sf:esri2sf]{esri2sf::esri2df} or
 \link[esri2sf:esri2sf]{esri2sf::esri2sf}}
 
-\item{layers}{Either a vector with URLs, a named list of urls, or a numeric vector}
+\item{layers}{Either a vector with URLs, a named list of urls, or a numeric
+vector}
 
 \item{service_url}{Base service URL with layers are located.}
 

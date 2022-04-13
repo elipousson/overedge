@@ -123,7 +123,8 @@ get_esri_data <- function(location = NULL,
 #'
 #' @name get_esri_layers
 #' @rdname get_esri_data
-#' @param layers Either a vector with URLs, a named list of urls, or a numeric vector
+#' @param layers Either a vector with URLs, a named list of urls, or a numeric
+#'   vector
 #' @param service_url Base service URL with layers are located.
 #' @export
 #' @importFrom dplyr case_when

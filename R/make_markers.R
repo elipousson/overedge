@@ -46,7 +46,15 @@ make_markers <- function(data,
 
     is_pkg_installed("tidygeocoder")
 
-    data <- tidygeocoder::geocode(data, address = address, long = "lon", lat = "lat", quiet = rlang::is_interactive())
+    data <-
+      tidygeocoder::geocode(
+        data,
+        address = address,
+        long = "lon",
+        lat = "lat",
+        quiet = rlang::is_interactive()
+        )
+
     data <- df_to_sf(data, coords = c("lon", "lat"), crs = crs)
   }
 

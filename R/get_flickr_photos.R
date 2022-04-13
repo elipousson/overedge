@@ -1,7 +1,8 @@
 #' Use FlickrAPI to get geotagged photos for a location
 #'
 #' Set API key using `FlickrAPI::set_flickr_api_key()` or pass to the api_key
-#' parameter. Currently relies on fork of package at <https://github.com/elipousson/FlickrAPI>
+#' parameter. Currently relies on fork of package at
+#' <https://github.com/elipousson/FlickrAPI>
 #'
 #' @param location A `sf` or `bbox` object to use in creating bounding box for
 #'   getting photos from Flickr.
@@ -151,7 +152,12 @@ get_flickr_photos <- function(api_key = NULL,
   }
 
   if (geometry) {
-    photos <- df_to_sf(x = photos, coords = c("longitude", "latitude"), crs = crs)
+    photos <-
+      df_to_sf(
+        x = photos,
+        coords = c("longitude", "latitude"),
+        crs = crs
+        )
   }
 
   return(photos)
