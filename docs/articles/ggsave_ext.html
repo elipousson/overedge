@@ -100,7 +100,10 @@
 <div class="section level3">
 <h3 id="set-parameters-for-the-map-and-location">Set parameters for the map and location<a class="anchor" aria-label="anchor" href="#set-parameters-for-the-map-and-location"></a>
 </h3>
-<p>overedge is designed to easily support a workflow where the page or image size, page margin, and map area (defined by the location along with dist and diag_ratio parameters) are used repeatly across a range of related functions map making and layout functions.</p>
+<p>overedge is designed to easily support a workflow where the page or
+image size, page margin, and map area (defined by the location along
+with dist and diag_ratio parameters) are used repeatly across a range of
+related functions map making and layout functions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Set initial parameters</span>
 <span class="va">params</span> <span class="op">&lt;-</span>
@@ -114,7 +117,9 @@
     dist <span class="op">=</span> <span class="cn">NULL</span>,
     diag_ratio <span class="op">=</span> <span class="fl">0.75</span>
   <span class="op">)</span></code></pre></div>
-<p>In this example, the location name, location type, and package with the type data are used to get an sf object for a Baltimore neighborhood.</p>
+<p>In this example, the location name, location type, and package with
+the type data are used to get an sf object for a Baltimore
+neighborhood.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Create wrapper function to get neighborhood</span>
 <span class="va">get_neighborhood</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">location</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
@@ -129,7 +134,12 @@
 <span class="co"># Use the get_neighborhood wrapper function to get the neighborhood named in param</span>
 <span class="va">params</span><span class="op">$</span><span class="va">neighborhood</span> <span class="op">&lt;-</span>
   <span class="fu">get_neighborhood</span><span class="op">(</span>name <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></code></pre></div>
-<p>Additional parameters can be derived based on the preliminary parameters and geometry. For example, page orientation can be based on the aspect ratio of the buffered bounding box for the named location. The aspect ratio for a location map is based on the combination of the paper, margin, and orientation. The overall bounding box for the map area requires the distance or diagonal ratio and the aspect ratio.</p>
+<p>Additional parameters can be derived based on the preliminary
+parameters and geometry. For example, page orientation can be based on
+the aspect ratio of the buffered bounding box for the named location.
+The aspect ratio for a location map is based on the combination of the
+paper, margin, and orientation. The overall bounding box for the map
+area requires the distance or diagonal ratio and the aspect ratio.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Get appropriate orientation based on buffer parameters</span>
 <span class="va">params</span><span class="op">$</span><span class="va">orientation</span> <span class="op">&lt;-</span>
@@ -177,7 +187,9 @@
   <span class="fu">get_neighborhood</span><span class="op">(</span>
     location <span class="op">=</span> <span class="va">block_bbox</span>
   <span class="op">)</span></code></pre></div>
-<p>A quick map is helpful for illustrating the relative size and proportion of the different simple feature objects and bounding boxes created through this process:</p>
+<p>A quick map is helpful for illustrating the relative size and
+proportion of the different simple feature objects and bounding boxes
+created through this process:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
@@ -191,8 +203,14 @@
     data <span class="op">=</span> <span class="va">nearby_neighborhoods</span>
   <span class="op">)</span></code></pre></div>
 <p><img src="ggsave_ext_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<p>In this example, the objects <code>block_bbox</code> and <code>nearby_neighborhoods</code> are as separate objects but could easily be added to the list of parameters. The approach of using parameters is intended to make this code easy to reuse for a parameterized RMarkdown document.</p>
-<p>In some cases, it may be convenient to wrap an overedge function with preset parameters or use <code><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">purrr::partial()</a></code> for a similar purpose:</p>
+<p>In this example, the objects <code>block_bbox</code> and
+<code>nearby_neighborhoods</code> are as separate objects but could
+easily be added to the list of parameters. The approach of using
+parameters is intended to make this code easy to reuse for a
+parameterized RMarkdown document.</p>
+<p>In some cases, it may be convenient to wrap an overedge function with
+preset parameters or use <code><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">purrr::partial()</a></code> for a similar
+purpose:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Use partial to create a version of layer_location_data that applies a half-mile buffer to the specified neighborhood</span>
 <span class="va">layer_half_mi_buffer</span> <span class="op">&lt;-</span> 
@@ -204,7 +222,8 @@
     diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,
     asp <span class="op">=</span> <span class="fu"><a href="../reference/get_asp.html">get_asp</a></span><span class="op">(</span>paper <span class="op">=</span> <span class="st">"letter"</span>, orientation <span class="op">=</span> <span class="st">"landscape"</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
-<p>This can be helpful in reducing repetition when setting up maps but it also can get confusing so use this approach with care.</p>
+<p>This can be helpful in reducing repetition when setting up maps but
+it also can get confusing so use this approach with care.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">layer_half_mi_buffer</span><span class="op">(</span>
@@ -224,7 +243,11 @@
 <div class="section level3">
 <h3 id="create-a-basemap-and-label-layer">Create a basemap and label layer<a class="anchor" aria-label="anchor" href="#create-a-basemap-and-label-layer"></a>
 </h3>
-<p>In order to maintain some flexibility in the map layout process, it may be helpful to set up a basemap that covers a larger area. This example illustrates how to combine street center line data, neighborhood boundaries, and labels for residential neighborhoods into a larger basemap centered on the selected neighborhood.</p>
+<p>In order to maintain some flexibility in the map layout process, it
+may be helpful to set up a basemap that covers a larger area. This
+example illustrates how to combine street center line data, neighborhood
+boundaries, and labels for residential neighborhoods into a larger
+basemap centered on the selected neighborhood.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">basemap</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -249,7 +272,11 @@
 <span class="co">#&gt; Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Blues is 9</span>
 <span class="co">#&gt; Returning the palette you asked for with that many colors</span></code></pre></div>
 <p><img src="ggsave_ext_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
-<p><code><a href="../reference/layer_location_data.html">layer_location_data()</a></code> is a flexible wrapper function around several different types of geoms for sf objects including geoms from <a href="https://ggrepel.slowkow.com/" class="external-link">ggrepel</a> and <a href="https://allancameron.github.io/geomtextpath/" class="external-link">geomtextpath</a>. This makes it easy to create separate layers for a basemap, labels, or other features.</p>
+<p><code><a href="../reference/layer_location_data.html">layer_location_data()</a></code> is a flexible wrapper function
+around several different types of geoms for sf objects including geoms
+from <a href="https://ggrepel.slowkow.com/" class="external-link">ggrepel</a> and <a href="https://allancameron.github.io/geomtextpath/" class="external-link">geomtextpath</a>.
+This makes it easy to create separate layers for a basemap, labels, or
+other features.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">label_layer</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="../reference/layer_location_data.html">layer_location_data</a></span><span class="op">(</span>
@@ -276,7 +303,11 @@
 <div class="section level3">
 <h3 id="add-a-neatline-location-mask-or-location-boundary">Add a neatline, location mask, or location boundary<a class="anchor" aria-label="anchor" href="#add-a-neatline-location-mask-or-location-boundary"></a>
 </h3>
-<p>After creating any needed layers for a map, you may want to focus on a specific area and clean up the appearance of the map by removing grid lines and axis labels. The <code><a href="../reference/layer_neatline.html">layer_neatline()</a></code> function makes it easy to effectively “zoom” in to a specific area while hiding the grid lines and axis labels.</p>
+<p>After creating any needed layers for a map, you may want to focus on
+a specific area and clean up the appearance of the map by removing grid
+lines and axis labels. The <code><a href="../reference/layer_neatline.html">layer_neatline()</a></code> function makes
+it easy to effectively “zoom” in to a specific area while hiding the
+grid lines and axis labels.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">neighborhood_map</span> <span class="op">&lt;-</span>
   <span class="va">basemap</span> <span class="op">+</span>
@@ -294,7 +325,9 @@
 <span class="co">#&gt; Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Blues is 9</span>
 <span class="co">#&gt; Returning the palette you asked for with that many colors</span></code></pre></div>
 <p><img src="ggsave_ext_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<p>The <code><a href="../reference/layer_mask.html">layer_mask()</a></code> function also allow you to add <code><a href="../reference/layer_neatline.html">layer_neatline()</a></code> to a map along with a mask using the same parameters.</p>
+<p>The <code><a href="../reference/layer_mask.html">layer_mask()</a></code> function also allow you to add
+<code><a href="../reference/layer_neatline.html">layer_neatline()</a></code> to a map along with a mask using the same
+parameters.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">basemap</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/layer_mask.html">layer_mask</a></span><span class="op">(</span>
@@ -320,7 +353,9 @@
 <div class="section level3">
 <h3 id="add-margins">Add margins<a class="anchor" aria-label="anchor" href="#add-margins"></a>
 </h3>
-<p>The last step is to add margins. Margins can also include a header and footer to ensure there is sufficient space for a title, subtitle, and caption.</p>
+<p>The last step is to add margins. Margins can also include a header
+and footer to ensure there is sufficient space for a title, subtitle,
+and caption.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">letter_map</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/theme_ext.html">theme_margin</a></span><span class="op">(</span>
@@ -338,24 +373,33 @@
 <span class="co">#    title = "{params$name} and nearby neighborhoods",</span>
 <span class="co">#    caption = "Data courtesy {params$source}."</span>
 <span class="co">#  )</span></code></pre></div>
-<p>The resulting map appears oddly proportioned at the display size for this vignette but the units ensure the margin is appropriately sized for the paper size provided.</p>
+<p>The resulting map appears oddly proportioned at the display size for
+this vignette but the units ensure the margin is appropriately sized for
+the paper size provided.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="export-a-map">Export a map<a class="anchor" aria-label="anchor" href="#export-a-map"></a>
 </h2>
-<p>Finally, the <code>ggsave_exif()</code> function uses the <code><a href="../reference/make_filename.html">make_filename()</a></code> function also used by <code><a href="../reference/write_sf_ext.html">write_sf_ext()</a></code> to create consistent file names that can optionally include a date or date-time prefix.</p>
+<p>Finally, the <code>ggsave_exif()</code> function uses the
+<code><a href="../reference/make_filename.html">make_filename()</a></code> function also used by
+<code><a href="../reference/write_sf_ext.html">write_sf_ext()</a></code> to create consistent file names that can
+optionally include a date or date-time prefix.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/make_filename.html">make_filename</a></span><span class="op">(</span>
   name <span class="op">=</span> <span class="st">"Neighborhood map"</span>,
   label <span class="op">=</span> <span class="va">params</span><span class="op">$</span><span class="va">name</span>,
   prefix <span class="op">=</span> <span class="st">"date"</span>
 <span class="op">)</span>
-<span class="co">#&gt; [1] "2022-03-30_harwood_neighborhood_map"</span></code></pre></div>
+<span class="co">#&gt; [1] "2022-04-13_harwood_neighborhood_map"</span></code></pre></div>
 <div class="section level3">
 <h3 id="save-map-with-ggsave_ext">Save map with ggsave_ext<a class="anchor" aria-label="anchor" href="#save-map-with-ggsave_ext"></a>
 </h3>
-<p>The dimensions of the exported file may be set automatically based on paper and orientation. The title and author parameter are used to update the EXIF metadata for the file after it is exported. The title and author are both evaluated with <code>glue()</code> which allow you to use the same parameters to label and title the map.</p>
+<p>The dimensions of the exported file may be set automatically based on
+paper and orientation. The title and author parameter are used to update
+the EXIF metadata for the file after it is exported. The title and
+author are both evaluated with <code>glue()</code> which allow you to
+use the same parameters to label and title the map.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ggsave_ext.html">ggsave_ext</a></span><span class="op">(</span>
   plot <span class="op">=</span> <span class="va">neighborhood_map</span>,
@@ -385,7 +429,8 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
