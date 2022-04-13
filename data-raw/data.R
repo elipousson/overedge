@@ -224,10 +224,11 @@ usethis::use_data(
   overwrite = TRUE
 )
 
-dist_unit_options <-
+select_unit_options <-
   c(
     "arc_degree", "arc_minute", "arc_second", "cm", "m", "metre", "meter", "meters", "km", "kilometer", "kilometers",
-    "inch", "in", "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile", "radian"
+    "inch", "in", "ft", "foot", "feet", "yard", "yards", "mi", "mile", "miles", "nautical_mile", "radian",
+    "mm", "millimeter", "millimeters", "millimetre", "millimetres"
   )
 
 add_metric_units <-
@@ -251,7 +252,7 @@ dist_units <-
   filter(
     if_any(
       any_of(units_filter_cols),
-      ~ (.x %in% dist_unit_options)
+      ~ (.x %in% select_unit_options)
     )
   )
 
@@ -261,6 +262,26 @@ dist_units <-
 usethis::use_data(
   dist_units,
   overwrite = TRUE
+)
+
+dist_unit_options <-
+  unique(c(
+    dist_units$name_singular,
+    dist_units$name_plural,
+    stringr::str_split(dist_units$name_singular_aliases, ", ", simplify = TRUE),
+    stringr::str_split(dist_units$name_plural_aliases, ", ", simplify = TRUE),
+    dist_units$symbol,
+    dist_units$symbol_aliases,
+    select_unit_options
+  ))
+
+dist_unit_options <- dist_unit_options[!is.na(dist_unit_options)]
+dist_unit_options <- dist_unit_options[dist_unit_options != ""]
+
+usethis::use_data(
+  dist_unit_options,
+  overwrite = TRUE,
+  internal = FALSE
 )
 
 area_units <-
@@ -275,28 +296,18 @@ area_units <-
 area_units <-
   naniar::replace_with_na_if(area_units, is.character, ~ .x == "")
 
+area_unit_options <-
+  c(paste0(c(
+    "meter", "meters", "nautical_mile", "international_inch", "international_foot",
+    "international_yard", "international_mile", "kilometer", "centimeter", "m", "in",
+    "ft", "yd", "mi", "km", "cm", "metre", "inch", "foot", "yard", "mile", "kilometre",
+    "centimetre", "international_feet", "kilometers", "centimeters", "feet", "kilometres",
+    "centimetres"
+  ), "^2"), "hectare", "hectares", "acre", "acres", "acre_foot", "acre_feet")
+
 usethis::use_data(
-  area_units,
+  area_unit_options,
   overwrite = TRUE
-)
-
-dist_unit_options <-
-  unique(c(
-    dist_units$name_singular,
-    dist_units$name_plural,
-    stringr::str_split(dist_units$name_singular_aliases, ", ", simplify = TRUE),
-    stringr::str_split(dist_units$name_plural_aliases, ", ", simplify = TRUE),
-    dist_units$symbol,
-    dist_units$symbol_aliases
-  ))
-
-dist_unit_options <- dist_unit_options[!is.na(dist_unit_options)]
-dist_unit_options <- dist_unit_options[dist_unit_options != ""]
-
-usethis::use_data(
-  dist_unit_options,
-  overwrite = TRUE,
-  internal = FALSE
 )
 
 standard_scales <-

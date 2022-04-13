@@ -32,7 +32,7 @@
 #'  Standard paper and image sizes
 #'
 #' Reference table of standard paper, postcard, photo print, and social media image
-#' sizes, for `get_paper()` and `ggsave_ext()` functions. Derived from
+#' sizes, for [get_paper] and [ggsave_ext] functions. Derived from
 #' [visioguy/PaperSizes](https://github.com/visioguy/PaperSizes/) repo, [Adobe UK
 #' guide to photo
 #' sizes](https://www.adobe.com/uk/creativecloud/photography/discover/standard-photo-sizes.html)
@@ -51,10 +51,10 @@
 #' }
 "paper_sizes"
 
-#' Valid distance units
+#' Distance units (data frame)
 #'
 #' A subset of units supported by the units package accessible through the
-#' units::valid_udunits() function.
+#' [units::valid_udunits] function.
 #'
 #' @format A data frame with 11 rows and 11 variables:
 #' \describe{
@@ -71,27 +71,6 @@
 #'   \item{\code{source_xml}}{source XML}
 #' }
 "dist_units"
-
-#' Valid area units
-#'
-#' A subset of units supported by the units package accessible through the
-#' units::valid_udunits() function.
-#'
-#' @format A data frame with 3 rows and 11 variables:
-#' \describe{
-#'   \item{\code{symbol}}{symbols}
-#'   \item{\code{symbol_aliases}}{symbol aliases}
-#'   \item{\code{name_singular}}{singular names}
-#'   \item{\code{name_singular_aliases}}{singular name aliases}
-#'   \item{\code{name_plural}}{character plural names}
-#'   \item{\code{name_plural_aliases}}{plural name aliases}
-#'   \item{\code{def}}{short definition}
-#'   \item{\code{definition}}{definition}
-#'   \item{\code{comment}}{comment}
-#'   \item{\code{dimensionless}}{logical indicator for dimensionless units}
-#'   \item{\code{source_xml}}{source XML}
-#' }
-"area_units"
 
 #' Standard map, architectural, and engineering scales
 #'
@@ -125,7 +104,7 @@
 
 #' OpenStreetMap building tags
 #'
-#' Used by `get_osm_data()` if key = "building".
+#' Used by [get_osm_data] if key = "building".
 #'
 #' More information on the building key
 #' <https://wiki.openstreetmap.org/wiki/Key:building>
@@ -176,10 +155,19 @@
 #' }
 "us_counties"
 
-#' Supported distance units
+#' Distance units (vector)
 #'
 #' A vector of supported distance units pulled from [dist_units].
 #'
-#' @format A character vector with 47 names, plural names, aliases, and symbols
+#' @format A character vector with 55 names, plural names, aliases, and symbols
 #'   for distance units.
 "dist_unit_options"
+
+#' Area units (vector)
+#'
+#' A vector of supported area units derived from [dist_units] and
+#' [units::valid_udunits].
+#'
+#' @format A character vector with 35 names, plural names, and aliases for area
+#'   units.
+"area_unit_options"
