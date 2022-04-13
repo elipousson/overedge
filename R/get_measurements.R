@@ -64,7 +64,6 @@ get_area <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "area
 #' @rdname get_measurements
 #' @export
 #' @importFrom cli cli_alert_info
-#' @importFrom lwgeom st_perimeter
 #' @importFrom sf st_length
 get_length <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "length") {
   if (is_point(x) | is_multipoint(x)) {
