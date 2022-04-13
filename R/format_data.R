@@ -29,6 +29,7 @@
 #' @importFrom tidyr replace_na
 format_data <- function(data,
                         var_names = NULL,
+                        clean_names = TRUE,
                         replace_na = NULL,
                         replace_with_na = NULL,
                         replace_empty_char_with_na = TRUE,
@@ -55,6 +56,10 @@ format_data <- function(data,
         data,
         !!!var_names
       )
+  }
+
+  if (clean_names) {
+    data <- janitor::clean_names(data, "snake")
   }
 
   if (!is.null(replace_na)) {
@@ -111,4 +116,77 @@ relocate_sf_col <- function(x, .after = dplyr::everything()) {
     dplyr::all_of(attributes(x)$sf_column),
     .after = .after
   )
+}
+
+#' @name bind_address_col
+#' @rdname format_data
+#' @importFrom dplyr mutate
+bind_address_col <- function(x, city = NULL, county = NULL, state = NULL) {
+  if (!is.null(city)) {
+    x <- has_same_name_col(x, col = "city")
+
+    x <-
+      dplyr::mutate(
+        x,
+        city = city
+      )
+  }
+
+  if (!is.null(county)) {
+    x <- has_same_name_col(x, col = "county")
+
+    x <-
+      dplyr::mutate(
+        x,
+        county = county
+      )
+  }
+
+  if (!is.null(state)) {
+    x <- has_same_name_col(x, col = "state")
+
+    x <-
+      dplyr::mutate(
+        x,
+        state = state
+      )
+  }
+
+  return(x)
+}
+
+
+#' @name bind_units_col
+#' @rdname format_data
+#' @importFrom units drop_units
+#' @importFrom dplyr bind_cols
+bind_units_col <- function(x, y, units = NULL, drop = FALSE, keep_all = TRUE, .id = NULL) {
+  x <- has_same_name_col(x, col = .id)
+
+  if (!is.null(units)) {
+    if (units %in% c(dist_unit_options, area_unit_options)) {
+      y <-
+        convert_dist_units(
+          dist = y,
+          from = get_dist_units(y),
+          to = units
+        )
+    }
+  }
+
+  if (drop) {
+    y <- units::drop_units(y)
+  }
+
+  if (!keep_all) {
+    return(y)
+  }
+
+  x <-
+    dplyr::bind_cols(
+      x,
+      "{.id}" := y
+    )
+
+  return(relocate_sf_col(x))
 }
