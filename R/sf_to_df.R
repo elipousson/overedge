@@ -43,7 +43,7 @@ sf_to_df <- function(x,
                      geometry = "centroid",
                      keep_all = TRUE) {
   x <- st_transform_ext(x, crs = crs)
-  x <- st_coords(x, geometry = geometry, coords = coords, keep_all = keep_all, drop = TRUE)
+  x <- get_coords(x, geometry = geometry, coords = coords, keep_all = keep_all, drop = TRUE)
   return(x)
 }
 

@@ -107,7 +107,7 @@ get_wiki_data <- function(location,
 #' @noRd
 make_gscoord <- function(location, crs = 4326) {
   # center <- st_center(location, ext = FALSE)
-  center <- st_coords(location, crs = crs)
+  center <- get_coords(location, crs = crs)
   paste0(center$lat, "|", center$lon)
 }
 

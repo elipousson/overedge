@@ -1,11 +1,10 @@
-
 #' Get coordinates for a simple feature or bounding box object
 #'
-#' An extended version of st_coords that supports binding coordinates to the
-#' object, optionally dropping the geometry, and returning wkt or a point on
-#' surface (geometry = "surface point") instead of the centroid.
+#' An extended version of [sf::st_coordinates] that supports binding coordinates
+#' to the object, optionally dropping the geometry, and returning wkt or a point
+#' on surface (geometry = "surface point") instead of the centroid.
 #'
-#' [st_coords_minmax] get a bounding box for each feature (or group of features)
+#' [get_minmax] get a bounding box for each feature (or group of features)
 #' appends the xmin, ymin, xmax, and ymax values for each feature to the simple
 #' feature object.
 #'
@@ -18,12 +17,13 @@
 #'   Default: `TRUE`.
 #' @param crs Coordinate reference system to use for coordinates; defaults to `NULL`.
 #' @param drop If `TRUE` and x is an sf object, drop the geometry Default: `TRUE`.
-#' @rdname st_coords
+#' @rdname get_coords
+#' @aliases st_coords
 #' @export
 #' @importFrom sf st_as_text st_point_on_surface st_coordinates
 #'   st_drop_geometry st_zm
 #' @importFrom dplyr select bind_cols
-st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = TRUE, drop = TRUE) {
+get_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = TRUE, drop = TRUE) {
   geometry <- match.arg(geometry, c("centroid", "surface point", "wkt"))
 
   stopifnot(
@@ -35,8 +35,7 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
   if (geometry == "wkt") {
     x <- has_same_name_col(x, "wkt", quiet = TRUE)
     # Convert geometry to wkt
-    x_coords <-
-      data.frame("wkt" = sf::st_as_text(as_sfc(x)))
+    x_coords <- data.frame("wkt" = sf::st_as_text(as_sfc(x)))
   } else {
     # Convert to coordinates at centroid or as a point on surface
     # FIXME: This approach may be an issue if a sf object has mixed geometry
@@ -51,8 +50,8 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
     }
 
     x_coords <- as.data.frame(sf::st_coordinates(x_coords))
-    coords <- check_coords(coords = coords)
 
+    coords <- check_coords(coords = coords)
     x <- has_same_name_col(x, coords[1], quiet = TRUE)
     x <- has_same_name_col(x, coords[2], quiet = TRUE)
 
@@ -81,14 +80,15 @@ st_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all = 
   return(x)
 }
 
-#' @name st_coords_minmax
-#' @rdname st_coords
+#' @name get_minmax
+#' @aliases st_coords_minmax
+#' @rdname get_coords
 #' @importFrom dplyr mutate row_number select bind_cols
 #' @importFrom purrr map
 #' @importFrom tibble enframe
 #' @importFrom tidyr unnest_wider
 #' @importFrom sf st_drop_geometry
-st_coords_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
+get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
   stopifnot(
     is_sf(x, ext = TRUE)
   )

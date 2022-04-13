@@ -80,7 +80,7 @@ st_omerc <- function(x, rotate = 0) {
   }
 
   coords <-
-    st_coords(sf::st_union(x), keep_all = FALSE, crs = 4326)
+    get_coords(sf::st_union(x), keep_all = FALSE, crs = 4326)
 
   proj <- "omerc"
   datum <- "WGS84"

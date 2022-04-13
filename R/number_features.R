@@ -2,9 +2,9 @@
 #'
 #' Used with [layer_numbers()]. Supports multiple types of sorting including sorting:
 #'
-#' - by centroid coordinates ("lon", "lat") appended with [st_coords]
+#' - by centroid coordinates ("lon", "lat") appended with [get_coords]
 #' - by one or more bounding box min or max values ("xmin", "ymin", "xmax",
-#' "ymax") appended with [st_coords_minmax]
+#' "ymax") appended with [get_minmax]
 #' - by distance from the corner, side midpoint, or center of a bounding box
 #' ("dist_xmin_ymin", "dist_xmax_ymax", "dist_xmin_ymax", "dist_xmax_ymin",
 #' "dist_xmin_ymid", "dist_xmax_ymid", "dist_xmid_ymin", "dist_xmid_ymax",
@@ -117,7 +117,7 @@ sort_features <- function(data,
 
     if ((sort %in% latlon_opts) && !all(rlang::has_name(data, sort))) {
       data <-
-        st_coords(
+        get_coords(
           data,
           geometry = "centroid",
           crs = crs,
@@ -126,7 +126,7 @@ sort_features <- function(data,
         )
     } else if ((sort %in% minmax_opts) && !all(rlang::has_name(data, sort))) {
       data <-
-        st_coords_minmax(
+        get_minmax(
           data,
           crs = crs,
           keep_all = TRUE,
@@ -158,7 +158,7 @@ sort_features <- function(data,
     }
 
     data <-
-      st_dist(
+      get_dist(
         data,
         to = to,
         keep_all = TRUE,
