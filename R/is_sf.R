@@ -125,28 +125,6 @@ is_same_crs <- function(x, y) {
   sf::st_crs(x) == sf::st_crs(y)
 }
 
-
-#' @name is_same_area
-#' @rdname  is_sf
-#' @importFrom sf st_area
-#' @export
-is_same_area <- function(x, y, union = FALSE, diff = FALSE) {
-  if (union) {
-    x <- sf::st_union(x)
-    y <- sf::st_union(y)
-  }
-
-  x_area <- sf::st_area(x)
-  y_area <- sf::st_area(y)
-
-  if (diff) {
-    return(x_area - y_area)
-  }
-
-  return(x_area == y_area)
-}
-
-
 #' @name is_sf_or_what
 #' @rdname  is_sf
 #' @importFrom cli cli_abort
