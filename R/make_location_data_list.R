@@ -29,32 +29,23 @@ make_location_data_list <- function(data = NULL, location = NULL, key = c("locat
     params$data_col <- params$col
   }
 
-  if (is.null(params$location_col)) {
-    location <- as_sf_list(location)
-  } else if ("location_col" %in% names(params)) {
-    location <- as_sf_list(x = location, col = params$location_col)
-  }
+  location <- as_sf_list(x = location, col = params$location_col)
 
   len_location <- length(location)
 
-  if (is.null(params$data_col)) {
-    data <- as_sf_list(x = data)
-  } else if ("data_col" %in% names(params)) {
-    data <- as_sf_list(x = data, col = params$data_col)
-  }
+  data <- as_sf_list(x = data, col = params$data_col)
 
   len_data <- length(data)
 
-  if ((len_location == 1) && (len_data > 1)) {
-    location_data_list <- list(rep(location, len_data), data)
-  } else if ((len_data == 1) && (len_location > 1)) {
-    location_data_list <- list(location, rep(data, len_location))
-  } else {
-    if (!(len_location == len_data)) {
-      cli::cli_warn("location is length {location_len} and data is {data_len}.")
-    }
+  location_data_list <-
+    dplyr::case_when(
+      (len_location == 1) && (len_data > 1) ~ list(rep(location, len_data), data),
+      (len_data == 1) && (len_location > 1) ~ list(location, rep(data, len_location)),
+      TRUE ~ list(location, data)
+    )
 
-    location_data_list <- list(location, data)
+  if (!(len_location == len_data) && (len_location != 1) && (len_data != 1)) {
+    cli::cli_warn("location is length {location_len} and data is {data_len}.")
   }
 
   if (!is.null(key) && (length(key) == 2)) {
