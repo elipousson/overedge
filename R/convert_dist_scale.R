@@ -40,11 +40,11 @@ convert_dist_scale <- function(dist = NULL,
 
   dist <-
     switch(scale_unit,
-           "mm" = dist / 10,
-           "cm" = dist,
-           # FIXME: Double-check how this handles px
-           "px" = dist / dpi,
-           "in" = dist
+      "mm" = dist / 10,
+      "cm" = dist,
+      # FIXME: Double-check how this handles px
+      "px" = dist / dpi,
+      "in" = dist
     )
 
   if (scale_unit %in% c("mm", "cm")) {
