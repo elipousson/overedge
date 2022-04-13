@@ -1,6 +1,6 @@
-#' Convert distances between different units
+#' Convert distance (and area) values between different units
 #'
-#' @param dist Numeric or units
+#' @param dist Numeric or units object
 #' @param from Existing unit for dist, Default: NULL. If dist is a units object,
 #'   the numerator is used as "from"
 #' @param to Unit to convert distance to, Default: 'meter'
@@ -21,7 +21,7 @@ convert_dist_units <- function(dist,
   }
 
   if (!is.null(from)) {
-    from <- match.arg(from, dist_unit_options)
+    from <- match.arg(from, c(dist_unit_options, area_unit_options))
 
     if (!is_units(dist)) {
       from <- gsub(" ", "_", from)
@@ -36,7 +36,7 @@ convert_dist_units <- function(dist,
 
   if (!is.null(to)) {
     to <- gsub(" ", "_", to)
-    to <- match.arg(to, dist_unit_options)
+    to <- match.arg(to, c(dist_unit_options, area_unit_options))
 
     dist <-
       units::set_units(

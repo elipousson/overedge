@@ -16,7 +16,7 @@
 #' @family dist
 #' @export
 is_dist_units <- function(x) {
-  is_units(x) && (get_dist_units(x) %in% dist_unit_options)
+  is_units(x) && (get_dist_units(x) %in% c(dist_unit_options, area_unit_options))
 }
 
 #' @name diff_dist
@@ -40,19 +40,19 @@ is_diff_dist <- function(x, y, units = NULL) {
   }
 
   switch(which_is_units,
-         "x" = diff(c(x, as_dist_units(y, units = x))),
-         "y" = diff(c(as_dist_units(x, units = y), y)),
-         "xy" = diff(c(x, y)),
-         "neither" = diff(c(as_units(x, units = units), as_units(y, units = units)))
+    "x" = diff(c(x, as_dist_units(y, units = x))),
+    "y" = diff(c(as_dist_units(x, units = y), y)),
+    "xy" = diff(c(x, y)),
+    "neither" = diff(c(as_units(x, units = units), as_units(y, units = units)))
   )
 }
 
 #' @name is_same_dist
 #' @rdname  is_dist_units
-#' @param dist type of distance to compare if x and y are sf, sfc, or bbox
-#'   objects; "diagdist", "xdist", "ydist". defaults to NULL.
-#' @param diff If TRUE, return results from [is_diff_dist]; if FALSE, return
-#'   logical indicator; defaults to FALSE
+#' @param dist type of distance to compare if x and y are `sf`, `sfc`, or `bbox`
+#'   objects; "diagdist", "xdist", "ydist". defaults to `NULL`.
+#' @param diff If `TRUE`, return results from [is_diff_dist] or [is_diff_area];
+#'   if `FALSE`, return logical indicator; defaults to `FALSE`
 #' @param ... Additional parameters passed to all.equal
 #' @export
 #' @importFrom sf st_area
@@ -65,18 +65,18 @@ is_same_dist <- function(x, y, dist = NULL, diff = FALSE, ...) {
 
     x <-
       switch(dist,
-             # FIXME: Is this going to work or is there a tolerance factor needed?
-             "diagdist" = sf_bbox_diagdist(x, drop = FALSE),
-             "xdist" = sf_bbox_xdist(x, drop = FALSE),
-             "ydist" = sf_bbox_ydist(x, drop = FALSE)
+        # FIXME: Is this going to work or is there a tolerance factor needed?
+        "diagdist" = sf_bbox_diagdist(x, drop = FALSE),
+        "xdist" = sf_bbox_xdist(x, drop = FALSE),
+        "ydist" = sf_bbox_ydist(x, drop = FALSE)
       )
 
     y <-
       switch(dist,
-             # FIXME: Is this going to work or is there a tolerance factor needed?
-             "diagdist" = sf_bbox_diagdist(y, drop = FALSE),
-             "xdist" = sf_bbox_xdist(y, drop = FALSE),
-             "ydist" = sf_bbox_ydist(y, drop = FALSE)
+        # FIXME: Is this going to work or is there a tolerance factor needed?
+        "diagdist" = sf_bbox_diagdist(y, drop = FALSE),
+        "xdist" = sf_bbox_xdist(y, drop = FALSE),
+        "ydist" = sf_bbox_ydist(y, drop = FALSE)
       )
   }
 
@@ -122,12 +122,17 @@ get_dist_units <- function(x, null.ok = TRUE) {
     return(sf::st_crs(x)$units_gdal)
   }
 
-  if (is_units(x)) {
+  if (is_units(x) && (x %in% dist_unit_options)) {
+    # FIXME: This approach does not work for area units
     return(as.character(units(x)[["numerator"]]))
   }
 
+  if (is_units(x) && (x %in% area_unit_options)) {
+    return(as.character(units(x)))
+  }
+
   if (is.character(x)) {
-    return(x[x %in% dist_unit_options])
+    return(x[x %in% c(dist_unit_options, area_unit_options)])
   }
 }
 
@@ -140,7 +145,7 @@ as_dist_units <- function(x, units = NULL, null.ok = FALSE) {
   units <- get_dist_units(units, null.ok = null.ok)
 
   if (!is.null(units)) {
-    units <- match.arg(units, dist_unit_options)
+    units <- match.arg(units, c(dist_unit_options, area_unit_options))
   } else if (null.ok) {
     return(x)
   }
@@ -153,6 +158,33 @@ as_dist_units <- function(x, units = NULL, null.ok = FALSE) {
       to = units
     )
   }
+}
+
+#' @name is_diff_area
+#' @rdname  is_dist_units
+#' @export
+#' @importFrom sf st_union st_area
+is_diff_area <- function(x, y, units = NULL, union = TRUE) {
+  if (union) {
+    x <- sf::st_union(x)
+    y <- sf::st_union(y)
+  }
+
+  x_area <- sf::st_area(x)
+  y_area <- sf::st_area(y)
+
+  diff(x_area, y_area)
+}
+
+#' @name is_same_area
+#' @rdname  is_dist_units
+#' @export
+is_same_area <- function(x, y, units = NULL, union = TRUE, diff = FALSE, ...) {
+  if (diff) {
+    return(is_diff_area(x, y, units = units, union = union))
+  }
+
+  all.equal(as.numeric(is_diff_area(x, y, union = union)), 0, ...)
 }
 
 #' @noRd
