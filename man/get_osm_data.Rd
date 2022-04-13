@@ -98,6 +98,10 @@ because the server may time out before all data are delivered.}
 \item{level}{administrative level (admin_level) of boundary to return;
 defaults to NULL. See \url{https://wiki.openstreetmap.org/wiki/Key:admin_level}
 for more information. Only used for get_osm_boundaries.}
+
+\item{lang}{Language for boundary names to include in resulting data frame
+(e.g. "en" for English or "es" for Spanish). Default language names should
+always be included in results. Defaults to "en".}
 }
 \value{
 A simple feature object with features using selected geometry type or

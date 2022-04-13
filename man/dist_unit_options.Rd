@@ -3,9 +3,9 @@
 \docType{data}
 \name{dist_unit_options}
 \alias{dist_unit_options}
-\title{Supported distance units}
+\title{Distance units (vector)}
 \format{
-A character vector with 47 names, plural names, aliases, and symbols
+A character vector with 55 names, plural names, aliases, and symbols
 for distance units.
 }
 \usage{

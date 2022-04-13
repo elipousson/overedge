@@ -111,10 +111,12 @@ provided.</p></dd>
 <dd><p>Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, <code><a href="get_asp.html">get_asp()</a></code> returns the same value
 without modification.</p></dd>
+<dt>style_url</dt>
+<dd><p>A Mapbox style url; defaults to NULL.</p></dd>
 <dt>style_id</dt>
-<dd><p>A style ID</p></dd>
+<dd><p>A style ID (required if style_url is NULL).</p></dd>
 <dt>username</dt>
-<dd><p>A Mapbox username</p></dd>
+<dd><p>A Mapbox username (required if style_url is NULL).</p></dd>
 <dt>basemap</dt>
 <dd><p>If FALSE, create a standalone layer; if TRUE, the layer is
 precededed by <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot2::ggplot()</a></code> to allow use as a basemap, Default: TRUE</p></dd>
@@ -125,14 +127,15 @@ largest possible image. defaults to 0.5</p></dd>
 <dd><p>The scaling factor of the tiles; either <code>"1x"</code>
 (the default) or <code>"2x"</code></p></dd>
 <dt>attribution</dt>
-<dd><p>Controls whether there is attribution on the image. Defaults to `TRUE`.
-Note: If attribution=false, the watermarked attribution is removed from the
-image. You still have a legal responsibility to attribute maps that use
-OpenStreetMap data, which includes most maps from Mapbox. If you specify
-attribution=false, you are legally required to include proper attribution
-elsewhere on the webpage or document.</p></dd>
+<dd><p>Controls whether there is attribution on the image.
+Defaults to `TRUE`. Note: If attribution=false, the watermarked attribution
+is removed from the image. You still have a legal responsibility to
+attribute maps that use OpenStreetMap data, which includes most maps from
+Mapbox. If you specify attribution=false, you are legally required to
+include proper attribution elsewhere on the webpage or document.</p></dd>
 <dt>logo</dt>
-<dd><p>Controls whether there is a Mapbox logo on the image. Defaults to `TRUE`.</p></dd>
+<dd><p>Controls whether there is a Mapbox logo on the image. Defaults to
+`TRUE`.</p></dd>
 <dt>access_token</dt>
 <dd><p>A Mapbox access token; can be set with
 <code>mb_access_token()</code>.</p></dd>

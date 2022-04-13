@@ -67,6 +67,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">format_data</span><span class="op">(</span>
   <span class="va">data</span>,
   var_names <span class="op">=</span> <span class="cn">NULL</span>,
+  clean_names <span class="op">=</span> <span class="cn">TRUE</span>,
   replace_na <span class="op">=</span> <span class="cn">NULL</span>,
   replace_with_na <span class="op">=</span> <span class="cn">NULL</span>,
   replace_empty_char_with_na <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -75,7 +76,11 @@
 
 <span class="fu">fix_date</span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
 
-<span class="fu">relocate_sf_col</span><span class="op">(</span><span class="va">x</span>, .after <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu">relocate_sf_col</span><span class="op">(</span><span class="va">x</span>, .after <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu">bind_address_col</span><span class="op">(</span><span class="va">x</span>, city <span class="op">=</span> <span class="cn">NULL</span>, county <span class="op">=</span> <span class="cn">NULL</span>, state <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+
+<span class="fu">bind_units_col</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, units <span class="op">=</span> <span class="cn">NULL</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, .id <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">

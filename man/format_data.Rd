@@ -4,11 +4,14 @@
 \alias{format_data}
 \alias{fix_date}
 \alias{relocate_sf_col}
+\alias{bind_address_col}
+\alias{bind_units_col}
 \title{Format data using common approaches}
 \usage{
 format_data(
   data,
   var_names = NULL,
+  clean_names = TRUE,
   replace_na = NULL,
   replace_with_na = NULL,
   replace_empty_char_with_na = TRUE,
@@ -18,6 +21,10 @@ format_data(
 fix_date(data)
 
 relocate_sf_col(x, .after = dplyr::everything())
+
+bind_address_col(x, city = NULL, county = NULL, state = NULL)
+
+bind_units_col(x, y, units = NULL, drop = FALSE, keep_all = TRUE, .id = NULL)
 }
 \arguments{
 \item{data}{A tibble or data frame object}

@@ -94,7 +94,11 @@ is_shorter, is_longer: Is x shorter or longer than y?
 
 <span class="fu">get_dist_units</span><span class="op">(</span><span class="va">x</span>, null.ok <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="fu">as_dist_units</span><span class="op">(</span><span class="va">x</span>, units <span class="op">=</span> <span class="cn">NULL</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="fu">as_dist_units</span><span class="op">(</span><span class="va">x</span>, units <span class="op">=</span> <span class="cn">NULL</span>, null.ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="fu">is_diff_area</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, units <span class="op">=</span> <span class="cn">NULL</span>, union <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu">is_same_area</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, units <span class="op">=</span> <span class="cn">NULL</span>, union <span class="op">=</span> <span class="cn">TRUE</span>, diff <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -105,11 +109,11 @@ is_shorter, is_longer: Is x shorter or longer than y?
 <dd><p>For is_diff_dist, if x and y are both not units objects, use
 units; default to <code>NULL</code>.</p></dd>
 <dt>dist</dt>
-<dd><p>type of distance to compare if x and y are sf, sfc, or bbox
-objects; "diagdist", "xdist", "ydist". defaults to NULL.</p></dd>
+<dd><p>type of distance to compare if x and y are <code>sf</code>, <code>sfc</code>, or <code>bbox</code>
+objects; "diagdist", "xdist", "ydist". defaults to <code>NULL</code>.</p></dd>
 <dt>diff</dt>
-<dd><p>If TRUE, return results from is_diff_dist; if FALSE, return
-logical indicator; defaults to FALSE</p></dd>
+<dd><p>If <code>TRUE</code>, return results from is_diff_dist or is_diff_area;
+if <code>FALSE</code>, return logical indicator; defaults to <code>FALSE</code></p></dd>
 <dt>...</dt>
 <dd><p>Additional parameters passed to all.equal</p></dd>
 <dt>null.ok</dt>
@@ -127,8 +131,8 @@ objects or a character string from <a href="dist_unit_options.html">dist_unit_op
     <div class="dont-index"><p>Other dist: 
 <code><a href="convert_dist_scale.html">convert_dist_scale</a>()</code>,
 <code><a href="convert_dist_units.html">convert_dist_units</a>()</code>,
-<code><a href="sf_bbox_misc.html">sf_bbox_misc</a></code>,
-<code><a href="st_dist.html">st_dist</a>()</code></p></div>
+<code><a href="get_measurements.html">get_measurements</a></code>,
+<code><a href="sf_bbox_misc.html">sf_bbox_misc</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

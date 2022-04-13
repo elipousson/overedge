@@ -80,8 +80,6 @@
 
 <span class="fu">is_same_crs</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
 
-<span class="fu">is_same_area</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, union <span class="op">=</span> <span class="cn">FALSE</span>, diff <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
 <span class="fu">is_sf_or_what</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, return <span class="op">=</span> <span class="cn">NULL</span>, us <span class="op">=</span> <span class="cn">FALSE</span>, null.ok <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
@@ -97,17 +95,17 @@ not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 <dt>y</dt>
 <dd><p>An sf object or a character or numeric object supported by
 <a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs</a> that can be compared to x. (used by is_same_crs)</p></dd>
-<dt>union</dt>
-<dd><p>If <code>TRUE</code>, use <a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">sf::st_union</a> on both x and y before comparing
-area; defaults to <code>FALSE</code>.</p></dd>
-<dt>diff</dt>
-<dd><p>For <a href="is_dist_units.html">is_same_dist</a> and is_same_area, If <code>TRUE</code>, return the difference
-between the x and y objects. If <code>FALSE</code>, return <code>TRUE</code> or <code>FALSE</code> as expected;
-defaults to <code>FALSE</code>.</p></dd>
 <dt>dist</dt>
 <dd><p>For <a href="is_dist_units.html">is_same_dist</a>, bounding box dimension to compare distances for "diagdist",
 "xdist", or "ydist"; does not currently support numeric distances; defaults
 to <code>NULL</code>.</p></dd>
+<dt>diff</dt>
+<dd><p>For <a href="is_dist_units.html">is_same_dist</a> and <a href="is_dist_units.html">is_same_area</a>, If <code>TRUE</code>, return the difference
+between the x and y objects. If <code>FALSE</code>, return <code>TRUE</code> or <code>FALSE</code> as expected;
+defaults to <code>FALSE</code>.</p></dd>
+<dt>union</dt>
+<dd><p>If <code>TRUE</code>, use <a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">sf::st_union</a> on both x and y before comparing
+area; defaults to <code>FALSE</code>.</p></dd>
 <dt>is_named</dt>
 <dd><p>If <code>TRUE</code>, check if sf list is named; defaults <code>FALSE</code>.</p></dd>
 </dl></div>
@@ -122,7 +120,7 @@ to <code>NULL</code>.</p></dd>
 <li><p>is_sp: is x a <code>Spatial</code> class object of any type?</p></li>
 <li><p>is_same_crs: do x and y have the same coordinate reference system?</p></li>
 <li><p><a href="is_dist_units.html">is_same_dist</a>: do the bbox for x and bbox for y have the same x, y, or diagonal distance?</p></li>
-<li><p>is_same_area: do x and y have the same area?</p></li>
+<li><p><a href="is_dist_units.html">is_same_area</a>: do x and y have the same area?</p></li>
 </ul></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

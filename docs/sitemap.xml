@@ -181,7 +181,7 @@
     <loc>/reference/st_bbox_ext.html</loc>
   </url>
   <url>
-    <loc>/reference/st_bearing.html</loc>
+    <loc>/reference/get_bearing.html</loc>
   </url>
   <url>
     <loc>/reference/st_buffer_ext.html</loc>
@@ -193,7 +193,7 @@
     <loc>/reference/st_clip.html</loc>
   </url>
   <url>
-    <loc>/reference/st_coords.html</loc>
+    <loc>/reference/get_coords.html</loc>
   </url>
   <url>
     <loc>/reference/st_erase.html</loc>

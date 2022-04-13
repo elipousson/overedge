@@ -3,7 +3,7 @@
 \docType{data}
 \name{dist_units}
 \alias{dist_units}
-\title{Valid distance units}
+\title{Distance units (data frame)}
 \format{
 A data frame with 11 rows and 11 variables:
 \describe{
@@ -25,6 +25,6 @@ dist_units
 }
 \description{
 A subset of units supported by the units package accessible through the
-units::valid_udunits() function.
+\link[units:valid_udunits]{units::valid_udunits} function.
 }
 \keyword{datasets}

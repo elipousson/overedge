@@ -2,12 +2,12 @@
 % Please edit documentation in R/convert_dist_units.R
 \name{convert_dist_units}
 \alias{convert_dist_units}
-\title{Convert distances between different units}
+\title{Convert distance (and area) values between different units}
 \usage{
 convert_dist_units(dist, from = NULL, to = "meter")
 }
 \arguments{
-\item{dist}{Numeric or units}
+\item{dist}{Numeric or units object}
 
 \item{from}{Existing unit for dist, Default: NULL. If dist is a units object,
 the numerator is used as "from"}
@@ -18,13 +18,13 @@ the numerator is used as "from"}
 Object created by \code{\link[units:units]{units::set_units()}}
 }
 \description{
-Convert distances between different units
+Convert distance (and area) values between different units
 }
 \seealso{
 Other dist: 
 \code{\link{convert_dist_scale}()},
+\code{\link{get_measurements}},
 \code{\link{is_dist_units}()},
-\code{\link{sf_bbox_misc}},
-\code{\link{st_dist}()}
+\code{\link{sf_bbox_misc}}
 }
 \concept{dist}

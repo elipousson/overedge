@@ -9,6 +9,8 @@
 \alias{is_shorter}
 \alias{get_dist_units}
 \alias{as_dist_units}
+\alias{is_diff_area}
+\alias{is_same_area}
 \title{General utility functions for working with distance units objects}
 \usage{
 is_dist_units(x)
@@ -24,6 +26,10 @@ is_shorter(x, y)
 get_dist_units(x, null.ok = TRUE)
 
 as_dist_units(x, units = NULL, null.ok = FALSE)
+
+is_diff_area(x, y, units = NULL, union = TRUE)
+
+is_same_area(x, y, units = NULL, union = TRUE, diff = FALSE, ...)
 }
 \arguments{
 \item{x, y}{objects to check}
@@ -31,11 +37,11 @@ as_dist_units(x, units = NULL, null.ok = FALSE)
 \item{units}{For \link{is_diff_dist}, if x and y are both not units objects, use
 units; default to \code{NULL}.}
 
-\item{dist}{type of distance to compare if x and y are sf, sfc, or bbox
-objects; "diagdist", "xdist", "ydist". defaults to NULL.}
+\item{dist}{type of distance to compare if x and y are \code{sf}, \code{sfc}, or \code{bbox}
+objects; "diagdist", "xdist", "ydist". defaults to \code{NULL}.}
 
-\item{diff}{If TRUE, return results from \link{is_diff_dist}; if FALSE, return
-logical indicator; defaults to FALSE}
+\item{diff}{If \code{TRUE}, return results from \link{is_diff_dist} or \link{is_diff_area};
+if \code{FALSE}, return logical indicator; defaults to \code{FALSE}}
 
 \item{...}{Additional parameters passed to all.equal}
 
@@ -62,7 +68,7 @@ objects or a character string from \link{dist_unit_options})
 Other dist: 
 \code{\link{convert_dist_scale}()},
 \code{\link{convert_dist_units}()},
-\code{\link{sf_bbox_misc}},
-\code{\link{st_dist}()}
+\code{\link{get_measurements}},
+\code{\link{sf_bbox_misc}}
 }
 \concept{dist}

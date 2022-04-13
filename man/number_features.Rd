@@ -51,9 +51,9 @@ Used with \code{\link[=layer_numbers]{layer_numbers()}}. Supports multiple types
 }
 \details{
 \itemize{
-\item by centroid coordinates ("lon", "lat") appended with \link{st_coords}
+\item by centroid coordinates ("lon", "lat") appended with \link{get_coords}
 \item by one or more bounding box min or max values ("xmin", "ymin", "xmax",
-"ymax") appended with \link{st_coords_minmax}
+"ymax") appended with \link{get_minmax}
 \item by distance from the corner, side midpoint, or center of a bounding box
 ("dist_xmin_ymin", "dist_xmax_ymax", "dist_xmin_ymax", "dist_xmax_ymin",
 "dist_xmin_ymid", "dist_xmax_ymid", "dist_xmid_ymin", "dist_xmid_ymax",

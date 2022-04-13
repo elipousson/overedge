@@ -20,7 +20,7 @@ reference:
   - '`get_admin_data`'
   - '`us_states`'
   - '`us_counties`'
-- title: Check, convert, or modify simple feature and bounding box objects
+- title: Check, convert, or modify the geometry of simple feature objects
   contents:
   - '`is_sf`'
   - '`is_geom_type`'
@@ -31,13 +31,18 @@ reference:
   - '`st_bbox_ext`'
   - '`st_buffer_ext`'
   - '`st_transform_ext`'
+  - '`st_erase`'
+  - '`st_clip`'
+  - '`st_misc`'
   - '`st_cast_ext`'
-  - starts_with("st_")
-  - '`format_data`'
-- title: Create, view, and combine simple feature and bounding box objects
+- title: Create new or work with existing simple feature objects
   contents:
   - starts_with("make_location")
   - starts_with("location_filter")
+  - '`get_coords`'
+  - '`get_dist`'
+  - '`get_length`'
+  - '`format_data`'
   - '`make_markers`'
   - '`number_features`'
   - starts_with("mapview")
@@ -67,6 +72,6 @@ reference:
   - '`map_icons`'
   - '`dist_units`'
   - '`dist_unit_options`'
-  - '`area_units`'
+  - '`area_unit_options`'
   - '`standard_scales`'
   - '`paper_sizes`'

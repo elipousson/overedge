@@ -115,7 +115,7 @@ sf_bbox_dist. All other functions only take a bbox parameter.
 Other dist: 
 \code{\link{convert_dist_scale}()},
 \code{\link{convert_dist_units}()},
-\code{\link{is_dist_units}()},
-\code{\link{st_dist}()}
+\code{\link{get_measurements}},
+\code{\link{is_dist_units}()}
 }
 \concept{dist}
