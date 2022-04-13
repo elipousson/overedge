@@ -100,18 +100,32 @@
 <div class="section level3">
 <h3 id="supported-location-types">Supported location types<a class="anchor" aria-label="anchor" href="#supported-location-types"></a>
 </h3>
-<p>The “type” of location data that you can access with <code><a href="../reference/get_location.html">get_location()</a></code> is very flexible. You can provide:</p>
+<p>The “type” of location data that you can access with
+<code><a href="../reference/get_location.html">get_location()</a></code> is very flexible. You can provide:</p>
 <ul>
 <li>A simple feature object</li>
-<li>A url to a spatial data file compatible with <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code>
+<li>A url to a spatial data file compatible with
+<code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code>
 </li>
 <li>A url for an ArcGIS MapServer or FeatureServer</li>
 <li>A file path</li>
 </ul>
-<p>You can also provide the name of a simple feature object that is either already loaded to the global environment or available to load through any installed package.</p>
-<p>Data in packages include exported data that is available when a package is loaded, data that is available in the system files but not loaded (and may sometimes be undocumented), and data that is in the default cache folder path from <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code>. If you want to use package data that is cached in a different location, you need to provide the file path (or filename and directory) in order to use it with <code><a href="../reference/get_location.html">get_location()</a></code>.</p>
-<p>All of these parameters are passed from <code><a href="../reference/get_location.html">get_location()</a></code> to <code><a href="../reference/get_location_data.html">get_location_data()</a></code> so the following section of this vignette includes more details on how the more general function works.</p>
-<p>Finally, you can alternatively pass a named list to index that serves as a look-up table for matching the “type” to a an sf object.</p>
+<p>You can also provide the name of a simple feature object that is
+either already loaded to the global environment or available to load
+through any installed package.</p>
+<p>Data in packages include exported data that is available when a
+package is loaded, data that is available in the system files but not
+loaded (and may sometimes be undocumented), and data that is in the
+default cache folder path from <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code>.
+If you want to use package data that is cached in a different location,
+you need to provide the file path (or filename and directory) in order
+to use it with <code><a href="../reference/get_location.html">get_location()</a></code>.</p>
+<p>All of these parameters are passed from <code><a href="../reference/get_location.html">get_location()</a></code>
+to <code><a href="../reference/get_location_data.html">get_location_data()</a></code> so the following section of this
+vignette includes more details on how the more general function
+works.</p>
+<p>Finally, you can alternatively pass a named list to index that serves
+as a look-up table for matching the “type” to a an sf object.</p>
 </div>
 <div class="section level3">
 <h3 id="supported-parameters-to-accessing-a-location">Supported parameters to accessing a location<a class="anchor" aria-label="anchor" href="#supported-parameters-to-accessing-a-location"></a>
@@ -121,17 +135,26 @@
 <li>name (with name_col matching column to filter)</li>
 <li>id (with id_col matching column to filter)</li>
 </ul>
-<p>The passed value for name is coerced to character and id is coerced to numeric so, if the “id” column for this type of location is in a character format, you need to treat it as a “name” instead.</p>
-<p>Alternatively you can use the location parameter which supports either:</p>
+<p>The passed value for name is coerced to character and id is coerced
+to numeric so, if the “id” column for this type of location is in a
+character format, you need to treat it as a “name” instead.</p>
+<p>Alternatively you can use the location parameter which supports
+either:</p>
 <ul>
-<li>a valid street address (geocoded with <code><a href="https://jessecambon.github.io/tidygeocoder/reference/geo.html" class="external-link">tidygeocoder::geo()</a></code>)</li>
+<li>a valid street address (geocoded with
+<code><a href="https://jessecambon.github.io/tidygeocoder/reference/geo.html" class="external-link">tidygeocoder::geo()</a></code>)</li>
 <li>a simple feature object or bounding box</li>
 </ul>
-<p>If you provide a sf or bbox object, the object is used as a spatial filter either when reading in the data (using the bbox parameter for <code>read_sf_path</code> or <code>read_sf_url</code>) or before returning the data using the <code><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">sf::st_filter()</a></code> function.</p>
+<p>If you provide a sf or bbox object, the object is used as a spatial
+filter either when reading in the data (using the bbox parameter for
+<code>read_sf_path</code> or <code>read_sf_url</code>) or before
+returning the data using the <code><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">sf::st_filter()</a></code> function.</p>
 <div class="section level4">
 <h4 id="working-with-union-and-label-parameters">Working with union and label parameters<a class="anchor" aria-label="anchor" href="#working-with-union-and-label-parameters"></a>
 </h4>
-<p>Location types that are administrative boundaries can often be grouped together into larger areas. The <code>union</code> parameter makes it easy to do this.</p>
+<p>Location types that are administrative boundaries can often be
+grouped together into larger areas. The <code>union</code> parameter
+makes it easy to do this.</p>
 </div>
 </div>
 <div class="section level3">
@@ -140,8 +163,14 @@
 <div class="section level4">
 <h4 id="building-custom-look-up-functions">Building custom look-up functions<a class="anchor" aria-label="anchor" href="#building-custom-look-up-functions"></a>
 </h4>
-<p>Here is are a few examples showing how you can use <code><a href="../reference/get_location.html">get_location()</a></code> to create new custom look-up functions.</p>
-<p>If your location data is from another package, you can use the package parameters passed to <code><a href="../reference/get_location_data.html">get_location_data()</a></code> to access that data even without loading the package. This approach works best when the package data uses a consistent naming scheme for columns and data to support. This makes it easy to turn the names into parameters as the example below using the <a href="https://nycgeo.mattherman.info/" class="external-link">nycgeo package</a>.</p>
+<p>Here is are a few examples showing how you can use
+<code><a href="../reference/get_location.html">get_location()</a></code> to create new custom look-up functions.</p>
+<p>If your location data is from another package, you can use the
+package parameters passed to <code><a href="../reference/get_location_data.html">get_location_data()</a></code> to access
+that data even without loading the package. This approach works best
+when the package data uses a consistent naming scheme for columns and
+data to support. This makes it easy to turn the names into parameters as
+the example below using the <a href="https://nycgeo.mattherman.info/" class="external-link">nycgeo package</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remotes::install_github("mfherman/nycgeo")</span>
 
@@ -177,7 +206,11 @@
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 36061 36         061         New York    Manhattan    1         </span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 1 more variable: geometry &lt;MULTIPOLYGON [US_survey_foot]&gt;</span></span></code></pre></div>
-<p>If your location data is sourced from an ArcGIS MapServer or FeatureServer, you can use the <code>name</code> and <code>name_col</code> parameters from the underlying <code><a href="../reference/get_esri_data.html">get_esri_data()</a></code> function. This avoids the need to download the full dataset every time.</p>
+<p>If your location data is sourced from an ArcGIS MapServer or
+FeatureServer, you can use the <code>name</code> and
+<code>name_col</code> parameters from the underlying
+<code><a href="../reference/get_esri_data.html">get_esri_data()</a></code> function. This avoids the need to download
+the full dataset every time.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get_anc looks up the Advisory Neighborhood Council</span>
 <span class="co"># Data from Open Data DC https://opendata.dc.gov/datasets/fcfbf29074e549d8aff9b9c708179291</span>
@@ -187,7 +220,7 @@
 
   <span class="fu"><a href="../reference/get_location.html">get_location</a></span><span class="op">(</span>
     type <span class="op">=</span> <span class="va">url</span>,
-    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span>,
+    name <span class="op">=</span> <span class="va">name</span>,
     name_col <span class="op">=</span> <span class="st">"name"</span>
   <span class="op">)</span>
 <span class="op">}</span>
@@ -206,14 +239,17 @@
 <span class="co">#&gt; 1        9 ANC 5B http://anc.dc.gov/page/advisory-neighborhood-commission-5b</span>
 <span class="co">#&gt;   name shape_area shape_len                               globalid creator</span>
 <span class="co">#&gt; 1   5B          0         0 {6DBCF9C2-E269-41C6-AE4D-AC645FFC101D}      NA</span>
-<span class="co">#&gt;   created editor       edited                       geometry</span>
+<span class="co">#&gt;   created editor       edited                          geoms</span>
 <span class="co">#&gt; 1      NA  DCGIS 1.573036e+12 MULTIPOLYGON (((-76.98239 3...</span></code></pre></div>
-<p>Location data can also be loaded from a URL with a GeoJSON or other spatial data file.</p>
+<p>Location data can also be loaded from a URL with a GeoJSON or other
+spatial data file.</p>
 </div>
 <div class="section level4">
 <h4 id="accessing-overlapping-geographies">Accessing overlapping geographies<a class="anchor" aria-label="anchor" href="#accessing-overlapping-geographies"></a>
 </h4>
-<p>Since location supports both addresses and sf objects, you can pull individual locations without knowing the name or id of an area. For example, you can use an address:</p>
+<p>Since location supports both addresses and sf objects, you can pull
+individual locations without knowing the name or id of an area. For
+example, you can use an address:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remotes::install_github("elipousson/mapbaltimore")</span>
 
@@ -237,7 +273,11 @@
 <span class="co">#&gt; 1  040100 24510040100  401 Census Tract 401 1191002   1430 +39.2902267</span>
 <span class="co">#&gt;       intptlon                       geometry</span>
 <span class="co">#&gt; 1 -076.6145019 POLYGON ((432552.6 180801.8...</span></code></pre></div>
-<p>You can also combine multiple approaches to create a look-up function that returns overlapping geography for a named characteristic. For example, the following function takes the name of a school and returns any Baltimore City neighborhoods that overlap with that school’s attendance zone.</p>
+<p>You can also combine multiple approaches to create a look-up function
+that returns overlapping geography for a named characteristic. For
+example, the following function takes the name of a school and returns
+any Baltimore City neighborhoods that overlap with that school’s
+attendance zone.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">lookup_school_neighborhoods</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">school_name</span><span class="op">)</span> <span class="op">{</span>
@@ -281,9 +321,15 @@
 <div class="section level3">
 <h3 id="get-location-data">Get location data<a class="anchor" aria-label="anchor" href="#get-location-data"></a>
 </h3>
-<p>As noted in the previous section, <code><a href="../reference/get_location.html">get_location()</a></code> is largely built around <code><a href="../reference/get_location_data.html">get_location_data()</a></code>. But, get_location_data() is also a helpful function just by itself.</p>
-<p>While the data parameter supports all of the options for the type parameter described in the prior section, <code><a href="../reference/get_location_data.html">get_location_data()</a></code> also supports named parameters for path or url.</p>
-<p>Note: This vignette is a work in progress with additional details to be added soon.</p>
+<p>As noted in the previous section, <code><a href="../reference/get_location.html">get_location()</a></code> is
+largely built around <code><a href="../reference/get_location_data.html">get_location_data()</a></code>. But,
+get_location_data() is also a helpful function just by itself.</p>
+<p>While the data parameter supports all of the options for the type
+parameter described in the prior section,
+<code><a href="../reference/get_location_data.html">get_location_data()</a></code> also supports named parameters for path
+or url.</p>
+<p>Note: This vignette is a work in progress with additional details to
+be added soon.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   type <span class="op">=</span> <span class="st">"council_districts"</span>,
@@ -315,7 +361,8 @@
 <div class="section level2">
 <h2 id="selecting-a-page-size">Selecting a page size<a class="anchor" aria-label="anchor" href="#selecting-a-page-size"></a>
 </h2>
-<p>You can use the get_paper function to look up one or more common paper sizes or standard image sizes:</p>
+<p>You can use the get_paper function to look up one or more common
+paper sizes or standard image sizes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">paper_options</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_paper.html">get_paper</a></span><span class="op">(</span>paper <span class="op">=</span> <span class="cn">NULL</span>, standard <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Twitter"</span>, <span class="st">"Instagram"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">paper_options</span><span class="op">)</span></code></pre></div>
@@ -467,14 +514,17 @@
 </tr>
 </tbody>
 </table>
-<p>You can also use the geometry of any specified location to set the orientation of the page or the suggested aspect ratio using the <code>sf_bbox_asp</code> function:</p>
+<p>You can also use the geometry of any specified location to set the
+orientation of the page or the suggested aspect ratio using the
+<code>sf_bbox_asp</code> function:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/sf_bbox_misc.html">sf_bbox_asp</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">district</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.930126</span>
 
 <span class="fu"><a href="../reference/sf_bbox_misc.html">sf_bbox_asp</a></span><span class="op">(</span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">district</span><span class="op">)</span><span class="op">)</span>, orientation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] "square"</span></code></pre></div>
-<p>Based on this information, it looks like this map way work well as an Instagram post.</p>
+<p>Based on this information, it looks like this map way work well as an
+Instagram post.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">params</span><span class="op">$</span><span class="va">paper</span> <span class="op">&lt;-</span> <span class="st">"Instagram post"</span>
 
@@ -491,7 +541,15 @@
 <span class="co"># NOTE: px units are not fully supported by all functions</span>
 <span class="co"># NOTE: units supports map-scale options ("in") rather than the unit parameter used by st_buffer_ext</span>
 <span class="va">params</span><span class="op">$</span><span class="va">units</span> <span class="op">&lt;-</span> <span class="va">paper</span><span class="op">$</span><span class="va">units</span></code></pre></div>
-<p>There is one additional consideration in setting the aspect ratio for the map area: the aspect ratio of the content block after marings have been applied. While this is less significant for a Instagram post where full bleed images are appropriate, an example below shows how to get the aspect ratio of a plot, text, or map block after margins have been added to a page. The “px” units associated with the Instagram post paper cannot currently be used with the header and footer option so I passed “npc” units to manually set the margin rather than using the preset options.</p>
+<p>There is one additional consideration in setting the aspect ratio for
+the map area: the aspect ratio of the content block after marings have
+been applied. While this is less significant for a Instagram post where
+full bleed images are appropriate, an example below shows how to get the
+aspect ratio of a plot, text, or map block after margins have been added
+to a page. The “px” units associated with the Instagram post paper
+cannot currently be used with the header and footer option so I passed
+“npc” units to manually set the margin rather than using the preset
+options.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_asp.html">get_asp</a></span><span class="op">(</span>
   paper <span class="op">=</span> <span class="st">"letter"</span>,
@@ -503,7 +561,10 @@
   margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">1</span><span class="op">)</span>,
   block_asp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.7647059</span></code></pre></div>
-<p>Finally, the final selections can be used to create a bounding box that reduces the need to pass these same variables to all similar functions. This can also works as a way of effectively saving different “zoom levels” for a map based on different buffer units.</p>
+<p>Finally, the final selections can be used to create a bounding box
+that reduces the need to pass these same variables to all similar
+functions. This can also works as a way of effectively saving different
+“zoom levels” for a map based on different buffer units.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># This information </span>
 <span class="va">district_bbox</span> <span class="op">&lt;-</span>
@@ -523,12 +584,12 @@
   <span class="op">)</span>
 
 <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span><span class="va">district_trees</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="fxbukkqkkv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="fvbpmybwho" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#fxbukkqkkv .gt_table {
+#fvbpmybwho .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -553,7 +614,7 @@
   border-left-color: #D3D3D3;
 }
 
-#fxbukkqkkv .gt_heading {
+#fvbpmybwho .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -565,7 +626,7 @@
   border-right-color: #D3D3D3;
 }
 
-#fxbukkqkkv .gt_title {
+#fvbpmybwho .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -575,7 +636,7 @@
   border-bottom-width: 0;
 }
 
-#fxbukkqkkv .gt_subtitle {
+#fvbpmybwho .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -585,13 +646,13 @@
   border-top-width: 0;
 }
 
-#fxbukkqkkv .gt_bottom_border {
+#fvbpmybwho .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fxbukkqkkv .gt_col_headings {
+#fvbpmybwho .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -606,7 +667,7 @@
   border-right-color: #D3D3D3;
 }
 
-#fxbukkqkkv .gt_col_heading {
+#fvbpmybwho .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -626,7 +687,7 @@
   overflow-x: hidden;
 }
 
-#fxbukkqkkv .gt_column_spanner_outer {
+#fvbpmybwho .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -638,15 +699,15 @@
   padding-right: 4px;
 }
 
-#fxbukkqkkv .gt_column_spanner_outer:first-child {
+#fvbpmybwho .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fxbukkqkkv .gt_column_spanner_outer:last-child {
+#fvbpmybwho .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fxbukkqkkv .gt_column_spanner {
+#fvbpmybwho .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -658,7 +719,7 @@
   width: 100%;
 }
 
-#fxbukkqkkv .gt_group_heading {
+#fvbpmybwho .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -680,7 +741,7 @@
   vertical-align: middle;
 }
 
-#fxbukkqkkv .gt_empty_group_heading {
+#fvbpmybwho .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -695,15 +756,15 @@
   vertical-align: middle;
 }
 
-#fxbukkqkkv .gt_from_md > :first-child {
+#fvbpmybwho .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fxbukkqkkv .gt_from_md > :last-child {
+#fvbpmybwho .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fxbukkqkkv .gt_row {
+#fvbpmybwho .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -722,7 +783,7 @@
   overflow-x: hidden;
 }
 
-#fxbukkqkkv .gt_stub {
+#fvbpmybwho .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -734,7 +795,7 @@
   padding-left: 12px;
 }
 
-#fxbukkqkkv .gt_summary_row {
+#fvbpmybwho .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -744,7 +805,7 @@
   padding-right: 5px;
 }
 
-#fxbukkqkkv .gt_first_summary_row {
+#fvbpmybwho .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -754,7 +815,7 @@
   border-top-color: #D3D3D3;
 }
 
-#fxbukkqkkv .gt_grand_summary_row {
+#fvbpmybwho .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -764,7 +825,7 @@
   padding-right: 5px;
 }
 
-#fxbukkqkkv .gt_first_grand_summary_row {
+#fvbpmybwho .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -774,11 +835,11 @@
   border-top-color: #D3D3D3;
 }
 
-#fxbukkqkkv .gt_striped {
+#fvbpmybwho .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fxbukkqkkv .gt_table_body {
+#fvbpmybwho .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -787,7 +848,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#fxbukkqkkv .gt_footnotes {
+#fvbpmybwho .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -801,13 +862,13 @@
   border-right-color: #D3D3D3;
 }
 
-#fxbukkqkkv .gt_footnote {
+#fvbpmybwho .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#fxbukkqkkv .gt_sourcenotes {
+#fvbpmybwho .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -821,41 +882,41 @@
   border-right-color: #D3D3D3;
 }
 
-#fxbukkqkkv .gt_sourcenote {
+#fvbpmybwho .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#fxbukkqkkv .gt_left {
+#fvbpmybwho .gt_left {
   text-align: left;
 }
 
-#fxbukkqkkv .gt_center {
+#fvbpmybwho .gt_center {
   text-align: center;
 }
 
-#fxbukkqkkv .gt_right {
+#fvbpmybwho .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fxbukkqkkv .gt_font_normal {
+#fvbpmybwho .gt_font_normal {
   font-weight: normal;
 }
 
-#fxbukkqkkv .gt_font_bold {
+#fvbpmybwho .gt_font_bold {
   font-weight: bold;
 }
 
-#fxbukkqkkv .gt_font_italic {
+#fvbpmybwho .gt_font_italic {
   font-style: italic;
 }
 
-#fxbukkqkkv .gt_super {
+#fvbpmybwho .gt_super {
   font-size: 65%;
 }
 
-#fxbukkqkkv .gt_footnote_marks {
+#fvbpmybwho .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -878,7 +939,7 @@
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">genus</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">x_coord</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">y_coord</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">geometry</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">geom</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
@@ -1103,7 +1164,8 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
