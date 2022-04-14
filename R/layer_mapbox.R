@@ -1,21 +1,18 @@
 #' Use mapboxapi to make a Mapbox static map layer
 #'
-#' layer_mapbox works the same as make_mapbox_basemap but defaults to
-#' basemap and neatline to FALSE
-#'
-#' @param data sf, sfc, or bbox object; any objects convertible with [as_bbox()]
+#' @param data `sf`, `sfc`, or `bbox` object; any objects convertible with [as_bbox]
 #' @inheritParams layer_neatline
 #' @inheritParams mapboxapi::layer_static_mapbox
 #' @param map_style Map style used to fill style_id and username parameters,
 #'   Default: "mapbox://styles/mapbox/satellite-streets-v11"
-#' @param basemap If FALSE, create a standalone layer; if TRUE, the layer is
-#'   precededed by [ggplot2::ggplot()] to allow use as a basemap, Default: TRUE
-#' @param neatline If TRUE, add a neatline matching the provided data, Default: TRUE
+#' @param basemap If FALSE, create a standalone layer; if `TRUE`, the layer is
+#'   precededed by [ggplot2::ggplot()] to allow use as a basemap, Default: `TRUE`
+#' @param neatline If `TRUE`, add a neatline matching the provided data, Default:
+#'   `TRUE`
 #' @inheritParams layer_neatline
 #' @param ... Additional parameter passed to [mapboxapi::layer_static_mapbox]
 #' @seealso
 #' \code{\link[mapboxapi]{layer_static_mapbox}}
-#'  \code{\link[overedge]{st_transform_ext}},\code{\link[overedge]{as_sf}},\code{\link[overedge]{layer_neatline}}
 #' @rdname layer_mapbox
 #' @md
 #' @export
@@ -45,10 +42,6 @@ layer_mapbox <- function(data = NULL,
                          label_axes = "----",
                          ...) {
   is_pkg_installed("mapboxapi", repo = "walkerke/mapboxapi")
-  if (!is.null(style_url)) {
-    username <- stringr::str_extract(style_url, "(?<=styles/).+(?=/)")
-    style_id <- stringr::str_extract(style_url, glue::glue("(?<={username}/).+"))
-  }
 
   # Set appropriate CRS for Mapbox
   crs_mapbox <- 3857
@@ -68,6 +61,7 @@ layer_mapbox <- function(data = NULL,
     mapboxapi::layer_static_mapbox(
       location = bbox,
       buffer_dist = 0,
+      style_url = style_url,
       style_id = style_id,
       username = username,
       scale = scale,
