@@ -3,15 +3,15 @@
 #' A flexible wrapper for [sf::st_geometry_type] and [sf::st_is].
 #'
 #' @name is_geom_type
-#' @param x A sf or sfc object passed to [sf::st_geometry_type]
+#' @param x A `sf` or `sfc` object passed to [sf::st_geometry_type]
 #' @param type If "POINT", check if geometry type is POINT. Same for all
-#'   available geometry types; not case sensitive; Default: NULL
-#' @param by_geometry Passed to sf::st_geometry_type; defaults to FALSE
-#' @param ext For st_geom_type, if ext TRUE and check is NULL, return a list
+#'   available geometry types; not case sensitive; Default: `NULL`
+#' @param by_geometry Passed to [sf::st_geometry_type]; defaults to `FALSE`
+#' @param ext For st_geom_type, if ext `TRUE` and check is `NULL`, return a list
 #'   with checks for POINTS, POLYGONS, LINESTRING, and the returned types.
 #' @returns If ext is FALSE and type is NULL, returns vector with geometry types
-#'   identical to [sf::st_geometry_type]. If ext is TRUE, returns a list and, if
-#'   type is not NULL, returns a logical vector.
+#'   identical to [sf::st_geometry_type]. If ext is `TRUE`, returns a list and,
+#'   if type is not `NULL`, returns a logical vector.
 #' @export
 #' @importFrom sf st_geometry_type st_is
 is_geom_type <- function(x, type = NULL, by_geometry = FALSE, ext = TRUE) {

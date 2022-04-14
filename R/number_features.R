@@ -19,9 +19,6 @@
 #' designed to match the standard enumeration options available in LaTeX.
 #'
 #' @param data Marker data
-#' @param col Group column name, Default: `NULL`
-#' @param sort Sort column name, Default: "dist_xmin_ymax".
-#' @param desc If `TRUE`, sort descending; default `FALSE`.
 #' @param num_style Style of enumeration, either "arabic", "alph", "Alph",
 #'   "roman", "Roman"
 #' @param suffix Character to appended to "number" column. (e.g. "." for "1." or
@@ -99,6 +96,9 @@ int_to_alph <- function(num, suffix = NULL, base = 26) {
 
 #' @name sort_features
 #' @rdname number_features
+#' @param col Group column name, Default: `NULL`
+#' @param sort Sort column name, Default: "dist_xmin_ymax".
+#' @param desc If `TRUE`, sort descending; default `FALSE`.
 #' @export
 #' @importFrom rlang has_name
 #' @importFrom dplyr arrange desc across all_of

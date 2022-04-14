@@ -5,9 +5,9 @@
 #' - Applies [stringr::str_squish] and [stringr::str_trim] to all character columns
 #' - Optionally replaces all character values of "" with NA values
 #' - Optionally corrects UNIX formatted dates with 1970-01-01 origins
-#' - Optionally renames variables by passing a named list of
+#' - Optionally renames variables by passing a named list of variables
 #'
-#' @param data A tibble or data frame object
+#' @param x A tibble or data frame object
 #' @param var_names A named list following the format, list("New var name" =
 #'   old_var_name), or a two column data frame with the first column being the
 #'   new variable names and the second column being the old variable names;
@@ -16,7 +16,7 @@
 #'   `NULL`.
 #' @param replace_with_na A named list to pass to [naniar::replace_with_na];
 #'   defaults to `NULL`.
-#' @param replace_empty_char_with_na If `TRUE`, replace "" with NA using
+#' @param replace_empty_char_with_na If `TRUE`, replace "" with `NA` using
 #'   [naniar::replace_with_na_if], Default: `TRUE`
 #' @param fix_date If `TRUE`, fix UNIX dates (common issue with dates from
 #'   FeatureServer and MapServer sources) , Default: `TRUE`
@@ -27,16 +27,16 @@
 #' @importFrom stringr str_trim str_squish
 #' @importFrom tibble deframe
 #' @importFrom tidyr replace_na
-format_data <- function(data,
+format_data <- function(x,
                         var_names = NULL,
                         clean_names = TRUE,
                         replace_na = NULL,
                         replace_with_na = NULL,
                         replace_empty_char_with_na = TRUE,
                         fix_date = TRUE) {
-  data <-
+  x <-
     dplyr::mutate(
-      data,
+      x,
       dplyr::across(
         where(is.character),
         ~ stringr::str_trim(stringr::str_squish(.x))
@@ -51,20 +51,20 @@ format_data <- function(data,
         tibble::deframe(var_names)
     }
 
-    data <-
+    x <-
       dplyr::rename(
-        data,
+        x,
         !!!var_names
       )
   }
 
   if (clean_names) {
-    data <- janitor::clean_names(data, "snake")
+    x <- janitor::clean_names(x, "snake")
   }
 
   if (!is.null(replace_na)) {
-    data <-
-      tidyr::replace_na(data, replace = replace_na)
+    x <-
+      tidyr::replace_na(x, replace = replace_na)
   }
 
 
@@ -72,34 +72,36 @@ format_data <- function(data,
     is_pkg_installed("naniar")
 
     if (!is.null(replace_with_na)) {
-      data <-
+      x <-
         naniar::replace_with_na(
-          data,
+          x,
           replace = replace_with_na
         )
     }
 
     if (replace_empty_char_with_na) {
-      data <-
+      x <-
         naniar::replace_with_na_if(
-          data,
+          x,
           is.character, ~ .x == ""
         )
     }
   }
 
   if (fix_date) {
-    data <- fix_date(data)
+    x <- fix_date(x)
   }
 
-  return(data)
+  return(x)
 }
 
 #' @name format_data
 #' @rdname format_data
-fix_date <- function(data) {
+#' @export
+#' @importFrom dplyr mutate across contains
+fix_date <- function(x) {
   dplyr::mutate(
-    data,
+    x,
     dplyr::across(
       dplyr::contains("date"),
       ~ as.POSIXct(.x / 1000, origin = "1970-01-01")
@@ -109,6 +111,9 @@ fix_date <- function(data) {
 
 #' @name relocate_sf_col
 #' @rdname format_data
+#' @param .after The location to place sf column after; defaults to
+#'   [dplyr::everything].
+#' @export
 #' @importFrom dplyr everything relocate all_of
 relocate_sf_col <- function(x, .after = dplyr::everything()) {
   dplyr::relocate(
@@ -120,6 +125,7 @@ relocate_sf_col <- function(x, .after = dplyr::everything()) {
 
 #' @name bind_address_col
 #' @rdname format_data
+#' @export
 #' @importFrom dplyr mutate
 bind_address_col <- function(x, city = NULL, county = NULL, state = NULL) {
   if (!is.null(city)) {
@@ -158,6 +164,7 @@ bind_address_col <- function(x, city = NULL, county = NULL, state = NULL) {
 
 #' @name bind_units_col
 #' @rdname format_data
+#' @export
 #' @importFrom units drop_units
 #' @importFrom dplyr bind_cols
 bind_units_col <- function(x, y, units = NULL, drop = FALSE, keep_all = TRUE, .id = NULL) {

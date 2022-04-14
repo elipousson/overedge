@@ -29,6 +29,7 @@
 #'   based enclosing with "relation" using "multipolygon" and "way" using
 #'   "polygon" geometry.
 #' @inheritParams osmdata::opq
+#' @inheritParams osmdata::add_osm_features
 #' @return A simple feature object with features using selected geometry type or
 #'   an `osmdata` object with features from all geometry types.
 #' @export
