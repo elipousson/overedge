@@ -84,8 +84,8 @@ read_sf_ext <- function(..., bbox = NULL) {
   rlang::exec(read_sf_fn, !!!args)
 }
 
-#' @rdname read_sf_ext
 #' @name read_sf_pkg
+#' @rdname read_sf_ext
 #' @export
 #' @md
 #' @importFrom utils data
@@ -118,14 +118,31 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
   return(data)
 }
 
-#' @rdname read_sf_ext
 #' @name read_sf_path
+#' @rdname read_sf_ext
 #' @export
 #' @importFrom sf read_sf
 read_sf_path <- function(path, bbox = NULL, ...) {
   stopifnot(
     fs::file_exists(path)
   )
+
+  path_type <-
+    dplyr::case_when(
+    stringr::str_detect(path, "\\.csv$") ~ "csv",
+    stringr::str_detect(path, "\\.xlsx$|\\.xls$") ~ "excel",
+    TRUE ~ "other"
+  )
+
+  if (path_type != "other") {
+    data <-
+      switch (path_type,
+            "csv" = read_sf_csv(path = path, bbox = bbox, ...),
+            "excel" = read_sf_excel(path = path, bbox = bbox, ...)
+    )
+
+    return(data)
+  }
 
   params <- rlang::list2(...)
 
@@ -167,8 +184,8 @@ read_sf_path <- function(path, bbox = NULL, ...) {
   return(data)
 }
 
-#' @rdname read_sf_ext
 #' @name read_sf_url
+#' @rdname read_sf_ext
 #' @export
 #' @importFrom sf read_sf
 read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
@@ -221,7 +238,6 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
   return(data)
 }
 
-#' Convert Google Sheets url to sf
 #' @name read_sf_gsheet
 #' @rdname read_sf_ext
 #' @inheritParams googlesheets4::read_sheet
@@ -230,6 +246,7 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
 #' @export
 #' @importFrom rlang is_missing
 read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
+  # Convert Google Sheet with coordinates to sf
   is_pkg_installed("googlesheets4")
 
   if (ask && rlang::is_missing(ss)) {
@@ -239,7 +256,7 @@ read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALS
 
   data <- googlesheets4::read_sheet(ss = ss, ...)
 
-  coords <- check_coords(x = data, coords = coords)
+  coords <- check_coords(data, coords = coords)
 
   data <- df_to_sf(data, coords = coords)
 
@@ -250,8 +267,63 @@ read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALS
   return(data)
 }
 
+#' @name read_sf_excel
 #' @rdname read_sf_ext
-#' @aliases read_sf_download
+#' @inheritParams readxl::read_excel
+#' @export
+read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"),  ...) {
+  is_pkg_installed("readxl")
+  # Convert XLS or XLSX file with coordinates to sf
+
+  if (!is.null(sheet) && length(sheet) > 1) {
+    params <- rlang::list2(...)
+
+    data <- purrr::map(
+      sheet,
+      ~ read_sf_excel(
+        path = path,
+        sheet = .x,
+        bbox = bbox,
+        coords = coords,
+        col_types = params$col_types
+        )
+    )
+
+    return(data)
+  }
+
+  data <- readxl::read_excel(path = path, ...)
+
+  coords <- check_coords(data, coords = coords)
+
+  data <- df_to_sf(data, coords = coords)
+
+  if (!is.null(bbox)) {
+    data <- bbox_filter(data, bbox = bbox)
+  }
+
+  return(data)
+}
+
+#' @name read_sf_csv
+#' @rdname read_sf_ext
+#' @export
+read_sf_csv <- function(path, bbox = NULL, coords = c("lon", "lat"),  ...) {
+  data <- readr::read_csv(path = path, ...)
+
+  coords <- check_coords(data, coords = coords)
+
+  data <- df_to_sf(data, coords = coords)
+
+  if (!is.null(bbox)) {
+    data <- bbox_filter(data, bbox = bbox)
+  }
+
+  return(data)
+}
+
+#' @name read_sf_download
+#' @rdname read_sf_ext
 #' @param unzip If `TRUE`, url must be a zip file that is downloaded, unzipped
 #'   into a temporary directory, and then read to a file using the specified
 #'   file type.
