@@ -24,17 +24,15 @@ make_location_data_list <- function(data = NULL, location = NULL, key = c("locat
 
   params <- rlang::list2(...)
 
-  if ("col" %in% names(params)) {
+  if (rlang::has_name(params, "col")) {
     params$location_col <- params$col
     params$data_col <- params$col
   }
 
   location <- as_sf_list(x = location, col = params$location_col)
-
-  len_location <- length(location)
-
   data <- as_sf_list(x = data, col = params$data_col)
 
+  len_location <- length(location)
   len_data <- length(data)
 
   location_data_list <-
@@ -58,6 +56,7 @@ make_location_data_list <- function(data = NULL, location = NULL, key = c("locat
 
 #' @noRd
 get_location_data_list <- function(data = NULL, location = NULL, nm = NULL, ...) {
+  # FIXME: Should this be titled map_location_data_list?
   if (is.null(nm) && !is.null(data)) {
     nm <- names(data)
   } else if (is.null(nm) && !is.null(location)) {
