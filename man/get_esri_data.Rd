@@ -65,9 +65,11 @@ location names for features}
 \link[esri2sf:esri2sf]{esri2sf::esri2sf}}
 
 \item{layers}{Either a vector with URLs, a named list of urls, or a numeric
-vector}
+vector.}
 
 \item{service_url}{Base service URL with layers are located.}
+
+\item{nm}{Name or vector of names to add to the layers; defaults to \code{NULL}.}
 
 \item{meta}{Name of metadata list value to return from \link[esri2sf:esri2sf]{esri2sf::esrimeta}.}
 

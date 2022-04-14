@@ -6,6 +6,8 @@
 \alias{read_sf_path}
 \alias{read_sf_url}
 \alias{read_sf_gsheet}
+\alias{read_sf_excel}
+\alias{read_sf_csv}
 \alias{read_sf_download}
 \title{Read spatial data in a bounding box to a simple feature object}
 \usage{
@@ -18,6 +20,10 @@ read_sf_path(path, bbox = NULL, ...)
 read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
 read_sf_gsheet(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...)
+
+read_sf_excel(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"), ...)
+
+read_sf_csv(path, bbox = NULL, coords = c("lon", "lat"), ...)
 
 read_sf_download(
   url,
@@ -67,6 +73,8 @@ Processed through \code{\link[googlesheets4:sheets_id]{as_sheets_id()}}.}
 
 \item{ask}{If \code{TRUE}, ask for the name of the Google Sheet to read if ss is
 not provided to \link{read_sf_gsheet}.}
+
+\item{sheet}{Sheet to read, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number. Ignored if the sheet is specified via \code{range}. If neither argument specifies the sheet, defaults to the first visible sheet.}
 
 \item{filename}{File name; if file name is \code{NULL}, name and file type are
 both required.}

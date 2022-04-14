@@ -31,7 +31,7 @@ layer_mapbox(
 )
 }
 \arguments{
-\item{data}{sf, sfc, or bbox object; any objects convertible with \code{\link[=as_bbox]{as_bbox()}}}
+\item{data}{\code{sf}, \code{sfc}, or \code{bbox} object; any objects convertible with \link{as_bbox}}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -52,8 +52,8 @@ without modification.}
 
 \item{username}{A Mapbox username (required if style_url is NULL).}
 
-\item{basemap}{If FALSE, create a standalone layer; if TRUE, the layer is
-precededed by \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} to allow use as a basemap, Default: TRUE}
+\item{basemap}{If FALSE, create a standalone layer; if \code{TRUE}, the layer is
+precededed by \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} to allow use as a basemap, Default: \code{TRUE}}
 
 \item{scale}{ratio to scale the output image; `scale = 1` will return the
 largest possible image. defaults to 0.5}
@@ -74,7 +74,8 @@ include proper attribution elsewhere on the webpage or document.}
 \item{access_token}{A Mapbox access token; can be set with
 \code{mb_access_token()}.}
 
-\item{neatline}{If TRUE, add a neatline matching the provided data, Default: TRUE}
+\item{neatline}{If \code{TRUE}, add a neatline matching the provided data, Default:
+\code{TRUE}}
 
 \item{color}{Color of panel border, Default: 'black'}
 
@@ -102,10 +103,8 @@ labels.}
 Default: "mapbox://styles/mapbox/satellite-streets-v11"}
 }
 \description{
-layer_mapbox works the same as make_mapbox_basemap but defaults to
-basemap and neatline to FALSE
+Use mapboxapi to make a Mapbox static map layer
 }
 \seealso{
 \code{\link[mapboxapi]{layer_static_mapbox}}
-\code{\link[overedge]{st_transform_ext}},\code{\link[overedge]{as_sf}},\code{\link[overedge]{layer_neatline}}
 }

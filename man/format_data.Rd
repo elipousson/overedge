@@ -9,7 +9,7 @@
 \title{Format data using common approaches}
 \usage{
 format_data(
-  data,
+  x,
   var_names = NULL,
   clean_names = TRUE,
   replace_na = NULL,
@@ -18,7 +18,7 @@ format_data(
   fix_date = TRUE
 )
 
-fix_date(data)
+fix_date(x)
 
 relocate_sf_col(x, .after = dplyr::everything())
 
@@ -27,7 +27,7 @@ bind_address_col(x, city = NULL, county = NULL, state = NULL)
 bind_units_col(x, y, units = NULL, drop = FALSE, keep_all = TRUE, .id = NULL)
 }
 \arguments{
-\item{data}{A tibble or data frame object}
+\item{x}{A tibble or data frame object}
 
 \item{var_names}{A named list following the format, list("New var name" =
 old_var_name), or a two column data frame with the first column being the
@@ -40,11 +40,14 @@ defaults to \code{NULL}.}
 \item{replace_with_na}{A named list to pass to \link[naniar:replace_with_na]{naniar::replace_with_na};
 defaults to \code{NULL}.}
 
-\item{replace_empty_char_with_na}{If \code{TRUE}, replace "" with NA using
+\item{replace_empty_char_with_na}{If \code{TRUE}, replace "" with \code{NA} using
 \link[naniar:replace_with_na_if]{naniar::replace_with_na_if}, Default: \code{TRUE}}
 
 \item{fix_date}{If \code{TRUE}, fix UNIX dates (common issue with dates from
 FeatureServer and MapServer sources) , Default: \code{TRUE}}
+
+\item{.after}{The location to place sf column after; defaults to
+\link[dplyr:reexports]{dplyr::everything}.}
 }
 \value{
 Data with formatting functions applied.
@@ -57,6 +60,6 @@ This function can apply the following common data cleaning tasks:
 \item Applies \link[stringr:str_trim]{stringr::str_squish} and \link[stringr:str_trim]{stringr::str_trim} to all character columns
 \item Optionally replaces all character values of "" with NA values
 \item Optionally corrects UNIX formatted dates with 1970-01-01 origins
-\item Optionally renames variables by passing a named list of
+\item Optionally renames variables by passing a named list of variables
 }
 }

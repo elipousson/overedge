@@ -86,6 +86,10 @@ supported for all data types).</p>
 
 <span class="fu">read_sf_gsheet</span><span class="op">(</span><span class="va">ss</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
 
+<span class="fu">read_sf_excel</span><span class="op">(</span><span class="va">path</span>, sheet <span class="op">=</span> <span class="cn">NULL</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+
+<span class="fu">read_sf_csv</span><span class="op">(</span><span class="va">path</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+
 <span class="fu">read_sf_download</span><span class="op">(</span>
   <span class="va">url</span>,
   <span class="va">filename</span>,
@@ -122,6 +126,19 @@ MapServer to access with <code><a href="get_esri_data.html">get_esri_data()</a><
 <dt>coords</dt>
 <dd><p>Character vector with coordinate values; used for
 <code>read_sf_url()</code> if the "url" is a Google Sheet.</p></dd>
+<dt>ss</dt>
+<dd><p>Something that identifies a Google Sheet:</p><ul><li><p>its file id as a string or <code><a href="https://googledrive.tidyverse.org/reference/as_id.html" class="external-link">drive_id</a></code></p></li>
+<li><p>a URL from which we can recover the id</p></li>
+<li><p>a one-row <code><a href="https://googledrive.tidyverse.org/reference/dribble.html" class="external-link">dribble</a></code>, which is how googledrive
+represents Drive files</p></li>
+<li><p>an instance of <code>googlesheets4_spreadsheet</code>, which is what <code><a href="https://googlesheets4.tidyverse.org/reference/gs4_get.html" class="external-link">gs4_get()</a></code>
+returns</p></li>
+</ul><p>Processed through <code><a href="https://googlesheets4.tidyverse.org/reference/sheets_id.html" class="external-link">as_sheets_id()</a></code>.</p></dd>
+<dt>ask</dt>
+<dd><p>If <code>TRUE</code>, ask for the name of the Google Sheet to read if ss is
+not provided to read_sf_gsheet.</p></dd>
+<dt>sheet</dt>
+<dd><p>Sheet to read, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number. Ignored if the sheet is specified via <code>range</code>. If neither argument specifies the sheet, defaults to the first visible sheet.</p></dd>
 <dt>filename</dt>
 <dd><p>File name; if file name is <code>NULL</code>, name and file type are
 both required.</p></dd>
@@ -175,7 +192,8 @@ read_sf functions.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -65,7 +65,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">format_data</span><span class="op">(</span>
-  <span class="va">data</span>,
+  <span class="va">x</span>,
   var_names <span class="op">=</span> <span class="cn">NULL</span>,
   clean_names <span class="op">=</span> <span class="cn">TRUE</span>,
   replace_na <span class="op">=</span> <span class="cn">NULL</span>,
@@ -74,7 +74,7 @@
   fix_date <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
 
-<span class="fu">fix_date</span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+<span class="fu">fix_date</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
 
 <span class="fu">relocate_sf_col</span><span class="op">(</span><span class="va">x</span>, .after <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
@@ -85,7 +85,7 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
+    <dl><dt>x</dt>
 <dd><p>A tibble or data frame object</p></dd>
 <dt>var_names</dt>
 <dd><p>A named list following the format, list("New var name" =
@@ -99,11 +99,14 @@ defaults to <code>NULL</code>.</p></dd>
 <dd><p>A named list to pass to <a href="https://rdrr.io/pkg/naniar/man/replace_with_na.html" class="external-link">naniar::replace_with_na</a>;
 defaults to <code>NULL</code>.</p></dd>
 <dt>replace_empty_char_with_na</dt>
-<dd><p>If <code>TRUE</code>, replace "" with NA using
+<dd><p>If <code>TRUE</code>, replace "" with <code>NA</code> using
 <a href="https://rdrr.io/pkg/naniar/man/replace_with_na_if.html" class="external-link">naniar::replace_with_na_if</a>, Default: <code>TRUE</code></p></dd>
 <dt>fix_date</dt>
 <dd><p>If <code>TRUE</code>, fix UNIX dates (common issue with dates from
 FeatureServer and MapServer sources) , Default: <code>TRUE</code></p></dd>
+<dt>.after</dt>
+<dd><p>The location to place sf column after; defaults to
+dplyr::everything.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -115,7 +118,7 @@ FeatureServer and MapServer sources) , Default: <code>TRUE</code></p></dd>
 <ul><li><p>Applies <a href="https://stringr.tidyverse.org/reference/str_trim.html" class="external-link">stringr::str_squish</a> and <a href="https://stringr.tidyverse.org/reference/str_trim.html" class="external-link">stringr::str_trim</a> to all character columns</p></li>
 <li><p>Optionally replaces all character values of "" with NA values</p></li>
 <li><p>Optionally corrects UNIX formatted dates with 1970-01-01 origins</p></li>
-<li><p>Optionally renames variables by passing a named list of</p></li>
+<li><p>Optionally renames variables by passing a named list of variables</p></li>
 </ul></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

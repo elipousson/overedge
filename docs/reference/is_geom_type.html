@@ -82,21 +82,21 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>A sf or sfc object passed to <a href="https://r-spatial.github.io/sf/reference/st_geometry_type.html" class="external-link">sf::st_geometry_type</a></p></dd>
+<dd><p>A <code>sf</code> or <code>sfc</code> object passed to <a href="https://r-spatial.github.io/sf/reference/st_geometry_type.html" class="external-link">sf::st_geometry_type</a></p></dd>
 <dt>type</dt>
 <dd><p>If "POINT", check if geometry type is POINT. Same for all
-available geometry types; not case sensitive; Default: NULL</p></dd>
+available geometry types; not case sensitive; Default: <code>NULL</code></p></dd>
 <dt>by_geometry</dt>
-<dd><p>Passed to sf::st_geometry_type; defaults to FALSE</p></dd>
+<dd><p>Passed to <a href="https://r-spatial.github.io/sf/reference/st_geometry_type.html" class="external-link">sf::st_geometry_type</a>; defaults to <code>FALSE</code></p></dd>
 <dt>ext</dt>
-<dd><p>For st_geom_type, if ext TRUE and check is NULL, return a list
+<dd><p>For st_geom_type, if ext <code>TRUE</code> and check is <code>NULL</code>, return a list
 with checks for POINTS, POLYGONS, LINESTRING, and the returned types.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>If ext is FALSE and type is NULL, returns vector with geometry types
-identical to <a href="https://r-spatial.github.io/sf/reference/st_geometry_type.html" class="external-link">sf::st_geometry_type</a>. If ext is TRUE, returns a list and, if
-type is not NULL, returns a logical vector.</p>
+identical to <a href="https://r-spatial.github.io/sf/reference/st_geometry_type.html" class="external-link">sf::st_geometry_type</a>. If ext is <code>TRUE</code>, returns a list and,
+if type is not <code>NULL</code>, returns a logical vector.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

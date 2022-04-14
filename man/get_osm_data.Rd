@@ -61,6 +61,9 @@ exclamation mark, \code{value = "!this"}, and can also be a vector, \code{value 
 passed to the osmdata package are from a preset list extracted from
 \code{\link[osmdata:available_tags]{osmdata::available_tags()}}.}
 
+\item{features}{Character vector of key-value pairs with keys and values
+enclosed in escape-formatted quotations (see examples).}
+
 \item{crs}{Coordinate reference system for output data; if NULL, the data
 remains in the Open Street Map coordinate reference system 4326. Default:
 \code{NULL}.}
