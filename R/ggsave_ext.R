@@ -64,8 +64,8 @@ ggsave_ext <- function(plot = ggplot2::last_plot(),
                        path = NULL,
                        paper = NULL,
                        orientation = "portrait",
-                       width,
-                       height,
+                       width = NULL,
+                       height = NULL,
                        units = "in",
                        scale = 1,
                        dpi = 300,
@@ -129,11 +129,15 @@ ggsave_ext <- function(plot = ggplot2::last_plot(),
 
 #' @rdname ggsave_ext
 #' @name ggsave_social
+#' @inheritParams get_social_image
 #' @export
 #' @importFrom ggplot2 last_plot
 #' @importFrom rlang list2 exec
 ggsave_social <- function(plot = ggplot2::last_plot(),
-                          paper = "Instagram post",
+                          image = "Instagram post",
+                          platform = NULL,
+                          format = NULL,
+                          orientation = NULL,
                           name = NULL,
                           filename = NULL,
                           filetype = "jpeg",
@@ -142,30 +146,13 @@ ggsave_social <- function(plot = ggplot2::last_plot(),
                           height = 1080,
                           units = "px",
                           ...) {
-  social_sizes <-
-    c(
-      "Facebook cover photo",
-      "Facebook post",
-      "Facebook story",
-      "Instagram post",
-      "Instagram story",
-      "Twitter cover photo",
-      "Twitter image and link post",
-      "Twitter single image post",
-      "Twitter multiple image post"
+  image_size <-
+    get_social_image(
+      image = image,
+      platform = platform,
+      format = format,
+      orientation = orientation
     )
-
-  image_size <- match.arg(paper, social_sizes)
-
-  # FIXME: Platform and format are not being used in this function yet
-  # platform <- match.arg(platform, c("Instagram", "Twitter", "Facebook"))
-  # format <- match.arg(format, c("story", "cover", "post"))
-
-  # FIXME: Is there some additional identifier that can be added to the paper_size data to allow uniqu
-  # image_size <-
-  #  get_social_image(platform = platform, format = format, width = width)
-
-  image_size <- get_paper(paper = image_size)
 
   params <-
     modify_fn_fmls(
@@ -186,17 +173,37 @@ ggsave_social <- function(plot = ggplot2::last_plot(),
   )
 }
 
-#' Get social media image size matching platform and format
+#' Get social media image size to match platform and format
 #'
-#' @noRd
-get_social_image <- function(platform, format, ...) {
-  platform <- match.arg(platform, c("Instagram", "Twitter", "Facebook"))
-  format <- match.arg(format, c("story", "cover", "post"))
+#' See `paper_sizes[paper_sizes$type == "social",]$name` for support image
+#' options.
+#'
+#' @param image Image size name, Default: `NULL`
+#' @param platform Social media platform, "Instagram", "Facebook", or "Twitter",
+#'   Default: `NULL`
+#' @param format Image format, "post", "story", or "cover", Default: `NULL`
+#' @param orientation Image orientation, Default: `NULL`.
+#' @rdname get_social_image
+#' @export
+#' @importFrom glue glue
+get_social_image <- function(image = NULL, platform = NULL, format = NULL, orientation = NULL) {
+  social_image_sizes <-
+    paper_sizes[paper_sizes$type == "social", ]$name
 
-  get_paper(
-    standard = platform,
-    size = format,
-    ...
+  if (!is.null(image)) {
+    image <- match.arg(image, social_image_sizes)
+  } else {
+    platform <- match.arg(platform, c("Instagram", "Twitter", "Facebook"))
+    format <- match.arg(format, c("post", "story", "cover"))
+    platform_image_sizes <- grep(glue::glue("^{platform}.+{format}"), social_image_sizes, value = TRUE)
+    image <- match.arg(image, platform_image_sizes)
+  }
+
+  return(
+    get_paper(
+      paper = image,
+      orientation = orientation
+    )
   )
 }
 
