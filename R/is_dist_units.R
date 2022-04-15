@@ -2,8 +2,9 @@
 #'
 #' - [is_dist_units]: Is x a distance unit object?
 #' - [is_diff_dist]: What is the difference between x and y distance?
-#' - [is_same_dist]: Is x the same distance as y?
+#' - [is_same_dist]: Is x the same distance as y? or does the bbox of x and bbox of y have the same x, y, or diagonal distance?
 #' - [is_shorter], is_longer: Is x shorter or longer than y?
+#' - [is_same_area]: do x and y have the same area?
 #'
 #' There are two additional functions that support these utility functions:
 #'
