@@ -9,6 +9,9 @@
 #' @param geom ggplot2 geom to use, Default: 'sf'. Options include "sf"
 #'   (geom_sf), "icon" (layer_icon / geom_sf_icon), "text" (geom_sf_text), "label"
 #'   (geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".
+#' @param geom_fn ggplot2 geom or custom function using lambda syntax. Use for
+#'   passing custom mapping functions to layer_location_data beyond the
+#'   supported geom options.
 #' @param unit unit to adjust location by dist or diag_ratio; defaults to
 #'   "meter"
 #' @param label_col Column name or id for a column with the text or labels to
@@ -39,6 +42,7 @@ layer_location_data <-
            package = NULL,
            filetype = NULL,
            fn = NULL,
+           geom_fn = NULL,
            crop = TRUE,
            trim = FALSE,
            from_crs = NULL,
@@ -106,6 +110,10 @@ layer_location_data <-
           stat = "sf_coordinates"
         )
       }
+    }
+
+    if (!is.null(geom_fn)) {
+      return(use_fn(data, geom_fn))
     }
 
     geom <-
