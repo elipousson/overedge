@@ -31,8 +31,6 @@ is_class <- function(x, classes = NULL, null.ok = FALSE) {
 #' - [is_raster]: is x a `Raster` class object?
 #' - [is_sp]: is x a `Spatial` class object of any type?
 #' - [is_same_crs]: do x and y have the same coordinate reference system?
-#' - [is_same_dist]: do the bbox for x and bbox for y have the same x, y, or diagonal distance?
-#' - [is_same_area]: do x and y have the same area?
 #'
 #' @export
 #' @md
@@ -161,8 +159,8 @@ is_sf_or_what <- function(x = NULL, return = NULL, us = FALSE, null.ok = TRUE) {
       type <- c(
         type,
         list(
-          "state" = (as.character(x) %in% c(us_states$name, us_states$abb, us_states$statefp, as.integer(us_states$statefp))),
-          "county" = (as.character(x) %in% c(us_counties$name, us_counties$geoid, as.integer(us_counties$geoid)))
+          "state" = is_state_geoid(x) | is_state_name(x),
+          "county" = is_county_geoid(x) | is_county_name(x)
         )
       )
     }
@@ -183,4 +181,24 @@ is_sf_or_what <- function(x = NULL, return = NULL, us = FALSE, null.ok = TRUE) {
       type$num ~ "num"
     )
   )
+}
+
+#' @noRd
+is_state_name <- function(x) {
+  x %in% c(us_states$name, us_states$abb, us_states$statefp)
+}
+
+#' @noRd
+is_state_geoid <- function(x) {
+  x %in% c(as.integer(us_states$statefp), us_states$statefp)
+}
+
+#' @noRd
+is_county_name <- function(x) {
+  x %in% c(us_counties$name, us_counties$name_short)
+}
+
+#' @noRd
+is_county_geoid <- function(x) {
+  x %in% c(as.integer(us_counties$geoid), us_counties$geoid)
 }
