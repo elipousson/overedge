@@ -80,12 +80,14 @@ layer_location_data <-
 
     ggrepel_geoms <- c("text_repel", "label_repel")
     text_geoms <- c("text", "label", "textsf", "labelsf", ggrepel_geoms)
-    birdseyeview_geoms <- c("mark", "mapbox", "location", "context", "markers", "numbered")
+    birdseyeview_geoms <- c("mark", "location", "context")
+    overedge_geoms <- c("icon", "mapbox", "markers", "numbers")
+
 
     # Match geoms
     geom <- match.arg(
       geom,
-      c("sf", "icon", text_geoms, birdseyeview_geoms)
+      c("sf", overedge_geoms, text_geoms, birdseyeview_geoms)
     )
 
     is_geom_pkg_installed(geom)
@@ -110,6 +112,9 @@ layer_location_data <-
       switch(geom,
         "sf" = ggplot2::geom_sf,
         "icon" = layer_icon,
+        "mapbox" = layer_mapbox,
+        "markers" = layer_markers,
+        "numbers" = layer_numbers,
         "text" = ggplot2::geom_sf_text,
         "label" = ggplot2::geom_sf_label,
         "text_repel" = ggrepel::geom_text_repel,
@@ -117,11 +122,8 @@ layer_location_data <-
         "textsf" = geomtextpath::geom_textsf,
         "labelsf" = geomtextpath::geom_labelsf,
         "mark" = birdseyeview::layer_show_mark,
-        "mapbox" = birdseyeview::layer_show_mapbox,
         "location" = birdseyeview::layer_show_location,
-        "context" = birdseyeview::layer_show_context,
-        "markers" = birdseyeview::layer_show_markers,
-        "numbered" = birdseyeview::layer_number_markers
+        "context" = birdseyeview::layer_show_context
       )
 
     init_params <- params
