@@ -15,7 +15,7 @@
 #' @param geometry Geometry type to output ("polygons", "points", "lines",
 #'   "multilines", or "multipolygons"); if multiple geometry types are needed
 #'   set osmdata to `TRUE.` Default `NULL`.
-#' @param crs Coordinate reference system for output data; if NULL, the data
+#' @param crs Coordinate reference system for output data; if `NULL`, the data
 #'   remains in the Open Street Map coordinate reference system 4326. Default:
 #'   `NULL`.
 #' @param osmdata If `TRUE` return a `osmdata` class object that includes the
@@ -103,10 +103,8 @@ get_osm_data <- function(location = NULL,
 #' @param type type of feature with id; "node", "way", or "relation"
 #' @export
 #' @importFrom purrr map_dfr
-get_osm_id <- function(id, type = "way", crs = NULL, geometry = NULL, osmdata = FALSE) {
+get_osm_id <- function(id, type = NULL, crs = NULL, geometry = NULL, osmdata = FALSE) {
   is_pkg_installed("osmdata")
-
-  id <- as.character(id)
 
   if (length(id) > 1) {
     data <- purrr::map_dfr(id, ~ get_osm_id(id = .x, type = type, crs = crs, geometry = geometry, osmdata = FALSE))
@@ -114,6 +112,17 @@ get_osm_id <- function(id, type = "way", crs = NULL, geometry = NULL, osmdata = 
     return(data)
   }
 
+  if (is.null(type)) {
+    if (has_osm_type_prefix(id)) {
+      split_id <- stringr::str_split(x, pattern = "/")
+      type <- split_id[1]
+      id <- split_id[2]
+    } else if (has_osm_type_name(id)) {
+      type <- names(id)
+    }
+  }
+
+  id <- as.character(id)
   type <- match.arg(type, c("node", "way", "relation"))
 
   if (is.null(geometry)) {
@@ -138,9 +147,29 @@ get_osm_id <- function(id, type = "way", crs = NULL, geometry = NULL, osmdata = 
   return(data)
 }
 
+#' Is this an OpenStreetMap element (id with type)?
+#'
+#' @noRd
+is_osm_element <- function(x) {
+  return(has_osm_type_prefix(x) | has_osm_type_name(x))
+}
+
+#' @noRd
+has_osm_type_prefix <- function(x) {
+  grepl(
+    "^node/|^way/|^relation/",
+    x
+  )
+}
+
+#' @noRd
+has_osm_type_name <- function(x) {
+  names(x) %in% c("node", "way", "relation")
+}
+
 #' @param level administrative level (admin_level) of boundary to return;
-#'   defaults to NULL. See <https://wiki.openstreetmap.org/wiki/Key:admin_level>
-#'   for more information. Only used for get_osm_boundaries.
+#'   defaults to `NULL`. See <https://wiki.openstreetmap.org/wiki/Key:admin_level>
+#'   for more information. Only used for [get_osm_boundaries].
 #' @param lang Language for boundary names to include in resulting data frame
 #'   (e.g. "en" for English or "es" for Spanish). Default language names should
 #'   always be included in results. Defaults to "en".
