@@ -157,7 +157,7 @@ get_flickr_photos <- function(api_key = NULL,
         x = photos,
         coords = c("longitude", "latitude"),
         crs = crs
-        )
+      )
   }
 
   return(photos)

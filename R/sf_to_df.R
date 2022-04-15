@@ -52,7 +52,7 @@ sf_to_df <- function(x,
       coords = coords,
       keep_all = keep_all,
       drop = TRUE
-      )
+    )
   return(x)
 }
 

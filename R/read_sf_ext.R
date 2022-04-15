@@ -129,17 +129,17 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 
   path_type <-
     dplyr::case_when(
-    stringr::str_detect(path, "\\.csv$") ~ "csv",
-    stringr::str_detect(path, "\\.xlsx$|\\.xls$") ~ "excel",
-    TRUE ~ "other"
-  )
+      stringr::str_detect(path, "\\.csv$") ~ "csv",
+      stringr::str_detect(path, "\\.xlsx$|\\.xls$") ~ "excel",
+      TRUE ~ "other"
+    )
 
   if (path_type != "other") {
     data <-
-      switch (path_type,
-            "csv" = read_sf_csv(path = path, bbox = bbox, ...),
-            "excel" = read_sf_excel(path = path, bbox = bbox, ...)
-    )
+      switch(path_type,
+        "csv" = read_sf_csv(path = path, bbox = bbox, ...),
+        "excel" = read_sf_excel(path = path, bbox = bbox, ...)
+      )
 
     return(data)
   }
@@ -271,7 +271,7 @@ read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALS
 #' @rdname read_sf_ext
 #' @inheritParams readxl::read_excel
 #' @export
-read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"),  ...) {
+read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"), ...) {
   is_pkg_installed("readxl")
   # Convert XLS or XLSX file with coordinates to sf
 
@@ -286,7 +286,7 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
         bbox = bbox,
         coords = coords,
         col_types = params$col_types
-        )
+      )
     )
 
     return(data)
@@ -308,7 +308,7 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
 #' @name read_sf_csv
 #' @rdname read_sf_ext
 #' @export
-read_sf_csv <- function(path, bbox = NULL, coords = c("lon", "lat"),  ...) {
+read_sf_csv <- function(path, bbox = NULL, coords = c("lon", "lat"), ...) {
   data <- readr::read_csv(path = path, ...)
 
   coords <- check_coords(data, coords = coords)
