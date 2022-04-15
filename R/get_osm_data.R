@@ -112,6 +112,26 @@ get_osm_id <- function(id, type = NULL, crs = NULL, geometry = NULL, osmdata = F
     return(data)
   }
 
+  id_type <-
+    get_osm_id_type(id = id, type = type, geometry = geometry)
+
+  data <-
+    osmdata::osmdata_sf(
+      osmdata::opq_string(
+        osmdata::opq_osm_id(type = id_type$type, id = id_type$id)
+      )
+    )
+
+  data <-
+    get_osm_data_geometry(data, geometry = id_type$geometry, crs = crs, osmdata = osmdata)
+
+  return(data)
+}
+
+#' @noRd
+#' @importFrom stringr str_split
+get_osm_id_type <- function(id, type = NULL, geometry = NULL) {
+
   if (is.null(type)) {
     if (has_osm_type_prefix(id)) {
       split_id <- stringr::str_split(x, pattern = "/")
@@ -128,23 +148,13 @@ get_osm_id <- function(id, type = NULL, crs = NULL, geometry = NULL, osmdata = F
   if (is.null(geometry)) {
     geometry <-
       switch(type,
-        "node" = "points",
-        "way" = "polygons",
-        "relation" = "multipolygons"
+             "node" = "points",
+             "way" = "polygons",
+             "relation" = "multipolygons"
       )
   }
 
-  data <-
-    osmdata::osmdata_sf(
-      osmdata::opq_string(
-        osmdata::opq_osm_id(type = type, id = id)
-      )
-    )
-
-  data <-
-    get_osm_data_geometry(data, geometry = geometry, crs = crs, osmdata = osmdata)
-
-  return(data)
+  return(list("type" = type, "id" = id, "geometry" = geometry))
 }
 
 #' Is this an OpenStreetMap element (id with type)?
