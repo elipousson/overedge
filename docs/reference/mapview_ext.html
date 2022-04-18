@@ -46,7 +46,17 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -54,7 +64,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Use mapview to interactively explore spatial data</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/mapview_ext.R" class="external-link"><code>R/mapview_ext.R</code></a></small>
       <div class="d-none name"><code>mapview_ext.Rd</code></div>
     </div>
 
@@ -103,17 +113,18 @@ defaults to "data".</p></dd>
   
 </dl></dd>
 <dt>path</dt>
-<dd><p>path to folder of one or more files with EXIF location metadata</p></dd>
+<dd><p>A path to folder of one or more files with EXIF location
+metadata.</p></dd>
 <dt>filetype</dt>
-<dd><p>file extension or file type; defaults to "jpg"</p></dd>
+<dd><p>The file extension or file type; defaults to <code>NULL</code>.</p></dd>
 <dt>popup</dt>
 <dd><p>If <code>TRUE</code>, add a popup image to a leaflet map; defaults <code>TRUE</code>.</p></dd>
 <dt>user_id</dt>
 <dd><p>The NSID of the user who's photo to search. If this parameter
 isn't passed then everybody's public photos will be searched.</p></dd>
 <dt>tags</dt>
-<dd><p>EXIF tags to read from files. Must include GPS tags to create an
-sf object.</p></dd>
+<dd><p>Optional list of EXIF tags to read from files. Must include GPS
+tags to create an sf object.</p></dd>
 <dt>api_key</dt>
 <dd><p>Flickr API key. If api_key is `NULL`, the function uses
 [getFlickrAPIKey()] to use the environment variable "FLICKR_API_KEY" as the
@@ -140,7 +151,8 @@ largest include "sq", "t", "s", "q", "m", "n", "z", "c", "l", and "o"</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

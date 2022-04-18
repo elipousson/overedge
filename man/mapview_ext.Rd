@@ -44,17 +44,18 @@ defaults to "data".}
     \item{\code{}}{}
   }}
 
-\item{path}{path to folder of one or more files with EXIF location metadata}
+\item{path}{A path to folder of one or more files with EXIF location
+metadata.}
 
-\item{filetype}{file extension or file type; defaults to "jpg"}
+\item{filetype}{The file extension or file type; defaults to \code{NULL}.}
 
 \item{popup}{If \code{TRUE}, add a popup image to a leaflet map; defaults \code{TRUE}.}
 
 \item{user_id}{The NSID of the user who's photo to search. If this parameter
 isn't passed then everybody's public photos will be searched.}
 
-\item{tags}{EXIF tags to read from files. Must include GPS tags to create an
-sf object.}
+\item{tags}{Optional list of EXIF tags to read from files. Must include GPS
+tags to create an sf object.}
 
 \item{api_key}{Flickr API key. If api_key is `NULL`, the function uses
 [getFlickrAPIKey()] to use the environment variable "FLICKR_API_KEY" as the

@@ -1,24 +1,24 @@
 
-#' Read EXIF location data from images to a simple feature object
+#' Read location data from images to a simple feature object using EXIF or write EXIF metadata
 #'
 #' Read EXIF data from folder of images.
 #'
-#' @param path path to folder of one or more files with EXIF location metadata
-#' @param bbox bounding box to crop sf file (excluding images with location data
-#'   outside the bounding box). If bbox is provided the returned data will match
-#'   the crs of the bbox.
-#' @param filetype file extension or file type; defaults to "jpg"
-#' @param sort variable to sort by. Currently supports "lon" (default), "lat",
-#'   or "filename"
-#' @param tags EXIF tags to read from files. Must include GPS tags to create an
-#'   sf object.
-#' @param ... Additional EXIF tags to pass to `exiftoolr::exif_read`
+#' @param path A path to folder of one or more files with EXIF location
+#'   metadata.
+#' @param bbox Optional bounding box to crop returned file (excluding images
+#'   with location data outside the bounding box). If bbox is provided the
+#'   returned data will match the crs of the bbox.
+#' @param filetype The file extension or file type; defaults to `NULL`.
+#' @param sort Column name for variable to sort by. Currently supports "lon"
+#'   (default), "lat", or "filename"
+#' @param tags Optional list of EXIF tags to read from files. Must include GPS
+#'   tags to create an sf object.
+#' @param ... Additional EXIF tags to pass to [exiftoolr::exif_read]
 #' @family read_write
 #' @example examples/read_sf_exif.R
 #' @export
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom purrr map_dfr
-#' @importFrom fs dir_ls
 #' @importFrom dplyr rename_with rename mutate case_when
 #' @importFrom janitor clean_names
 #' @importFrom rlang has_name
@@ -66,17 +66,13 @@ read_sf_exif <- function(path = NULL,
     cli::cli_warn("The tags must include GPS values to create a simple feature object based on the file EXIF data.")
   }
 
-  filetype <- get_path_filetype(path, filetype)
-  glob <- paste0("*.", filetype)
+  file_list <- get_path_file_list(path, filetype)
 
   # FIXME: Figure out how to append path to the end of the table not the beginning
   data <-
     suppressMessages(
       purrr::map_dfr(
-        fs::dir_ls(
-          path = path,
-          glob = glob
-        ),
+        file_list,
         ~ exiftoolr::exif_read(
           .x,
           tags = tags
@@ -191,6 +187,14 @@ get_path_filetype <- function(path, filetype = NULL) {
   return(filetype)
 }
 
+#' Get list of files at
+#' @noRd
+#' @importFrom fs dir_ls
+get_path_file_list <- function(path, filetype = NULL) {
+  filetype <- get_path_filetype(path, filetype)
+  fs::dir_ls(path = path, glob = paste0("*.", filetype))
+}
+
 #' @name write_exif
 #' @rdname read_sf_exif
 #' @section Writing EXIF metadata
@@ -278,4 +282,70 @@ write_exif <- function(path = NULL,
       )
     }
   }
+}
+
+
+#' @name write_exif_keywords
+#' @rdname read_sf_exif
+#' @param key_list List of sf objects with features with keywords, e.g. boundaries
+#' @param key_col Column name in key_list with the values to use for keywords.
+#' @param join geometry predicate function; defaults to `NULL`, set to
+#'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
+#'   or [sf::st_nearest_feature] if key_list contains other types.
+#' @export
+#' @importFrom fs dir_ls
+#' @importFrom purrr map_dfr walk2
+#' @importFrom sf st_drop_geometry st_join
+#' @importFrom dplyr select all_of group_by summarize
+write_exif_keywords <- function(path,
+                                filetype = NULL,
+                                key_list,
+                                key_col = "name",
+                                keywords = NULL,
+                                join = NULL,
+                                overwrite = TRUE) {
+  data <- read_sf_exif(path = path, filetype = filetype)
+  data <- has_same_name_col(data, col = key_col)
+
+  file_list <- get_path_file_list(path, filetype)
+  key_list <- as_sf_list(key_list, nm = NULL, crs = data)
+
+  if (is.null(join)) {
+    if (all(sapply(key_list, is_polygon) | sapply(key_list, is_multipolygon))) {
+      join <- sf::st_intersects
+    } else {
+      join <- sf::st_nearest_feature
+    }
+  }
+
+  data_test <-
+    purrr::map_dfr(
+      key_list,
+      ~ sf::st_drop_geometry(
+        sf::st_join(
+          data,
+          dplyr::select(.x, dplyr::all_of(key_col)),
+          join = join
+        )
+      ),
+      .id = path
+    )
+
+  data <-
+    dplyr::group_by(
+      data,
+      path
+    )
+
+  data <-
+    dplyr::summarize(
+      data,
+      keywords = list(unique(keywords, .data[[key_col]]))
+    )
+
+  purrr::walk2(
+    data$path,
+    data$keywords,
+    ~ write_exif(path = .x, keywords = .y, overwrite = overwrite)
+  )
 }

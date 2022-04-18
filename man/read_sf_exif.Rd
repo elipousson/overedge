@@ -3,7 +3,8 @@
 \name{read_sf_exif}
 \alias{read_sf_exif}
 \alias{write_exif}
-\title{Read EXIF location data from images to a simple feature object}
+\alias{write_exif_keywords}
+\title{Read location data from images to a simple feature object using EXIF or write EXIF metadata}
 \usage{
 read_sf_exif(
   path = NULL,
@@ -24,23 +25,34 @@ write_exif(
   args = NULL,
   overwrite = TRUE
 )
+
+write_exif_keywords(
+  path,
+  filetype = NULL,
+  key_list,
+  key_col = "name",
+  keywords = NULL,
+  join = NULL,
+  overwrite = TRUE
+)
 }
 \arguments{
-\item{path}{path to folder of one or more files with EXIF location metadata}
+\item{path}{A path to folder of one or more files with EXIF location
+metadata.}
 
-\item{filetype}{file extension or file type; defaults to "jpg"}
+\item{filetype}{The file extension or file type; defaults to \code{NULL}.}
 
-\item{bbox}{bounding box to crop sf file (excluding images with location data
-outside the bounding box). If bbox is provided the returned data will match
-the crs of the bbox.}
+\item{bbox}{Optional bounding box to crop returned file (excluding images
+with location data outside the bounding box). If bbox is provided the
+returned data will match the crs of the bbox.}
 
-\item{sort}{variable to sort by. Currently supports "lon" (default), "lat",
-or "filename"}
+\item{sort}{Column name for variable to sort by. Currently supports "lon"
+(default), "lat", or "filename"}
 
-\item{tags}{EXIF tags to read from files. Must include GPS tags to create an
-sf object.}
+\item{tags}{Optional list of EXIF tags to read from files. Must include GPS
+tags to create an sf object.}
 
-\item{...}{Additional EXIF tags to pass to \code{exiftoolr::exif_read}}
+\item{...}{Additional EXIF tags to pass to \link[exiftoolr:exif_read]{exiftoolr::exif_read}}
 
 \item{title}{Title to add to file metadata with exiftoolr, Default: \code{NULL}.}
 
@@ -58,6 +70,14 @@ is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
 
 \item{overwrite}{If TRUE, overwrite any existing EXIF metadata present in the
 provided fields; defaults to TRUE}
+
+\item{key_list}{List of sf objects with features with keywords, e.g. boundaries}
+
+\item{key_col}{Column name in key_list with the values to use for keywords.}
+
+\item{join}{geometry predicate function; defaults to \code{NULL}, set to
+\link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON objects
+or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
 }
 \description{
 Read EXIF data from folder of images.
