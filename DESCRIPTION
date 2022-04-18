@@ -2,9 +2,12 @@ Package: overedge
 Title: Assorted Functions For Easier Map Making
 Version: 0.0.0.9000
 Authors@R: 
-    person("Eli", "Pousson", , "eli.pousson@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-8280-1706"))
+    person(
+    given = "Eli", family = "Pousson", email = "eli.pousson@gmail.com",
+    role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-8280-1706"))
 Description: Assorted functions to support data wrangling and visualization for map making with a focus on the ggplot2 and sf packages.
+URL: https://github.com/elipousson/overedge, https://elipousson.github.io/overedge/
+BugReports: https://github.com/elipousson/overedge/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -33,7 +36,7 @@ Remotes:
     yonghah/esri2sf,
     coolbutuseless/ggsvg,
     elipousson/birdseyeview,
-    walkerke/mapboxapi
+    elipousson/mapboxapi
 Depends: 
     R (>= 2.10)
 LazyData: true
