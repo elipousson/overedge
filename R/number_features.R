@@ -176,6 +176,10 @@ sort_features <- function(data,
     by_group <- TRUE
   }
 
+  if (!rlang::has_name(data, sort)) {
+    cli::cli_warn("The provided value for {.field {'sort'}} ({.val {sort}}) is not found in the data.")
+  }
+
   if (desc) {
     data <-
       dplyr::arrange(data, dplyr::desc(dplyr::across(dplyr::all_of(sort))), .by_group = by_group)
