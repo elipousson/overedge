@@ -6,6 +6,7 @@
 #' - [openstreetmap/map-icons](https://github.com/openstreetmap/map-icons/)
 #' - [openstreetmap/lane-icons](https://github.com/openstreetmap/lane-icons/)
 #' - [Esri/calcite-point-symbols](https://github.com/Esri/calcite-point-symbols)
+#' - [NPMap Symbol Library](https://github.com/nationalparkservice/symbol-library/)
 #'
 #' Most of these icon sources use open licenses.
 #' [Maki](https://github.com/mapbox/maki/blob/main/LICENSE.txt),
@@ -16,7 +17,9 @@
 #' license](https://github.com/manifestinteractive/weather-underground-icons/blob/master/LICENSE).
 #' The OSM map icons use an unspecified PD style license.
 #' The Calcite icons are [available under the Esri Master License Agreement
-#' (MLA)](https://github.com/Esri/calcite-point-symbols#licensing).
+#' (MLA)](https://github.com/Esri/calcite-point-symbols#licensing). The NPMap
+#' Symbol Library is created by the National Park Service so is assumed to be a
+#' [Public Domain work in the U.S.](http://www.usa.gov/publicdomain/label/1.0/).
 #' @format A data frame with 1855 rows and 5 variables:
 #' \describe{
 #'   \item{\code{name}}{Icon name}
@@ -25,7 +28,6 @@
 #'   \item{\code{size}}{Icon width/height (pixels)}
 #'   \item{\code{repo}}{GitHub repository for icon collection}
 #' }
-#' @md
 "map_icons"
 
 

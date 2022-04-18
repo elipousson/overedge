@@ -26,6 +26,7 @@ An index of map icons from four sources:
 \item \href{https://github.com/openstreetmap/map-icons/}{openstreetmap/map-icons}
 \item \href{https://github.com/openstreetmap/lane-icons/}{openstreetmap/lane-icons}
 \item \href{https://github.com/Esri/calcite-point-symbols}{Esri/calcite-point-symbols}
+\item \href{https://github.com/nationalparkservice/symbol-library/}{NPMap Symbol Library}
 }
 
 Most of these icon sources use open licenses.
@@ -35,6 +36,8 @@ Most of these icon sources use open licenses.
 all use a CC0 license. The Weather Underground Icons use an
 \href{https://github.com/manifestinteractive/weather-underground-icons/blob/master/LICENSE}{MIT license}.
 The OSM map icons use an unspecified PD style license.
-The Calcite icons are \href{https://github.com/Esri/calcite-point-symbols#licensing}{available under the Esri Master License Agreement (MLA)}.
+The Calcite icons are \href{https://github.com/Esri/calcite-point-symbols#licensing}{available under the Esri Master License Agreement (MLA)}. The NPMap
+Symbol Library is created by the National Park Service so is assumed to be a
+\href{http://www.usa.gov/publicdomain/label/1.0/}{Public Domain work in the U.S.}.
 }
 \keyword{datasets}

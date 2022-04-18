@@ -70,6 +70,26 @@ osm_map_icons <-
     style = ""
   )
 
+nps_icons <-
+  get_repo_svg(repo = "nationalparkservice/symbol-library", branch = "master") |>
+  mutate(
+    size = case_when(
+      str_detect(name, "14") ~ 14,
+      str_detect(name, "22") ~ 17,
+      str_detect(name, "30") ~ 30
+    ),
+    style = case_when(
+      str_detect(url, "shielded.+") ~ "shielded-white",
+      str_detect(name, "standalone.+white") ~ "standalone-white",
+      str_detect(name, "standalone.+black") ~ "standalone-black"
+    ),
+    name = str_remove(name, "-white-[:digit:]+$"),
+    name = str_remove(name, "-black-[:digit:]+$"),
+    name = str_remove(name, "^shielded/"),
+    name = str_remove(name, "^standalone/")
+  ) |>
+  arrange(name, desc(size))
+
 map_icons <-
   bind_rows(
     maki,
@@ -77,7 +97,8 @@ map_icons <-
     wu_icons,
     lane_icons,
     osm_map_icons,
-    calcite
+    calcite,
+    nps_icons
   ) |>
   relocate(
     repo,
