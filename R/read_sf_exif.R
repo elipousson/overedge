@@ -16,11 +16,12 @@
 #' @family read_write
 #' @example examples/read_sf_exif.R
 #' @export
-#' @importFrom fs dir_ls
-#' @importFrom stringr str_extract
+#' @importFrom cli cli_abort cli_warn
 #' @importFrom purrr map_dfr
-#' @importFrom dplyr rename_with rename mutate case_when arrange
+#' @importFrom fs dir_ls
+#' @importFrom dplyr rename_with rename mutate case_when
 #' @importFrom janitor clean_names
+#' @importFrom rlang has_name
 #' @importFrom sf st_crs
 read_sf_exif <- function(path = NULL,
                          filetype = NULL,
@@ -61,28 +62,12 @@ read_sf_exif <- function(path = NULL,
         "*GPS*",
         ...
       )
-
-    check_tags <- FALSE
-    lonlat_tags <- TRUE
-    lonlat_ext_tags <- TRUE
-    orientation_tags <- TRUE
   } else if (!any(grepl("GPS", tags))) {
     cli::cli_warn("The tags must include GPS values to create a simple feature object based on the file EXIF data.")
-    check_tags <- TRUE
   }
 
-  if (is.null(filetype)) {
-    dir_files <- fs::dir_ls(path)
-    filetype <- unique(stringr::str_extract(dir_files, "(?<=\\.).+$"))
-
-    if (length(filetype) > 1) {
-      cli::cli_abort("The path {.file {path}} includes files with multiple types so a filetype parameter must be provided.")
-    }
-  }
-
-  if (!is.null(filetype)) {
-    glob <- paste0("*.", filetype)
-  }
+  filetype <- get_path_filetype(path, filetype)
+  glob <- paste0("*.", filetype)
 
   # FIXME: Figure out how to append path to the end of the table not the beginning
   data <-
@@ -106,13 +91,15 @@ read_sf_exif <- function(path = NULL,
       ~ sub("^gps_", "", .x)
     )
 
-  if (check_tags) {
-    lonlat_tags <- all(c("latitude", "longitude") %in% names(data))
-    lonlat_ext_tags <- all(c("longitude_ref", "latitude_ref", "img_direction", "img_direction_ref", "source_file") %in% names(data))
-    orientation_tags <- all(c("orientation", "image_width", "image_height") %in% names(data))
+  if (rlang::has_name(data, "image_description")) {
+    data <-
+      dplyr::rename(
+        data,
+        description = image_description
+      )
   }
 
-  if (lonlat_tags) {
+  if (all(rlang::has_name(data, c("latitude", "longitude")))) {
     data <-
       dplyr::rename(
         data,
@@ -121,7 +108,7 @@ read_sf_exif <- function(path = NULL,
       )
   }
 
-  if (lonlat_ext_tags) {
+  if (all(rlang::has_name(data, c("longitude_ref", "latitude_ref", "img_direction", "img_direction_ref", "source_file")))) {
     data <-
       dplyr::rename(
         data,
@@ -131,11 +118,10 @@ read_sf_exif <- function(path = NULL,
       )
   }
 
-  if (orientation_tags) {
+  if (all(rlang::has_name(data, c("orientation", "image_width", "image_height")))) {
     data <-
       dplyr::rename(
         data,
-        description = image_description,
         img_width = image_width,
         img_height = image_height,
         exif_orientation = orientation
@@ -164,12 +150,7 @@ read_sf_exif <- function(path = NULL,
       )
   }
 
-  if (sort %in% names(data)) {
-    data <-
-      dplyr::arrange(data, .data[[sort]])
-  } else {
-    cli::cli_warn("The provided value for {.field {'sort'}} ({.val {sort}}) is not found in the data.")
-  }
+  data <- sort_features(data = data, sort = sort)
 
   exif_crs <- 4326
 
@@ -188,6 +169,27 @@ read_sf_exif <- function(path = NULL,
   return(data)
 }
 
+#' Get filetype from the path (using most frequent type if multiple are at the path)
+#'
+#' @noRd
+#' @importFrom fs dir_ls
+#' @importFrom stringr str_extract
+#' @importFrom cli cli_warn
+get_path_filetype <- function(path, filetype = NULL) {
+  if (!is.null(filetype)) {
+    return(filetype)
+  }
+  dir_files <- fs::dir_ls(path)
+  filetype <- unique(stringr::str_extract(dir_files, "(?<=\\.).+$"))
+
+  if (length(filetype) > 1) {
+    # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector
+    filetype <- names(sort(table(filetype), decreasing = TRUE)[1])
+    cli::cli_warn("The path {.file {path}} includes multiple filetypes. Using most frequent filetype: {.val {filetype}}")
+  }
+
+  return(filetype)
+}
 
 #' @name write_exif
 #' @rdname read_sf_exif
@@ -249,16 +251,31 @@ write_exif <- function(path = NULL,
   }
 
   if (!is.null(args)) {
-    suppressMessages(
-      suppressWarnings(
-        exiftoolr::exif_call(
-          args = args,
-          path = path,
-          quiet = TRUE
+    if (length(path) == 1) {
+      suppressMessages(
+        suppressWarnings(
+          exiftoolr::exif_call(
+            args = args,
+            path = path,
+            quiet = TRUE
+          )
         )
       )
-    )
 
-    cli::cli_alert_success("EXIF metadata updated for {.file {path}}")
+      cli::cli_alert_success("EXIF metadata updated for {.file {path}}")
+    } else {
+      suppressMessages(
+        suppressWarnings(
+          purrr::walk(
+            path,
+            ~ exiftoolr::exif_call(
+              args = args,
+              path = .x,
+              quiet = TRUE
+            )
+          )
+        )
+      )
+    }
   }
 }
