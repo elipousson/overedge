@@ -131,6 +131,8 @@ use_fn <- function(data, fn = NULL) {
   fn(data)
 }
 
+#' Does the data frame has a column with the same name?
+#'
 #' @noRd
 #' @importFrom rlang has_name
 #' @importFrom cli cli_abort cli_alert_success
@@ -172,5 +174,5 @@ utils::globalVariables(c(
   "gps_latitude", "gps_longitude", "osm_building_tags", "source_file",
   "address", "asp", "block_height", "block_width", "col_width", "cols", "geometry", "gutter",
   "height", "id", "image_description", "image_height", "image_width",
-  "row_height", "rows", "width", "df", "where", "number_col"
+  "row_height", "rows", "width", "df", "where", ".id", "nm", "area_unit_options"
 ))
