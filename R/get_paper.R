@@ -56,7 +56,12 @@ get_paper <- function(paper = "letter",
     orientation <-
       sf_bbox_asp(bbox = bbox, orientation = TRUE)
   } else {
-    orientation <- match.arg(orientation, c("portrait", "landscape", "square"), several.ok = TRUE)
+    orientation <-
+      match.arg(
+        orientation,
+        c("portrait", "landscape", "square"),
+        several.ok = TRUE
+        )
   }
 
   if (is.data.frame(paper)) {

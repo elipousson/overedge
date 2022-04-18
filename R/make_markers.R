@@ -53,7 +53,7 @@ make_markers <- function(data,
         long = "lon",
         lat = "lat",
         quiet = rlang::is_interactive()
-        )
+      )
 
     data <- df_to_sf(data, coords = c("lon", "lat"), crs = crs)
   }
