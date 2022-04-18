@@ -50,29 +50,28 @@ without modification.}
 
 \item{style_id}{A style ID (required if style_url is NULL).}
 
-\item{username}{A Mapbox username (required if style_url is NULL).}
+\item{username}{A Mapbox username (required if \code{style_url = NULL}).}
 
 \item{basemap}{If FALSE, create a standalone layer; if \code{TRUE}, the layer is
 precededed by \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} to allow use as a basemap, Default: \code{TRUE}}
 
-\item{scale}{ratio to scale the output image; `scale = 1` will return the
+\item{scale}{ratio to scale the output image; \code{scale = 1} will return the
 largest possible image. defaults to 0.5}
 
-\item{scaling_factor}{The scaling factor of the tiles; either \code{"1x"}
-(the default) or \code{"2x"}}
+\item{scaling_factor}{The scaling factor of the tiles; either \verb{"1x"`` (the default) or }"2x"`}
 
 \item{attribution}{Controls whether there is attribution on the image.
-Defaults to `TRUE`. Note: If attribution=false, the watermarked attribution
-is removed from the image. You still have a legal responsibility to
-attribute maps that use OpenStreetMap data, which includes most maps from
-Mapbox. If you specify attribution=false, you are legally required to
-include proper attribution elsewhere on the webpage or document.}
+Defaults to \code{TRUE}. If \code{FALSE}, the watermarked attribution is removed from
+the image. You still have a legal responsibility to attribute maps that use
+OpenStreetMap data, which includes most maps from Mapbox. If you specify
+\code{attribution = FALSE}, you are legally required to include proper
+attribution elsewhere on the webpage or document.}
 
 \item{logo}{Controls whether there is a Mapbox logo on the image. Defaults to
-`TRUE`.}
+\code{TRUE}.}
 
-\item{access_token}{A Mapbox access token; can be set with
-\code{mb_access_token()}.}
+\item{access_token}{A Mapbox access token; which can be set with
+\link[mapboxapi]{mb_access_token}.}
 
 \item{neatline}{If \code{TRUE}, add a neatline matching the provided data, Default:
 \code{TRUE}}

@@ -18,8 +18,8 @@ ggsave_ext(
   path = NULL,
   paper = NULL,
   orientation = "portrait",
-  width,
-  height,
+  width = NULL,
+  height = NULL,
   units = "in",
   scale = 1,
   dpi = 300,
@@ -34,7 +34,10 @@ ggsave_ext(
 
 ggsave_social(
   plot = ggplot2::last_plot(),
-  paper = "Instagram post",
+  image = "Instagram post",
+  platform = NULL,
+  format = NULL,
+  orientation = NULL,
   name = NULL,
   filename = NULL,
   filetype = "jpeg",
@@ -122,6 +125,13 @@ is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
 
 \item{...}{Additional parameters passed to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} or
 \code{\link[gt:gtsave]{gt::gtsave()}}.}
+
+\item{image}{Image size name, Default: \code{NULL}}
+
+\item{platform}{Social media platform, "Instagram", "Facebook", or "Twitter",
+Default: \code{NULL}}
+
+\item{format}{Image format, "post", "story", or "cover", Default: \code{NULL}}
 
 \item{gt_object}{A gt table to save to file.}
 }

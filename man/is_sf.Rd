@@ -66,7 +66,5 @@ What is the class or spatial attributes of this feature?
 \item \link{is_raster}: is x a \code{Raster} class object?
 \item \link{is_sp}: is x a \code{Spatial} class object of any type?
 \item \link{is_same_crs}: do x and y have the same coordinate reference system?
-\item \link{is_same_dist}: do the bbox for x and bbox for y have the same x, y, or diagonal distance?
-\item \link{is_same_area}: do x and y have the same area?
 }
 }

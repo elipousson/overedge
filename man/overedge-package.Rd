@@ -8,8 +8,17 @@
 \description{
 Assorted functions to support data wrangling and visualization for map making with a focus on the ggplot2 and sf packages.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/elipousson/overedge}
+  \item \url{https://elipousson.github.io/overedge/}
+  \item Report bugs at \url{https://github.com/elipousson/overedge/issues}
+}
+
+}
 \author{
-\strong{Maintainer}: Eli Pousson \email{eli.pousson@gmail.com} (\href{https://orcid.org/0000-0001-8280-1706}{ORCID})
+\strong{Maintainer}: Eli Pousson \email{eli.pousson@gmail.com} (\href{https://orcid.org/0000-0001-8280-1706}{ORCID}) [copyright holder]
 
 }
 \keyword{internal}

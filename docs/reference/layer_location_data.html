@@ -50,7 +50,17 @@ set based on the name_col but values passed to mapping take precedence."><!-- ma
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -58,7 +68,7 @@ set based on the name_col but values passed to mapping take precedence."><!-- ma
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Layer location data into a ggplot2 map</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/layer_location_data.R" class="external-link"><code>R/layer_location_data.R</code></a></small>
       <div class="d-none name"><code>layer_location_data.Rd</code></div>
     </div>
 
@@ -83,6 +93,7 @@ set based on the name_col but values passed to mapping take precedence.</p>
   package <span class="op">=</span> <span class="cn">NULL</span>,
   filetype <span class="op">=</span> <span class="cn">NULL</span>,
   fn <span class="op">=</span> <span class="cn">NULL</span>,
+  geom_fn <span class="op">=</span> <span class="cn">NULL</span>,
   crop <span class="op">=</span> <span class="cn">TRUE</span>,
   trim <span class="op">=</span> <span class="cn">FALSE</span>,
   from_crs <span class="op">=</span> <span class="cn">NULL</span>,
@@ -134,6 +145,10 @@ without modification.</p></dd>
 provided for extdata and cached data.</p></dd>
 <dt>fn</dt>
 <dd><p>Function to apply to data before returning.</p></dd>
+<dt>geom_fn</dt>
+<dd><p>ggplot2 geom or custom function using lambda syntax. Use for
+passing custom mapping functions to layer_location_data beyond the
+supported geom options.</p></dd>
 <dt>crop</dt>
 <dd><p>If <code>TRUE</code>, data is cropped to location or bounding box
 <a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">sf::st_crop</a> adjusted by the <code>dist</code>, <code>diag_ratio</code>, and <code>asp</code> parameters

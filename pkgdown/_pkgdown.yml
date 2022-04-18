@@ -35,9 +35,10 @@ reference:
   - '`st_clip`'
   - '`st_misc`'
   - '`st_cast_ext`'
-- title: Create new or work with existing simple feature objects
+- title: Create or modify simple feature objects
   contents:
-  - starts_with("make_location")
+  - '`make_location_data_list`'
+  - '`make_location_grid`'
   - starts_with("location_filter")
   - '`get_coords`'
   - '`get_dist`'
@@ -50,6 +51,7 @@ reference:
   contents:
   - starts_with("layer_")
   - starts_with("geom_")
+  - '`make_location_map`'
 - title: Working with ggplot2 themes, labels, and file export
   contents:
   - '`is_gg`'
@@ -64,6 +66,7 @@ reference:
   - starts_with("is_dist")
   - starts_with("convert_dist")
   - '`get_paper`'
+  - '`get_social_image`'
   - '`get_margin`'
   - '`get_scale`'
   - '`get_asp`'

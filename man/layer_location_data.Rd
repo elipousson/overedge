@@ -17,6 +17,7 @@ layer_location_data(
   package = NULL,
   filetype = NULL,
   fn = NULL,
+  geom_fn = NULL,
   crop = TRUE,
   trim = FALSE,
   from_crs = NULL,
@@ -65,6 +66,10 @@ without modification.}
 provided for extdata and cached data.}
 
 \item{fn}{Function to apply to data before returning.}
+
+\item{geom_fn}{ggplot2 geom or custom function using lambda syntax. Use for
+passing custom mapping functions to layer_location_data beyond the
+supported geom options.}
 
 \item{crop}{If \code{TRUE}, data is cropped to location or bounding box
 \link[sf:st_crop]{sf::st_crop} adjusted by the \code{dist}, \code{diag_ratio}, and \code{asp} parameters

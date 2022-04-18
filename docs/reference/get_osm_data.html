@@ -87,7 +87,7 @@ nodes_only parameters are not fully supported currently.</p>
   timeout <span class="op">=</span> <span class="fl">120</span>
 <span class="op">)</span>
 
-<span class="fu">get_osm_id</span><span class="op">(</span><span class="va">id</span>, type <span class="op">=</span> <span class="st">"way"</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, geometry <span class="op">=</span> <span class="cn">NULL</span>, osmdata <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu">get_osm_id</span><span class="op">(</span><span class="va">id</span>, type <span class="op">=</span> <span class="cn">NULL</span>, crs <span class="op">=</span> <span class="cn">NULL</span>, geometry <span class="op">=</span> <span class="cn">NULL</span>, osmdata <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="fu">get_osm_boundaries</span><span class="op">(</span>
   <span class="va">location</span>,
@@ -131,7 +131,7 @@ passed to the osmdata package are from a preset list extracted from
 <dd><p>Character vector of key-value pairs with keys and values
 enclosed in escape-formatted quotations (see examples).</p></dd>
 <dt>crs</dt>
-<dd><p>Coordinate reference system for output data; if NULL, the data
+<dd><p>Coordinate reference system for output data; if <code>NULL</code>, the data
 remains in the Open Street Map coordinate reference system 4326. Default:
 <code>NULL</code>.</p></dd>
 <dt>geometry</dt>
@@ -166,7 +166,7 @@ because the server may time out before all data are delivered.</p></dd>
 <dd><p>type of feature with id; "node", "way", or "relation"</p></dd>
 <dt>level</dt>
 <dd><p>administrative level (admin_level) of boundary to return;
-defaults to NULL. See <a href="https://wiki.openstreetmap.org/wiki/Key:admin_level" class="external-link">https://wiki.openstreetmap.org/wiki/Key:admin_level</a>
+defaults to <code>NULL</code>. See <a href="https://wiki.openstreetmap.org/wiki/Key:admin_level" class="external-link">https://wiki.openstreetmap.org/wiki/Key:admin_level</a>
 for more information. Only used for get_osm_boundaries.</p></dd>
 <dt>lang</dt>
 <dd><p>Language for boundary names to include in resulting data frame

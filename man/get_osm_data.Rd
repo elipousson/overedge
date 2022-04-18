@@ -23,7 +23,7 @@ get_osm_data(
   timeout = 120
 )
 
-get_osm_id(id, type = "way", crs = NULL, geometry = NULL, osmdata = FALSE)
+get_osm_id(id, type = NULL, crs = NULL, geometry = NULL, osmdata = FALSE)
 
 get_osm_boundaries(
   location,
@@ -64,7 +64,7 @@ passed to the osmdata package are from a preset list extracted from
 \item{features}{Character vector of key-value pairs with keys and values
 enclosed in escape-formatted quotations (see examples).}
 
-\item{crs}{Coordinate reference system for output data; if NULL, the data
+\item{crs}{Coordinate reference system for output data; if \code{NULL}, the data
 remains in the Open Street Map coordinate reference system 4326. Default:
 \code{NULL}.}
 
@@ -99,8 +99,8 @@ because the server may time out before all data are delivered.}
 \item{type}{type of feature with id; "node", "way", or "relation"}
 
 \item{level}{administrative level (admin_level) of boundary to return;
-defaults to NULL. See \url{https://wiki.openstreetmap.org/wiki/Key:admin_level}
-for more information. Only used for get_osm_boundaries.}
+defaults to \code{NULL}. See \url{https://wiki.openstreetmap.org/wiki/Key:admin_level}
+for more information. Only used for \link{get_osm_boundaries}.}
 
 \item{lang}{Language for boundary names to include in resulting data frame
 (e.g. "en" for English or "es" for Spanish). Default language names should

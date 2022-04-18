@@ -52,8 +52,9 @@ if \code{FALSE}, return logical indicator; defaults to \code{FALSE}}
 \itemize{
 \item \link{is_dist_units}: Is x a distance unit object?
 \item \link{is_diff_dist}: What is the difference between x and y distance?
-\item \link{is_same_dist}: Is x the same distance as y?
+\item \link{is_same_dist}: Is x the same distance as y? or does the bbox of x and bbox of y have the same x, y, or diagonal distance?
 \item \link{is_shorter}, is_longer: Is x shorter or longer than y?
+\item \link{is_same_area}: do x and y have the same area?
 }
 }
 \details{
