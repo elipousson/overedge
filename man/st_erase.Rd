@@ -10,15 +10,13 @@ st_erase(x, y, flip = FALSE, union = TRUE)
 st_trim(x, y, union = TRUE)
 }
 \arguments{
-\item{x}{sf object}
+\item{x, y}{sf objects}
 
-\item{y}{sf object}
+\item{flip}{If \code{TRUE}, use st_intersection; if \code{FALSE} use st_difference,
+Default: \code{FALSE}}
 
-\item{flip}{If TRUE, use st_intersection; if FALSE use st_difference,
-Default: FALSE}
-
-\item{union}{If TRUE, use st_combine and st_union on y before applying
-difference/intersection, Default: FALSE}
+\item{union}{If \code{TRUE}, use \link[sf:geos_combine]{sf::st_combine} and \link[sf:geos_combine]{sf::st_union} on y before
+applying difference/intersection, Default: \code{FALSE}}
 }
 \description{
 An extended version of \link[sf:geos_binary_ops]{sf::st_difference} that uses the flip parameter to

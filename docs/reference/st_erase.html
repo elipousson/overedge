@@ -50,7 +50,17 @@ object by default. st_trim is st_erase with flip set to TRUE."><!-- mathjax --><
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -58,7 +68,7 @@ object by default. st_trim is st_erase with flip set to TRUE."><!-- mathjax --><
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Erase an area of a simple feature object</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/st_erase.R" class="external-link"><code>R/st_erase.R</code></a></small>
       <div class="d-none name"><code>st_erase.Rd</code></div>
     </div>
 
@@ -77,16 +87,14 @@ object by default. st_trim is st_erase with flip set to <code>TRUE</code>.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>sf object</p></dd>
-<dt>y</dt>
-<dd><p>sf object</p></dd>
+    <dl><dt>x, y</dt>
+<dd><p>sf objects</p></dd>
 <dt>flip</dt>
-<dd><p>If TRUE, use st_intersection; if FALSE use st_difference,
-Default: FALSE</p></dd>
+<dd><p>If <code>TRUE</code>, use st_intersection; if <code>FALSE</code> use st_difference,
+Default: <code>FALSE</code></p></dd>
 <dt>union</dt>
-<dd><p>If TRUE, use st_combine and st_union on y before applying
-difference/intersection, Default: FALSE</p></dd>
+<dd><p>If <code>TRUE</code>, use <a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">sf::st_combine</a> and <a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">sf::st_union</a> on y before
+applying difference/intersection, Default: <code>FALSE</code></p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -98,7 +106,8 @@ difference/intersection, Default: FALSE</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
