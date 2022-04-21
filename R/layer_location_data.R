@@ -1,14 +1,35 @@
 #' Layer location data into a ggplot2 map
 #'
 #' Helper function to make a ggplot2 layer from data returned by
-#' `get_location_data`. For text geoms, the required aesthetic mapping is
+#' [get_location_data()]. For text geoms, the required aesthetic mapping is
 #' set based on the name_col but values passed to mapping take precedence.
 #'
-#' @param label label for area (appended to data as a prefix if data is a
-#'   string)
-#' @param geom ggplot2 geom to use, Default: 'sf'. Options include "sf"
-#'   (geom_sf), "icon" (layer_icon / geom_sf_icon), "text" (geom_sf_text), "label"
-#'   (geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".
+#' @details Supported geom function options:
+#'
+#' Options for the geom parameter from the overedge package include:
+#'
+#' - "icon" ([layer_icon]),
+#' - "mapbox" ([layer_mapbox]),
+#' - "markers" ([layer_markers]),
+#' - "numbers" ([layer_numbers])
+#'
+#' Options for the geom parameter from other packages include:
+#'
+#'   - "textsf" ([geomtextpath::geom_textsf])
+#'   - "labelsf" ([geomtextpath::geom_labelsf])
+#'   - "text_repel" ([ggrepel::geom_text_repel])
+#'   - "label_repel" ([ggrepel::geom_label_repel])
+#'   - "mark" ([birdseyeview::layer_show_mark])
+#'   - "location" ([birdseyeview::layer_show_location])
+#'   - "context" ([birdseyeview::layer_show_context])
+#'
+#' Alternatively, use the "geom_fn" parameter to pass a function that returns a
+#' ggplot2 layer to use instead of one of the preset geom functions.
+#'
+#' @param geom A character string indicating which ggplot2 geom to use, Default:
+#'   'sf'. Options include "sf" ([ggplot2::geom_sf]), "icon" ([layer_icon]),
+#'   "markers" ([layer_markers]), "text" ([ggplot2::geom_sf_text]), and "label"
+#'   ([ggplot2::geom_sf_label]). See details for a full list.
 #' @param geom_fn ggplot2 geom or custom function using lambda syntax. Use for
 #'   passing custom mapping functions to layer_location_data beyond the
 #'   supported geom options.
@@ -32,7 +53,6 @@
 layer_location_data <-
   function(mapping = NULL,
            data = NULL,
-           label = NULL,
            geom = "sf",
            location = NULL,
            dist = NULL,
@@ -49,12 +69,6 @@ layer_location_data <-
            crs = NULL,
            label_col = "name",
            ...) {
-
-    # FIXME: The use of label in this function is designed for use with batch loading
-    # but it is inconsistent with how other functions handle the "label" parameter
-    # if (is.character(data) && !is.null(label)) {
-    #  data <- paste0(collapse = "_", c(label, data))
-    # }
 
     data <-
       get_location_data(
@@ -86,7 +100,6 @@ layer_location_data <-
     text_geoms <- c("text", "label", "textsf", "labelsf", ggrepel_geoms)
     birdseyeview_geoms <- c("mark", "location", "context")
     overedge_geoms <- c("icon", "mapbox", "markers", "numbers")
-
 
     # Match geoms
     geom <- match.arg(
@@ -157,8 +170,5 @@ layer_location_data <-
       params$direction <- "both"
     }
 
-    layer <-
-      rlang::exec(geom, !!!params)
-
-    return(layer)
+    return(rlang::exec(geom, !!!params))
   }

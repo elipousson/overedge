@@ -7,7 +7,6 @@
 layer_location_data(
   mapping = NULL,
   data = NULL,
-  label = NULL,
   geom = "sf",
   location = NULL,
   dist = NULL,
@@ -36,12 +35,10 @@ plot. You must supply \code{mapping} if there is no plot mapping.}
 path. data can be the name of a data object or, if package and filetype are
 provided, a cached or external file.}
 
-\item{label}{label for area (appended to data as a prefix if data is a
-string)}
-
-\item{geom}{ggplot2 geom to use, Default: 'sf'. Options include "sf"
-(geom_sf), "icon" (layer_icon / geom_sf_icon), "text" (geom_sf_text), "label"
-(geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".}
+\item{geom}{A character string indicating which ggplot2 geom to use, Default:
+'sf'. Options include "sf" (\link[ggplot2:ggsf]{ggplot2::geom_sf}), "icon" (\link{layer_icon}),
+"markers" (\link{layer_markers}), "text" (\link[ggplot2:ggsf]{ggplot2::geom_sf_text}), and "label"
+(\link[ggplot2:ggsf]{ggplot2::geom_sf_label}). See details for a full list.}
 
 \item{location}{sf object. If multiple areas are provided, they are unioned
 into a single sf object using \link[sf:geos_combine]{sf::st_union}}
@@ -93,8 +90,33 @@ ggplot2 geom
 }
 \description{
 Helper function to make a ggplot2 layer from data returned by
-\code{get_location_data}. For text geoms, the required aesthetic mapping is
+\code{\link[=get_location_data]{get_location_data()}}. For text geoms, the required aesthetic mapping is
 set based on the name_col but values passed to mapping take precedence.
+}
+\details{
+Supported geom function options:
+
+Options for the geom parameter from the overedge package include:
+\itemize{
+\item "icon" (\link{layer_icon}),
+\item "mapbox" (\link{layer_mapbox}),
+\item "markers" (\link{layer_markers}),
+\item "numbers" (\link{layer_numbers})
+}
+
+Options for the geom parameter from other packages include:
+\itemize{
+\item "textsf" (\link[geomtextpath:geom_textsf]{geomtextpath::geom_textsf})
+\item "labelsf" (\link[geomtextpath:geom_textsf]{geomtextpath::geom_labelsf})
+\item "text_repel" (\link[ggrepel:geom_text_repel]{ggrepel::geom_text_repel})
+\item "label_repel" (\link[ggrepel:geom_text_repel]{ggrepel::geom_label_repel})
+\item "mark" (\link[birdseyeview:layer_show_mark]{birdseyeview::layer_show_mark})
+\item "location" (\link[birdseyeview:layer_show_location]{birdseyeview::layer_show_location})
+\item "context" (\link[birdseyeview:layer_show_context]{birdseyeview::layer_show_context})
+}
+
+Alternatively, use the "geom_fn" parameter to pass a function that returns a
+ggplot2 layer to use instead of one of the preset geom functions.
 }
 \seealso{
 \code{\link[ggplot2]{CoordSf}}
