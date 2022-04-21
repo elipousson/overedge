@@ -168,16 +168,17 @@ sort_features <- function(data,
     sort <- "dist"
   }
 
+
+  if (!rlang::has_name(data, sort)) {
+    cli::cli_warn("The provided value for {.field {'sort'}} ({.val {sort}}) is not found in the data.")
+  }
+
   by_group <- FALSE
 
   if (!is.null(col)) {
     data <- group_by_col(data, col = col)
     # FIXME: Is there a reason to allow grouping by column even if not numbering by group
     by_group <- TRUE
-  }
-
-  if (!rlang::has_name(data, sort)) {
-    cli::cli_warn("The provided value for {.field {'sort'}} ({.val {sort}}) is not found in the data.")
   }
 
   if (desc) {
