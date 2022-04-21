@@ -41,6 +41,8 @@ get_esri_data <- function(location = NULL,
                           ...) {
   is_pkg_installed(pkg = "esri2sf", repo = "yonghah/esri2sf")
 
+  meta <- esri2sf::esrimeta(url)
+
   if (!is.null(location)) {
     # Adjust bounding box
     bbox <- st_bbox_ext(
@@ -79,7 +81,6 @@ get_esri_data <- function(location = NULL,
       glue::glue("{name_col} = '{name}'")
     )
 
-    meta <- esri2sf::esrimeta(url)
 
     if (meta$type == "Table") {
       # Get Table (no geometry) with location name column
@@ -100,13 +101,21 @@ get_esri_data <- function(location = NULL,
       where <- "1=1"
     }
 
-    # Get FeatureServer with no bounding box
-    data <- esri2sf::esri2sf(
-      url = url,
-      where = where,
-      progress = TRUE,
-      ...
-    )
+    if (meta$type == "Table") {
+      # Get Table (no geometry)
+      data <- esri2sf::esri2df(
+        url = url,
+        progress = TRUE,
+        ...
+      )
+    } else {
+      # Get FeatureServer with no bounding box
+      data <- esri2sf::esri2sf(
+        url = url,
+        progress = TRUE,
+        ...
+      )
+    }
   }
 
   if (!is.null(coords_col)) {
