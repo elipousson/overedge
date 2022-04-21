@@ -80,9 +80,10 @@ without modification.}
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
 'portrait'.}
 
-\item{geom}{ggplot2 geom to use, Default: 'sf'. Options include "sf"
-(geom_sf), "icon" (layer_icon / geom_sf_icon), "text" (geom_sf_text), "label"
-(geom_sf_label), "textsf", "labelsf", "text_repel", and "label_repel".}
+\item{geom}{A character string indicating which ggplot2 geom to use, Default:
+'sf'. Options include "sf" (\link[ggplot2:ggsf]{ggplot2::geom_sf}), "icon" (\link{layer_icon}),
+"markers" (\link{layer_markers}), "text" (\link[ggplot2:ggsf]{ggplot2::geom_sf_text}), and "label"
+(\link[ggplot2:ggsf]{ggplot2::geom_sf_label}). See details for a full list.}
 
 \item{save}{If \code{TRUE}, save file with \link{ggsave_ext} or \link{ggsave_social},
 requires \code{basemap = TRUE} and filename is not NULL \emph{or} ... include a name
@@ -91,8 +92,9 @@ parameter. Default: FALSE}
 \item{name}{Plot name, used to create filename (if filename is \code{NULL}) using
 \code{\link[=make_filename]{make_filename()}}}
 
-\item{label}{label for area (appended to data as a prefix if data is a
-string)}
+\item{label}{Label to combine with name converted to snake case with
+\code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}. The label is designed to identify the area
+or other shared characteristics across multiple data files, maps, or plots.}
 
 \item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
 date/time prefix; defaults to \code{NULL}.}

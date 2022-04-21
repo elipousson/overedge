@@ -50,7 +50,17 @@ applied."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -58,7 +68,7 @@ applied."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Convert an object to a simple feature or bounding box object</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/as_sf.R" class="external-link"><code>R/as_sf.R</code></a></small>
       <div class="d-none name"><code>as_sf.Rd</code></div>
     </div>
 
@@ -84,7 +94,7 @@ applied.</p>
     <dl><dt>x</dt>
 <dd><p>A <code>sf</code>, <code>bbox</code>, <code>sfc</code>, <code>raster</code>, <code>sp</code>, or data frame object that can
 be converted into a simple feature or bounding box object. <code>as_bbox()</code> can
-also convert a vector with xmin, ymin, xmax, and ymax values. as_sf_list
+also convert a vector with xmin, ymin, xmax, and ymax values. <code>as_sf_list()</code>
 only supports sf objects or a data frames with a sf list column named
 "data" (typically created by using <code><a href="https://dplyr.tidyverse.org/reference/group_nest.html" class="external-link">dplyr::group_nest()</a></code> on an sf object.</p></dd>
 <dt>crs</dt>
