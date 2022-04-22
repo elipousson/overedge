@@ -113,6 +113,7 @@ Options for the geom parameter from other packages include:
 \item "mark" (\link[birdseyeview:layer_show_mark]{birdseyeview::layer_show_mark})
 \item "location" (\link[birdseyeview:layer_show_location]{birdseyeview::layer_show_location})
 \item "context" (\link[birdseyeview:layer_show_context]{birdseyeview::layer_show_context})
+\item "pattern" (\link[ggpattern:geom-docs]{ggpattern::geom_sf_pattern})
 }
 
 Alternatively, use the "geom_fn" parameter to pass a function that returns a

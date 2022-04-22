@@ -66,6 +66,7 @@ Suggests:
     naniar,
     patchwork,
     scales,
-    paletteer
+    paletteer,
+    ggpattern
 Config/testthat/edition: 3
 VignetteBuilder: knitr

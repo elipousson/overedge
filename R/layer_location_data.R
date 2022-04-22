@@ -22,6 +22,7 @@
 #'   - "mark" ([birdseyeview::layer_show_mark])
 #'   - "location" ([birdseyeview::layer_show_location])
 #'   - "context" ([birdseyeview::layer_show_context])
+#'   - "pattern" ([ggpattern::geom_sf_pattern])
 #'
 #' Alternatively, use the "geom_fn" parameter to pass a function that returns a
 #' ggplot2 layer to use instead of one of the preset geom functions.
@@ -100,6 +101,7 @@ layer_location_data <-
     text_geoms <- c("text", "label", "textsf", "labelsf", ggrepel_geoms)
     birdseyeview_geoms <- c("mark", "location", "context")
     overedge_geoms <- c("icon", "mapbox", "markers", "numbers")
+    ggpattern_geoms <- c("pattern")
 
     # Match geoms
     geom <- match.arg(
@@ -144,7 +146,8 @@ layer_location_data <-
         "labelsf" = geomtextpath::geom_labelsf,
         "mark" = birdseyeview::layer_show_mark,
         "location" = birdseyeview::layer_show_location,
-        "context" = birdseyeview::layer_show_context
+        "context" = birdseyeview::layer_show_context,
+        "pattern" = ggpattern::geom_sf_pattern
       )
 
     init_params <- params

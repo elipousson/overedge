@@ -33,6 +33,10 @@ is_geom_pkg_installed <- function(geom) {
   if (geom %in% c("text_repel", "label_repel")) {
     return(is_pkg_installed("ggrepel"))
   }
+
+  if (geom %in% c("pattern")) {
+    return(is_pkg_installed("ggpattern", repo = "coolbutuseless/ggpattern"))
+  }
 }
 
 #' @noRd
