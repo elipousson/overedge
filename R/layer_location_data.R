@@ -97,27 +97,25 @@ layer_location_data <-
 
     data <- as_sf(data)
 
+    overedge_geoms <- c("icon", "mapbox", "markers", "numbers")
     ggrepel_geoms <- c("text_repel", "label_repel")
     text_geoms <- c("text", "label", "textsf", "labelsf", ggrepel_geoms)
     birdseyeview_geoms <- c("mark", "location", "context")
-    overedge_geoms <- c("icon", "mapbox", "markers", "numbers")
     ggpattern_geoms <- c("pattern")
 
     # Match geoms
     geom <- match.arg(
       geom,
-      c("sf", overedge_geoms, text_geoms, birdseyeview_geoms)
+      c("sf", overedge_geoms, text_geoms, birdseyeview_geoms, ggpattern_geoms)
     )
 
     is_geom_pkg_installed(geom)
-
-    is_ggrepel_geom <- geom %in% ggrepel_geoms
 
     # Assign aesthetics for text/label geoms
     if (geom %in% text_geoms) {
       mapping <- modify_mapping(mapping = mapping, label = label_col)
 
-      if (is_ggrepel_geom) {
+      if (geom %in% ggrepel_geoms) {
         mapping <- modify_mapping(mapping = mapping, data = data)
 
         params <- c(
@@ -169,7 +167,11 @@ layer_location_data <-
       params$nudge_y <- NULL
     }
 
-    if (!rlang::has_name(init_params, c("direction")) && is_ggrepel_geom) {
+    if (rlang::has_name(params, "geom") && (geom %in% overedge_geoms)) {
+      params$geom <- geom
+    }
+
+    if (!rlang::has_name(init_params, c("direction")) && (geom %in% ggrepel_geoms)) {
       params$direction <- "both"
     }
 
