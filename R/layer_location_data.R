@@ -105,7 +105,7 @@ layer_location_data <-
     ggrepel_geoms <- c("text_repel", "label_repel")
     text_geoms <- c("text", "label", "textsf", "labelsf", ggrepel_geoms)
     birdseyeview_geoms <- c("mark", "location", "context")
-    ggpattern_geoms <- c("pattern")
+    ggpattern_geoms <- "pattern"
 
     # Match geoms
     geom <- match.arg(
@@ -129,8 +129,10 @@ layer_location_data <-
       }
     }
 
+    geom_chr <- geom
+
     geom <-
-      switch(geom,
+      switch(geom_chr,
         "sf" = ggplot2::geom_sf,
         "icon" = layer_icon,
         "mapbox" = layer_mapbox,
@@ -167,11 +169,11 @@ layer_location_data <-
       params$nudge_y <- NULL
     }
 
-    if (geom %in% c("markers", "numbers")) {
-      params$geom <- geom
+    if (geom_chr %in% c("markers", "numbers")) {
+      params$geom <- geom_chr
     }
 
-    if (!rlang::has_name(init_params, c("direction")) && (geom %in% ggrepel_geoms)) {
+    if (!rlang::has_name(init_params, c("direction")) && (geom_chr %in% ggrepel_geoms)) {
       params$direction <- "both"
     }
 
