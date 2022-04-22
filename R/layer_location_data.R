@@ -97,6 +97,10 @@ layer_location_data <-
 
     data <- as_sf(data)
 
+    if (!is.null(geom_fn)) {
+      return(use_fn(data, geom_fn))
+    }
+
     overedge_geoms <- c("icon", "mapbox", "markers", "numbers")
     ggrepel_geoms <- c("text_repel", "label_repel")
     text_geoms <- c("text", "label", "textsf", "labelsf", ggrepel_geoms)
@@ -123,10 +127,6 @@ layer_location_data <-
           stat = "sf_coordinates"
         )
       }
-    }
-
-    if (!is.null(geom_fn)) {
-      return(use_fn(data, geom_fn))
     }
 
     geom <-
@@ -167,7 +167,7 @@ layer_location_data <-
       params$nudge_y <- NULL
     }
 
-    if (rlang::has_name(init_params, "geom") && (geom %in% overedge_geoms)) {
+    if (geom %in% c("markers", "numbers")) {
       params$geom <- geom
     }
 
