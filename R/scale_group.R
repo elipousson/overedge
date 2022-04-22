@@ -47,7 +47,7 @@ scale_group_data <-
         )
 
       discrete_scale <-
-        gplot2::scale_fill_discrete(
+        ggplot2::scale_fill_discrete(
           limits = names(group_pal),
           type = manual_scale
         )
