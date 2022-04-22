@@ -167,7 +167,7 @@ layer_location_data <-
       params$nudge_y <- NULL
     }
 
-    if (rlang::has_name(params, "geom") && (geom %in% overedge_geoms)) {
+    if (rlang::has_name(init_params, "geom") && (geom %in% overedge_geoms)) {
       params$geom <- geom
     }
 
