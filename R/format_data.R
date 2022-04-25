@@ -123,6 +123,18 @@ relocate_sf_col <- function(x, .after = dplyr::everything()) {
   )
 }
 
+
+#' @name rename_sf_col
+#' @rdname format_data
+#' @export
+#' @importFrom dplyr everything relocate all_of
+rename_sf_col <- function(x, sf_col = "geometry") {
+  dplyr::rename(
+    x,
+    "{sf_col}" := dplyr::all_of(attributes(x)$sf_column)
+  )
+}
+
 #' @name bind_address_col
 #' @rdname format_data
 #' @export
