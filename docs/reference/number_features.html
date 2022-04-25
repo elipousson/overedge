@@ -46,7 +46,17 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -54,7 +64,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Sort and number features by coordinates or distance</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/number_features.R" class="external-link"><code>R/number_features.R</code></a></small>
       <div class="d-none name"><code>number_features.Rd</code></div>
     </div>
 
@@ -72,6 +82,7 @@
   desc <span class="op">=</span> <span class="cn">FALSE</span>,
   crs <span class="op">=</span> <span class="cn">NULL</span>,
   num_style <span class="op">=</span> <span class="st">"arabic"</span>,
+  num_start <span class="op">=</span> <span class="fl">1</span>,
   suffix <span class="op">=</span> <span class="cn">NULL</span>,
   .id <span class="op">=</span> <span class="st">"number"</span>
 <span class="op">)</span>
@@ -100,6 +111,8 @@
 <dt>num_style</dt>
 <dd><p>Style of enumeration, either "arabic", "alph", "Alph",
 "roman", "Roman"</p></dd>
+<dt>num_start</dt>
+<dd><p>Starting number; defaults to 1.</p></dd>
 <dt>suffix</dt>
 <dd><p>Character to appended to "number" column. (e.g. "." for "1." or
 ":" for "1:"). Can also be a character vector with the same length as the

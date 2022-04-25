@@ -93,6 +93,7 @@ Other layer:
 \code{\link{layer_frame}()},
 \code{\link{layer_icon}()},
 \code{\link{layer_location_data}()},
+\code{\link{layer_markers}()},
 \code{\link{layer_mask}()},
 \code{\link{layer_scaled}()}
 }

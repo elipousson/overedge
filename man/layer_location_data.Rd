@@ -125,6 +125,7 @@ ggplot2 layer to use instead of one of the preset geom functions.
 Other layer: 
 \code{\link{layer_frame}()},
 \code{\link{layer_icon}()},
+\code{\link{layer_markers}()},
 \code{\link{layer_mask}()},
 \code{\link{layer_neatline}()},
 \code{\link{layer_scaled}()}

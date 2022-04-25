@@ -13,6 +13,7 @@ number_features(
   desc = FALSE,
   crs = NULL,
   num_style = "arabic",
+  num_start = 1,
   suffix = NULL,
   .id = "number"
 )
@@ -38,6 +39,8 @@ sort_features(
 
 \item{num_style}{Style of enumeration, either "arabic", "alph", "Alph",
 "roman", "Roman"}
+
+\item{num_start}{Starting number; defaults to 1.}
 
 \item{suffix}{Character to appended to "number" column. (e.g. "." for "1." or
 ":" for "1:"). Can also be a character vector with the same length as the

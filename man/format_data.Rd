@@ -4,6 +4,7 @@
 \alias{format_data}
 \alias{fix_date}
 \alias{relocate_sf_col}
+\alias{rename_sf_col}
 \alias{bind_address_col}
 \alias{bind_units_col}
 \title{Format data using common approaches}
@@ -21,6 +22,8 @@ format_data(
 fix_date(x)
 
 relocate_sf_col(x, .after = dplyr::everything())
+
+rename_sf_col(x, sf_col = "geometry")
 
 bind_address_col(x, city = NULL, county = NULL, state = NULL)
 

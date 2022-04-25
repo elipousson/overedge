@@ -3,7 +3,7 @@
 \name{layer_markers}
 \alias{layer_markers}
 \alias{layer_numbers}
-\title{Add a marker layer to a map with or without numbered markers}
+\title{Create a ggplot2 layer with map markers or numbered markers}
 \usage{
 layer_markers(
   data,
@@ -16,6 +16,7 @@ layer_markers(
   number = FALSE,
   num_by_group = FALSE,
   num_style = NULL,
+  num_start = 1,
   suffix = NULL,
   sort = "dist_xmin_ymax",
   desc = FALSE,
@@ -34,6 +35,7 @@ layer_numbers(
   sort = "dist_xmin_ymax",
   num_by_group = FALSE,
   num_style = NULL,
+  num_start = 1,
   suffix = NULL,
   desc = FALSE,
   fn = NULL,
@@ -50,6 +52,13 @@ layer_numbers(
 \item{data}{Data with markers, passed to data parameter of
 \code{\link[=get_location_data]{get_location_data()}}}
 
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or
+\code{\link[ggplot2:aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply \code{mapping} if there is no plot mapping.}
+
+\item{geom}{The geometric object to use display the data}
+
 \item{make}{If \code{TRUE}, pass data to \link{make_markers}.}
 
 \item{groupname_col}{Group column name, used to join group metadata if
@@ -63,11 +72,13 @@ with markers; Default: \code{NULL}}
 \item{number}{If \code{TRUE}, number markers using \code{\link[=layer_markers]{layer_markers()}} (not
 currently supported)}
 
-\item{num_by_group}{If TRUE, numbers are added by group based on
+\item{num_by_group}{If \code{TRUE}, numbers are added by group based on
 groupname_col.}
 
 \item{num_style}{Style of enumeration, either "arabic", "alph", "Alph",
 "roman", "Roman"}
+
+\item{num_start}{Starting number; defaults to 1.}
 
 \item{suffix}{Character to appended to "number" column. (e.g. "." for "1." or
 ":" for "1:"). Can also be a character vector with the same length as the
@@ -85,6 +96,12 @@ grouped; Default: \code{NULL}}
 \item{style}{Style of number markers to map; defaults to "roundrect".}
 
 \item{size}{Marker size, Default: 5}
+
+\item{label.size}{Size of label border, in mm.}
+
+\item{label.padding}{Amount of padding around label. Defaults to 0.25 lines.}
+
+\item{label.r}{Radius of rounded corners. Defaults to 0.15 lines.}
 }
 \value{
 ggplot2 layers
@@ -92,10 +109,6 @@ ggplot2 layers
 \description{
 If get is \code{TRUE}, groupname_col, group_meta, crs, and fn is all passed on to
 make_markers.
-}
-\details{
-The number parameter is not currently supported so the number_col parameter
-is not implemented.
 }
 \examples{
 \dontrun{
@@ -108,3 +121,13 @@ if (interactive()) {
 }
 }
 }
+\seealso{
+Other layer: 
+\code{\link{layer_frame}()},
+\code{\link{layer_icon}()},
+\code{\link{layer_location_data}()},
+\code{\link{layer_mask}()},
+\code{\link{layer_neatline}()},
+\code{\link{layer_scaled}()}
+}
+\concept{layer}

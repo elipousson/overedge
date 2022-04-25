@@ -12,7 +12,7 @@ make_markers."><!-- Inform modern browsers that this page supports both dark and
       "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/5/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
     );
   }
-</script><title>Add a marker layer to a map with or without numbered markers — layer_markers • overedge</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Add a marker layer to a map with or without numbered markers — layer_markers"><meta property="og:description" content="If get is TRUE, groupname_col, group_meta, crs, and fn is all passed on to
+</script><title>Create a ggplot2 layer with map markers or numbered markers — layer_markers • overedge</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create a ggplot2 layer with map markers or numbered markers — layer_markers"><meta property="og:description" content="If get is TRUE, groupname_col, group_meta, crs, and fn is all passed on to
 make_markers."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -48,15 +48,25 @@ make_markers."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Add a marker layer to a map with or without numbered markers</h1>
-      
+      <img src="" class="logo" alt=""><h1>Create a ggplot2 layer with map markers or numbered markers</h1>
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/layer_markers.R" class="external-link"><code>R/layer_markers.R</code></a></small>
       <div class="d-none name"><code>layer_markers.Rd</code></div>
     </div>
 
@@ -78,6 +88,7 @@ make_markers.</p>
   number <span class="op">=</span> <span class="cn">FALSE</span>,
   num_by_group <span class="op">=</span> <span class="cn">FALSE</span>,
   num_style <span class="op">=</span> <span class="cn">NULL</span>,
+  num_start <span class="op">=</span> <span class="fl">1</span>,
   suffix <span class="op">=</span> <span class="cn">NULL</span>,
   sort <span class="op">=</span> <span class="st">"dist_xmin_ymax"</span>,
   desc <span class="op">=</span> <span class="cn">FALSE</span>,
@@ -96,6 +107,7 @@ make_markers.</p>
   sort <span class="op">=</span> <span class="st">"dist_xmin_ymax"</span>,
   num_by_group <span class="op">=</span> <span class="cn">FALSE</span>,
   num_style <span class="op">=</span> <span class="cn">NULL</span>,
+  num_start <span class="op">=</span> <span class="fl">1</span>,
   suffix <span class="op">=</span> <span class="cn">NULL</span>,
   desc <span class="op">=</span> <span class="cn">FALSE</span>,
   fn <span class="op">=</span> <span class="cn">NULL</span>,
@@ -114,6 +126,13 @@ make_markers.</p>
     <dl><dt>data</dt>
 <dd><p>Data with markers, passed to data parameter of
 <code><a href="get_location_data.html">get_location_data()</a></code></p></dd>
+<dt>mapping</dt>
+<dd><p>Set of aesthetic mappings created by <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> or
+<code><a href="https://ggplot2.tidyverse.org/reference/aes_.html" class="external-link">aes_()</a></code>. If specified and <code>inherit.aes = TRUE</code> (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply <code>mapping</code> if there is no plot mapping.</p></dd>
+<dt>geom</dt>
+<dd><p>The geometric object to use display the data</p></dd>
 <dt>make</dt>
 <dd><p>If <code>TRUE</code>, pass data to <a href="make_markers.html">make_markers</a>.</p></dd>
 <dt>groupname_col</dt>
@@ -128,11 +147,13 @@ with markers; Default: <code>NULL</code></p></dd>
 <dd><p>If <code>TRUE</code>, number markers using <code>layer_markers()</code> (not
 currently supported)</p></dd>
 <dt>num_by_group</dt>
-<dd><p>If TRUE, numbers are added by group based on
+<dd><p>If <code>TRUE</code>, numbers are added by group based on
 groupname_col.</p></dd>
 <dt>num_style</dt>
 <dd><p>Style of enumeration, either "arabic", "alph", "Alph",
 "roman", "Roman"</p></dd>
+<dt>num_start</dt>
+<dd><p>Starting number; defaults to 1.</p></dd>
 <dt>suffix</dt>
 <dd><p>Character to appended to "number" column. (e.g. "." for "1." or
 ":" for "1:"). Can also be a character vector with the same length as the
@@ -150,15 +171,26 @@ grouped; Default: <code>NULL</code></p></dd>
 <dd><p>Style of number markers to map; defaults to "roundrect".</p></dd>
 <dt>size</dt>
 <dd><p>Marker size, Default: 5</p></dd>
+<dt>label.size</dt>
+<dd><p>Size of label border, in mm.</p></dd>
+<dt>label.padding</dt>
+<dd><p>Amount of padding around label. Defaults to 0.25 lines.</p></dd>
+<dt>label.r</dt>
+<dd><p>Radius of rounded corners. Defaults to 0.15 lines.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>ggplot2 layers</p>
     </div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The number parameter is not currently supported so the number_col parameter
-is not implemented.</p>
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other layer: 
+<code><a href="layer_frame.html">layer_frame</a>()</code>,
+<code><a href="layer_icon.html">layer_icon</a>()</code>,
+<code><a href="layer_location_data.html">layer_location_data</a>()</code>,
+<code><a href="layer_mask.html">layer_mask</a>()</code>,
+<code><a href="layer_neatline.html">layer_neatline</a>()</code>,
+<code><a href="layer_scaled.html">layer_scaled</a>()</code></p></div>
     </div>
 
     <div class="section level2">
