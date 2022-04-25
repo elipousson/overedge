@@ -1,11 +1,8 @@
 
-#' Add a marker layer to a map with or without numbered markers
+#' Create a ggplot2 layer with map markers or numbered markers
 #'
 #' If get is `TRUE`, groupname_col, group_meta, crs, and fn is all passed on to
 #' make_markers.
-#'
-#' The number parameter is not currently supported so the number_col parameter
-#' is not implemented.
 #'
 #' @inheritParams make_markers
 #' @param make If `TRUE`, pass data to [make_markers].
@@ -28,9 +25,9 @@
 #' }
 #' }
 #' @name layer_markers
+#' @family layer
 #' @md
 #' @export
-#' @importFrom ggplot2 facet_wrap
 layer_markers <- function(data,
                           mapping = NULL,
                           geom = "sf",
@@ -41,6 +38,7 @@ layer_markers <- function(data,
                           number = FALSE,
                           num_by_group = FALSE,
                           num_style = NULL,
+                          num_start = 1,
                           suffix = NULL,
                           sort = "dist_xmin_ymax",
                           desc = FALSE,
@@ -70,15 +68,14 @@ layer_markers <- function(data,
         sort = sort,
         desc = desc,
         num_style = num_style,
+        num_start = num_start,
         suffix = suffix
       )
-
-    number_col <- "number"
 
     mapping <-
       modify_mapping(
         mapping = mapping,
-        label = number_col
+        label = "number"
       )
   }
 
@@ -110,12 +107,13 @@ layer_markers <- function(data,
 #' @name layer_numbers
 #' @param style Style of number markers to map; defaults to "roundrect".
 #' @param size Marker size, Default: 5
-#' @param num_by_group If TRUE, numbers are added by group based on
+#' @param num_by_group If `TRUE`, numbers are added by group based on
 #'   groupname_col.
 #' @inheritParams number_features
+#' @inheritParams ggplot2::geom_sf_label
 #' @param ... Additional parameters passed to [layer_location_data()]
 #' @export
-#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes unit
 #' @importFrom rlang list2
 #' @importFrom purrr list_modify zap
 #' @importFrom utils modifyList
@@ -130,6 +128,7 @@ layer_numbers <- function(data,
                           sort = "dist_xmin_ymax",
                           num_by_group = FALSE,
                           num_style = NULL,
+                          num_start = 1,
                           suffix = NULL,
                           desc = FALSE,
                           fn = NULL,
@@ -152,7 +151,6 @@ layer_numbers <- function(data,
     data = data,
     mapping = mapping,
     number = TRUE,
-    label = number_col,
     geom = geom,
     sort = sort,
     num_style = num_style,

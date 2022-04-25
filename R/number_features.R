@@ -21,6 +21,7 @@
 #' @param data Marker data
 #' @param num_style Style of enumeration, either "arabic", "alph", "Alph",
 #'   "roman", "Roman"
+#' @param num_start Starting number; defaults to 1.
 #' @param suffix Character to appended to "number" column. (e.g. "." for "1." or
 #'   ":" for "1:"). Can also be a character vector with the same length as the
 #'   number column.
@@ -35,6 +36,7 @@ number_features <- function(data,
                             desc = FALSE,
                             crs = NULL,
                             num_style = "arabic",
+                            num_start = 1,
                             suffix = NULL,
                             .id = "number") {
   data <- has_same_name_col(data, col = .id)
@@ -54,7 +56,7 @@ number_features <- function(data,
   data <-
     dplyr::mutate(
       data,
-      "{.id}" := dplyr::row_number(),
+      "{.id}" := dplyr::row_number() + (num_start - 1),
       .before = dplyr::everything()
     )
 
