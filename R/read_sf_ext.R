@@ -131,10 +131,10 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     dplyr::case_when(
       stringr::str_detect(path, "\\.csv$") ~ "csv",
       stringr::str_detect(path, "\\.xlsx$|\\.xls$") ~ "excel",
-      TRUE ~ "other"
+      TRUE ~ "spatial_data"
     )
 
-  if (path_type != "other") {
+  if (path_type != "spatial_data") {
     data <-
       switch(path_type,
         "csv" = read_sf_csv(path = path, bbox = bbox, ...),
@@ -228,9 +228,7 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
     wkt_filter = params$wkt_filter
   )
 
-  if (!is.null(bbox)) {
-    data <- bbox_filter(data, bbox = bbox)
-  }
+  data <- bbox_filter(data, bbox = bbox)
 
   # FIXME: This should be documented and maybe should be the default but optional
   data <- sf::st_zm(data)
@@ -260,9 +258,7 @@ read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALS
 
   data <- df_to_sf(data, coords = coords)
 
-  if (!is.null(bbox)) {
-    data <- bbox_filter(data, bbox = bbox)
-  }
+  data <- bbox_filter(data, bbox = bbox)
 
   return(data)
 }
@@ -298,9 +294,7 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
 
   data <- df_to_sf(data, coords = coords)
 
-  if (!is.null(bbox)) {
-    data <- bbox_filter(data, bbox = bbox)
-  }
+  data <- bbox_filter(data, bbox = bbox)
 
   return(data)
 }
@@ -315,9 +309,7 @@ read_sf_csv <- function(path, bbox = NULL, coords = c("lon", "lat"), ...) {
 
   data <- df_to_sf(data, coords = coords)
 
-  if (!is.null(bbox)) {
-    data <- bbox_filter(data, bbox = bbox)
-  }
+  data <- bbox_filter(data, bbox = bbox)
 
   return(data)
 }

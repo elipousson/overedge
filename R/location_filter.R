@@ -4,6 +4,10 @@
 #' @noRd
 #' @importFrom sf st_crop st_filter
 bbox_filter <- function(data, bbox = NULL, join = NULL, crop = TRUE) {
+  if (is.null(bbox)) {
+    return(data)
+  }
+
   bbox <- st_transform_ext(x = bbox, crs = data)
 
   if (crop) {
@@ -26,6 +30,10 @@ bbox_filter <- function(data, bbox = NULL, join = NULL, crop = TRUE) {
 #' @importFrom cli cli_warn
 #' @importFrom sf st_filter
 sf_filter <- function(data, location, join = NULL, trim = FALSE) {
+  if (is.null(location)) {
+    return(data)
+  }
+
   location <- st_transform_ext(x = location, crs = data)
 
   if (is_point(location) || is_multipoint(location)) {
