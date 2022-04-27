@@ -55,6 +55,11 @@ get_esri_data <- function(location = NULL,
 
     if (!is.null(coords_col)) {
       # Get Table (no geometry) by filtering coordinate columns with bbox
+
+      if (!is.null(where)) {
+        where <- paste0("(", where, ")")
+      }
+
       where <- c(
         where,
         sf_bbox_to_lonlat_query(bbox = bbox, coords = coords_col)
