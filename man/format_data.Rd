@@ -61,7 +61,7 @@ This function can apply the following common data cleaning tasks:
 \details{
 \itemize{
 \item Applies \link[stringr:str_trim]{stringr::str_squish} and \link[stringr:str_trim]{stringr::str_trim} to all character columns
-\item Optionally replaces all character values of "" with NA values
+\item Optionally replaces all character values of "" with \code{NA} values
 \item Optionally corrects UNIX formatted dates with 1970-01-01 origins
 \item Optionally renames variables by passing a named list of variables
 }
