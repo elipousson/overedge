@@ -104,7 +104,7 @@ fix_date <- function(x) {
     x,
     dplyr::across(
       dplyr::contains("date"),
-      ~ dplyr::if_else(is.numeric(.x), as.POSIXct(.x / 1000, origin = "1970-01-01"), .x)
+      ~ dplyr::if_else(all(is.numeric(.x)), as.POSIXct(.x / 1000, origin = "1970-01-01"), .x)
     )
   )
 }
