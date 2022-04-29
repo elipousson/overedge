@@ -75,7 +75,7 @@ get_paper <- function(paper = "letter",
   } else if (!is.null(standard)) {
     paper <- get_paper_standard(standard = standard, series = series, size = size)
   } else {
-    paper <- get_paper_dims(width = width, height = height)
+    paper <- get_paper_dims(width = width, height = height, units = units)
   }
 
   paper_orientation <- unique(paper$orientation)
