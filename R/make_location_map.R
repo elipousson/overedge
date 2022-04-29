@@ -10,6 +10,9 @@
 #' @inheritParams st_bbox_ext
 #' @inheritParams layer_location_data
 #' @inheritParams ggsave_ext
+#' @param bg_layer,fg_layer A ggplot2 layer or a list of ggproto objects (e.g.
+#'   scales, labels, etc.) to add to the background or foreground of the primary
+#'   map layer defined by `"geom"` and other parameters.
 #' @param ... Additional parameters passed to [layer_location_data].
 #' @rdname make_location_map
 #' @export
@@ -23,8 +26,8 @@ make_location_map <- function(location,
                               orientation = NULL,
                               geom = "sf",
                               basemap = TRUE,
-                              below = NULL,
-                              above = NULL,
+                              bg_layer = NULL,
+                              fg_layer = NULL,
                               save = FALSE,
                               name = NULL,
                               label = NULL,
@@ -51,22 +54,15 @@ make_location_map <- function(location,
     location <- NULL
   }
 
-  if (!is.null(below) && is.list(below) && check_class(below[[1]], "ggproto")) {
-    below_layer <- below
-  } else {
-    below_layer <- NULL
-  }
+  stopifnot(
+    is.null(bg_layer) || is.list(bg_layer) || is_gg_layer(bg_layer),
+    is.null(fg_layer) || is.list(fg_layer) || is_gg_layer(fg_layer)
 
-
-  if (!is.null(above) && is.list(above) && check_class(above[[1]], "ggproto")) {
-    above_layer <- above
-  } else {
-    above_layer <- NULL
-  }
+  )
 
   map_layer <-
     list(
-      below_layer,
+      bg_layer,
       layer_location_data(
         data = data,
         location = location,
@@ -77,7 +73,7 @@ make_location_map <- function(location,
         geom = geom,
         ...
       ),
-      above_layer
+      fg_layer
     )
 
   if (basemap) {
