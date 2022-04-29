@@ -11,7 +11,9 @@ make_location_map(
   diag_ratio = NULL,
   unit = NULL,
   asp = NULL,
-  paper = NULL,
+  data = NULL,
+  crs = NULL,
+  paper = "Letter",
   orientation = NULL,
   geom = "sf",
   basemap = TRUE,
@@ -75,6 +77,12 @@ to units matching GDAL units for x; defaults to "meter"}
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
+\item{data}{sf object including data in area. data may also be a url or file
+path. data can be the name of a data object or, if package and filetype are
+provided, a cached or external file.}
+
+\item{crs}{Coordinate reference system of bounding box to return}
+
 \item{paper}{Paper, Default: 'letter'.}
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
@@ -122,8 +130,6 @@ working directory.}
 "print" (300), or "screen" (72). Applies only to raster output types.}
 
 \item{...}{Additional parameters passed to \link{layer_location_data}.}
-
-\item{crs}{Coordinate reference system of bounding box to return}
 
 \item{image}{Image size name, Default: \code{NULL}}
 
