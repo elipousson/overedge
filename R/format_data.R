@@ -3,7 +3,7 @@
 #' This function can apply the following common data cleaning tasks:
 #'
 #' - Applies [stringr::str_squish] and [stringr::str_trim] to all character columns
-#' - Optionally replaces all character values of "" with `NA` values
+#' - Optionally replaces all character values of "" with NA values
 #' - Optionally corrects UNIX formatted dates with 1970-01-01 origins
 #' - Optionally renames variables by passing a named list of variables
 #'
@@ -98,13 +98,13 @@ format_data <- function(x,
 #' @name format_data
 #' @rdname format_data
 #' @export
-#' @importFrom dplyr mutate across contains if_else
+#' @importFrom dplyr mutate across contains
 fix_date <- function(x) {
   dplyr::mutate(
     x,
     dplyr::across(
       dplyr::contains("date"),
-      ~ dplyr::if_else(is.numeric(.x), as.POSIXct(.x / 1000, origin = "1970-01-01"), .x)
+      ~ as.POSIXct(.x / 1000, origin = "1970-01-01")
     )
   )
 }
