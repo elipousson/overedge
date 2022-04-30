@@ -11,12 +11,14 @@ make_location_map(
   diag_ratio = NULL,
   unit = NULL,
   asp = NULL,
-  paper = NULL,
+  data = NULL,
+  crs = NULL,
+  paper = "Letter",
   orientation = NULL,
   geom = "sf",
   basemap = TRUE,
-  below = NULL,
-  above = NULL,
+  bg_layer = NULL,
+  fg_layer = NULL,
   save = FALSE,
   name = NULL,
   label = NULL,
@@ -75,6 +77,12 @@ to units matching GDAL units for x; defaults to "meter"}
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
+\item{data}{sf object including data in area. data may also be a url or file
+path. data can be the name of a data object or, if package and filetype are
+provided, a cached or external file.}
+
+\item{crs}{Coordinate reference system of bounding box to return}
+
 \item{paper}{Paper, Default: 'letter'.}
 
 \item{orientation}{Orientation "portrait", "landscape", or "square", Default:
@@ -84,6 +92,10 @@ without modification.}
 'sf'. Options include "sf" (\link[ggplot2:ggsf]{ggplot2::geom_sf}), "icon" (\link{layer_icon}),
 "markers" (\link{layer_markers}), "text" (\link[ggplot2:ggsf]{ggplot2::geom_sf_text}), and "label"
 (\link[ggplot2:ggsf]{ggplot2::geom_sf_label}). See details for a full list.}
+
+\item{bg_layer, fg_layer}{A ggplot2 layer or a list of ggproto objects (e.g.
+scales, labels, etc.) to add to the background or foreground of the primary
+map layer defined by \code{"geom"} and other parameters.}
 
 \item{save}{If \code{TRUE}, save file with \link{ggsave_ext} or \link{ggsave_social},
 requires \code{basemap = TRUE} and filename is not NULL \emph{or} ... include a name
@@ -118,8 +130,6 @@ working directory.}
 "print" (300), or "screen" (72). Applies only to raster output types.}
 
 \item{...}{Additional parameters passed to \link{layer_location_data}.}
-
-\item{crs}{Coordinate reference system of bounding box to return}
 
 \item{image}{Image size name, Default: \code{NULL}}
 

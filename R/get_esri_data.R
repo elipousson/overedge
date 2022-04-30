@@ -55,10 +55,16 @@ get_esri_data <- function(location = NULL,
 
     if (!is.null(coords_col)) {
       # Get Table (no geometry) by filtering coordinate columns with bbox
+
+      if (!is.null(where)) {
+        where <- paste0("(", where, ")")
+      }
+
       where <- c(
         where,
         sf_bbox_to_lonlat_query(bbox = bbox, coords = coords_col)
       )
+
       data <- esri2sf::esri2df(
         url = url,
         where = paste(where[!is.na(where)], collapse = " AND "),
@@ -120,7 +126,7 @@ get_esri_data <- function(location = NULL,
 
   if (!is.null(coords_col)) {
     # Convert Table to sf object if coordinate columns exist
-    data <- df_to_sf(data, coords = coord_col)
+    data <- df_to_sf(data, coords = coords_col)
   }
 
   data <- janitor::clean_names(data, "snake")
