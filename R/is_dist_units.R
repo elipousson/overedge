@@ -123,13 +123,12 @@ get_dist_units <- function(x, null.ok = TRUE) {
     return(sf::st_crs(x)$units_gdal)
   }
 
-  if (is_units(x) && (x %in% dist_unit_options)) {
-    # FIXME: This approach does not work for area units
-    return(as.character(units(x)[["numerator"]]))
+  if (is_units(x) && (as.character(units(x)[["numerator"]]) %in% dist_unit_options) && !(as.character(units(x)) %in% area_unit_options)) {
+      return(as.character(units(x)[["numerator"]]))
   }
 
-  if (is_units(x) && (x %in% area_unit_options)) {
-    return(as.character(units(x)))
+  if (is_units(x)) {
+    as.character(units(x))
   }
 
   if (is.character(x)) {
@@ -163,6 +162,8 @@ as_dist_units <- function(x, units = NULL, null.ok = FALSE) {
 
 #' @name is_diff_area
 #' @rdname  is_dist_units
+#' @param union If `TRUE`, union objects before comparing area with
+#'   [is_diff_area()] or [is_same_area()], defaults to `TRUE`.
 #' @export
 #' @importFrom sf st_union st_area
 is_diff_area <- function(x, y, units = NULL, union = TRUE) {
