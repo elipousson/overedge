@@ -16,6 +16,12 @@
 #'   scales, labels, etc.) to add to the background or foreground of the primary
 #'   map layer defined by `"geom"` and other parameters.
 #' @param ... Additional parameters passed to [layer_location_data].
+#'
+#' @details Using make_image_map:
+#'
+#' [make_image_map] wraps [read_sf_exif] and [make_location_map]. It is designed for
+#' making simple maps of photos in combination with reference tables.
+#'
 #' @rdname make_location_map
 #' @export
 #' @importFrom ggplot2 ggplot
@@ -186,4 +192,98 @@ make_social_map <- function(location,
   }
 
   return(map_layer)
+}
+
+#' @name make_image_map
+#' @rdname make_location_map
+#' @inheritParams layer_markers
+#' @export
+make_image_map <- function(image_path,
+                           location = NULL,
+                           dist = NULL,
+                           diag_ratio = NULL,
+                           unit = NULL,
+                           asp = NULL,
+                           data = NULL,
+                           crs = 3857,
+                           paper = "Letter",
+                           orientation = NULL,
+                           geom = "mapbox",
+                           style_url = NULL,
+                           basemap = TRUE,
+                           bg_layer = NULL,
+                           fg_layer = NULL,
+                           save = FALSE,
+                           name = NULL,
+                           label = NULL,
+                           prefix = NULL,
+                           postfix = NULL,
+                           filename = NULL,
+                           device = NULL,
+                           path = NULL,
+                           dpi = 300,
+                           image_geom = "label",
+                           groupname_col = NULL,
+                           group_meta = NULL,
+                           number = FALSE,
+                           num_by_group = FALSE,
+                           num_style = NULL,
+                           num_start = 1,
+                           suffix = NULL,
+                           sort = "dist_xmin_ymax",
+                           desc = FALSE,
+                           ...) {
+  images <-
+    read_sf_exif(
+      path = image_path
+    )
+
+  if (is.null(location)) {
+    location <-
+      st_bbox_ext(
+        sf::st_union(images),
+        dist = dist,
+        diag_ratio = diag_ratio,
+        unit = unit,
+        asp = asp,
+        crs = crs
+      )
+  }
+
+  fg_layer <-
+    list(
+      fg_layer,
+      layer_markers(
+        data = images,
+        geom = image_geom,
+        crs = crs,
+        groupname_col = groupname_col,
+        group_meta = group_meta,
+        number = number,
+        num_by_group = num_by_group,
+        num_style = num_style,
+        num_start = num_start,
+        suffix = suffix,
+        sort = sort,
+        desc = desc,
+        ...
+      )
+    )
+
+  make_location_map(
+    location = location,
+    geom = geom,
+    bg_layer = bg_layer,
+    fg_layer = fg_layer,
+    save = save,
+    name = name,
+    label = label,
+    prefix = prefix,
+    postfix = postfix,
+    filename = filename,
+    device = device,
+    path = path,
+    dpi = dpi,
+    style_url = style_url
+  )
 }

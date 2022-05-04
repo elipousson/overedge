@@ -3,6 +3,7 @@
 \name{make_location_map}
 \alias{make_location_map}
 \alias{make_social_map}
+\alias{make_image_map}
 \title{Make a ggplot map using layer_location_data}
 \usage{
 make_location_map(
@@ -53,6 +54,44 @@ make_social_map(
   path = NULL,
   filetype = "jpeg",
   dpi = 72,
+  ...
+)
+
+make_image_map(
+  image_path,
+  location = NULL,
+  dist = NULL,
+  diag_ratio = NULL,
+  unit = NULL,
+  asp = NULL,
+  data = NULL,
+  crs = 3857,
+  paper = "Letter",
+  orientation = NULL,
+  geom = "mapbox",
+  style_url = NULL,
+  basemap = TRUE,
+  bg_layer = NULL,
+  fg_layer = NULL,
+  save = FALSE,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  device = NULL,
+  path = NULL,
+  dpi = 300,
+  image_geom = "label",
+  groupname_col = NULL,
+  group_meta = NULL,
+  number = FALSE,
+  num_by_group = FALSE,
+  num_style = NULL,
+  num_start = 1,
+  suffix = NULL,
+  sort = "dist_xmin_ymax",
+  desc = FALSE,
   ...
 )
 }
@@ -139,8 +178,39 @@ Default: \code{NULL}}
 
 \item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file type must be
 provided for extdata and cached data.}
+
+\item{groupname_col}{Group column name, used to join group metadata if
+group_meta is a non-spatial data frame; Default: \code{NULL}}
+
+\item{group_meta}{Group metadata as a data frame or sf object that intersect
+with markers; Default: \code{NULL}}
+
+\item{number}{If \code{TRUE}, number markers using \code{\link[=layer_markers]{layer_markers()}} (not
+currently supported)}
+
+\item{num_by_group}{If \code{TRUE}, numbers are added by group based on
+groupname_col.}
+
+\item{num_style}{Style of enumeration, either "arabic", "alph", "Alph",
+"roman", "Roman"}
+
+\item{num_start}{Starting number; defaults to 1.}
+
+\item{suffix}{Character to appended to "number" column. (e.g. "." for "1." or
+":" for "1:"). Can also be a character vector with the same length as the
+number column.}
+
+\item{sort}{Sort column name, Default: "dist_xmin_ymax".}
+
+\item{desc}{If \code{TRUE}, sort descending; default \code{FALSE}.}
 }
 \description{
 Location is used as the data parameter of layer_location_data so this
 function is primarily appropriate for the layer_mapbox (\code{geom = "mapbox"}).
+}
+\details{
+Using make_image_map:
+
+\link{make_image_map} wraps \link{read_sf_exif} and \link{make_location_map}. It is designed for
+making simple maps of photos in combination with reference tables.
 }
