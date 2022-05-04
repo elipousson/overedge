@@ -3,8 +3,8 @@
 \name{write_sf_ext}
 \alias{write_sf_ext}
 \alias{write_sf_cache}
-\alias{write_sf_gsheet}
 \alias{write_sf_gist}
+\alias{write_sf_gsheet}
 \title{Write or cache a simple feature object to a file}
 \usage{
 write_sf_ext(
@@ -32,18 +32,6 @@ write_sf_cache(
   overwrite = FALSE
 )
 
-write_sf_gsheet(
-  data,
-  name = NULL,
-  label = NULL,
-  prefix = NULL,
-  postfix = NULL,
-  filename = NULL,
-  sheet = 1,
-  ask = FALSE,
-  key = NULL
-)
-
 write_sf_gist(
   data,
   name = NULL,
@@ -56,6 +44,18 @@ write_sf_gist(
   public = TRUE,
   browse = FALSE,
   token = Sys.getenv("GITHUB_PAT")
+)
+
+write_sf_gsheet(
+  data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  sheet = 1,
+  ask = FALSE,
+  key = NULL
 )
 }
 \arguments{
@@ -94,16 +94,6 @@ cached files that use the same file name.}
 \code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL. (only used
 for write_sf_cache; default is used when cache = TRUE for write_sf_ext)}
 
-\item{sheet}{Sheet to write into, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number.}
-
-\item{ask}{If \code{TRUE}, the user is prompted to make revisions to the created
-Google Sheet. When user responds to the prompt, the date is read back into
-the environment using \link{read_sf_gsheet} and joined to the provided data with
-the column name provided to key. Defaults to \code{FALSE}.}
-
-\item{key}{If ask is \code{TRUE}, a key is required to join the sheet data to the
-provided data.}
-
 \item{description}{(character) Brief description of gist (optional)}
 
 \item{public}{(logical) Whether gist is public (default: TRUE)}
@@ -113,6 +103,16 @@ provided data.}
 
 \item{token}{A personal access token on GitHub with permission to create
 gists; defaults to Sys.getenv("GITHUB_PAT")}
+
+\item{sheet}{Sheet to write into, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number.}
+
+\item{ask}{If \code{TRUE}, the user is prompted to make revisions to the created
+Google Sheet. When user responds to the prompt, the date is read back into
+the environment using \link{read_sf_gsheet} and joined to the provided data with
+the column name provided to key. Defaults to \code{FALSE}.}
+
+\item{key}{If ask is \code{TRUE}, a key is required to join the sheet data to the
+provided data.}
 }
 \description{
 The write_sf_ext and write_sf_cache helper functions wrap the \link[sf:st_write]{sf::write_sf}

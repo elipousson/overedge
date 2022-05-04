@@ -25,6 +25,15 @@ is_gsheet <- function(x) {
   )
 }
 
+
+#' Is this a GitHub gist URL?
+#'
+#' @noRd
+is_gist_url <- function(x) {
+  grepl("https://gist.github.com/", x)
+}
+
+
 #' Is this a unit class object?
 #'
 #' @noRd

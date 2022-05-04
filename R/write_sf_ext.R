@@ -147,65 +147,6 @@ write_sf_cache <- function(data,
 }
 
 #' @rdname write_sf_ext
-#' @name write_sf_gsheet
-#' @param ask If `TRUE`, the user is prompted to make revisions to the created
-#'   Google Sheet. When user responds to the prompt, the date is read back into
-#'   the environment using [read_sf_gsheet] and joined to the provided data with
-#'   the column name provided to key. Defaults to `FALSE`.
-#' @param key If ask is `TRUE`, a key is required to join the sheet data to the
-#'   provided data.
-#' @inheritParams googlesheets4::sheet_write
-#' @export
-#' @importFrom stringr str_remove
-write_sf_gsheet <- function(data,
-                            name = NULL,
-                            label = NULL,
-                            prefix = NULL,
-                            postfix = NULL,
-                            filename = NULL,
-                            sheet = 1,
-                            ask = FALSE,
-                            key = NULL) {
-  is_pkg_installed("googlesheets4")
-
-  if (!is.null(filename)) {
-    filename <-
-      str_remove_filetype(filename, filetype = "gsheet")
-  }
-
-  filename <-
-    make_filename(
-      name = name,
-      label = label,
-      filetype = NULL,
-      filename = filename,
-      prefix = prefix,
-      postfix = postfix,
-      path = NULL
-    )
-
-  # FIXME: Using the path as the name may cause issues
-  ss <-
-    googlesheets4::gs4_create(
-      name = filename
-    )
-
-  data <- sf_to_df(data)
-
-  googlesheets4::write_sheet(
-    data = data,
-    ss = ss,
-    sheet = sheet
-  )
-
-  if (!ask) {
-    return(data)
-  }
-
-  return(join_sf_gsheet(data, ss = ss, sheet = sheet, key = key))
-}
-
-#' @rdname write_sf_ext
 #' @name write_sf_gist
 #' @inheritParams gistr::gist_create
 #' @param token A personal access token on GitHub with permission to create
@@ -275,9 +216,70 @@ write_sf_gist <- function(data,
   )
 }
 
+#' @rdname write_sf_ext
+#' @name write_sf_gsheet
+#' @param ask If `TRUE`, the user is prompted to make revisions to the created
+#'   Google Sheet. When user responds to the prompt, the date is read back into
+#'   the environment using [read_sf_gsheet] and joined to the provided data with
+#'   the column name provided to key. Defaults to `FALSE`.
+#' @param key If ask is `TRUE`, a key is required to join the sheet data to the
+#'   provided data.
+#' @inheritParams googlesheets4::sheet_write
+#' @export
+#' @importFrom stringr str_remove
+write_sf_gsheet <- function(data,
+                            name = NULL,
+                            label = NULL,
+                            prefix = NULL,
+                            postfix = NULL,
+                            filename = NULL,
+                            sheet = 1,
+                            ask = FALSE,
+                            key = NULL) {
+  is_pkg_installed("googlesheets4")
+
+  if (!is.null(filename)) {
+    filename <-
+      str_remove_filetype(filename, filetype = "gsheet")
+  }
+
+  filename <-
+    make_filename(
+      name = name,
+      label = label,
+      filetype = NULL,
+      filename = filename,
+      prefix = prefix,
+      postfix = postfix,
+      path = NULL
+    )
+
+  # FIXME: Using the path as the name may cause issues
+  ss <-
+    googlesheets4::gs4_create(
+      name = filename
+    )
+
+  data <- sf_to_df(data)
+
+  googlesheets4::write_sheet(
+    data = data,
+    ss = ss,
+    sheet = sheet
+  )
+
+  if (!ask) {
+    return(data)
+  }
+
+  return(join_sf_gsheet(data, ss = ss, sheet = sheet, key = key))
+}
+
 #' @noRd
 #' @importFrom readr write_csv write_rds
 #' @importFrom sf write_sf
+#' @importFrom stringr str_detect
+#' @importFrom cli cli_alert_success cli_abort
 write_sf_types <- function(data, filename = NULL, path = NULL, filetype = NULL, overwrite = TRUE) {
   if (!is.null(filename) && (filename %in% list.files(path))) {
     if (!overwrite) {
@@ -312,7 +314,7 @@ write_sf_types <- function(data, filename = NULL, path = NULL, filetype = NULL, 
       )
     } else if (!is.null(filetype) && (filetype == "gsheet")) {
       write_sf_gsheet(data = data, filename = filename)
-    } else if (!is.null(filename)) {
+    } else if (!is.null(filename) && !stringr::str_detect(path, paste0(filename, "$"))) {
       sf::write_sf(
         obj = data,
         dsn = file.path(path, filename)

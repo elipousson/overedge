@@ -1,11 +1,19 @@
 #' Read spatial data in a bounding box to a simple feature object
 #'
 #' An extended version of [sf::read_sf()] that support reading spatial
-#' data based on a file path, url (for spatial data or ArcGIS FeatureServer or
-#' MapServer, or a Google Sheet with coordinate columns), or the data name and
+#' data based on a file path, url, or the data name and
 #' associated package. Optionally provide a bounding box to filter data (not
 #' supported for all data types).
 #'
+#'#' @details Reading data from a url:
+#'
+#' [read_sf_url] supports multiple types of urls:
+#'
+#'   - A MapServer or FeatureServer url
+#'   - A url for a GitHub gist with a single spatial data file
+#'   - A direct url for a spatial data file
+#'   - A Google Sheets url
+
 #' @details Reading data from a package:
 #'
 #' [read_sf_pkg] looks for three types of package data:
@@ -33,8 +41,8 @@
 #' @param bbox A bounding box object; Default: `NULL`. If "bbox" is provided,
 #'   read_sf only returns features intersecting the bounding box.
 #' @param path A file path; used by [read_sf_path()] only.
-#' @param url A url for a spatial data file or for ArcGIS FeatureServer or
-#'   MapServer to access with [get_esri_data()]; used by [read_sf_url()] only
+#' @param url A url for a spatial data file, a GitHub gist, or a ArcGIS
+#'   FeatureServer or MapServer to access with [get_esri_data()]
 #' @param data character; name of data; used by [read_sf_pkg()] only
 #' @param package character; package name; used by [read_sf_pkg()] only
 #' @param filetype file type supported by [sf::read_sf()]., Default: 'gpkg';
@@ -184,85 +192,6 @@ read_sf_path <- function(path, bbox = NULL, ...) {
   return(data)
 }
 
-#' @name read_sf_url
-#' @rdname read_sf_ext
-#' @export
-#' @importFrom sf read_sf
-read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
-  params <- rlang::list2(...)
-
-  stopifnot(
-    # Check url
-    is_url(url)
-  )
-
-  # Check MapServer or FeatureServer url
-  if (is_esri_url(url)) {
-    return(
-      get_esri_data(
-        location = bbox,
-        url = url,
-        name_col = params$name_col,
-        name = params$name,
-        where = params$where
-      )
-    )
-  } else if (is_gsheet(url)) {
-    return(read_sf_gsheet(ss = url, coords = coords, sheet = params$sheet))
-  }
-
-  # FIXME: This is an awkward way to reset back to defaults
-  if (is.null(params$query)) {
-    params$query <- NA
-  }
-
-  if (is.null(params$wkt_filter)) {
-    params$wkt_filter <- character(0)
-  }
-
-  # TODO: Check if it is possible to use a WKT filter
-  # when reading data from a url (e.g. a hosted GeoJSON file)
-  data <- sf::read_sf(
-    dsn = url,
-    query = params$query,
-    wkt_filter = params$wkt_filter
-  )
-
-  data <- bbox_filter(data, bbox = bbox)
-
-  # FIXME: This should be documented and maybe should be the default but optional
-  data <- sf::st_zm(data)
-
-  return(data)
-}
-
-#' @name read_sf_gsheet
-#' @rdname read_sf_ext
-#' @inheritParams googlesheets4::read_sheet
-#' @param ask If `TRUE`, ask for the name of the Google Sheet to read if ss is
-#'   not provided to [read_sf_gsheet].
-#' @export
-#' @importFrom rlang is_missing
-read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
-  # Convert Google Sheet with coordinates to sf
-  is_pkg_installed("googlesheets4")
-
-  if (ask && rlang::is_missing(ss)) {
-    ss <-
-      googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
-  }
-
-  data <- googlesheets4::read_sheet(ss = ss, ...)
-
-  coords <- check_coords(data, coords = coords)
-
-  data <- df_to_sf(data, coords = coords)
-
-  data <- bbox_filter(data, bbox = bbox)
-
-  return(data)
-}
-
 #' @name read_sf_excel
 #' @rdname read_sf_ext
 #' @inheritParams readxl::read_excel
@@ -312,6 +241,80 @@ read_sf_csv <- function(path, bbox = NULL, coords = c("lon", "lat"), ...) {
   data <- bbox_filter(data, bbox = bbox)
 
   return(data)
+}
+
+#' @name read_sf_url
+#' @rdname read_sf_ext
+#' @export
+#' @importFrom sf read_sf st_zm
+read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
+  params <- rlang::list2(...)
+
+  stopifnot(
+    # Check url
+    is_url(url)
+  )
+
+  # Check MapServer or FeatureServer url
+  if (is_esri_url(url)) {
+    return(
+      get_esri_data(
+        location = bbox,
+        url = url,
+        name_col = params$name_col,
+        name = params$name,
+        where = params$where
+      )
+    )
+  } else if (is_gsheet(url)) {
+    return(read_sf_gsheet(ss = url, bbox = bbox, coords = coords, sheet = params$sheet))
+  } else if (is_gist_url(url)) {
+    return(read_sf_gist(url = url, bbox = bbox))
+  }
+
+  # FIXME: This is an awkward way to reset back to defaults
+  if (is.null(params$query)) {
+    params$query <- NA
+  }
+
+  if (is.null(params$wkt_filter)) {
+    params$wkt_filter <- character(0)
+  }
+
+  # TODO: Check if it is possible to use a WKT filter
+  # when reading data from a url (e.g. a hosted GeoJSON file)
+  data <- sf::read_sf(
+    dsn = url,
+    query = params$query,
+    wkt_filter = params$wkt_filter
+  )
+
+  data <- bbox_filter(data, bbox = bbox)
+
+  # FIXME: This should be documented and maybe should be the default but optional
+  data <- sf::st_zm(data)
+
+  return(data)
+}
+
+#' @name read_sf_gist
+#' @rdname read_sf_ext
+#' @export
+read_sf_gist <- function(url,
+                         bbox = NULL,
+                         ...) {
+  is_pkg_installed("gistr")
+
+  gist_data <-
+    gistr::gist(
+      id = url
+    )
+
+  if (length(gist_data$files) == 1) {
+    url <- gist_data$files[[1]]$raw_url
+  }
+
+  return(read_sf_url(url = url, bbox = bbox, ...))
 }
 
 #' @name read_sf_download
@@ -375,6 +378,33 @@ read_sf_download <-
 
     return(data)
   }
+
+#' @name read_sf_gsheet
+#' @rdname read_sf_ext
+#' @inheritParams googlesheets4::read_sheet
+#' @param ask If `TRUE`, ask for the name of the Google Sheet to read if ss is
+#'   not provided to [read_sf_gsheet].
+#' @export
+#' @importFrom rlang is_missing
+read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
+  # Convert Google Sheet with coordinates to sf
+  is_pkg_installed("googlesheets4")
+
+  if (ask && rlang::is_missing(ss)) {
+    ss <-
+      googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
+  }
+
+  data <- googlesheets4::read_sheet(ss = ss, ...)
+
+  coords <- check_coords(data, coords = coords)
+
+  data <- df_to_sf(data, coords = coords)
+
+  data <- bbox_filter(data, bbox = bbox)
+
+  return(data)
+}
 
 #' Join data from a Google Sheet to a simple feature object
 #'

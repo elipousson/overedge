@@ -4,11 +4,12 @@
 \alias{read_sf_ext}
 \alias{read_sf_pkg}
 \alias{read_sf_path}
-\alias{read_sf_url}
-\alias{read_sf_gsheet}
 \alias{read_sf_excel}
 \alias{read_sf_csv}
+\alias{read_sf_url}
+\alias{read_sf_gist}
 \alias{read_sf_download}
+\alias{read_sf_gsheet}
 \title{Read spatial data in a bounding box to a simple feature object}
 \usage{
 read_sf_ext(..., bbox = NULL)
@@ -17,13 +18,13 @@ read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 
 read_sf_path(path, bbox = NULL, ...)
 
-read_sf_url(url, bbox = NULL, coords = NULL, ...)
-
-read_sf_gsheet(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...)
-
 read_sf_excel(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"), ...)
 
 read_sf_csv(path, bbox = NULL, coords = c("lon", "lat"), ...)
+
+read_sf_url(url, bbox = NULL, coords = NULL, ...)
+
+read_sf_gist(url, bbox = NULL, ...)
 
 read_sf_download(
   url,
@@ -36,6 +37,8 @@ read_sf_download(
   unzip = FALSE,
   ...
 )
+
+read_sf_gsheet(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...)
 }
 \arguments{
 \item{...}{additional parameters passed to multiple functions; see details.}
@@ -53,28 +56,16 @@ package cache directory or extdata system files.}
 
 \item{path}{A file path; used by \code{\link[=read_sf_path]{read_sf_path()}} only.}
 
-\item{url}{A url for a spatial data file or for ArcGIS FeatureServer or
-MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}; used by \code{\link[=read_sf_url]{read_sf_url()}} only}
+\item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
+integer (the position of the sheet). Ignored if the sheet is specified via
+\code{range}. If neither argument specifies the sheet, defaults to the first
+sheet.}
 
 \item{coords}{Character vector with coordinate values; used for
 \code{\link[=read_sf_url]{read_sf_url()}} if the "url" is a Google Sheet.}
 
-\item{ss}{Something that identifies a Google Sheet:
-\itemize{
-\item its file id as a string or \code{\link[googledrive:as_id]{drive_id}}
-\item a URL from which we can recover the id
-\item a one-row \code{\link[googledrive:dribble]{dribble}}, which is how googledrive
-represents Drive files
-\item an instance of \code{googlesheets4_spreadsheet}, which is what \code{\link[googlesheets4:gs4_get]{gs4_get()}}
-returns
-}
-
-Processed through \code{\link[googlesheets4:sheets_id]{as_sheets_id()}}.}
-
-\item{ask}{If \code{TRUE}, ask for the name of the Google Sheet to read if ss is
-not provided to \link{read_sf_gsheet}.}
-
-\item{sheet}{Sheet to read, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number. Ignored if the sheet is specified via \code{range}. If neither argument specifies the sheet, defaults to the first visible sheet.}
+\item{url}{A url for a spatial data file, a GitHub gist, or a ArcGIS
+FeatureServer or MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}}
 
 \item{filename}{File name; if file name is \code{NULL}, name and file type are
 both required.}
@@ -94,15 +85,39 @@ date/time prefix; defaults to \code{NULL}.}
 \item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded, unzipped
 into a temporary directory, and then read to a file using the specified
 file type.}
+
+\item{ss}{Something that identifies a Google Sheet:
+\itemize{
+\item its file id as a string or \code{\link[googledrive:as_id]{drive_id}}
+\item a URL from which we can recover the id
+\item a one-row \code{\link[googledrive:dribble]{dribble}}, which is how googledrive
+represents Drive files
+\item an instance of \code{googlesheets4_spreadsheet}, which is what \code{\link[googlesheets4:gs4_get]{gs4_get()}}
+returns
+}
+
+Processed through \code{\link[googlesheets4:sheets_id]{as_sheets_id()}}.}
+
+\item{ask}{If \code{TRUE}, ask for the name of the Google Sheet to read if ss is
+not provided to \link{read_sf_gsheet}.}
 }
 \description{
 An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial
-data based on a file path, url (for spatial data or ArcGIS FeatureServer or
-MapServer, or a Google Sheet with coordinate columns), or the data name and
+data based on a file path, url, or the data name and
 associated package. Optionally provide a bounding box to filter data (not
 supported for all data types).
 }
 \details{
+#' @details Reading data from a url:
+
+\link{read_sf_url} supports multiple types of urls:
+\itemize{
+\item A MapServer or FeatureServer url
+\item A url for a GitHub gist with a single spatial data file
+\item A direct url for a spatial data file
+\item A Google Sheets url
+}
+
 Reading data from a package:
 
 \link{read_sf_pkg} looks for three types of package data:
