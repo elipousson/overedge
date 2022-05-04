@@ -68,6 +68,7 @@ Suggests:
     scales,
     paletteer,
     ggpattern,
-    gistr
+    gistr,
+    readxl
 Config/testthat/edition: 3
 VignetteBuilder: knitr
