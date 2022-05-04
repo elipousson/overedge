@@ -82,11 +82,20 @@ write_sf_ext <- function(data,
       path <- file.path(path, filename)
     }
 
+    if (filetype == "geojson") {
+      data <-
+        st_transform_ext(
+          data,
+          crs = 4326
+        )
+    }
+
     write_sf_types(
       data = data,
       filename = filename,
       filetype = filetype,
-      path = path
+      path = path,
+      overwrite = overwrite
     )
 
     if (cache) {
@@ -105,14 +114,14 @@ write_sf_ext <- function(data,
 #' @importFrom sf write_sf
 #' @importFrom readr write_rds
 write_sf_cache <- function(data,
-                           data_dir = NULL,
-                           overwrite = FALSE,
                            name = NULL,
                            label = NULL,
-                           filetype = NULL,
-                           filename = NULL,
                            prefix = NULL,
-                           postfix = NULL) {
+                           postfix = NULL,
+                           filename = NULL,
+                           filetype = NULL,
+                           data_dir = NULL,
+                           overwrite = FALSE) {
   data_dir <- get_data_dir(path = data_dir)
 
   filename <-
@@ -128,28 +137,12 @@ write_sf_cache <- function(data,
 
   data_dir_path <- file.path(data_dir, filename)
 
-  if (filename %in% list.files(data_dir)) {
-    if (!overwrite) {
-      overwrite <-
-        cli_yeah(
-          "A file with the same name exists in {.file {data_dir}}
-        Do you want to overwrite {.val {filename}}?"
-        )
-    }
-
-    if (overwrite) {
-      cli::cli_alert_success("Removing existing cached data.")
-      file.remove(data_dir_path)
-    } else {
-      cli::cli_abort("{.file {filename}} was not overwritten.")
-    }
-  }
-
   write_sf_types(
     data = date,
     filename = filename,
     path = data_dir_path,
-    filetype = filetype
+    filetype = filetype,
+    overwrite = overwrite
   )
 }
 
@@ -212,10 +205,103 @@ write_sf_gsheet <- function(data,
   return(join_sf_gsheet(data, ss = ss, sheet = sheet, key = key))
 }
 
+#' @rdname write_sf_ext
+#' @name write_sf_gist
+#' @inheritParams gistr::gist_create
+#' @param token A personal access token on GitHub with permission to create
+#'   gists; defaults to Sys.getenv("GITHUB_PAT")
+#' @export
+write_sf_gist <- function(data,
+                          name = NULL,
+                          label = NULL,
+                          prefix = NULL,
+                          postfix = NULL,
+                          filename = NULL,
+                          filetype = "geojson",
+                          description = NULL,
+                          public = TRUE,
+                          browse = FALSE,
+                          token = Sys.getenv("GITHUB_PAT")) {
+  is_pkg_installed("gistr")
+
+  filename <-
+    make_filename(
+      name = name,
+      label = label,
+      filetype = filetype,
+      filename = filename,
+      prefix = prefix,
+      postfix = postfix,
+      path = NULL
+    )
+
+  path <- tempdir()
+
+  if (filetype == "geojson") {
+    data <-
+      st_transform_ext(
+        data,
+        crs = 4326
+      )
+  }
+
+  suppressMessages(
+    write_sf_types(
+      data = data,
+      filename = filename,
+      filetype = filetype,
+      path = path,
+      overwrite = TRUE
+    )
+  )
+
+  gistr::gist_auth(app = token)
+
+  if (is.null(description)) {
+    description <-
+      paste("A", filetype, "format spatial data file.")
+  }
+
+  cli::cli_alert_success("Creating gist for {.file filename}")
+
+  suppressWarnings(
+    gistr::gist_create(
+      files = file.path(path, filename),
+      filename = filename,
+      description = description,
+      public = public,
+      browse = browse
+    )
+  )
+}
+
 #' @noRd
 #' @importFrom readr write_csv write_rds
 #' @importFrom sf write_sf
-write_sf_types <- function(data, filename = NULL, path = NULL, filetype = NULL) {
+write_sf_types <- function(data, filename = NULL, path = NULL, filetype = NULL, overwrite = TRUE) {
+  if (!is.null(filename) && (filename %in% list.files(path))) {
+    if (!overwrite) {
+      overwrite <-
+        cli_yeah(
+          "A file with the same name exists in {.file {path}}
+        Do you want to overwrite {.val {filename}}?"
+        )
+    }
+
+    if (overwrite) {
+      cli::cli_alert_success("Removing existing cached data.")
+      # FIXME: Add check to make sure path ends in a filename
+
+      if (!stringr::str_detect(path, paste0(filename, "$"))) {
+        file.remove(file.path(path, filename))
+      } else {
+        file.remove(path)
+      }
+    } else {
+      cli::cli_abort("{.file {filename}} was not overwritten.")
+    }
+  }
+
   if (is_sf(data)) {
     cli::cli_alert_success("Writing {.file {path}}")
 
@@ -226,6 +312,11 @@ write_sf_types <- function(data, filename = NULL, path = NULL, filetype = NULL) 
       )
     } else if (!is.null(filetype) && (filetype == "gsheet")) {
       write_sf_gsheet(data = data, filename = filename)
+    } else if (!is.null(filename)) {
+      sf::write_sf(
+        obj = data,
+        dsn = file.path(path, filename)
+      )
     } else {
       sf::write_sf(
         obj = data,
