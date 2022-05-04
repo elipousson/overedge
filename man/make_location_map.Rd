@@ -26,7 +26,6 @@ make_location_map(
   postfix = NULL,
   filename = NULL,
   device = NULL,
-  filetype = NULL,
   path = NULL,
   dpi = 300,
   ...
@@ -119,9 +118,6 @@ date/time prefix; defaults to \code{NULL}.}
 (e.g. \link{png}), or one of "eps", "ps", "tex" (pictex),
 "pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).}
 
-\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file type must be
-provided for extdata and cached data.}
-
 \item{path}{Path of the directory to save plot to: \code{path} and \code{filename}
 are combined to create the fully qualified file name. Defaults to the
 working directory.}
@@ -137,6 +133,9 @@ working directory.}
 Default: \code{NULL}}
 
 \item{format}{Image format, "post", "story", or "cover", Default: \code{NULL}}
+
+\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file type must be
+provided for extdata and cached data.}
 }
 \description{
 Location is used as the data parameter of layer_location_data so this

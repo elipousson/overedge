@@ -67,6 +67,7 @@ Suggests:
     patchwork,
     scales,
     paletteer,
-    ggpattern
+    ggpattern,
+    gistr
 Config/testthat/edition: 3
 VignetteBuilder: knitr

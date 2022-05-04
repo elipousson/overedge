@@ -46,6 +46,7 @@ reference:
   - '`format_data`'
   - '`make_markers`'
   - '`number_features`'
+  - '`count_features`'
   - starts_with("mapview")
 - title: Spatial layers for ggplot2 maps
   contents:

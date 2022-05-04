@@ -83,12 +83,14 @@ function is primarily appropriate for the layer_mapbox (<code>geom = "mapbox"</c
   diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,
   unit <span class="op">=</span> <span class="cn">NULL</span>,
   asp <span class="op">=</span> <span class="cn">NULL</span>,
-  paper <span class="op">=</span> <span class="cn">NULL</span>,
+  data <span class="op">=</span> <span class="cn">NULL</span>,
+  crs <span class="op">=</span> <span class="cn">NULL</span>,
+  paper <span class="op">=</span> <span class="st">"Letter"</span>,
   orientation <span class="op">=</span> <span class="cn">NULL</span>,
   geom <span class="op">=</span> <span class="st">"sf"</span>,
   basemap <span class="op">=</span> <span class="cn">TRUE</span>,
-  below <span class="op">=</span> <span class="cn">NULL</span>,
-  above <span class="op">=</span> <span class="cn">NULL</span>,
+  bg_layer <span class="op">=</span> <span class="cn">NULL</span>,
+  fg_layer <span class="op">=</span> <span class="cn">NULL</span>,
   save <span class="op">=</span> <span class="cn">FALSE</span>,
   name <span class="op">=</span> <span class="cn">NULL</span>,
   label <span class="op">=</span> <span class="cn">NULL</span>,
@@ -96,7 +98,6 @@ function is primarily appropriate for the layer_mapbox (<code>geom = "mapbox"</c
   postfix <span class="op">=</span> <span class="cn">NULL</span>,
   filename <span class="op">=</span> <span class="cn">NULL</span>,
   device <span class="op">=</span> <span class="cn">NULL</span>,
-  filetype <span class="op">=</span> <span class="cn">NULL</span>,
   path <span class="op">=</span> <span class="cn">NULL</span>,
   dpi <span class="op">=</span> <span class="fl">300</span>,
   <span class="va">...</span>
@@ -149,6 +150,12 @@ to units matching GDAL units for x; defaults to "meter"</p></dd>
 <dd><p>Aspect ratio of width to height as a numeric value (e.g. 0.33) or
 character (e.g. "1:3"). If numeric, <code><a href="get_asp.html">get_asp()</a></code> returns the same value
 without modification.</p></dd>
+<dt>data</dt>
+<dd><p>sf object including data in area. data may also be a url or file
+path. data can be the name of a data object or, if package and filetype are
+provided, a cached or external file.</p></dd>
+<dt>crs</dt>
+<dd><p>Coordinate reference system of bounding box to return</p></dd>
 <dt>paper</dt>
 <dd><p>Paper, Default: 'letter'.</p></dd>
 <dt>orientation</dt>
@@ -159,6 +166,10 @@ without modification.</p></dd>
 'sf'. Options include "sf" (<a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::geom_sf</a>), "icon" (<a href="layer_icon.html">layer_icon</a>),
 "markers" (<a href="layer_markers.html">layer_markers</a>), "text" (<a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::geom_sf_text</a>), and "label"
 (<a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::geom_sf_label</a>). See details for a full list.</p></dd>
+<dt>bg_layer, fg_layer</dt>
+<dd><p>A ggplot2 layer or a list of ggproto objects (e.g.
+scales, labels, etc.) to add to the background or foreground of the primary
+map layer defined by <code>"geom"</code> and other parameters.</p></dd>
 <dt>save</dt>
 <dd><p>If <code>TRUE</code>, save file with <a href="ggsave_ext.html">ggsave_ext</a> or <a href="ggsave_ext.html">ggsave_social</a>,
 requires <code>basemap = TRUE</code> and filename is not NULL <em>or</em> ... include a name
@@ -181,9 +192,6 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 <dd><p>Device to use. Can either be a device function
 (e.g. <a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a>), or one of "eps", "ps", "tex" (pictex),
 "pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).</p></dd>
-<dt>filetype</dt>
-<dd><p>file type supported by <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>. The file type must be
-provided for extdata and cached data.</p></dd>
 <dt>path</dt>
 <dd><p>Path of the directory to save plot to: <code>path</code> and <code>filename</code>
 are combined to create the fully qualified file name. Defaults to the
@@ -193,8 +201,6 @@ working directory.</p></dd>
 "print" (300), or "screen" (72). Applies only to raster output types.</p></dd>
 <dt>...</dt>
 <dd><p>Additional parameters passed to <a href="layer_location_data.html">layer_location_data</a>.</p></dd>
-<dt>crs</dt>
-<dd><p>Coordinate reference system of bounding box to return</p></dd>
 <dt>image</dt>
 <dd><p>Image size name, Default: <code>NULL</code></p></dd>
 <dt>platform</dt>
@@ -202,6 +208,9 @@ working directory.</p></dd>
 Default: <code>NULL</code></p></dd>
 <dt>format</dt>
 <dd><p>Image format, "post", "story", or "cover", Default: <code>NULL</code></p></dd>
+<dt>filetype</dt>
+<dd><p>file type supported by <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>. The file type must be
+provided for extdata and cached data.</p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

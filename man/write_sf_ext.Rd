@@ -4,6 +4,7 @@
 \alias{write_sf_ext}
 \alias{write_sf_cache}
 \alias{write_sf_gsheet}
+\alias{write_sf_gist}
 \title{Write or cache a simple feature object to a file}
 \usage{
 write_sf_ext(
@@ -21,14 +22,14 @@ write_sf_ext(
 
 write_sf_cache(
   data,
-  data_dir = NULL,
-  overwrite = FALSE,
   name = NULL,
   label = NULL,
-  filetype = NULL,
-  filename = NULL,
   prefix = NULL,
-  postfix = NULL
+  postfix = NULL,
+  filename = NULL,
+  filetype = NULL,
+  data_dir = NULL,
+  overwrite = FALSE
 )
 
 write_sf_gsheet(
@@ -41,6 +42,20 @@ write_sf_gsheet(
   sheet = 1,
   ask = FALSE,
   key = NULL
+)
+
+write_sf_gist(
+  data,
+  name = NULL,
+  label = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  filename = NULL,
+  filetype = "geojson",
+  description = NULL,
+  public = TRUE,
+  browse = FALSE,
+  token = Sys.getenv("GITHUB_PAT")
 )
 }
 \arguments{
@@ -88,6 +103,16 @@ the column name provided to key. Defaults to \code{FALSE}.}
 
 \item{key}{If ask is \code{TRUE}, a key is required to join the sheet data to the
 provided data.}
+
+\item{description}{(character) Brief description of gist (optional)}
+
+\item{public}{(logical) Whether gist is public (default: TRUE)}
+
+\item{browse}{(logical) To open newly create gist in default browser
+(default: TRUE)}
+
+\item{token}{A personal access token on GitHub with permission to create
+gists; defaults to Sys.getenv("GITHUB_PAT")}
 }
 \description{
 The write_sf_ext and write_sf_cache helper functions wrap the \link[sf:st_write]{sf::write_sf}
