@@ -6,7 +6,7 @@
 #'   group_meta is a non-spatial data frame; Default: `NULL`
 #' @param group_meta Group metadata as a data frame or sf object that intersect
 #'   with markers; Default: `NULL`
-#' @param group_join The join function used by [sf::st_join()] if group_meta is
+#' @param join The join function used by [sf::st_join()] if group_meta is
 #'   an sf object, Default: [sf::st_intersects]
 #' @param geocode If `TRUE`, geocode data using [tidygeocoder::geo] and then
 #'   convert to sf with [df_to_sf], Default: `FALSE`
@@ -26,7 +26,7 @@
 make_markers <- function(data,
                          groupname_col = NULL,
                          group_meta = NULL,
-                         group_join = sf::st_intersects,
+                         join = sf::st_intersects,
                          geocode = FALSE,
                          address_col = "address",
                          point = TRUE,
@@ -64,7 +64,7 @@ make_markers <- function(data,
         dplyr::left_join(data, group_meta, by = groupname_col)
     } else if (is_sf(group_meta) && is_sf(data)) {
       data <-
-        sf::st_join(x = data, y = group_meta, join = group_join)
+        sf::st_join(x = data, y = group_meta, join = join)
     }
   }
 
