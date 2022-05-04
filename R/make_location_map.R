@@ -37,7 +37,6 @@ make_location_map <- function(location,
                               postfix = NULL,
                               filename = NULL,
                               device = NULL,
-                              filetype = NULL,
                               path = NULL,
                               dpi = 300,
                               ...) {
@@ -86,6 +85,7 @@ make_location_map <- function(location,
   }
 
   if (save && basemap) {
+    # FIXME: basemap condition should be substituted for some condition checking if map_layer is a valid plot
     ggsave_ext(
       plot = map_layer,
       width = paper$section_width,
@@ -96,7 +96,6 @@ make_location_map <- function(location,
       prefix = prefix,
       postfix = postfix,
       device = device,
-      filetype = filetype,
       path = path,
       scale = scale,
       dpi = dpi
