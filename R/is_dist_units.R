@@ -123,7 +123,7 @@ get_dist_units <- function(x, null.ok = TRUE) {
     return(sf::st_crs(x)$units_gdal)
   }
 
-  if (is_units(x) && (as.character(units(x)[["numerator"]]) %in% dist_unit_options) && !(as.character(units(x)) %in% area_unit_options)) {
+  if (is_units(x) && all(as.character(units(x)[["numerator"]]) %in% dist_unit_options) && !(as.character(units(x)) %in% area_unit_options)) {
       return(as.character(units(x)[["numerator"]]))
   }
 
