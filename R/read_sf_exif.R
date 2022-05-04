@@ -318,7 +318,7 @@ write_exif_keywords <- function(path,
     }
   }
 
-  data_test <-
+  data <-
     purrr::map_dfr(
       key_list,
       ~ sf::st_drop_geometry(
