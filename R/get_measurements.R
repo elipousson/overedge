@@ -48,7 +48,7 @@ get_area <- function(x, units = NULL, keep_all = TRUE, drop = FALSE, .id = "area
     cli::cli_abort("{as.character(is_geom_type(x, ext = FALSE))} type objects are not supported by this function.")
   }
 
-  x_area <- sf::st_area(x)
+  x_area <- sf::st_area(x_poly)
 
   bind_units_col(
     x,
