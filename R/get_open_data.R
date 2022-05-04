@@ -27,7 +27,7 @@
 #'   \code{\link{sf}} object. Default `FALSE`.
 #' @param coords Name(s) of column with coordinate data, Default: c("longitude",
 #'   "latitude")
-#' @param key API Key; required
+#' @param token Access token or API Key; required to access data from Socrata.
 #' @param location sf or bbox obkect
 #' @param from_crs Coordinate reference system for source data.
 #' @param crs Coordinate reference system to return.
@@ -50,7 +50,7 @@ get_open_data <- function(data = NULL,
                           name = NULL,
                           coords = c("longitude", "latitude"),
                           geometry = FALSE,
-                          key = NULL,
+                          token = NULL,
                           from_crs = 4326,
                           crs = NULL) {
   if (source_type != "socrata") {
@@ -63,8 +63,8 @@ get_open_data <- function(data = NULL,
   is_pkg_installed("RSocrata")
 
   # Check for an API key
-  if ((is.null(key) | key == "") && !(data == "list")) {
-    cli::cli_abort("An API key is required.")
+  if ((is.null(token) | token == "") && !(data == "list")) {
+    cli::cli_abort("An API key or access token is required.")
   } else if (data == "list") {
     url <- source_url
     data_list <- RSocrata::ls.socrata(url = url)
@@ -106,7 +106,7 @@ get_open_data <- function(data = NULL,
 
   # Download data from Socrata Open Data portal
   data <-
-    as.data.frame(RSocrata::read.socrata(url = url, app_token = key))
+    as.data.frame(RSocrata::read.socrata(url = url, app_token = token))
 
   data <-
     janitor::clean_names(data, "snake")

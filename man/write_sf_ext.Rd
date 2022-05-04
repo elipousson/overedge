@@ -43,7 +43,7 @@ write_sf_gist(
   description = NULL,
   public = TRUE,
   browse = FALSE,
-  token = Sys.getenv("GITHUB_PAT")
+  token = get_access_token(type = "GITHUB_PAT")
 )
 
 write_sf_gsheet(

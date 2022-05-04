@@ -20,6 +20,7 @@ reference:
   - '`get_admin_data`'
   - '`us_states`'
   - '`us_counties`'
+  - '`set_access_token`'
 - title: Check, convert, or modify the geometry of simple feature objects
   contents:
   - '`is_sf`'

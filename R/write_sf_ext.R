@@ -162,7 +162,7 @@ write_sf_gist <- function(data,
                           description = NULL,
                           public = TRUE,
                           browse = FALSE,
-                          token = Sys.getenv("GITHUB_PAT")) {
+                          token = get_access_token(type = "GITHUB_PAT")) {
   is_pkg_installed("gistr")
 
   filename <-

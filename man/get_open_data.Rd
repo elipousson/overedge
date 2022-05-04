@@ -21,7 +21,7 @@ get_open_data(
   name = NULL,
   coords = c("longitude", "latitude"),
   geometry = FALSE,
-  key = NULL,
+  token = NULL,
   from_crs = 4326,
   crs = NULL
 )
@@ -95,7 +95,7 @@ location names (e.g. County)}
 \item{geometry}{If \code{TRUE} and latitude/longitude columns available, return a
 \code{\link{sf}} object. Default \code{FALSE}.}
 
-\item{key}{API Key; required}
+\item{token}{Access token or API Key; required to access data from Socrata.}
 
 \item{from_crs}{Coordinate reference system for source data.}
 
