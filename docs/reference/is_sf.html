@@ -46,7 +46,17 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -54,7 +64,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>What is the class or spatial attributes of this feature?</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/is_sf.R" class="external-link"><code>R/is_sf.R</code></a></small>
       <div class="d-none name"><code>is_sf.Rd</code></div>
     </div>
 
@@ -92,22 +102,16 @@
 not; defaults to <code>FALSE</code>. (used by is_sf)</p></dd>
 <dt>null.ok</dt>
 <dd><p>If <code>TRUE</code> and x is <code>NULL</code>, return <code>TRUE</code>; defaults to <code>FALSE</code>.</p></dd>
+<dt>named</dt>
+<dd><p>If <code>TRUE</code>, check if sf list is named; defaults <code>FALSE</code>.</p></dd>
 <dt>y</dt>
 <dd><p>An sf object or a character or numeric object supported by
 <a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">sf::st_crs</a> that can be compared to x. (used by is_same_crs)</p></dd>
-<dt>dist</dt>
-<dd><p>For <a href="is_dist_units.html">is_same_dist</a>, bounding box dimension to compare distances for "diagdist",
-"xdist", or "ydist"; does not currently support numeric distances; defaults
-to <code>NULL</code>.</p></dd>
-<dt>diff</dt>
-<dd><p>For <a href="is_dist_units.html">is_same_dist</a> and <a href="is_dist_units.html">is_same_area</a>, If <code>TRUE</code>, return the difference
-between the x and y objects. If <code>FALSE</code>, return <code>TRUE</code> or <code>FALSE</code> as expected;
-defaults to <code>FALSE</code>.</p></dd>
-<dt>union</dt>
-<dd><p>If <code>TRUE</code>, use <a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">sf::st_union</a> on both x and y before comparing
-area; defaults to <code>FALSE</code>.</p></dd>
-<dt>is_named</dt>
-<dd><p>If <code>TRUE</code>, check if sf list is named; defaults <code>FALSE</code>.</p></dd>
+<dt>return</dt>
+<dd><p>type of object to return; "list" or <code>NULL</code> (default).</p></dd>
+<dt>us</dt>
+<dd><p>If <code>TRUE</code>, check if x is a U.S. state or county name; defaults to
+<code>FALSE</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

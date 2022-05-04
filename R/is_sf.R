@@ -15,14 +15,6 @@ is_class <- function(x, classes = NULL, null.ok = FALSE) {
 #' @param ext If `TRUE`, check if x is a `sf`, `sfc`, or `bbox` class object or
 #'   not; defaults to `FALSE`. (used by [is_sf])
 #' @param null.ok If `TRUE` and x is `NULL`, return `TRUE`; defaults to `FALSE`.
-#' @param dist For [is_same_dist], bounding box dimension to compare distances for "diagdist",
-#'   "xdist", or "ydist"; does not currently support numeric distances; defaults
-#'   to `NULL`.
-#' @param diff For [is_same_dist] and [is_same_area], If `TRUE`, return the difference
-#'   between the x and y objects. If `FALSE`, return `TRUE` or `FALSE` as expected;
-#'   defaults to `FALSE`.
-#' @param union If `TRUE`, use [sf::st_union] on both x and y before comparing
-#'   area; defaults to `FALSE`.
 #' @details
 #' - [is_sf]: is x a `sf` class object?
 #' - [is_sfc]: is x is a `sfc` class object?
@@ -67,7 +59,7 @@ is_bbox <- function(x, null.ok = FALSE) {
 
 #' @rdname is_sf
 #' @name is_sf_list
-#' @param is_named If `TRUE`, check if sf list is named; defaults `FALSE`.
+#' @param named If `TRUE`, check if sf list is named; defaults `FALSE`.
 #' @export
 #' @importFrom rlang is_named
 is_sf_list <- function(x, named = FALSE, ext = FALSE, null.ok = FALSE) {
@@ -126,6 +118,9 @@ is_same_crs <- function(x, y) {
 
 #' @name is_sf_or_what
 #' @rdname  is_sf
+#' @param return type of object to return; "list" or `NULL` (default).
+#' @param us If `TRUE`, check if x is a U.S. state or county name; defaults to
+#'   `FALSE`.
 #' @importFrom cli cli_abort
 is_sf_or_what <- function(x = NULL, return = NULL, us = FALSE, null.ok = TRUE) {
   # Is x a sf object, a sf/sfc/bbox object, a character string, or a state or county name/id?

@@ -66,9 +66,6 @@ circular polygons.}
 "hex", "flat_top_hex", "circle", "circle_offset"}
 
 \item{.id}{A name to use for the cell id column.}
-
-\item{base}{default value used for n if cols, rows, and cellsize are all
-\code{NULL}.}
 }
 \description{
 Create a grid with an id column and optionally a set number of columns and

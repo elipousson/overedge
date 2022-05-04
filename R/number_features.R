@@ -26,6 +26,7 @@
 #'   ":" for "1:"). Can also be a character vector with the same length as the
 #'   number column.
 #' @return A sf object with a number column ordered by sort values.
+#' @inheritParams sort_features
 #' @export
 #' @importFrom dplyr mutate row_number everything
 #' @importFrom utils as.roman

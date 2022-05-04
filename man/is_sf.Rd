@@ -38,21 +38,15 @@ not; defaults to \code{FALSE}. (used by \link{is_sf})}
 
 \item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 
+\item{named}{If \code{TRUE}, check if sf list is named; defaults \code{FALSE}.}
+
 \item{y}{An sf object or a character or numeric object supported by
 \link[sf:st_crs]{sf::st_crs} that can be compared to x. (used by \link{is_same_crs})}
 
-\item{dist}{For \link{is_same_dist}, bounding box dimension to compare distances for "diagdist",
-"xdist", or "ydist"; does not currently support numeric distances; defaults
-to \code{NULL}.}
+\item{return}{type of object to return; "list" or \code{NULL} (default).}
 
-\item{diff}{For \link{is_same_dist} and \link{is_same_area}, If \code{TRUE}, return the difference
-between the x and y objects. If \code{FALSE}, return \code{TRUE} or \code{FALSE} as expected;
-defaults to \code{FALSE}.}
-
-\item{union}{If \code{TRUE}, use \link[sf:geos_combine]{sf::st_union} on both x and y before comparing
-area; defaults to \code{FALSE}.}
-
-\item{is_named}{If \code{TRUE}, check if sf list is named; defaults \code{FALSE}.}
+\item{us}{If \code{TRUE}, check if x is a U.S. state or county name; defaults to
+\code{FALSE}.}
 }
 \description{
 What is the class or spatial attributes of this feature?

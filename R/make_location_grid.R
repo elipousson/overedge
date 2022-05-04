@@ -12,8 +12,6 @@
 #'   circular polygons.
 #' @param cols,rows Used to set n if either are not `NULL`; defaults to `NULL`.
 #'   row and id are added as columns to the grid if they are provided.
-#' @param base default value used for n if cols, rows, and cellsize are all
-#'   `NULL`.
 #' @param gutter Distance in units between each column cell; gutter effectively
 #'   serves as a margin as the negative buffer is applied to all cells
 #'   (including those at the edges of the grid).
@@ -132,6 +130,8 @@ make_location_grid <- function(location = NULL,
 
 #' Get parameters for make_location_grid
 #'
+#' @param base default value used for n if cols, rows, and cellsize are all
+#'   `NULL`.
 #' @noRd
 #' @importFrom rlang has_length
 #' @importFrom cli cli_alert_danger cli_alert_info

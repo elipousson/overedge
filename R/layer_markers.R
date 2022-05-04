@@ -111,6 +111,7 @@ layer_markers <- function(data,
 #'   groupname_col.
 #' @inheritParams number_features
 #' @inheritParams ggplot2::geom_sf_label
+#' @param hjust,vjust Horizontal and vertical justification.
 #' @param ... Additional parameters passed to [layer_location_data()]
 #' @export
 #' @importFrom ggplot2 aes unit

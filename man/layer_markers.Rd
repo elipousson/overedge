@@ -102,6 +102,8 @@ grouped; Default: \code{NULL}}
 \item{label.padding}{Amount of padding around label. Defaults to 0.25 lines.}
 
 \item{label.r}{Radius of rounded corners. Defaults to 0.15 lines.}
+
+\item{hjust, vjust}{Horizontal and vertical justification.}
 }
 \value{
 ggplot2 layers
