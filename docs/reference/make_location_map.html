@@ -166,6 +166,9 @@ provided, a cached or external file.</p></dd>
 'sf'. Options include "sf" (<a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::geom_sf</a>), "icon" (<a href="layer_icon.html">layer_icon</a>),
 "markers" (<a href="layer_markers.html">layer_markers</a>), "text" (<a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::geom_sf_text</a>), and "label"
 (<a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::geom_sf_label</a>). See details for a full list.</p></dd>
+<dt>basemap</dt>
+<dd><p>If <code>FALSE</code>, return a list of ggplot2 layers (or ggproto
+objects). If <code>TRUE</code>, add the list to <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot2::ggplot()</a></code> to return a map.</p></dd>
 <dt>bg_layer, fg_layer</dt>
 <dd><p>A ggplot2 layer or a list of ggproto objects (e.g.
 scales, labels, etc.) to add to the background or foreground of the primary
@@ -173,7 +176,7 @@ map layer defined by <code>"geom"</code> and other parameters.</p></dd>
 <dt>save</dt>
 <dd><p>If <code>TRUE</code>, save file with <a href="ggsave_ext.html">ggsave_ext</a> or <a href="ggsave_ext.html">ggsave_social</a>,
 requires <code>basemap = TRUE</code> and filename is not NULL <em>or</em> ... include a name
-parameter. Default: FALSE</p></dd>
+parameter. Default: <code>FALSE</code></p></dd>
 <dt>name</dt>
 <dd><p>Plot name, used to create filename (if filename is <code>NULL</code>) using
 <code><a href="make_filename.html">make_filename()</a></code></p></dd>

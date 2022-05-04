@@ -20,5 +20,6 @@ get_access_token(token = NULL, type = NULL)
 \item{type}{Name of token; defaults to \code{NULL}.}
 }
 \description{
-This package uses access tokens
+Based on the \link[mapboxapi:mb_access_token]{mapboxapi::mb_access_token} function from the {mapboxapi}
+package by Kyle Walker.
 }

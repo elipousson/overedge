@@ -46,7 +46,17 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -54,7 +64,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Make map markers from a simple feature object</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/make_markers.R" class="external-link"><code>R/make_markers.R</code></a></small>
       <div class="d-none name"><code>make_markers.Rd</code></div>
     </div>
 
@@ -68,7 +78,7 @@
   <span class="va">data</span>,
   groupname_col <span class="op">=</span> <span class="cn">NULL</span>,
   group_meta <span class="op">=</span> <span class="cn">NULL</span>,
-  group_join <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="va"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">st_intersects</a></span>,
+  join <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="va"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">st_intersects</a></span>,
   geocode <span class="op">=</span> <span class="cn">FALSE</span>,
   address_col <span class="op">=</span> <span class="st">"address"</span>,
   point <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -89,7 +99,7 @@ group_meta is a non-spatial data frame; Default: <code>NULL</code></p></dd>
 <dt>group_meta</dt>
 <dd><p>Group metadata as a data frame or sf object that intersect
 with markers; Default: <code>NULL</code></p></dd>
-<dt>group_join</dt>
+<dt>join</dt>
 <dd><p>The join function used by <code><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">sf::st_join()</a></code> if group_meta is
 an sf object, Default: <a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">sf::st_intersects</a></p></dd>
 <dt>geocode</dt>
@@ -119,7 +129,8 @@ grouped; Default: <code>NULL</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

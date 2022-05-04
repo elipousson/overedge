@@ -46,7 +46,8 @@ provided.}
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
-\item{style_url}{A Mapbox style url; defaults to NULL.}
+\item{style_url}{Map style url used to fill style_id and username parameters,
+Default: "mapbox://styles/mapbox/satellite-streets-v11"}
 
 \item{style_id}{A style ID (required if style_url is NULL).}
 
@@ -97,9 +98,6 @@ provided parameters.}
 labels.}
 
 \item{...}{Additional parameter passed to \link[mapboxapi:layer_static_mapbox]{mapboxapi::layer_static_mapbox}}
-
-\item{map_style}{Map style used to fill style_id and username parameters,
-Default: "mapbox://styles/mapbox/satellite-streets-v11"}
 }
 \description{
 Use mapboxapi to make a Mapbox static map layer

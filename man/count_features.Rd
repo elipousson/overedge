@@ -14,35 +14,21 @@ count_features(
 )
 }
 \arguments{
-\item{data}{Data frame or \code{sf} object, Default: NULL}
+\item{data}{Data frame or \code{sf} object, Default: \code{NULL}}
 
-\item{boundaries}{Boundary data as an \code{sf} object, Default: NULL}
+\item{boundaries}{Boundary data as an \code{sf} object, Default: \code{NULL}}
 
-\item{by}{Character string to join data by if data is not an \code{sf} object, Default: NULL}
+\item{join}{The join function used by \code{\link[sf:st_join]{sf::st_join()}} if data is an \code{sf}
+object, Default: \link[sf:geos_binary_pred]{sf::st_intersects}}
+
+\item{by}{Character string to join data by if data is not an \code{sf} object,
+Default: \code{NULL}}
 
 \item{.id}{Count column, Default: "count"}
 
-\item{...}{PARAM_DESCRIPTION}
-}
-\value{
-OUTPUT_DESCRIPTION
+\item{...}{Additional parameters (not in use)}
 }
 \description{
 Count the number of simple feature objects within a geometry or by some
 attribute contained in both the data and the corresponding boundary geometry.
-}
-\details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
-}
-\seealso{
-\code{\link[sf]{geos_binary_pred}}, \code{\link[sf]{st_nearest_feature}}, \code{\link[sf]{st_geometry}}, \code{\link[sf]{st_join}}, \code{\link[sf]{st_as_sf}}
-\code{\link[purrr]{map}}
-\code{\link[dplyr]{pull}}, \code{\link[dplyr]{mutate-joins}}
 }

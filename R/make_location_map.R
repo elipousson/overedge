@@ -6,10 +6,12 @@
 #' @inheritParams get_paper
 #' @param save If `TRUE`, save file with [ggsave_ext] or [ggsave_social],
 #'   requires `basemap = TRUE` and filename is not NULL *or* ... include a name
-#'   parameter. Default: FALSE
+#'   parameter. Default: `FALSE`
 #' @inheritParams st_bbox_ext
 #' @inheritParams layer_location_data
 #' @inheritParams ggsave_ext
+#' @param basemap If `FALSE`, return a list of ggplot2 layers (or ggproto
+#'   objects). If `TRUE`, add the list to [ggplot2::ggplot()] to return a map.
 #' @param bg_layer,fg_layer A ggplot2 layer or a list of ggproto objects (e.g.
 #'   scales, labels, etc.) to add to the background or foreground of the primary
 #'   map layer defined by `"geom"` and other parameters.
@@ -58,7 +60,6 @@ make_location_map <- function(location,
   stopifnot(
     is.null(bg_layer) || is.list(bg_layer) || is_gg_layer(bg_layer),
     is.null(fg_layer) || is.list(fg_layer) || is_gg_layer(fg_layer)
-
   )
 
   map_layer <-

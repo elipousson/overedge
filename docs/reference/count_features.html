@@ -90,40 +90,21 @@ attribute contained in both the data and the corresponding boundary geometry.</p
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>Data frame or <code>sf</code> object, Default: NULL</p></dd>
+<dd><p>Data frame or <code>sf</code> object, Default: <code>NULL</code></p></dd>
 <dt>boundaries</dt>
-<dd><p>Boundary data as an <code>sf</code> object, Default: NULL</p></dd>
+<dd><p>Boundary data as an <code>sf</code> object, Default: <code>NULL</code></p></dd>
+<dt>join</dt>
+<dd><p>The join function used by <code><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">sf::st_join()</a></code> if data is an <code>sf</code>
+object, Default: <a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">sf::st_intersects</a></p></dd>
 <dt>by</dt>
-<dd><p>Character string to join data by if data is not an <code>sf</code> object, Default: NULL</p></dd>
+<dd><p>Character string to join data by if data is not an <code>sf</code> object,
+Default: <code>NULL</code></p></dd>
 <dt>.id</dt>
 <dd><p>Count column, Default: "count"</p></dd>
 <dt>...</dt>
-<dd><p>PARAM_DESCRIPTION</p></dd>
+<dd><p>Additional parameters (not in use)</p></dd>
 </dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>OUTPUT_DESCRIPTION</p>
-    </div>
-    <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>DETAILS</p>
-    </div>
-    <div class="section level2">
-    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">geos_binary_pred</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/st_nearest_feature.html" class="external-link">st_nearest_feature</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_join</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></code>
-<code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></code>
-<code><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">mutate-joins</a></code></p></div>
-    </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in"> <span class="co">#EXAMPLE1</span></span>
-<span class="r-in"> <span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

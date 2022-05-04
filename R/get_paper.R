@@ -61,7 +61,7 @@ get_paper <- function(paper = "letter",
         orientation,
         c("portrait", "landscape", "square"),
         several.ok = TRUE
-        )
+      )
   }
 
   if (is.data.frame(paper)) {

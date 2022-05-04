@@ -5,7 +5,7 @@
 #' associated package. Optionally provide a bounding box to filter data (not
 #' supported for all data types).
 #'
-#'#' @details Reading data from a url:
+#' @details Reading data from a url:
 #'
 #' [read_sf_url] supports multiple types of urls:
 #'
@@ -13,7 +13,7 @@
 #'   - A url for a GitHub gist with a single spatial data file
 #'   - A direct url for a spatial data file
 #'   - A Google Sheets url
-
+#'
 #' @details Reading data from a package:
 #'
 #' [read_sf_pkg] looks for three types of package data:

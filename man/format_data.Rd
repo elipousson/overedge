@@ -51,6 +51,9 @@ FeatureServer and MapServer sources) , Default: \code{TRUE}}
 
 \item{.after}{The location to place sf column after; defaults to
 \link[dplyr:reexports]{dplyr::everything}.}
+
+\item{city, county, state}{City, county, and state to bind to data frame or
+\code{sf} object.}
 }
 \value{
 Data with formatting functions applied.

@@ -50,7 +50,8 @@ row and id are added as columns to the grid if they are provided.}
 serves as a margin as the negative buffer is applied to all cells
 (including those at the edges of the grid).}
 
-\item{desc}{If TRUE, reverse standard order of cell id numbering; defaults FALSE}
+\item{desc}{If TRUE, reverse standard order of cell id numbering; defaults
+\code{FALSE}}
 
 \item{n}{If n is NULL and square is \code{TRUE}, the grid is set automatically to
 be 10 cells wide, Default: \code{NULL}}
@@ -66,7 +67,8 @@ circular polygons.}
 
 \item{.id}{A name to use for the cell id column.}
 
-\item{base}{default value used for n if cols, rows, and cellsize are all NULL.}
+\item{base}{default value used for n if cols, rows, and cellsize are all
+\code{NULL}.}
 }
 \description{
 Create a grid with an id column and optionally a set number of columns and

@@ -70,7 +70,6 @@ layer_location_data <-
            crs = NULL,
            label_col = "name",
            ...) {
-
     data <-
       get_location_data(
         location = location,

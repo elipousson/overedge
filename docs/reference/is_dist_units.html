@@ -62,7 +62,17 @@ is_same_area: do x and y have the same area?
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -70,7 +80,7 @@ is_same_area: do x and y have the same area?
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>General utility functions for working with distance units objects</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/is_dist_units.R" class="external-link"><code>R/is_dist_units.R</code></a></small>
       <div class="d-none name"><code>is_dist_units.Rd</code></div>
     </div>
 
@@ -122,6 +132,9 @@ if <code>FALSE</code>, return logical indicator; defaults to <code>FALSE</code><
 <dt>null.ok</dt>
 <dd><p>If null.ok is <code>TRUE</code>, allow x to return a <code>NULL</code> value; if
 <code>FALSE</code>, error on <code>NULL</code> values.</p></dd>
+<dt>union</dt>
+<dd><p>If <code>TRUE</code>, union objects before comparing area with
+<code>is_diff_area()</code> or <code>is_same_area()</code>, defaults to <code>TRUE</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

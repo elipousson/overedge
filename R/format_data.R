@@ -137,6 +137,8 @@ rename_sf_col <- function(x, sf_col = "geometry") {
 
 #' @name bind_address_col
 #' @rdname format_data
+#' @param city,county,state City, county, and state to bind to data frame or
+#'   `sf` object.
 #' @export
 #' @importFrom dplyr mutate
 bind_address_col <- function(x, city = NULL, county = NULL, state = NULL) {

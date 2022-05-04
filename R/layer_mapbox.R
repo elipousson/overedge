@@ -3,7 +3,7 @@
 #' @param data `sf`, `sfc`, or `bbox` object; any objects convertible with [as_bbox]
 #' @inheritParams layer_neatline
 #' @inheritParams mapboxapi::layer_static_mapbox
-#' @param map_style Map style used to fill style_id and username parameters,
+#' @param style_url Map style url used to fill style_id and username parameters,
 #'   Default: "mapbox://styles/mapbox/satellite-streets-v11"
 #' @param basemap If FALSE, create a standalone layer; if `TRUE`, the layer is
 #'   precededed by [ggplot2::ggplot()] to allow use as a basemap, Default: `TRUE`

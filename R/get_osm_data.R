@@ -131,7 +131,6 @@ get_osm_id <- function(id, type = NULL, crs = NULL, geometry = NULL, osmdata = F
 #' @noRd
 #' @importFrom stringr str_split
 get_osm_id_type <- function(id, type = NULL, geometry = NULL) {
-
   if (is.null(type)) {
     if (has_osm_type_prefix(id)) {
       split_id <- stringr::str_split(x, pattern = "/")
@@ -148,9 +147,9 @@ get_osm_id_type <- function(id, type = NULL, geometry = NULL) {
   if (is.null(geometry)) {
     geometry <-
       switch(type,
-             "node" = "points",
-             "way" = "polygons",
-             "relation" = "multipolygons"
+        "node" = "points",
+        "way" = "polygons",
+        "relation" = "multipolygons"
       )
   }
 

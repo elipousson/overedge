@@ -92,13 +92,16 @@ provided, a cached or external file.}
 "markers" (\link{layer_markers}), "text" (\link[ggplot2:ggsf]{ggplot2::geom_sf_text}), and "label"
 (\link[ggplot2:ggsf]{ggplot2::geom_sf_label}). See details for a full list.}
 
+\item{basemap}{If \code{FALSE}, return a list of ggplot2 layers (or ggproto
+objects). If \code{TRUE}, add the list to \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} to return a map.}
+
 \item{bg_layer, fg_layer}{A ggplot2 layer or a list of ggproto objects (e.g.
 scales, labels, etc.) to add to the background or foreground of the primary
 map layer defined by \code{"geom"} and other parameters.}
 
 \item{save}{If \code{TRUE}, save file with \link{ggsave_ext} or \link{ggsave_social},
 requires \code{basemap = TRUE} and filename is not NULL \emph{or} ... include a name
-parameter. Default: FALSE}
+parameter. Default: \code{FALSE}}
 
 \item{name}{Plot name, used to create filename (if filename is \code{NULL}) using
 \code{\link[=make_filename]{make_filename()}}}

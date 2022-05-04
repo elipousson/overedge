@@ -18,7 +18,7 @@ set_access_token <- function(token, overwrite = FALSE, install = FALSE, type = N
   }
 
   if (is.null(type)) {
-  cli::cli_abort("A type is required.")
+    cli::cli_abort("A type is required.")
   }
 
   if (install) {
@@ -36,8 +36,8 @@ set_access_token <- function(token, overwrite = FALSE, install = FALSE, type = N
         oldenv <- read.table(renv, stringsAsFactors = FALSE)
         newenv <- oldenv[-grep(type, oldenv), ]
         write.table(newenv, renv,
-                    quote = FALSE, sep = "\n",
-                    col.names = FALSE, row.names = FALSE
+          quote = FALSE, sep = "\n",
+          col.names = FALSE, row.names = FALSE
         )
       } else {
         tv <- readLines(renv)
@@ -71,5 +71,3 @@ get_access_token <- function(token = NULL, type = NULL) {
 
   return(token)
 }
-
-

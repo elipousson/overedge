@@ -47,6 +47,9 @@ if \code{FALSE}, return logical indicator; defaults to \code{FALSE}}
 
 \item{null.ok}{If null.ok is \code{TRUE}, allow x to return a \code{NULL} value; if
 \code{FALSE}, error on \code{NULL} values.}
+
+\item{union}{If \code{TRUE}, union objects before comparing area with
+\code{\link[=is_diff_area]{is_diff_area()}} or \code{\link[=is_same_area]{is_same_area()}}, defaults to \code{TRUE}.}
 }
 \description{
 \itemize{

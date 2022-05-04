@@ -8,7 +8,7 @@ make_markers(
   data,
   groupname_col = NULL,
   group_meta = NULL,
-  group_join = sf::st_intersects,
+  join = sf::st_intersects,
   geocode = FALSE,
   address_col = "address",
   point = TRUE,
@@ -27,7 +27,7 @@ group_meta is a non-spatial data frame; Default: \code{NULL}}
 \item{group_meta}{Group metadata as a data frame or sf object that intersect
 with markers; Default: \code{NULL}}
 
-\item{group_join}{The join function used by \code{\link[sf:st_join]{sf::st_join()}} if group_meta is
+\item{join}{The join function used by \code{\link[sf:st_join]{sf::st_join()}} if group_meta is
 an sf object, Default: \link[sf:geos_binary_pred]{sf::st_intersects}}
 
 \item{geocode}{If \code{TRUE}, geocode data using \link[tidygeocoder:geo]{tidygeocoder::geo} and then

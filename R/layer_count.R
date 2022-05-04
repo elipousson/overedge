@@ -4,40 +4,26 @@
 #' Count the number of simple feature objects within a geometry or by some
 #' attribute contained in both the data and the corresponding boundary geometry.
 #'
-#' @param data Data frame or `sf` object, Default: NULL
-#' @param boundaries Boundary data as an `sf` object, Default: NULL
-#' @param by Character string to join data by if data is not an `sf` object, Default: NULL
+#' @param data Data frame or `sf` object, Default: `NULL`
+#' @param boundaries Boundary data as an `sf` object, Default: `NULL`
+#' @param by Character string to join data by if data is not an `sf` object,
+#'   Default: `NULL`
+#' @param join The join function used by [sf::st_join()] if data is an `sf`
+#'   object, Default: [sf::st_intersects]
 #' @param .id Count column, Default: "count"
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @seealso
-#'  \code{\link[sf]{geos_binary_pred}}, \code{\link[sf]{st_nearest_feature}}, \code{\link[sf]{st_geometry}}, \code{\link[sf]{st_join}}, \code{\link[sf]{st_as_sf}}
-#'  \code{\link[purrr]{map}}
-#'  \code{\link[dplyr]{pull}}, \code{\link[dplyr]{mutate-joins}}
+#' @param ... Additional parameters (not in use)
 #' @rdname count_features
 #' @export
 #' @importFrom sf st_intersects st_nearest_feature st_drop_geometry st_join st_as_sf
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr pull left_join
-count_features <- function(
-    data = NULL,
-    boundaries = NULL,
-    join = NULL,
-    by = NULL,
-    .id = "count",
-    ...
-) {
-
+count_features <- function(data = NULL,
+                           boundaries = NULL,
+                           join = NULL,
+                           by = NULL,
+                           .id = "count",
+                           ...) {
   if (is_sf(data)) {
-
-
     if (is_sf(boundaries)) {
       boundaries <- as_sf_list(boundaries)
     }
@@ -67,8 +53,6 @@ count_features <- function(
         .id = path
       )
   } else if (is.data.frame(data) && is_sf(boundaries)) {
-
-
     if (class(dplyr::pull(data, by)) != class(dplyr::pull(boundaries, by))) {
 
     }
@@ -89,7 +73,6 @@ count_features <- function(
   }
 
   return(data)
-
 }
 
 #' @noRd
@@ -105,7 +88,6 @@ layer_count <- function(data = NULL,
                         basemap = FALSE,
                         crop = FALSE,
                         ...) {
-
   if (count) {
     # FIXME: pass data to count_features if count is TRUE
     # data <- has_same_name_col(data)
@@ -116,11 +98,11 @@ layer_count <- function(data = NULL,
       data = data,
       geom = "sf",
       location = location,
-      mapping = ggplot2::aes(fill =  .data[[count_col]]),
+      mapping = ggplot2::aes(fill = .data[[count_col]]),
       alpha = alpha,
       crop = crop,
       ...
-      )
+    )
 
   # FIXME: Should I add fg_layer and bg_layer options to layer_location_data?
 
@@ -138,7 +120,6 @@ layer_count <- function(data = NULL,
           crop = crop
         )
       )
-
   }
 
   if (!is.null(label_geom)) {
@@ -157,5 +138,4 @@ layer_count <- function(data = NULL,
   }
 
   return(map_layer)
-
 }

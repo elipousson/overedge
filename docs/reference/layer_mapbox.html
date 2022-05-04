@@ -46,7 +46,17 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -54,7 +64,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Use mapboxapi to make a Mapbox static map layer</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/layer_mapbox.R" class="external-link"><code>R/layer_mapbox.R</code></a></small>
       <div class="d-none name"><code>layer_mapbox.Rd</code></div>
     </div>
 
@@ -109,7 +119,8 @@ provided.</p></dd>
 character (e.g. "1:3"). If numeric, <code><a href="get_asp.html">get_asp()</a></code> returns the same value
 without modification.</p></dd>
 <dt>style_url</dt>
-<dd><p>A Mapbox style url; defaults to NULL.</p></dd>
+<dd><p>Map style url used to fill style_id and username parameters,
+Default: "mapbox://styles/mapbox/satellite-streets-v11"</p></dd>
 <dt>style_id</dt>
 <dd><p>A style ID (required if style_url is NULL).</p></dd>
 <dt>username</dt>
@@ -160,9 +171,6 @@ provided parameters.</p></dd>
 labels.</p></dd>
 <dt>...</dt>
 <dd><p>Additional parameter passed to <a href="https://rdrr.io/pkg/mapboxapi/man/layer_static_mapbox.html" class="external-link">mapboxapi::layer_static_mapbox</a></p></dd>
-<dt>map_style</dt>
-<dd><p>Map style used to fill style_id and username parameters,
-Default: "mapbox://styles/mapbox/satellite-streets-v11"</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

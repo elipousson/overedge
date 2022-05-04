@@ -174,5 +174,8 @@ utils::globalVariables(c(
   "gps_latitude", "gps_longitude", "osm_building_tags", "source_file",
   "address", "asp", "block_height", "block_width", "col_width", "cols", "geometry", "gutter",
   "height", "id", "image_description", "image_height", "image_width",
-  "row_height", "rows", "width", "df", "where", ".id", "nm", "area_unit_options"
+  "row_height", "rows", "width", "df", "where", ".id", "nm", "area_unit_options",
+  "angle", "number_col", "package", "paper", "x", "x1", "x2", "y1", "y2",
+  "get_start_end_point", "path"
 ))
+

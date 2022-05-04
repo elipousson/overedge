@@ -108,7 +108,7 @@ associated package. Optionally provide a bounding box to filter data (not
 supported for all data types).
 }
 \details{
-#' @details Reading data from a url:
+Reading data from a url:
 
 \link{read_sf_url} supports multiple types of urls:
 \itemize{
