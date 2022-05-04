@@ -11,3 +11,4 @@
 ^Meta$
 ^examples$
 ^codemeta\.json$
+^\.httr-oauth$
