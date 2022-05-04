@@ -128,7 +128,7 @@ get_dist_units <- function(x, null.ok = TRUE) {
   }
 
   if (is_units(x)) {
-    as.character(units(x))
+    return(as.character(units(x)))
   }
 
   if (is.character(x)) {
