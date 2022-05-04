@@ -181,7 +181,7 @@ get_socrata_data <- function(data = NULL,
                              name = NULL,
                              coords = c("longitude", "latitude"),
                              geometry = FALSE,
-                             key = NULL,
+                             token = NULL,
                              from_crs = 4326,
                              crs = NULL) {
   is_pkg_installed("RSocrata")
@@ -202,7 +202,7 @@ get_socrata_data <- function(data = NULL,
     name = name,
     coords = c("longitude", "latitude"),
     geometry = geometry,
-    key = key,
+    token = token,
     from_crs = from_crs,
     crs = crs
   )
