@@ -1,18 +1,18 @@
 #' Use esri2sf to get data from an ArcGIS FeatureServer or MapServer for a
 #' location
 #'
-#' Wraps the \code{\link[esri2sf]{esri2sf}} and \code{\link[esri2sf]{esri2df}}
-#' function to download an ArcGIS FeatureServer or MapServer. Supports spatial
-#' filtering with bounding box based on location and filtering by location name
-#' (if location name column is provided).
+#' Wraps the [esri2sf::esri2sf] and [esri2sf::esri2df] function to download an
+#' ArcGIS FeatureServer or MapServer. Supports spatial filtering with bounding
+#' box based on location and filtering by location name (if location name column
+#' is provided).
 #'
-#' @param location sf, sfc, or bbox object (or other object convertible with
+#' @param location `sf`, `sfc`, or `bbox` object (or other object convertible with
 #'   [as_bbox()]. Optional.
 #' @param url FeatureServer or MapServer url to retrieve data from. Passed to
-#'   \code{url} parameter of [esri2sf::esri2sf()] or
-#'   \code{\link[esri2sf]{esri2df}} functions.
+#'   `url` parameter of [esri2sf::esri2sf] or
+#'   [esri2sf::esri2df] functions.
 #' @param where string for where condition. Default is 1=1 for all rows.
-#' @param where where query string passed to esri2sf, Default: NULL
+#' @param where where query string passed to esri2sf, Default: `NULL`
 #' @param coords_col coordinate columns, e.g. c("longitude", "latitude")
 #' @param name_col name of ArcGIS FeatureServer or MapServer column with
 #'   location names for features
