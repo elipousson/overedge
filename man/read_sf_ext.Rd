@@ -7,6 +7,7 @@
 \alias{read_sf_excel}
 \alias{read_sf_csv}
 \alias{read_sf_url}
+\alias{read_sf_geojson}
 \alias{read_sf_gist}
 \alias{read_sf_download}
 \alias{read_sf_gsheet}
@@ -24,7 +25,9 @@ read_sf_csv(path, bbox = NULL, coords = c("lon", "lat"), ...)
 
 read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
-read_sf_gist(url, bbox = NULL, ...)
+read_sf_geojson(url, path = NULL, geojson = NULL, bbox = NULL, ...)
+
+read_sf_gist(url, id = NULL, bbox = NULL, ...)
 
 read_sf_download(
   url,
@@ -38,7 +41,15 @@ read_sf_download(
   ...
 )
 
-read_sf_gsheet(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...)
+read_sf_gsheet(
+  url,
+  sheet = NULL,
+  ss = NULL,
+  bbox = NULL,
+  coords = c("lon", "lat"),
+  ask = FALSE,
+  ...
+)
 }
 \arguments{
 \item{...}{additional parameters passed to multiple functions; see details.}
@@ -66,6 +77,10 @@ sheet.}
 
 \item{url}{A url for a spatial data file, a GitHub gist, or a ArcGIS
 FeatureServer or MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}}
+
+\item{geojson}{string or vector of GeoJSON, or a URL or file pointing to a geojson file}
+
+\item{id}{(character) A gist id, or a gist URL}
 
 \item{filename}{File name; if file name is \code{NULL}, name and file type are
 both required.}
@@ -102,20 +117,21 @@ Processed through \code{\link[googlesheets4:sheets_id]{as_sheets_id()}}.}
 not provided to \link{read_sf_gsheet}.}
 }
 \description{
-An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial
-data based on a file path, url, or the data name and
-associated package. Optionally provide a bounding box to filter data (not
-supported for all data types).
+An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial data
+based on a file path, URL, or the data name and associated package.
+Optionally provide a bounding box to filter data (not supported for all data
+types). If a file or path is provided for a GeoJSON file, the
+\link{read_sf_geojson} function (using the \link{{geojsonsf}} package) is used.
 }
 \details{
 Reading data from a url:
 
 \link{read_sf_url} supports multiple types of urls:
 \itemize{
-\item A MapServer or FeatureServer url
-\item A url for a GitHub gist with a single spatial data file
-\item A direct url for a spatial data file
-\item A Google Sheets url
+\item A MapServer or FeatureServer URL
+\item A URL for a GitHub gist with a single spatial data file
+\item A URL for a spatial data file or a CSV file
+\item A Google Sheets URL
 }
 
 Reading data from a package:

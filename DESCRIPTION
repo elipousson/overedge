@@ -69,6 +69,7 @@ Suggests:
     paletteer,
     ggpattern,
     gistr,
-    readxl
+    readxl,
+    geojsonsf
 Config/testthat/edition: 3
 VignetteBuilder: knitr

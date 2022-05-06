@@ -1,18 +1,19 @@
 #' Read spatial data in a bounding box to a simple feature object
 #'
-#' An extended version of [sf::read_sf()] that support reading spatial
-#' data based on a file path, url, or the data name and
-#' associated package. Optionally provide a bounding box to filter data (not
-#' supported for all data types).
+#' An extended version of [sf::read_sf()] that support reading spatial data
+#' based on a file path, URL, or the data name and associated package.
+#' Optionally provide a bounding box to filter data (not supported for all data
+#' types). If a file or path is provided for a GeoJSON file, the
+#' [read_sf_geojson] function (using the [{geojsonsf}] package) is used.
 #'
 #' @details Reading data from a url:
 #'
 #' [read_sf_url] supports multiple types of urls:
 #'
-#'   - A MapServer or FeatureServer url
-#'   - A url for a GitHub gist with a single spatial data file
-#'   - A direct url for a spatial data file
-#'   - A Google Sheets url
+#'   - A MapServer or FeatureServer URL
+#'   - A URL for a GitHub gist with a single spatial data file
+#'   - A URL for a spatial data file or a CSV file
+#'   - A Google Sheets URL
 #'
 #' @details Reading data from a package:
 #'
@@ -65,22 +66,19 @@ read_sf_ext <- function(..., bbox = NULL) {
       !is.null(params$package) ~ "pkg",
       !is.null(params$path) && is.null(params$filename) ~ "path",
       !is.null(params$url) ~ "url",
-      !is.null(params$ss) ~ "gsheet",
-      !is.null(params$filename) ~ "download"
+      TRUE ~ "error"
     )
+
+  if (read_sf_fn == "error") {
+    cli::cli_abort("The parameters provided did not match any overedge read_sf function.")
+  }
 
   read_sf_fn <-
     switch(read_sf_fn,
       "path" = read_sf_path,
       "pkg" = read_sf_pkg,
-      "url" = read_sf_url,
-      "gsheet" = read_sf_gsheet,
-      "download" = read_sf_download
+      "url" = read_sf_url
     )
-
-  if (!is.function(read_sf_fn)) {
-    cli::cli_abort("The parameters provided did not match any overedge read_sf function.")
-  }
 
   args <-
     modify_fn_fmls(
@@ -109,7 +107,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
     return(use_eval_parse(data = data, package = package))
   }
 
-  # FIXME: This triggers an alert with lintr but works file
+  # FIXME: This triggers an alert with lintr but works fine
   filename <- str_add_filetype(data, filetype = filetype)
 
   path <-
@@ -139,6 +137,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     dplyr::case_when(
       stringr::str_detect(path, "\\.csv$") ~ "csv",
       stringr::str_detect(path, "\\.xlsx$|\\.xls$") ~ "excel",
+      stringr::str_detect(path, "\\.geojson$") ~ "geojson",
       TRUE ~ "spatial_data"
     )
 
@@ -146,7 +145,8 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     data <-
       switch(path_type,
         "csv" = read_sf_csv(path = path, bbox = bbox, ...),
-        "excel" = read_sf_excel(path = path, bbox = bbox, ...)
+        "excel" = read_sf_excel(path = path, bbox = bbox, ...),
+        "geoson" = read_sf_geojson(geojson = path, bbox = bbox, ...)
       )
 
     return(data)
@@ -154,40 +154,38 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 
   params <- rlang::list2(...)
 
-  make_query <- !rlang::has_name(params, "query") && all(rlang::has_name(params, c("name", "name_col")))
+  if (is.null(params$query)) {
+    params$query <- NA
 
-  if (make_query) {
-    if (!rlang::has_name(params, "table")) {
-      params$table <-
-        stringr::str_extract(
-          basename(path),
-          "[:graph:]+(?=\\.)"
-        )
+    if (all(rlang::has_name(params, c("name", "name_col")))) {
+      if (is.null(params$table)) {
+        params$table <-
+          stringr::str_extract(
+            basename(path),
+            "[:graph:]+(?=\\.)"
+          )
+      }
+
+      params$query <-
+        glue::glue("select * from {params$table} where {params$name_col} = '{params$name}'")
     }
-
-    params$query <-
-      glue::glue("select * from {params$table} where {params$name_col} = '{params$name}'")
   }
 
-  if (!is.null(bbox)) {
-    # Convert bbox to well known text
-    wkt <- sf_bbox_to_wkt(bbox = bbox)
-  } else {
-    wkt <- character(0)
+  if (is.null(params$wkt_filter)) {
+    params$wkt_filter <- character(0)
+
+    if (!is.null(bbox)) {
+      # Convert bbox to well known text
+      params$wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
+    }
   }
+
   # Read external, cached, or data at path with wkt_filter
-  if (!is.null(params$query)) {
-    data <- sf::read_sf(
-      dsn = path,
-      wkt_filter = wkt,
-      query = params$query
-    )
-  } else {
-    data <- sf::read_sf(
-      dsn = path,
-      wkt_filter = wkt
-    )
-  }
+  data <- sf::read_sf(
+    dsn = path,
+    wkt_filter = params$wkt_filter,
+    query = params$query
+  )
 
   return(data)
 }
@@ -196,6 +194,8 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 #' @rdname read_sf_ext
 #' @inheritParams readxl::read_excel
 #' @export
+#' @importFrom rlang list2
+#' @importFrom purrr map
 read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"), ...) {
   is_pkg_installed("readxl")
   # Convert XLS or XLSX file with coordinates to sf
@@ -217,7 +217,7 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
     return(data)
   }
 
-  data <- readxl::read_excel(path = path, ...)
+  data <- readxl::read_excel(path = path, sheet = sheet, ...)
 
   coords <- check_coords(data, coords = coords)
 
@@ -246,33 +246,68 @@ read_sf_csv <- function(path, bbox = NULL, coords = c("lon", "lat"), ...) {
 #' @name read_sf_url
 #' @rdname read_sf_ext
 #' @export
+#' @importFrom rlang list2
+#' @importFrom stringr str_detect
 #' @importFrom sf read_sf st_zm
+#' @importFrom dplyr case_when
 read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
   params <- rlang::list2(...)
 
   stopifnot(
-    # Check url
     is_url(url)
   )
 
-  # Check MapServer or FeatureServer url
-  if (is_esri_url(url)) {
-    return(
-      get_esri_data(
-        location = bbox,
-        url = url,
-        name_col = params$name_col,
-        name = params$name,
-        where = params$where
-      )
+  url_type <-
+    dplyr::case_when(
+      is_esri_url(url) ~ "esri",
+      is_gsheet(url) ~ "gsheet",
+      is_gist_url(url) ~ "gist",
+      stringr::str_detect(url, "\\.csv$") ~ "csv",
+      stringr::str_detect(url, "\\.geojson$") ~ "geojson",
+      !is.null(params$filename) ~ "download",
+      TRUE ~ "spatial_data"
     )
-  } else if (is_gsheet(url)) {
-    return(read_sf_gsheet(ss = url, bbox = bbox, coords = coords, sheet = params$sheet))
-  } else if (is_gist_url(url)) {
-    return(read_sf_gist(url = url, bbox = bbox))
+
+  if (url_type != "spatial_data") {
+    data <-
+      switch(url_type,
+        "esri" = get_esri_data(
+          url = url,
+          location = bbox,
+          name_col = params$name_col,
+          name = params$name,
+          where = params$where
+        ),
+        "gsheet" = read_sf_gsheet(
+          ss = url,
+          bbox = bbox,
+          coords = coords,
+          sheet = params$sheet
+        ),
+        "gist" = read_sf_gist(
+          id = url,
+          bbox = bbox
+        ),
+        "csv" = read_sf_csv(
+          path = url,
+          bbox = bbox,
+          coords = coords
+        ),
+        "geojson" = read_sf_geojson(
+          geojson = url,
+          bbox = bbox
+        ),
+        "download" = read_sf_download(
+          url = url,
+          filename = params$filename,
+          bbox = bbox,
+          path = params$path
+        )
+      )
+
+    return(data)
   }
 
-  # FIXME: This is an awkward way to reset back to defaults
   if (is.null(params$query)) {
     params$query <- NA
   }
@@ -281,8 +316,6 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
     params$wkt_filter <- character(0)
   }
 
-  # TODO: Check if it is possible to use a WKT filter
-  # when reading data from a url (e.g. a hosted GeoJSON file)
   data <- sf::read_sf(
     dsn = url,
     query = params$query,
@@ -297,17 +330,53 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
   return(data)
 }
 
+
+#' @name read_sf_geojson
+#' @rdname read_sf_ext
+#' @inheritParams geojsonsf::geojson_sf
+#' @export
+#' @importFrom rlang is_missing
+read_sf_geojson <- function(url,
+                            path = NULL,
+                            geojson = NULL,
+                            bbox = NULL,
+                            ...) {
+  is_pkg_installed("geojsonsf")
+
+  stopifnot(
+    !rlang::is_missing(url) | !is.null(path) | !is.null(geojson)
+  )
+
+  if (!is.null(path)) {
+    url <- path
+  } else if (!is.null(geojson)) {
+    url <- geojson
+  }
+
+  data <- geojsonsf::geojson_sf(geojson = url, ...)
+
+  data <- bbox_filter(data, bbox = bbox)
+
+  return(data)
+}
+
 #' @name read_sf_gist
 #' @rdname read_sf_ext
+#' @inheritParams gistr::gist
 #' @export
 read_sf_gist <- function(url,
+                         id = NULL,
                          bbox = NULL,
                          ...) {
   is_pkg_installed("gistr")
 
+  if (!rlang::is_missing(url) && is.null(id)) {
+    id <- url
+  }
+
   gist_data <-
     gistr::gist(
-      id = url
+      id = id
     )
 
   if (length(gist_data$files) == 1) {
@@ -386,16 +455,20 @@ read_sf_download <-
 #'   not provided to [read_sf_gsheet].
 #' @export
 #' @importFrom rlang is_missing
-read_sf_gsheet <- function(ss, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
+read_sf_gsheet <- function(url, sheet = NULL, ss = NULL, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
   # Convert Google Sheet with coordinates to sf
   is_pkg_installed("googlesheets4")
 
-  if (ask && rlang::is_missing(ss)) {
-    ss <-
-      googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
+  if (is.null(ss)) {
+    if (!rlang::is_missing(url)) {
+      ss <- url
+    } else if (ask) {
+      ss <-
+        googlesheets4::gs4_find(cli_ask("What is the name of the Google Sheet to return?"))
+    }
   }
 
-  data <- googlesheets4::read_sheet(ss = ss, ...)
+  data <- googlesheets4::read_sheet(ss = ss, sheet = sheet, ...)
 
   coords <- check_coords(data, coords = coords)
 
