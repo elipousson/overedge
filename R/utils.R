@@ -178,4 +178,3 @@ utils::globalVariables(c(
   "angle", "number_col", "package", "paper", "x", "x1", "x2", "y1", "y2",
   "get_start_end_point", "path"
 ))
-
