@@ -88,19 +88,19 @@ meters.}
 Wraps \link{st_circle}, \link{st_square}, and \link{layer_neatline}.
 }
 \examples{
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
+nc <- st_transform_ext(nc, 3857)
+
 ggplot2::ggplot() +
   layer_frame(
-    data = mapbaltimore::baltimore_msa_counties,
+    data = dplyr::filter(nc, NAME \%in\% c("Franklin", "Johnston", "Wake")),
     frame = "circle",
-    fill = "lightblue",
-    alpha = 0.5,
-    dist = 1.5,
-    unit = "mile",
+    fill = "lightyellow",
     inscribed = FALSE
   ) +
   layer_location_data(
-    data = mapbaltimore::baltimore_msa_counties,
-    mapping = ggplot2::aes(fill = name),
+    data = dplyr::filter(nc, NAME \%in\% c("Franklin", "Johnston", "Wake")),
+    mapping = ggplot2::aes(fill = NAME),
     alpha = 0.5
   ) +
   ggplot2::guides(

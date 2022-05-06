@@ -19,13 +19,13 @@ get_coords(
 get_minmax(x, crs = NULL, keep_all = TRUE, drop = TRUE)
 }
 \arguments{
-\item{x}{sf, bbox, or sfc object}
+\item{x}{\code{sf}, \code{bbox}, or \code{sfc} object}
 
-\item{coords}{Column names to use for coordinates in results, Default: NULL;
+\item{coords}{Column names to use for coordinates in results, Default: \code{NULL};
 which is set to c("lon", "lat") by \link{check_coords}}
 
 \item{geometry}{geometry to use for coordinates "centroid", "surface point",
-or alternatively "wkt"; defaults to NULL ("centroid")}
+or alternatively "wkt"; defaults to \code{NULL} ("centroid")}
 
 \item{crs}{Coordinate reference system to use for coordinates; defaults to \code{NULL}.}
 

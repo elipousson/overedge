@@ -1,18 +1,16 @@
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
+nc <- st_transform_ext(nc, 3857)
+
 ggplot2::ggplot() +
   layer_location_data(
-    data = mapbaltimore::baltimore_city_detailed,
+    data = nc,
     fill = NA
   ) +
   layer_numbers(
-    data = mapbaltimore::csas,
+    data = dplyr::slice_sample(nc, n = 25),
     sort = "dist_xmid_ymid",
     num_style = "arabic",
-    geom = "text",
-    size = 5) +
-  layer_neatline(
-    data = mapbaltimore::baltimore_city,
-    asp = 1,
-    dist = 1,
-    unit = "mi",
-    expand = TRUE
-  )
+    geom = "label",
+    size = 3
+    ) +
+  ggplot2::theme_void()

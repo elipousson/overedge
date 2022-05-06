@@ -8,11 +8,11 @@
 #' appends the xmin, ymin, xmax, and ymax values for each feature to the simple
 #' feature object.
 #'
-#' @param x sf, bbox, or sfc object
-#' @param coords Column names to use for coordinates in results, Default: NULL;
+#' @param x `sf`, `bbox`, or `sfc` object
+#' @param coords Column names to use for coordinates in results, Default: `NULL`;
 #'   which is set to c("lon", "lat") by [check_coords]
 #' @param geometry geometry to use for coordinates "centroid", "surface point",
-#'   or alternatively "wkt"; defaults to NULL ("centroid")
+#'   or alternatively "wkt"; defaults to `NULL` ("centroid")
 #' @param keep_all If `TRUE`, bind the coordinates columns to the provided object x,
 #'   Default: `TRUE`.
 #' @param crs Coordinate reference system to use for coordinates; defaults to `NULL`.

@@ -33,10 +33,10 @@ make_img_leafpop(images, popup = TRUE)
   If missing, a blank map will be drawn. A value of NULL will return NULL.}
 
 \item{nm}{Character vector. If x is a sf list, filter the mapview data to
-those named in nm. If NULL, mapview displays the first item in the sf list;
+those named in nm. If \code{NULL}, mapview displays the first item in the sf list;
 defaults to "data".}
 
-\item{col}{Column name passed to zcol parameter, Default: NULL}
+\item{col}{Column name passed to zcol parameter, Default: \code{NULL}}
 
 \item{...}{
   Arguments passed on to \code{\link[mapview:mapView]{mapview::mapview}}

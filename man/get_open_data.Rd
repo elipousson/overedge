@@ -117,7 +117,7 @@ Details on SoQL queries are found in the Socrata API documentation
     where = "(year = '2020') AND (quarter = 'Q2')",
     name_col = "county_desc",
     name = "Cecil",
-    key = Sys.getenv("MARYLAND_OPEN_DATA_API_KEY")
+    token = Sys.getenv("MARYLAND_OPEN_DATA_API_KEY")
   )
 }
 }

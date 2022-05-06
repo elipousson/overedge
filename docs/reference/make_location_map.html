@@ -126,6 +126,44 @@ function is primarily appropriate for the layer_mapbox (<code>geom = "mapbox"</c
   filetype <span class="op">=</span> <span class="st">"jpeg"</span>,
   dpi <span class="op">=</span> <span class="fl">72</span>,
   <span class="va">...</span>
+<span class="op">)</span>
+
+<span class="fu">make_image_map</span><span class="op">(</span>
+  <span class="va">image_path</span>,
+  location <span class="op">=</span> <span class="cn">NULL</span>,
+  dist <span class="op">=</span> <span class="cn">NULL</span>,
+  diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,
+  unit <span class="op">=</span> <span class="cn">NULL</span>,
+  asp <span class="op">=</span> <span class="cn">NULL</span>,
+  data <span class="op">=</span> <span class="cn">NULL</span>,
+  crs <span class="op">=</span> <span class="fl">3857</span>,
+  paper <span class="op">=</span> <span class="st">"Letter"</span>,
+  orientation <span class="op">=</span> <span class="cn">NULL</span>,
+  geom <span class="op">=</span> <span class="st">"mapbox"</span>,
+  style_url <span class="op">=</span> <span class="cn">NULL</span>,
+  basemap <span class="op">=</span> <span class="cn">TRUE</span>,
+  bg_layer <span class="op">=</span> <span class="cn">NULL</span>,
+  fg_layer <span class="op">=</span> <span class="cn">NULL</span>,
+  save <span class="op">=</span> <span class="cn">FALSE</span>,
+  name <span class="op">=</span> <span class="cn">NULL</span>,
+  label <span class="op">=</span> <span class="cn">NULL</span>,
+  prefix <span class="op">=</span> <span class="cn">NULL</span>,
+  postfix <span class="op">=</span> <span class="cn">NULL</span>,
+  filename <span class="op">=</span> <span class="cn">NULL</span>,
+  device <span class="op">=</span> <span class="cn">NULL</span>,
+  path <span class="op">=</span> <span class="cn">NULL</span>,
+  dpi <span class="op">=</span> <span class="fl">300</span>,
+  image_geom <span class="op">=</span> <span class="st">"label"</span>,
+  groupname_col <span class="op">=</span> <span class="cn">NULL</span>,
+  group_meta <span class="op">=</span> <span class="cn">NULL</span>,
+  number <span class="op">=</span> <span class="cn">FALSE</span>,
+  num_by_group <span class="op">=</span> <span class="cn">FALSE</span>,
+  num_style <span class="op">=</span> <span class="cn">NULL</span>,
+  num_start <span class="op">=</span> <span class="fl">1</span>,
+  suffix <span class="op">=</span> <span class="cn">NULL</span>,
+  sort <span class="op">=</span> <span class="st">"dist_xmin_ymax"</span>,
+  desc <span class="op">=</span> <span class="cn">FALSE</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -214,7 +252,38 @@ Default: <code>NULL</code></p></dd>
 <dt>filetype</dt>
 <dd><p>file type supported by <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>. The file type must be
 provided for extdata and cached data.</p></dd>
+<dt>groupname_col</dt>
+<dd><p>Group column name, used to join group metadata if
+group_meta is a non-spatial data frame; Default: <code>NULL</code></p></dd>
+<dt>group_meta</dt>
+<dd><p>Group metadata as a data frame or sf object that intersect
+with markers; Default: <code>NULL</code></p></dd>
+<dt>number</dt>
+<dd><p>If <code>TRUE</code>, number markers using <code><a href="layer_markers.html">layer_markers()</a></code> (not
+currently supported)</p></dd>
+<dt>num_by_group</dt>
+<dd><p>If <code>TRUE</code>, numbers are added by group based on
+groupname_col.</p></dd>
+<dt>num_style</dt>
+<dd><p>Style of enumeration, either "arabic", "alph", "Alph",
+"roman", "Roman"</p></dd>
+<dt>num_start</dt>
+<dd><p>Starting number; defaults to 1.</p></dd>
+<dt>suffix</dt>
+<dd><p>Character to appended to "number" column. (e.g. "." for "1." or
+":" for "1:"). Can also be a character vector with the same length as the
+number column.</p></dd>
+<dt>sort</dt>
+<dd><p>Sort column name, Default: "dist_xmin_ymax".</p></dd>
+<dt>desc</dt>
+<dd><p>If <code>TRUE</code>, sort descending; default <code>FALSE</code>.</p></dd>
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Using make_image_map:</p>
+<p>make_image_map wraps <a href="read_sf_exif.html">read_sf_exif</a> and make_location_map. It is designed for
+making simple maps of photos in combination with reference tables.</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

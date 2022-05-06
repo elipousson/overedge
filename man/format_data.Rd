@@ -37,6 +37,8 @@ old_var_name), or a two column data frame with the first column being the
 new variable names and the second column being the old variable names;
 defaults to \code{NULL}.}
 
+\item{clean_names}{Optionally apply \link[janitor:clean_names]{janitor::clean_names}; defaukts to \code{TRUE}.}
+
 \item{replace_na}{A named list to pass to \link[tidyr:replace_na]{tidyr::replace_na}; defaults to
 \code{NULL}.}
 
@@ -52,8 +54,13 @@ FeatureServer and MapServer sources) , Default: \code{TRUE}}
 \item{.after}{The location to place sf column after; defaults to
 \link[dplyr:reexports]{dplyr::everything}.}
 
+\item{sf_col}{Name to rename sf column to.}
+
 \item{city, county, state}{City, county, and state to bind to data frame or
 \code{sf} object.}
+
+\item{keep_all}{If \code{FALSE}, keep all columns. If FALSE, return only the named
+.id column.}
 }
 \value{
 Data with formatting functions applied.

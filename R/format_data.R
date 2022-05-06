@@ -12,6 +12,7 @@
 #'   old_var_name), or a two column data frame with the first column being the
 #'   new variable names and the second column being the old variable names;
 #'   defaults to `NULL`.
+#' @param clean_names Optionally apply [janitor::clean_names]; defaukts to `TRUE`.
 #' @param replace_na A named list to pass to [tidyr::replace_na]; defaults to
 #'   `NULL`.
 #' @param replace_with_na A named list to pass to [naniar::replace_with_na];
@@ -126,6 +127,7 @@ relocate_sf_col <- function(x, .after = dplyr::everything()) {
 
 #' @name rename_sf_col
 #' @rdname format_data
+#' @param sf_col Name to rename sf column to.
 #' @export
 #' @importFrom dplyr everything relocate all_of
 rename_sf_col <- function(x, sf_col = "geometry") {
@@ -178,6 +180,8 @@ bind_address_col <- function(x, city = NULL, county = NULL, state = NULL) {
 
 #' @name bind_units_col
 #' @rdname format_data
+#' @param keep_all If `FALSE`, keep all columns. If FALSE, return only the named
+#'   .id column.
 #' @export
 #' @importFrom units drop_units
 #' @importFrom dplyr bind_cols

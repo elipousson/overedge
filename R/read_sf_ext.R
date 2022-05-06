@@ -4,7 +4,8 @@
 #' based on a file path, URL, or the data name and associated package.
 #' Optionally provide a bounding box to filter data (not supported for all data
 #' types). If a file or path is provided for a GeoJSON file, the
-#' [read_sf_geojson] function (using the [{geojsonsf}] package) is used.
+#' [read_sf_geojson] function (using the
+#' [{geojsonsf}](https://github.com/SymbolixAU/geojsonsf) package) is used.
 #'
 #' @details Reading data from a url:
 #'

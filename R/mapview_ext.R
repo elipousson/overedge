@@ -12,9 +12,9 @@ NULL
 #' @rdname mapview_ext
 #' @name mapview_col
 #' @param nm Character vector. If x is a sf list, filter the mapview data to
-#'   those named in nm. If NULL, mapview displays the first item in the sf list;
+#'   those named in nm. If `NULL`, mapview displays the first item in the sf list;
 #'   defaults to "data".
-#' @param col Column name passed to zcol parameter, Default: NULL
+#' @param col Column name passed to zcol parameter, Default: `NULL`
 #' @inheritParams make_img_leafpop
 #' @export
 mapview_col <- function(x, nm = "data", col = NULL, ...) {

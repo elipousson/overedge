@@ -163,10 +163,8 @@ or <a href="https://r-spatial.github.io/sf/reference/st_nearest_feature.html" cl
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"overedge"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">read_sf_exif</span><span class="op">(</span></span>
-<span class="r-in">  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">path</span>, <span class="st">"photos"</span><span class="op">)</span>,</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">read_sf_exif</span><span class="op">(</span></span>
+<span class="r-in">  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/photos"</span>, package <span class="op">=</span> <span class="st">"overedge"</span><span class="op">)</span>,</span>
 <span class="r-in">  filetype <span class="op">=</span> <span class="st">"jpeg"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 3 features and 26 fields</span>
@@ -187,18 +185,18 @@ or <a href="https://r-spatial.github.io/sf/reference/st_nearest_feature.html" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 Photograph by Eli Pousson, 2021 July 19.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 Photograph by Eli Pousson, 2021 July 21.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 Photograph by Eli Pousson, 2021 June 21.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                               keywords</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Maryland, public art, Remington, 28th Street, John Ellsberry, mural, Baltimore, Sisson Street, Jones Falls Area,District 12,Medfield/Hampden/Woodberry/Remingto, Jones Falls Area, District 12, Medfield/Hampden/Woodberry/Remington</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                       Maryland, public art, sculpture, MICA, Maryland Institute College of Art, Malster Avenue, Baltimore, Bolton Hill, Stan Edmister, modernism, Bolton Hill,District 11,Midtown, Bolton Hill, District 11, Midtown</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                        Maryland, public art, Greenmount Avenue, Gaia, Waverly, mural, Baltimore, Old York Road, Better Waverly,District 14,The Waverlies, Better Waverly, District 14, The Waverlies</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                     keywords</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                              Maryland, public art, Remington, 28th Street, John Ellsberry, mural, Baltimore, Sisson Street</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Maryland, public art, sculpture, MICA, Maryland Institute College of Art, Malster Avenue, Baltimore, Bolton Hill, Stan Edmister, modernism</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                    Maryland, public art, Greenmount Avenue, Gaia, Waverly, mural, Baltimore, Old York Road</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           file_name         create_date  date_time_original</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 sample_img_2.jpeg 2021:07:19 18:45:25 2021:07:19 18:45:25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 sample_img_3.jpeg 2021:07:21 08:31:07 2021:07:21 08:31:07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 sample_img_1.jpeg 2021:06:21 12:56:42 2021:06:21 12:56:42</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   offset_time_original img_width img_height    exif_orientation file_size</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               -04:00       320        240 Horizontal (normal)     42018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2               -04:00       320        240 Horizontal (normal)     34809</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3               -04:00       320        240 Horizontal (normal)     44903</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1               -04:00       320        240 Horizontal (normal)     41864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               -04:00       320        240 Horizontal (normal)     34723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               -04:00       320        240 Horizontal (normal)     44797</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   file_type lat_ref lon_ref altitude_ref speed_ref speed img_direction_ref</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      JPEG       N       W            0         K     0                 T</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      JPEG       N       W            0         K     0                 T</span>

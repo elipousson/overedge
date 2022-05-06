@@ -65,8 +65,6 @@ rotate = -45 to return a diamond shape. st_square wraps \link{st_bbox_ext} with
 asp = 1.
 }
 \examples{
-library(ggplot2)
-
 nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
 nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)
 

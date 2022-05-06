@@ -50,7 +50,17 @@ on surface (geometry = "surface point") instead of the centroid.'><!-- mathjax -
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -58,7 +68,7 @@ on surface (geometry = "surface point") instead of the centroid.'><!-- mathjax -
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get coordinates for a simple feature or bounding box object</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/get_coords.R" class="external-link"><code>R/get_coords.R</code></a></small>
       <div class="d-none name"><code>get_coords.Rd</code></div>
     </div>
 
@@ -85,13 +95,13 @@ on surface (geometry = "surface point") instead of the centroid.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>sf, bbox, or sfc object</p></dd>
+<dd><p><code>sf</code>, <code>bbox</code>, or <code>sfc</code> object</p></dd>
 <dt>coords</dt>
-<dd><p>Column names to use for coordinates in results, Default: NULL;
+<dd><p>Column names to use for coordinates in results, Default: <code>NULL</code>;
 which is set to c("lon", "lat") by <a href="sf_to_df.html">check_coords</a></p></dd>
 <dt>geometry</dt>
 <dd><p>geometry to use for coordinates "centroid", "surface point",
-or alternatively "wkt"; defaults to NULL ("centroid")</p></dd>
+or alternatively "wkt"; defaults to <code>NULL</code> ("centroid")</p></dd>
 <dt>crs</dt>
 <dd><p>Coordinate reference system to use for coordinates; defaults to <code>NULL</code>.</p></dd>
 <dt>keep_all</dt>

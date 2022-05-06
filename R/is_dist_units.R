@@ -124,7 +124,7 @@ get_dist_units <- function(x, null.ok = TRUE) {
   }
 
   if (is_units(x) && all(as.character(units(x)[["numerator"]]) %in% dist_unit_options) && !(as.character(units(x)) %in% area_unit_options)) {
-      return(as.character(units(x)[["numerator"]]))
+    return(as.character(units(x)[["numerator"]]))
   }
 
   if (is_units(x)) {

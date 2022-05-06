@@ -1,7 +1,7 @@
 #' Convert distance (and area) values between different units
 #'
 #' @param dist Numeric or units object
-#' @param from Existing unit for dist, Default: NULL. If dist is a units object,
+#' @param from Existing unit for dist, Default: `NULL`. If dist is a units object,
 #'   the numerator is used as "from"
 #' @param to Unit to convert distance to, Default: 'meter'
 #' @return Object created by [units::set_units()]

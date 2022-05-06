@@ -64,7 +64,7 @@ st_clip <- function(x,
 #' @param clip Clip style
 #' @param center center (data frame or list lon and lat values)
 #' @param crs Coordinate reference system
-#' @param style Style (not currently used), Default: NULL
+#' @param style Style (not currently used), Default: `NULL`
 #' @noRd
 #' @importFrom sf st_sf st_sfc st_convex_hull st_union
 make_clip <- function(x, clip, crs, style = NULL) {
