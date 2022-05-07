@@ -173,7 +173,7 @@ sort_features <- function(data,
         data,
         to = to,
         keep_all = TRUE,
-        drop = drop
+        drop = FALSE
       )
 
     sort <- "dist"
