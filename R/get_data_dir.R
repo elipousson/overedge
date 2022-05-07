@@ -6,9 +6,10 @@
 #' @param path Path to directory to use as data directory.
 #' @param package Package name; defaults to "overedge"
 #' @export
-#' @importFrom rappdirs user_cache_dir
 get_data_dir <- function(path = NULL, package = "overedge") {
   if (is.null(path)) {
+    is_pkg_installed("rappdirs")
+
     path <- rappdirs::user_cache_dir(package)
   }
 
