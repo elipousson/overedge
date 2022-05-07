@@ -24,23 +24,7 @@
 #'   set to "black".
 #' @param crs Coordinate reference system; defaults to `NULL`.
 #' @param ... Additional parameters to  [ggsvg::geom_point_svg()].
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   library(sf)
-#'   library(ggplot2)
-#'   library(overedge)
-#'
-#'   nc <- st_read(system.file("shape/nc.shp", package = "sf"))
-#'   ggplot() +
-#'     geom_sf_icon(data = nc, icon = "point-start", size = 10)
-#'
-#'
-#'   nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc) / 4)
-#'   ggplot() +
-#'     geom_sf_icon(data = nc, size = 5)
-#' }
-#' }
+#' @example examples/layer_icon.R
 #' @seealso
 #'  \code{\link[ggsvg]{geom_point_svg}}
 #'  \code{\link[overedge]{map_icons}}

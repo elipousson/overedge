@@ -14,16 +14,7 @@
 #'   TRUE,
 #' @param ... Additional parameters passed to [layer_group_data()]
 #' @return ggplot2 layers
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   ggplot2::ggplot() +
-#'     layer_markers(
-#'       data = mapbaltimore::parks,
-#'       groupname_col = "park_district"
-#'     )
-#' }
-#' }
+#' @example examples/layer_markers.R
 #' @name layer_markers
 #' @family layer
 #' @md

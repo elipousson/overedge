@@ -27,17 +27,7 @@
 #' @param ... Additional parameters to pass to \code{\link[ggplot2]{coord_sf}}.
 #' @return \code{\link[ggplot2]{coord_sf}} function with xlim and ylim
 #'   parameters
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   library(ggplot2)
-#'
-#'   nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-#'   ggplot() +
-#'     geom_sf(data = nc) +
-#'     layer_neatline(data = nc[1, ], asp = 1, color = "red")
-#' }
-#' }
+#' @example examples/layer_neatline.R
 #' @seealso
 #'  \code{\link[ggplot2]{CoordSf}},\code{\link[ggplot2]{scale_continuous}}
 #' @family layer

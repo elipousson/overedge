@@ -6,14 +6,6 @@
 #' @param start_col PARAM_DESCRIPTION, Default: 'start'
 #' @param end_col PARAM_DESCRIPTION, Default: 'end'
 #' @param type PARAM_DESCRIPTION, Default: 'closed'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   # EXAMPLE1
-#' }
-#' }
 #' @seealso
 #'  \code{\link[ggplot2]{reexports}}, \code{\link[ggplot2]{geom_segment}}, \code{\link[ggplot2]{aes}}
 #' @rdname layer_arrows

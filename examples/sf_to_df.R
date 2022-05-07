@@ -1,12 +1,13 @@
-nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
 
-nc_coords <-
-  suppressWarnings(sf::st_coordinates(sf::st_centroid(nc)))
+# Convert a sf object to a data frame
+nc_df <- sf_to_df(nc)
 
-nc_df <-
-  dplyr::bind_cols(sf::st_drop_geometry(nc), nc_coords)
+# Convert a data frame to a sf object
+df_to_sf(nc_df, coords = c("lon", "lat"), remove_coords = TRUE)
 
-nc_df <- janitor::clean_names(nc_df)
-df_to_sf(nc_df, coords = c("x", "y"), remove_coords = TRUE)
-nc_df$xy <- paste(nc_df$x, nc_df$y, sep = ",")
+# If lon and lat values are present in a single column, use the into parameter
+# to split the values back into separate columns
+nc_df$xy <- paste(nc_df$lon, nc_df$lat, sep = ",")
+
 df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
