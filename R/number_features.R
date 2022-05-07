@@ -1,19 +1,21 @@
 #' Sort and number features by coordinates or distance
 #'
-#' Used with [layer_numbers()]. Supports multiple types of sorting including sorting:
+#' Used with [layer_numbers()]. Supports multiple types of sorting including
+#' sorting:
 #'
-#' - by centroid coordinates ("lon", "lat") appended with [get_coords]
+#' - by centroid coordinates ("lon", "lat") appended with [get_coords()]
 #' - by one or more bounding box min or max values ("xmin", "ymin", "xmax",
-#' "ymax") appended with [get_minmax]
+#' "ymax") appended with [get_minmax()]
 #' - by distance from the corner, side midpoint, or center of a bounding box
 #' ("dist_xmin_ymin", "dist_xmax_ymax", "dist_xmin_ymax", "dist_xmax_ymin",
 #' "dist_xmin_ymid", "dist_xmax_ymid", "dist_xmid_ymin", "dist_xmid_ymax",
 #' "dist_xmid_ymid")
-#' - by distance to a point (or sf, sfc, or bbox object) passed to the to
+#' - by distance to a point (or `sf`, `sfc`, or `bbox` object) passed to the to
 #' parameter
 #'
 #' For example, in the eastern United States, you can sort and number features
-#' from the top-left corner of the map to the bottom right by setting sort to "dist_xmin_ymax" (default).
+#' from the top-left corner of the map to the bottom right by setting sort to
+#' "dist_xmin_ymax" (default).
 #'
 #' [number_features] also supports a range of different numbering styles
 #' designed to match the standard enumeration options available in LaTeX.
@@ -25,8 +27,9 @@
 #' @param suffix Character to appended to "number" column. (e.g. "." for "1." or
 #'   ":" for "1:"). Can also be a character vector with the same length as the
 #'   number column.
-#' @return A sf object with a number column ordered by sort values.
-#' @inheritParams sort_features
+#' @param .id Name of the column to use for the feature numbers; defaults to
+#'   "number".
+#' @return A `sf` object with a number column ordered by sort values.
 #' @export
 #' @importFrom dplyr mutate row_number everything
 #' @importFrom utils as.roman
@@ -63,13 +66,14 @@ number_features <- function(data,
 
   num_style <- match.arg(num_style, c("arabic", "alph", "Alph", "roman", "Roman"))
 
-  data$number <- switch(num_style,
-    "arabic" = data$number,
-    "alph" = tolower(sapply(data[[.id]], int_to_alph)),
-    "Alph" = toupper(sapply(data[[.id]], int_to_alph)),
-    "roman" = tolower(utils::as.roman(data[[.id]])),
-    "Roman" = toupper(utils::as.roman(data[[.id]]))
-  )
+  data$number <-
+    switch(num_style,
+      "arabic" = data$number,
+      "alph" = tolower(sapply(data[[.id]], int_to_alph)),
+      "Alph" = toupper(sapply(data[[.id]], int_to_alph)),
+      "roman" = tolower(utils::as.roman(data[[.id]])),
+      "Roman" = toupper(utils::as.roman(data[[.id]]))
+    )
 
   if (!is.null(suffix)) {
     data[[.id]] <- paste0(data[[.id]], suffix)
@@ -101,7 +105,12 @@ int_to_alph <- function(num, suffix = NULL, base = 26) {
 #' @rdname number_features
 #' @param col Group column name, Default: `NULL`
 #' @param sort Sort column name, Default: "dist_xmin_ymax".
+#' @param to A `sf` object used to determine sort order based on distance from a
+#'   feature to the center of the "to" object.
 #' @param desc If `TRUE`, sort descending; default `FALSE`.
+#' @param crs Coordinate reference to use with [get_coords()] or [get_minmax()]
+#'   if "sort" any of the following: "lon", "lat", "longitude", "latitude",
+#'   "xmin", "ymin", "xmax", "ymax"
 #' @export
 #' @importFrom rlang has_name
 #' @importFrom dplyr arrange desc across all_of
@@ -110,8 +119,7 @@ sort_features <- function(data,
                           sort = c("lon", "lat"),
                           to = NULL,
                           desc = FALSE,
-                          crs = NULL,
-                          drop = FALSE) {
+                          crs = NULL) {
   latlon_opts <- c("longitude", "latitude", "lon", "lat")
   minmax_opts <- c("xmin", "ymin", "xmax", "ymax")
 
@@ -125,7 +133,7 @@ sort_features <- function(data,
           geometry = "centroid",
           crs = crs,
           keep_all = TRUE,
-          drop = drop
+          drop = FALSE
         )
     } else if ((sort %in% minmax_opts) && !all(rlang::has_name(data, sort))) {
       data <-
@@ -133,7 +141,7 @@ sort_features <- function(data,
           data,
           crs = crs,
           keep_all = TRUE,
-          drop = drop
+          drop = FALSE
         )
     }
   }
