@@ -4,7 +4,7 @@
 #' based on a file path, URL, or the data name and associated package.
 #' Optionally provide a bounding box to filter data (not supported for all data
 #' types). If a file or path is provided for a GeoJSON file, the
-#' [read_sf_geojson] function (using the
+#' [read_sf_geojson] function (using the suggested
 #' [{geojsonsf}](https://github.com/SymbolixAU/geojsonsf) package) is used.
 #'
 #' @details Reading data from a url:
@@ -232,7 +232,11 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
 #' @name read_sf_csv
 #' @rdname read_sf_ext
 #' @export
-read_sf_csv <- function(path, bbox = NULL, coords = c("lon", "lat"), ...) {
+read_sf_csv <- function(path, url = NULL, bbox = NULL, coords = c("lon", "lat"), ...) {
+  if (rlang::is_missing(path) && !is.null(url)) {
+    path <- url
+  }
+
   data <- readr::read_csv(path = path, ...)
 
   coords <- check_coords(data, coords = coords)
@@ -280,22 +284,22 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
           where = params$where
         ),
         "gsheet" = read_sf_gsheet(
-          ss = url,
+          url = url,
           bbox = bbox,
           coords = coords,
           sheet = params$sheet
         ),
         "gist" = read_sf_gist(
-          id = url,
+          url = url,
           bbox = bbox
         ),
         "csv" = read_sf_csv(
-          path = url,
+          url = url,
           bbox = bbox,
           coords = coords
         ),
         "geojson" = read_sf_geojson(
-          geojson = url,
+          url = url,
           bbox = bbox
         ),
         "download" = read_sf_download(
@@ -344,15 +348,15 @@ read_sf_geojson <- function(url,
                             ...) {
   is_pkg_installed("geojsonsf")
 
-  stopifnot(
-    !rlang::is_missing(url) | !is.null(path) | !is.null(geojson)
-  )
-
   if (!is.null(path)) {
     url <- path
   } else if (!is.null(geojson)) {
     url <- geojson
   }
+
+  stopifnot(
+    !rlang::is_missing(url)
+  )
 
   data <- geojsonsf::geojson_sf(geojson = url, ...)
 
@@ -380,17 +384,25 @@ read_sf_gist <- function(url,
       id = id
     )
 
-  if (length(gist_data$files) == 1) {
-    url <- gist_data$files[[1]]$raw_url
+  stopifnot(
+    !is.null(gist_data$files)
+  )
+
+  if (length(gist_data$files) > 1) {
+    cli::cli_alert_danger("read_sf_gist only uses the first file of any provided gist but this gist has more than one file.")
   }
 
-  return(read_sf_url(url = url, bbox = bbox, ...))
+  url <- gist_data$files[[1]]$raw_url
+
+  data <- read_sf_url(url = url, bbox = bbox, ...)
+
+  return(data)
 }
 
 #' @name read_sf_download
 #' @rdname read_sf_ext
 #' @param unzip If `TRUE`, url must be a zip file that is downloaded, unzipped
-#'   into a temporary directory, and then read to a file using the specified
+#'   into a temporary directory (created with [tempdir()]), and then read to a file using the specified
 #'   file type.
 #' @inheritParams utils::download.file
 #' @inheritParams get_data_dir
