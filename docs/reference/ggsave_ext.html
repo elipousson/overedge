@@ -52,7 +52,17 @@ label (e.g. "baltcity") as a prefix to the output file name.'><!-- mathjax --><s
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -60,7 +70,7 @@ label (e.g. "baltcity") as a prefix to the output file name.'><!-- mathjax --><s
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Save a ggplot2 plot or gt table to file and update file EXIF metadata</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/ggsave_ext.R" class="external-link"><code>R/ggsave_ext.R</code></a></small>
       <div class="d-none name"><code>ggsave_ext.Rd</code></div>
     </div>
 
@@ -222,24 +232,17 @@ support EXIF metadata updates although this option may be added in the future.</
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">neighborhoods</span> <span class="op">&lt;-</span></span>
-<span class="r-in">    <span class="fu"><a href="get_location.html">get_location</a></span><span class="op">(</span></span>
-<span class="r-in">      type <span class="op">=</span> <span class="st">"neighborhoods"</span>,</span>
-<span class="r-in">      package <span class="op">=</span> <span class="st">"mapbaltimore"</span></span>
+<span class="r-in">  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span class="r-in">    <span class="fu"><a href="layer_location_data.html">layer_location_data</a></span><span class="op">(</span></span>
+<span class="r-in">      data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
 <span class="r-in">    <span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in">  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">neighborhoods</span><span class="op">)</span></span>
-<span class="r-in"></span>
 <span class="r-in">  <span class="fu">ggsave_ext</span><span class="op">(</span></span>
-<span class="r-in">    name <span class="op">=</span> <span class="st">"neighborhoods"</span>,</span>
-<span class="r-in">    label <span class="op">=</span> <span class="st">"Baltimore City"</span>,</span>
-<span class="r-in">    author <span class="op">=</span> <span class="st">"Thomas H. Poppleton"</span>,</span>
+<span class="r-in">    name <span class="op">=</span> <span class="st">"counties"</span>,</span>
+<span class="r-in">    label <span class="op">=</span> <span class="st">"North Carolina"</span>,</span>
 <span class="r-in">    device <span class="op">=</span> <span class="st">"pdf"</span>,</span>
 <span class="r-in">    paper <span class="op">=</span> <span class="st">"letter"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in">    <span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>

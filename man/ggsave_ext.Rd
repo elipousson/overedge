@@ -151,24 +151,17 @@ support EXIF metadata updates although this option may be added in the future.
 
 \examples{
 \dontrun{
-if (interactive()) {
-  neighborhoods <-
-    get_location(
-      type = "neighborhoods",
-      package = "mapbaltimore"
+  ggplot2::ggplot() +
+    layer_location_data(
+      data = system.file("shape/nc.shp", package = "sf")
     )
 
-  ggplot2::ggplot() +
-    ggplot2::geom_sf(data = neighborhoods)
-
   ggsave_ext(
-    name = "neighborhoods",
-    label = "Baltimore City",
-    author = "Thomas H. Poppleton",
+    name = "counties",
+    label = "North Carolina",
     device = "pdf",
     paper = "letter"
-  )
-}
+    )
 }
 }
 \seealso{

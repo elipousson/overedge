@@ -181,7 +181,9 @@ has_osm_type_name <- function(x) {
 #'   for more information. Only used for [get_osm_boundaries].
 #' @param lang Language for boundary names to include in resulting data frame
 #'   (e.g. "en" for English or "es" for Spanish). Default language names should
-#'   always be included in results. Defaults to "en".
+#'   always be included in results. Defaults to "en". See
+#'   <https://wiki.openstreetmap.org/wiki/Multilingual_names> for more
+#'   information.
 #' @rdname get_osm_data
 #' @name get_osm_boundaries
 #' @export

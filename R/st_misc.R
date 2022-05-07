@@ -1,19 +1,19 @@
 #' Modify the geometry of a simple feature or bounding box object
 #'
-#' Support both bbox and sf objects as inputs.
+#' Support both `bbox` and `sf` objects as inputs.
 #'
 #'  - Scale or rotate a simple feature or bounding box object using affine
 #'  transformations
-#'  - Get the center point for a sf object
-#'  - Get a circumscribed square or approximate inscribed square in a sf object
-#'  - Get a circumscribed circle or inscribed circle in a sf object
+#'  - Get the center point for a `sf` object
+#'  - Get a circumscribed square or approximate inscribed square in a `sf` object
+#'  - Get a circumscribed circle or inscribed circle in a `sf` object
 #'
 #' st_inscribed_square wraps `sf::st_inscribed_circle()` but limits the circle
-#' to 1 segment per quadrant (`nQuadSegs` = 1) and then rotates the resulting
+#' to 1 segment per quadrant (`nQuadSegs = 1`) and then rotates the resulting
 #' geometry 45 degrees to provide a (mostly) inscribed square. A different
 #' rotation value can be provided to change the orientation of the shape, e.g.
-#' rotate = -45 to return a diamond shape. st_square wraps [st_bbox_ext] with
-#' asp = 1.
+#' `rotate = -45` to return a diamond shape. [st_square()] wraps [st_bbox_ext()] with
+#' `asp = 1`.
 #' @example examples/st_misc.R
 #' @param x A sf, sfc, or bbox object
 #' @param scale numeric; scale factor, Default: 1

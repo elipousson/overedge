@@ -104,7 +104,9 @@ for more information. Only used for \link{get_osm_boundaries}.}
 
 \item{lang}{Language for boundary names to include in resulting data frame
 (e.g. "en" for English or "es" for Spanish). Default language names should
-always be included in results. Defaults to "en".}
+always be included in results. Defaults to "en". See
+\url{https://wiki.openstreetmap.org/wiki/Multilingual_names} for more
+information.}
 }
 \value{
 A simple feature object with features using selected geometry type or

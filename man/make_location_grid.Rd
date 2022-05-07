@@ -72,7 +72,7 @@ Create a grid with an id column and optionally a set number of columns and
 rows. This documentation is incomplete the function may change.
 }
 \examples{
-nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
 
 # Make a 4 by 5 grid covering a mile buffer around a location
 make_location_grid(

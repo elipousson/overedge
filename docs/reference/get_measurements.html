@@ -46,7 +46,17 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -54,7 +64,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get measurements for simple feature objects</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/get_measurements.R" class="external-link"><code>R/get_measurements.R</code></a></small>
       <div class="d-none name"><code>get_measurements.Rd</code></div>
     </div>
 
@@ -137,16 +147,9 @@ for x.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/Library/Frameworks/R.framework/Versions/4.1-arm64/Resources/library/sf/shape/nc.shp' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-in"><span class="va">nc_crs</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_sf_ext.html">read_sf_path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Get area for North Caroline counties</span></span>
 <span class="r-in"><span class="fu">get_area</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="op">]</span><span class="op">)</span><span class="op">$</span><span class="va">area</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Units: [m^2]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1137107793  610916077</span>
@@ -157,13 +160,16 @@ for x.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Units: [acres]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 280984.3 150960.0</span>
 <span class="r-in"></span>
+<span class="r-in"><span class="co"># Get distances for North Caroline counties</span></span>
 <span class="r-in"><span class="fu">get_dist</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xmax"</span>, <span class="st">"ymax"</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"mile"</span><span class="op">)</span><span class="op">$</span><span class="va">dist</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18.03826 [mile]</span>
 <span class="r-in"><span class="fu">get_dist</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, to <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="fl">30</span>,<span class="op">]</span>, units <span class="op">=</span> <span class="st">"km"</span><span class="op">)</span><span class="op">$</span><span class="va">dist</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 239.2365 [km]</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">nc_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_point.html">as_line</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">30</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">nc_crs</span><span class="op">)</span></span>
+<span class="r-in"><span class="co"># Create a line between two counties</span></span>
+<span class="r-in"><span class="va">nc_line</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_point.html">as_line</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="as_point.html">as_point</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">30</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">nc</span><span class="op">)</span></span>
 <span class="r-in"></span>
+<span class="r-in"><span class="co"># Get length and bearing of the line</span></span>
 <span class="r-in"><span class="fu">get_length</span><span class="op">(</span><span class="va">nc_line</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>

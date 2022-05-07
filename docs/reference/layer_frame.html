@@ -170,17 +170,22 @@ meters.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_sf_ext.html">read_sf_path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="st_transform_ext.html">st_transform_ext</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">raleigh_msa</span> <span class="op">&lt;-</span></span>
+<span class="r-in">  <span class="fu"><a href="get_location.html">get_location</a></span><span class="op">(</span>type <span class="op">=</span> <span class="va">nc</span>,</span>
+<span class="r-in">             name_col <span class="op">=</span> <span class="st">"NAME"</span>,</span>
+<span class="r-in">             name <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Franklin"</span>, <span class="st">"Johnston"</span>, <span class="st">"Wake"</span><span class="op">)</span>,</span>
+<span class="r-in">             crs <span class="op">=</span> <span class="fl">3857</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span class="r-in">  <span class="fu">layer_frame</span><span class="op">(</span></span>
-<span class="r-in">    data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">NAME</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Franklin"</span>, <span class="st">"Johnston"</span>, <span class="st">"Wake"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span class="r-in">    data <span class="op">=</span> <span class="va">raleigh_msa</span>,</span>
 <span class="r-in">    frame <span class="op">=</span> <span class="st">"circle"</span>,</span>
 <span class="r-in">    fill <span class="op">=</span> <span class="st">"lightyellow"</span>,</span>
 <span class="r-in">    inscribed <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span class="r-in">  <span class="op">)</span> <span class="op">+</span></span>
 <span class="r-in">  <span class="fu"><a href="layer_location_data.html">layer_location_data</a></span><span class="op">(</span></span>
-<span class="r-in">    data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">NAME</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Franklin"</span>, <span class="st">"Johnston"</span>, <span class="st">"Wake"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span class="r-in">    data <span class="op">=</span> <span class="va">raleigh_msa</span>,</span>
 <span class="r-in">    mapping <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">NAME</span><span class="op">)</span>,</span>
 <span class="r-in">    alpha <span class="op">=</span> <span class="fl">0.5</span></span>
 <span class="r-in">  <span class="op">)</span> <span class="op">+</span></span>
@@ -188,6 +193,7 @@ meters.</p></dd>
 <span class="r-in">    fill <span class="op">=</span> <span class="st">"none"</span></span>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-plt img"><img src="layer_frame-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

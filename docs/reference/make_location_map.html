@@ -252,6 +252,13 @@ Default: <code>NULL</code></p></dd>
 <dt>filetype</dt>
 <dd><p>file type supported by <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>. The file type must be
 provided for extdata and cached data.</p></dd>
+<dt>image_path</dt>
+<dd><p>path to location of images for <code>make_image_map()</code></p></dd>
+<dt>style_url</dt>
+<dd><p>A Mapbox style url; defaults to NULL.</p></dd>
+<dt>image_geom</dt>
+<dd><p>For <code>make_image_map()</code>, geom to use with layer_markers to
+mark the location of images (based on EXIF metadata).</p></dd>
 <dt>groupname_col</dt>
 <dd><p>Group column name, used to join group metadata if
 group_meta is a non-spatial data frame; Default: <code>NULL</code></p></dd>

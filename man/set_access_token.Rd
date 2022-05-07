@@ -10,7 +10,8 @@ set_access_token(token, overwrite = FALSE, install = FALSE, type = NULL)
 get_access_token(token = NULL, type = NULL)
 }
 \arguments{
-\item{token}{An access token or API key; required.}
+\item{token}{An access token or API key; required for \code{\link[=set_access_token]{set_access_token()}}.
+If token is not provided; type is required for \code{\link[=get_access_token]{get_access_token()}}.}
 
 \item{overwrite}{If \code{TRUE}, overwrite existing token; Default: \code{FALSE}}
 

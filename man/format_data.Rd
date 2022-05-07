@@ -32,12 +32,11 @@ bind_units_col(x, y, units = NULL, drop = FALSE, keep_all = TRUE, .id = NULL)
 \arguments{
 \item{x}{A tibble or data frame object}
 
-\item{var_names}{A named list following the format, list("New var name" =
-old_var_name), or a two column data frame with the first column being the
+\item{var_names}{A named list following the format, \code{list("New var name" = old_var_name)}, or a two column data frame with the first column being the
 new variable names and the second column being the old variable names;
 defaults to \code{NULL}.}
 
-\item{clean_names}{Optionally apply \link[janitor:clean_names]{janitor::clean_names}; defaukts to \code{TRUE}.}
+\item{clean_names}{If \code{TRUE}, pass data frame to \link[janitor:clean_names]{janitor::clean_names}; defaults to \code{TRUE}.}
 
 \item{replace_na}{A named list to pass to \link[tidyr:replace_na]{tidyr::replace_na}; defaults to
 \code{NULL}.}
@@ -54,13 +53,25 @@ FeatureServer and MapServer sources) , Default: \code{TRUE}}
 \item{.after}{The location to place sf column after; defaults to
 \link[dplyr:reexports]{dplyr::everything}.}
 
-\item{sf_col}{Name to rename sf column to.}
+\item{sf_col}{Name to use for the sf column after renaming; defaults to "geometry".}
 
 \item{city, county, state}{City, county, and state to bind to data frame or
 \code{sf} object.}
 
-\item{keep_all}{If \code{FALSE}, keep all columns. If FALSE, return only the named
-.id column.}
+\item{y}{Vector of numeric or units values to bind to x.}
+
+\item{units}{Units to use for y (if numeric) or convert to (if y is units
+class); defaults to \code{NULL}.}
+
+\item{drop}{If \code{TRUE}, apply the \link[units:drop_units]{units::drop_units} function to the column
+with units class values and return numeric values instead; defaults to
+\code{FALSE}.}
+
+\item{keep_all}{If \code{FALSE}, keep all columns. If \code{FALSE}, return only the
+named .id column.}
+
+\item{.id}{Name to use for vector of units provided to "y" parameter, when
+"y" is bound to the "x" data frame or tibble as a new column.}
 }
 \value{
 Data with formatting functions applied.

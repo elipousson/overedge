@@ -46,31 +46,39 @@ specified with long-lat coordinates and \code{sf_use_s2()} returns
 meters.}
 }
 \description{
-Support both bbox and sf objects as inputs.
+Support both \code{bbox} and \code{sf} objects as inputs.
 }
 \details{
 \itemize{
 \item Scale or rotate a simple feature or bounding box object using affine
 transformations
-\item Get the center point for a sf object
-\item Get a circumscribed square or approximate inscribed square in a sf object
-\item Get a circumscribed circle or inscribed circle in a sf object
+\item Get the center point for a \code{sf} object
+\item Get a circumscribed square or approximate inscribed square in a \code{sf} object
+\item Get a circumscribed circle or inscribed circle in a \code{sf} object
 }
 
 st_inscribed_square wraps \code{sf::st_inscribed_circle()} but limits the circle
-to 1 segment per quadrant (\code{nQuadSegs} = 1) and then rotates the resulting
+to 1 segment per quadrant (\code{nQuadSegs = 1}) and then rotates the resulting
 geometry 45 degrees to provide a (mostly) inscribed square. A different
 rotation value can be provided to change the orientation of the shape, e.g.
-rotate = -45 to return a diamond shape. st_square wraps \link{st_bbox_ext} with
-asp = 1.
+\code{rotate = -45} to return a diamond shape. \code{\link[=st_square]{st_square()}} wraps \code{\link[=st_bbox_ext]{st_bbox_ext()}} with
+\code{asp = 1}.
 }
 \examples{
-nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
+nc <- st_transform_ext(nc, crs = 3857)
 
-ggplot2::ggplot() +
+basemap <-
+  ggplot2::ggplot() +
   ggplot2::geom_sf(data = nc) +
-  ggplot2::geom_sf(data = nc_rotated, fill = NA, color = "red")
+  ggplot2::theme_void()
+
+basemap +
+  layer_location_data(
+    data = st_scale_rotate(nc, scale = 0.5, rotate = 15),
+    fill = NA,
+    color = "red"
+    )
 }
 \seealso{
 \itemize{

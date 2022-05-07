@@ -21,7 +21,7 @@ read_sf_path(path, bbox = NULL, ...)
 
 read_sf_excel(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"), ...)
 
-read_sf_csv(path, bbox = NULL, coords = c("lon", "lat"), ...)
+read_sf_csv(path, url = NULL, bbox = NULL, coords = c("lon", "lat"), ...)
 
 read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
@@ -98,7 +98,7 @@ date/time prefix; defaults to \code{NULL}.}
   }
 
 \item{unzip}{If \code{TRUE}, url must be a zip file that is downloaded, unzipped
-into a temporary directory, and then read to a file using the specified
+into a temporary directory (created with \code{\link[=tempdir]{tempdir()}}), and then read to a file using the specified
 file type.}
 
 \item{ss}{Something that identifies a Google Sheet:
@@ -121,7 +121,7 @@ An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support read
 based on a file path, URL, or the data name and associated package.
 Optionally provide a bounding box to filter data (not supported for all data
 types). If a file or path is provided for a GeoJSON file, the
-\link{read_sf_geojson} function (using the
+\link{read_sf_geojson} function (using the suggested
 \href{https://github.com/SymbolixAU/geojsonsf}{{geojsonsf}} package) is used.
 }
 \details{

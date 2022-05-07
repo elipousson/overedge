@@ -179,6 +179,13 @@ Default: \code{NULL}}
 \item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file type must be
 provided for extdata and cached data.}
 
+\item{image_path}{path to location of images for \code{\link[=make_image_map]{make_image_map()}}}
+
+\item{style_url}{A Mapbox style url; defaults to NULL.}
+
+\item{image_geom}{For \code{\link[=make_image_map]{make_image_map()}}, geom to use with layer_markers to
+mark the location of images (based on EXIF metadata).}
+
 \item{groupname_col}{Group column name, used to join group metadata if
 group_meta is a non-spatial data frame; Default: \code{NULL}}
 

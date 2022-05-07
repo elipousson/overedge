@@ -75,16 +75,15 @@ buffer and/or adjust the aspect ratio of the limiting bounding box to match a
 set aspect ratio.
 }
 \examples{
-\dontrun{
-if (interactive()) {
-  library(ggplot2)
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
 
-  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-  ggplot() +
-    geom_sf(data = nc) +
-    layer_neatline(data = nc[1, ], asp = 1, color = "red")
-}
-}
+ggplot2::ggplot() +
+  layer_location_data(data = nc) +
+  layer_neatline(data = nc[1, ], asp = 1, color = "red", size = 1.5, linetype = "dashed")
+
+ggplot2::ggplot() +
+  layer_location_data(data = nc) +
+  layer_neatline(data = nc[1, ], dist = 20, unit = "mi", color = "none")
 }
 \seealso{
 \code{\link[ggplot2]{CoordSf}},\code{\link[ggplot2]{scale_continuous}}

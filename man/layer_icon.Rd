@@ -65,22 +65,20 @@ Use the  \code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}} function to
 from the input simple feature object to set the icon location.
 }
 \examples{
-\dontrun{
-if (interactive()) {
-  library(sf)
-  library(ggplot2)
-  library(overedge)
+nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
 
-  nc <- st_read(system.file("shape/nc.shp", package = "sf"))
-  ggplot() +
-    geom_sf_icon(data = nc, icon = "point-start", size = 10)
+basemap <-
+  ggplot2::ggplot() +
+  ggplot2::theme_void() +
+  layer_location_data(data = nc)
 
+basemap +
+  geom_sf_icon(data = nc, icon = "point-start", size = 10)
 
-  nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc) / 4)
-  ggplot() +
-    geom_sf_icon(data = nc, size = 5)
-}
-}
+nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc) / 4)
+
+basemap +
+  geom_sf_icon(data = nc, size = 5)
 }
 \seealso{
 \code{\link[ggsvg]{geom_point_svg}}
