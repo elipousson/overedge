@@ -26,27 +26,7 @@
 #' @inheritParams write_exif
 #' @param ... Additional parameters passed to [ggplot2::ggsave()] or
 #'   [gt::gtsave()].
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   neighborhoods <-
-#'     get_location(
-#'       type = "neighborhoods",
-#'       package = "mapbaltimore"
-#'     )
-#'
-#'   ggplot2::ggplot() +
-#'     ggplot2::geom_sf(data = neighborhoods)
-#'
-#'   ggsave_ext(
-#'     name = "neighborhoods",
-#'     label = "Baltimore City",
-#'     author = "Thomas H. Poppleton",
-#'     device = "pdf",
-#'     paper = "letter"
-#'   )
-#' }
-#' }
+#' @example examples/ggsave_ext.R
 #' @seealso
 #'  \code{\link[ggplot2]{ggsave}}
 #' @rdname ggsave_ext
