@@ -1,12 +1,15 @@
-
 #' Create discrete fill and color scales for grouped data
 #'
 #' Designed for use with layer_group_data. group_data_pal generates palettes
 #' that are passed to [ggplot2::scale_fill_manual] and
 #' [ggplot2::scale_color_manual].
 #'
+#' @param data Data to use when generating scale or palette.
+#' @param col Grouping column found in data to use in generating scale or
+#'   palette; defaults to `NULL`.
 #' @inheritParams paletteer::paletteer_d
 #' @inheritParams ggplot2::scale_fill_manual
+#' @inheritDotParams ggplot2::scale_fill_manual
 #' @seealso
 #'  \code{\link[scales]{viridis_pal}}
 #'  \code{\link[paletteer]{paletteer_d}}

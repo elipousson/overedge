@@ -10,6 +10,7 @@
 #' @inheritParams st_bbox_ext
 #' @inheritParams layer_location_data
 #' @inheritParams ggsave_ext
+#' @inheritParams mapboxapi::layer_static_mapbox
 #' @param basemap If `FALSE`, return a list of ggplot2 layers (or ggproto
 #'   objects). If `TRUE`, add the list to [ggplot2::ggplot()] to return a map.
 #' @param bg_layer,fg_layer A ggplot2 layer or a list of ggproto objects (e.g.
@@ -196,6 +197,9 @@ make_social_map <- function(location,
 
 #' @name make_image_map
 #' @rdname make_location_map
+#' @param image_path path to location of images for [make_image_map()]
+#' @param image_geom For [make_image_map()], geom to use with layer_markers to
+#'   mark the location of images (based on EXIF metadata).
 #' @inheritParams layer_markers
 #' @export
 make_image_map <- function(image_path,

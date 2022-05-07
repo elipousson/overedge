@@ -7,12 +7,12 @@
 #' - Optionally corrects UNIX formatted dates with 1970-01-01 origins
 #' - Optionally renames variables by passing a named list of variables
 #'
+#'
 #' @param x A tibble or data frame object
-#' @param var_names A named list following the format, list("New var name" =
-#'   old_var_name), or a two column data frame with the first column being the
+#' @param var_names A named list following the format, `list("New var name" = old_var_name)`, or a two column data frame with the first column being the
 #'   new variable names and the second column being the old variable names;
 #'   defaults to `NULL`.
-#' @param clean_names Optionally apply [janitor::clean_names]; defaukts to `TRUE`.
+#' @param clean_names If `TRUE`, pass data frame to [janitor::clean_names]; defaults to `TRUE`.
 #' @param replace_na A named list to pass to [tidyr::replace_na]; defaults to
 #'   `NULL`.
 #' @param replace_with_na A named list to pass to [naniar::replace_with_na];
@@ -127,7 +127,7 @@ relocate_sf_col <- function(x, .after = dplyr::everything()) {
 
 #' @name rename_sf_col
 #' @rdname format_data
-#' @param sf_col Name to rename sf column to.
+#' @param sf_col Name to use for the sf column after renaming; defaults to "geometry".
 #' @export
 #' @importFrom dplyr everything relocate all_of
 rename_sf_col <- function(x, sf_col = "geometry") {
@@ -180,8 +180,16 @@ bind_address_col <- function(x, city = NULL, county = NULL, state = NULL) {
 
 #' @name bind_units_col
 #' @rdname format_data
-#' @param keep_all If `FALSE`, keep all columns. If FALSE, return only the named
-#'   .id column.
+#' @param y Vector of numeric or units values to bind to x.
+#' @param units Units to use for y (if numeric) or convert to (if y is units
+#'   class); defaults to `NULL`.
+#' @param drop If `TRUE`, apply the [units::drop_units] function to the column
+#'   with units class values and return numeric values instead; defaults to
+#'   `FALSE`.
+#' @param keep_all If `FALSE`, keep all columns. If `FALSE`, return only the
+#'   named .id column.
+#' @param .id Name to use for vector of units provided to "y" parameter, when
+#'   "y" is bound to the "x" data frame or tibble as a new column.
 #' @export
 #' @importFrom units drop_units
 #' @importFrom dplyr bind_cols

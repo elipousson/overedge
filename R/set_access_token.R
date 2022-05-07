@@ -3,7 +3,8 @@
 #' Based on the [mapboxapi::mb_access_token] function from the {mapboxapi}
 #' package by Kyle Walker.
 #'
-#' @param token An access token or API key; required.
+#' @param token An access token or API key; required for [set_access_token()].
+#'   If token is not provided; type is required for [get_access_token()].
 #' @param overwrite If `TRUE`, overwrite existing token; Default: `FALSE`
 #' @param install If `TRUE`, install token for use in future sessions; Default:
 #'   `FALSE`
