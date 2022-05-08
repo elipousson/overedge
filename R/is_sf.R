@@ -180,7 +180,7 @@ is_sf_or_what <- function(x = NULL, return = NULL, us = FALSE, null.ok = TRUE) {
 
 #' @noRd
 is_state_name <- function(x) {
-  x %in% c(us_states$name, us_states$abb, us_states$statefp)
+  x %in% c(us_states$name, us_states$abb)
 }
 
 #' @noRd
