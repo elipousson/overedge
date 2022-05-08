@@ -9,7 +9,7 @@
 #'   palette; defaults to `NULL`.
 #' @inheritParams paletteer::paletteer_d
 #' @inheritParams ggplot2::scale_fill_manual
-#' @inheritDotParams ggplot2::scale_fill_manual
+#' @inheritParams ggplot2::discrete_scale
 #' @seealso
 #'  \code{\link[scales]{viridis_pal}}
 #'  \code{\link[paletteer]{paletteer_d}}
