@@ -31,9 +31,8 @@ layer_location_data(
 default), it is combined with the default mapping at the top level of the
 plot. You must supply \code{mapping} if there is no plot mapping.}
 
-\item{data}{sf object including data in area. data may also be a url or file
-path. data can be the name of a data object or, if package and filetype are
-provided, a cached or external file.}
+\item{data}{Character string (e.g. url, file path, or name of data from
+package), a \code{sf}, \code{sfc}, or \code{bbox}  object including data in area.}
 
 \item{geom}{A character string indicating which ggplot2 geom to use, Default:
 'sf'. Options include "sf" (\link[ggplot2:ggsf]{ggplot2::geom_sf}), "icon" (\link{layer_icon}),
@@ -57,12 +56,13 @@ provided.}
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
-\item{package}{package name.}
+\item{package}{Name of the package to search for data.}
 
-\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file type must be
-provided for extdata and cached data.}
+\item{filetype}{File type to use if passing parameters to \link{read_sf_download}
+or \link{read_sf_pkg} (required for extdata and cached data).}
 
-\item{fn}{Function to apply to data before returning.}
+\item{fn}{Function to apply to data after filtering by location but before
+returning from function.}
 
 \item{geom_fn}{ggplot2 geom or custom function using lambda syntax. Use for
 passing custom mapping functions to layer_location_data beyond the
@@ -76,9 +76,10 @@ provided. Default TRUE.}
 This option ignores any \code{dist}, \code{diag_ratio}, or \code{asp} parameters. Default
 \code{FALSE}.}
 
-\item{from_crs}{coordinate reference system of the data.}
+\item{from_crs}{Coordinate reference system of the data (used to convert the
+CRS of the bounding box used in reading/filtering data).}
 
-\item{crs}{coordinate reference system to return}
+\item{crs}{Coordinate reference system to return}
 
 \item{label_col}{Column name or id for a column with the text or labels to
 pass to any text geom.}
@@ -120,7 +121,7 @@ Alternatively, use the "geom_fn" parameter to pass a function that returns a
 ggplot2 layer to use instead of one of the preset geom functions.
 }
 \seealso{
-\code{\link[ggplot2]{CoordSf}}
+\code{\link[ggplot2:ggsf]{ggplot2::CoordSf()}}
 
 Other layer: 
 \code{\link{layer_frame}()},

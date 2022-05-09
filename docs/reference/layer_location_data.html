@@ -110,9 +110,8 @@ set based on the name_col but values passed to mapping take precedence.</p>
 default), it is combined with the default mapping at the top level of the
 plot. You must supply <code>mapping</code> if there is no plot mapping.</p></dd>
 <dt>data</dt>
-<dd><p>sf object including data in area. data may also be a url or file
-path. data can be the name of a data object or, if package and filetype are
-provided, a cached or external file.</p></dd>
+<dd><p>Character string (e.g. url, file path, or name of data from
+package), a <code>sf</code>, <code>sfc</code>, or <code>bbox</code>  object including data in area.</p></dd>
 <dt>geom</dt>
 <dd><p>A character string indicating which ggplot2 geom to use, Default:
 'sf'. Options include "sf" (<a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::geom_sf</a>), "icon" (<a href="layer_icon.html">layer_icon</a>),
@@ -136,12 +135,13 @@ provided.</p></dd>
 character (e.g. "1:3"). If numeric, <code><a href="get_asp.html">get_asp()</a></code> returns the same value
 without modification.</p></dd>
 <dt>package</dt>
-<dd><p>package name.</p></dd>
+<dd><p>Name of the package to search for data.</p></dd>
 <dt>filetype</dt>
-<dd><p>file type supported by <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>. The file type must be
-provided for extdata and cached data.</p></dd>
+<dd><p>File type to use if passing parameters to <a href="read_sf_ext.html">read_sf_download</a>
+or <a href="read_sf_ext.html">read_sf_pkg</a> (required for extdata and cached data).</p></dd>
 <dt>fn</dt>
-<dd><p>Function to apply to data before returning.</p></dd>
+<dd><p>Function to apply to data after filtering by location but before
+returning from function.</p></dd>
 <dt>geom_fn</dt>
 <dd><p>ggplot2 geom or custom function using lambda syntax. Use for
 passing custom mapping functions to layer_location_data beyond the
@@ -155,9 +155,10 @@ provided. Default TRUE.</p></dd>
 This option ignores any <code>dist</code>, <code>diag_ratio</code>, or <code>asp</code> parameters. Default
 <code>FALSE</code>.</p></dd>
 <dt>from_crs</dt>
-<dd><p>coordinate reference system of the data.</p></dd>
+<dd><p>Coordinate reference system of the data (used to convert the
+CRS of the bounding box used in reading/filtering data).</p></dd>
 <dt>crs</dt>
-<dd><p>coordinate reference system to return</p></dd>
+<dd><p>Coordinate reference system to return</p></dd>
 <dt>label_col</dt>
 <dd><p>Column name or id for a column with the text or labels to
 pass to any text geom.</p></dd>
@@ -188,7 +189,7 @@ ggplot2 layer to use instead of one of the preset geom functions.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">CoordSf</a></code></p>
+    <div class="dont-index"><p><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::CoordSf()</a></code></p>
 <p>Other layer: 
 <code><a href="layer_frame.html">layer_frame</a>()</code>,
 <code><a href="layer_icon.html">layer_icon</a>()</code>,

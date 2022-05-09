@@ -27,7 +27,8 @@ get_counties(
 )
 }
 \arguments{
-\item{location}{sf, sfc, or bbox object convertible with as_sfc}
+\item{location}{A \code{sf}, \code{sfc}, or \code{bbox} object or a character string that
+matches a geoid, name, abb, or statefp for \link{us_states} or \link{us_counties}.}
 
 \item{dist}{buffer distance in units. Optional.}
 
@@ -47,8 +48,24 @@ without modification.}
 
 \item{class}{Class of data to return, "df" (default), "sf", "bbox", or "sfc"}
 
-\item{...}{Additional parameters including GeoID}
+\item{...}{Additional parameters including geoid or name. For \code{\link[=get_states]{get_states()}},
+additional parameters can be abb or statefp.}
 }
 \description{
 Get U.S. states and counties using a very fast query.
+}
+\examples{
+get_states(
+  location = "Maryland"
+)
+
+get_counties(
+  location = "Baltimore city, Maryland"
+)
+
+get_states(
+  location = "24",
+  class = "sf"
+)
+
 }

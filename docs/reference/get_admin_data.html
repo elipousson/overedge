@@ -46,7 +46,17 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/overedge/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -54,7 +64,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get U.S. State and County boundary data for a location</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/overedge/blob/HEAD/R/get_admin_data.R" class="external-link"><code>R/get_admin_data.R</code></a></small>
       <div class="d-none name"><code>get_admin_data.Rd</code></div>
     </div>
 
@@ -88,7 +98,8 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>location</dt>
-<dd><p>sf, sfc, or bbox object convertible with as_sfc</p></dd>
+<dd><p>A <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object or a character string that
+matches a geoid, name, abb, or statefp for <a href="us_states.html">us_states</a> or <a href="us_counties.html">us_counties</a>.</p></dd>
 <dt>dist</dt>
 <dd><p>buffer distance in units. Optional.</p></dd>
 <dt>diag_ratio</dt>
@@ -108,9 +119,44 @@ without modification.</p></dd>
 <dt>class</dt>
 <dd><p>Class of data to return, "df" (default), "sf", "bbox", or "sfc"</p></dd>
 <dt>...</dt>
-<dd><p>Additional parameters including GeoID</p></dd>
+<dd><p>Additional parameters including geoid or name. For <code>get_states()</code>,
+additional parameters can be abb or statefp.</p></dd>
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">get_states</span><span class="op">(</span></span>
+<span class="r-in">  location <span class="op">=</span> <span class="st">"Maryland"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name     geoid abb   est_pop statefp bbox       wkt                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Maryland 24    MD    6<span style="text-decoration: underline;">018</span>848 24      <span style="color: #949494;">&lt;bbox [4]&gt;</span> MULTIPOLYGON (((-8465780 4578…</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu">get_counties</span><span class="op">(</span></span>
+<span class="r-in">  location <span class="op">=</span> <span class="st">"Baltimore city, Maryland"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name          name_short abb_state est_pop geoid countyfp statefp bbox   wkt  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Baltimore ci… Baltimore  MD         <span style="text-decoration: underline;">609</span>032 24510 510      24      &lt;bbox&gt; MULT…</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu">get_states</span><span class="op">(</span></span>
+<span class="r-in">  location <span class="op">=</span> <span class="st">"24"</span>,</span>
+<span class="r-in">  class <span class="op">=</span> <span class="st">"sf"</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 5 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -8848525 ymin: 4566962 xmax: -8354410 ymax: 4825788</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / Pseudo-Mercator</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name     geoid abb   est_pop statefp                                  geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;MULTIPOLYGON [m]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Maryland 24    MD    6<span style="text-decoration: underline;">018</span>848 24      (((-8465780 4578058, -8465715 4580663, -…</span>
+<span class="r-in"></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
@@ -120,7 +166,8 @@ without modification.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -81,8 +81,8 @@ basemap +
   geom_sf_icon(data = nc, size = 5)
 }
 \seealso{
-\code{\link[ggsvg]{geom_point_svg}}
-\code{\link[overedge]{map_icons}}
+\code{\link[ggsvg:geom_point_svg]{ggsvg::geom_point_svg()}}
+\link{map_icons}
 
 Other layer: 
 \code{\link{layer_frame}()},

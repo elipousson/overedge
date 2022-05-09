@@ -110,8 +110,8 @@ sf_bbox_dist. All other functions only take a bbox parameter.
 }
 \seealso{
 \itemize{
-\item \code{\link[sf]{st_as_sf}},\code{\link[sf]{st_as_sfc}}
-\item \code{\link[sfx]{st_extent}}
+\item \code{\link[sf:st_as_sf]{sf::st_as_sf()}},\code{\link[sf:st_as_sfc]{sf::st_as_sfc()}}
+\item \code{\link[sfx:st_extent]{sfx::st_extent()}}
 }
 
 Other dist: 

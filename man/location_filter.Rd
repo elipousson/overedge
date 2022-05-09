@@ -59,7 +59,7 @@ Location can be:
 }
 \details{
 \itemize{
-\item A sf, bbox, or sfc object
+\item A \code{sf}, \code{bbox}, or \code{sfc} object
 \item A U.S. state (name, abbreviation, or GeoID) or county (GeoID)
 \item An address
 }

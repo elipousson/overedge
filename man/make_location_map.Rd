@@ -115,9 +115,8 @@ to units matching GDAL units for x; defaults to "meter"}
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
-\item{data}{sf object including data in area. data may also be a url or file
-path. data can be the name of a data object or, if package and filetype are
-provided, a cached or external file.}
+\item{data}{Character string (e.g. url, file path, or name of data from
+package), a \code{sf}, \code{sfc}, or \code{bbox}  object including data in area.}
 
 \item{crs}{Coordinate reference system of bounding box to return}
 
@@ -176,8 +175,8 @@ Default: \code{NULL}}
 
 \item{format}{Image format, "post", "story", or "cover", Default: \code{NULL}}
 
-\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file type must be
-provided for extdata and cached data.}
+\item{filetype}{File type to use if passing parameters to \link{read_sf_download}
+or \link{read_sf_pkg} (required for extdata and cached data).}
 
 \item{image_path}{path to location of images for \code{\link[=make_image_map]{make_image_map()}}}
 

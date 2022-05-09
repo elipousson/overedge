@@ -72,5 +72,5 @@ largest include "sq", "t", "s", "q", "m", "n", "z", "c", "l", and "o"}
 A wrapper for \link[mapview:mapView]{mapview::mapview}
 }
 \seealso{
-\code{\link[mapview]{mapView}}
+\code{\link[mapview:mapView]{mapview::mapView()}}
 }

@@ -25,21 +25,45 @@ get_group_data_pal_scale(data, col = NULL, palette = NULL, ...)
 }
 \arguments{
 \item{...}{
-  Arguments passed on to \code{\link[ggplot2:scale_manual]{ggplot2::scale_fill_manual}}
+  Arguments passed on to \code{\link[ggplot2:discrete_scale]{discrete_scale}}
   \describe{
-    \item{\code{values}}{a set of aesthetic values to map data values to. The values
-will be matched in order (usually alphabetical) with the limits of the
-scale, or with \code{breaks} if provided. If this is a named vector, then the
-values will be matched based on the names instead. Data values that don't
-match will be given \code{na.value}.}
-    \item{\code{breaks}}{One of:
+    \item{\code{palette}}{A palette function that when called with a single integer
+argument (the number of levels in the scale) returns the values that
+they should take (e.g., \code{\link[scales:hue_pal]{scales::hue_pal()}}).}
+    \item{\code{limits}}{One of:
 \itemize{
-\item \code{NULL} for no breaks
-\item \code{waiver()} for the default breaks (the scale limits)
-\item A character vector of breaks
-\item A function that takes the limits as input and returns breaks
-as output
+\item \code{NULL} to use the default scale values
+\item A character vector that defines possible values of the scale and their
+order
+\item A function that accepts the existing (automatic) values and returns
+new ones. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
 }}
+    \item{\code{drop}}{Should unused factor levels be omitted from the scale?
+The default, \code{TRUE}, uses the levels that appear in the data;
+\code{FALSE} uses all the levels in the factor.}
+    \item{\code{na.translate}}{Unlike continuous scales, discrete scales can easily show
+missing values, and do so by default. If you want to remove missing values
+from a discrete scale, specify \code{na.translate = FALSE}.}
+    \item{\code{scale_name}}{The name of the scale that should be used for error messages
+associated with this scale.}
+    \item{\code{name}}{The name of the scale. Used as the axis or legend title. If
+\code{waiver()}, the default, the name of the scale is taken from the first
+mapping used for that aesthetic. If \code{NULL}, the legend title will be
+omitted.}
+    \item{\code{labels}}{One of:
+\itemize{
+\item \code{NULL} for no labels
+\item \code{waiver()} for the default labels computed by the
+transformation object
+\item A character vector giving labels (must be same length as \code{breaks})
+\item A function that takes the breaks as input and returns labels
+as output. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
+}}
+    \item{\code{guide}}{A function used to create a guide or its name. See
+\code{\link[ggplot2:guides]{guides()}} for more information.}
+    \item{\code{super}}{The super class to use for the constructed scale}
   }}
 
 \item{data}{Data to use when generating scale or palette.}
@@ -56,6 +80,20 @@ packagename::palettename.}
 
 \item{na.value}{The aesthetic value to use for missing (\code{NA}) values}
 
+\item{drop}{Should unused factor levels be omitted from the scale?
+The default, \code{TRUE}, uses the levels that appear in the data;
+\code{FALSE} uses all the levels in the factor.}
+
+\item{limits}{One of:
+\itemize{
+\item \code{NULL} to use the default scale values
+\item A character vector that defines possible values of the scale and their
+order
+\item A function that accepts the existing (automatic) values and returns
+new ones. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
+}}
+
 \item{aesthetics}{Character string or vector of character strings listing the
 name(s) of the aesthetic(s) that this scale works with. This can be useful, for
 example, to apply colour settings to the \code{colour} and \code{fill} aesthetics at the
@@ -67,6 +105,6 @@ that are passed to \link[ggplot2:scale_manual]{ggplot2::scale_fill_manual} and
 \link[ggplot2:scale_manual]{ggplot2::scale_color_manual}.
 }
 \seealso{
-\code{\link[scales]{viridis_pal}}
-\code{\link[paletteer]{paletteer_d}}
+\code{\link[scales:viridis_pal]{scales::viridis_pal()}}
+\code{\link[paletteer:paletteer_d]{paletteer::paletteer_d()}}
 }

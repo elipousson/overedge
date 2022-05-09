@@ -93,7 +93,7 @@ location names (e.g. County)}
 "latitude")}
 
 \item{geometry}{If \code{TRUE} and latitude/longitude columns available, return a
-\code{\link{sf}} object. Default \code{FALSE}.}
+\code{\link[=sf]{sf()}} object. Default \code{FALSE}.}
 
 \item{token}{Access token or API Key; required to access data from Socrata.}
 

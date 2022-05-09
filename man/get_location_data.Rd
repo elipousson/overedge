@@ -12,8 +12,6 @@ get_location_data(
   unit = NULL,
   asp = NULL,
   data = NULL,
-  url = NULL,
-  path = NULL,
   package = NULL,
   filetype = "gpkg",
   fn = NULL,
@@ -34,8 +32,6 @@ map_location_data(
   unit = NULL,
   asp = NULL,
   data = NULL,
-  url = NULL,
-  path = NULL,
   package = NULL,
   filetype = "gpkg",
   fn = NULL,
@@ -70,21 +66,16 @@ to units matching GDAL units for x; defaults to "meter"}
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
-\item{data}{sf object including data in area. data may also be a url or file
-path. data can be the name of a data object or, if package and filetype are
-provided, a cached or external file.}
+\item{data}{Character string (e.g. url, file path, or name of data from
+package), a \code{sf}, \code{sfc}, or \code{bbox}  object including data in area.}
 
-\item{url}{url for FeatureServer or MapServer layer to pass to
-\link{get_esri_data}. url can be provided to data parameter}
+\item{package}{Name of the package to search for data.}
 
-\item{path}{path to spatial data file supported by \link[sf:st_read]{sf::read_sf}}
+\item{filetype}{File type to use if passing parameters to \link{read_sf_download}
+or \link{read_sf_pkg} (required for extdata and cached data).}
 
-\item{package}{package name.}
-
-\item{filetype}{file type supported by \link[sf:st_read]{sf::read_sf}. The file type must be
-provided for extdata and cached data.}
-
-\item{fn}{Function to apply to data before returning.}
+\item{fn}{Function to apply to data after filtering by location but before
+returning from function.}
 
 \item{crop}{If \code{TRUE}, data is cropped to location or bounding box
 \link[sf:st_crop]{sf::st_crop} adjusted by the \code{dist}, \code{diag_ratio}, and \code{asp} parameters
@@ -94,9 +85,10 @@ provided. Default TRUE.}
 This option ignores any \code{dist}, \code{diag_ratio}, or \code{asp} parameters. Default
 \code{FALSE}.}
 
-\item{from_crs}{coordinate reference system of the data.}
+\item{from_crs}{Coordinate reference system of the data (used to convert the
+CRS of the bounding box used in reading/filtering data).}
 
-\item{crs}{coordinate reference system to return}
+\item{crs}{Coordinate reference system to return}
 
 \item{class}{Class of object to return.}
 
@@ -105,7 +97,7 @@ objects in the list returned by the function.}
 
 \item{index}{A list of possible location, data, and (optionally) package
 values. List must be named and include a value named package and package
-must be \code{NULL}, to set package based on index. If list is not NULL and
+must be \code{NULL}, to set package based on index. If list is not \code{NULL} and
 location and/or data as character or numeric values, the location and data
 are assumed to be index values for the index list. The index parameter
 supports nested lists created by \link{make_location_data_list} (using only the
@@ -119,19 +111,21 @@ tested and may result in errors or unexpected results.}
 defaults \code{FALSE}.}
 }
 \description{
-Returns data for a selected area or areas with an optional buffer. If both
-crop and trim are FALSE, the function uses \code{\link[sf]{st_intersects}} to
-filter data to include the full geometry of anything that overlaps with the
-area or bbox (if the area is not provided).
+Returns data for a selected location or a list of locations (for
+\link{map_location_data}). If data is a character string, the parameter is passed
+to \link{read_sf_url}, \link{read_sf_path}, or \link{read_sf_pkg}. This function uses
+\code{\link[=location_filter]{location_filter()}} to filter (using \link[sf:geos_binary_pred]{sf::st_intersects}), crop, or trim data
+to the provided location. location can also be an an address, county GeoID,
+state name, abbreviation, or GeoID.
 }
 \details{
 Working with sf lists for data and locations:
 
-map_data_location makes it easier to work with sf lists. It supports data
-as a character vector, data as an sf list when location is a single object,
-location as a character vector or sf list (including lists of bbox or sfc
+\link{map_data_location} makes it easier to work with \code{sf} lists. It supports data
+as a character vector, data as an \code{sf} list when location is a single object,
+location as a character vector or \code{sf} list (including lists of \code{bbox} or \code{sfc}
 objects), or when both data and location are lists (such as a list created
-by make_location_data_list).
+by \link{make_location_data_list}).
 }
 \examples{
 map_location_data(

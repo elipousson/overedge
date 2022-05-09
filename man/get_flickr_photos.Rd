@@ -114,5 +114,5 @@ including:
 }
 }
 \seealso{
-\code{\link[FlickrAPI]{getPhotoSearch}}
+\code{\link[FlickrAPI:getPhotoSearch]{FlickrAPI::getPhotoSearch()}}
 }

@@ -23,5 +23,5 @@ functionality of st_cast but further development may improve the utility of
 this function.
 }
 \seealso{
-\code{\link[sf]{st_cast}}
+\code{\link[sf:st_cast]{sf::st_cast()}}
 }

@@ -165,5 +165,5 @@ support EXIF metadata updates although this option may be added in the future.
 }
 }
 \seealso{
-\code{\link[ggplot2]{ggsave}}
+\code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}
 }

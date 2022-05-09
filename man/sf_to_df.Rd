@@ -100,8 +100,8 @@ nc_df$xy <- paste(nc_df$lon, nc_df$lat, sep = ",")
 df_to_sf(nc_df, coords = "xy", into = c("lon", "lat"))
 }
 \seealso{
-\code{\link[sf]{st_coordinates}}
+\code{\link[sf:st_coordinates]{sf::st_coordinates()}}
 
-\code{\link[ggspatial]{df_spatial}}
-\code{\link[sf]{st_as_sf}}
+\code{\link[ggspatial:df_spatial]{ggspatial::df_spatial()}}
+\code{\link[sf:st_as_sf]{sf::st_as_sf()}}
 }

@@ -40,7 +40,7 @@ character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns th
 without modification.}
 
 \item{crs}{Coordinate reference system to use for
-\code{\link[ggplot2]{coord_sf}}.}
+\code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}}.}
 
 \item{color}{Color of panel border, Default: 'black'}
 
@@ -52,25 +52,25 @@ without modification.}
 \item{linetype}{Line type of panel border, Default: 'solid'}
 
 \item{expand}{Default \code{FALSE.} If \code{TRUE}, the function adds
-\code{\link[ggplot2]{scale_y_continuous}} and
-\code{\link[ggplot2]{scale_x_continuous}} to expand the map extent to
+\code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}} and
+\code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_continuous()}} to expand the map extent to
 provided parameters.}
 
 \item{hide_grid}{If \code{TRUE}, hide major grid lines. Default: \code{TRUE}}
 
 \item{label_axes}{A description of which axes to label passed to
-\code{\link[ggplot2]{coord_sf}}; defaults to '----' which hides axes
+\code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}}; defaults to '----' which hides axes
 labels.}
 
-\item{...}{Additional parameters to pass to \code{\link[ggplot2]{coord_sf}}.}
+\item{...}{Additional parameters to pass to \code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}}.}
 }
 \value{
-\code{\link[ggplot2]{coord_sf}} function with xlim and ylim
+\code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}} function with xlim and ylim
 parameters
 }
 \description{
 Set limits for a map to the bounding box of an x using
-\code{\link[ggplot2]{coord_sf}}. Optionally, adjust the x size by applying a
+\code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}}. Optionally, adjust the x size by applying a
 buffer and/or adjust the aspect ratio of the limiting bounding box to match a
 set aspect ratio.
 }
@@ -86,7 +86,7 @@ ggplot2::ggplot() +
   layer_neatline(data = nc[1, ], dist = 20, unit = "mi", color = "none")
 }
 \seealso{
-\code{\link[ggplot2]{CoordSf}},\code{\link[ggplot2]{scale_continuous}}
+\code{\link[ggplot2:ggsf]{ggplot2::CoordSf()}},\code{\link[ggplot2:scale_continuous]{ggplot2::scale_continuous()}}
 
 Other layer: 
 \code{\link{layer_frame}()},

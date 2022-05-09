@@ -65,8 +65,8 @@ provided.}
 \item{neatline}{If TRUE, add a neatline to the returned layer.}
 
 \item{expand}{Default \code{FALSE.} If \code{TRUE}, the function adds
-\code{\link[ggplot2]{scale_y_continuous}} and
-\code{\link[ggplot2]{scale_x_continuous}} to expand the map extent to
+\code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}} and
+\code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_continuous()}} to expand the map extent to
 provided parameters.}
 
 \item{union}{If \code{TRUE}, union data before buffering and creating frame;
@@ -91,10 +91,12 @@ Wraps \link{st_circle}, \link{st_square}, and \link{layer_neatline}.
 nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
 
 raleigh_msa <-
-  get_location(type = nc,
-             name_col = "NAME",
-             name =  c("Franklin", "Johnston", "Wake"),
-             crs = 3857)
+  get_location(
+    type = nc,
+    name_col = "NAME",
+    name =  c("Franklin", "Johnston", "Wake"),
+    crs = 3857
+    )
 
 ggplot2::ggplot() +
   layer_frame(
@@ -111,7 +113,6 @@ ggplot2::ggplot() +
   ggplot2::guides(
     fill = "none"
   )
-
 }
 \seealso{
 Other layer: 

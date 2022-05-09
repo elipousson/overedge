@@ -48,13 +48,13 @@ is pulled from current set theme which is helpful for resetting all text
 families to the theme.}
 
 \item{color}{Color for text elements (passed to
-\code{\link[ggplot2]{element_text}} by theme_text), \code{plot.background}
-(passed to \code{\link[ggplot2]{element_rect}} by theme_margin). Default:
+\code{\link[ggplot2:element]{ggplot2::element_text()}} by theme_text), \code{plot.background}
+(passed to \code{\link[ggplot2:element]{ggplot2::element_rect()}} by theme_margin). Default:
 \code{NA}.}
 
 \item{geom_text}{If \code{TRUE}, update text family for
-\code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_sf_text}},
-\code{\link[ggplot2]{geom_label}}, and \code{\link[ggplot2]{geom_sf_label}}
+\code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}, \code{\link[ggplot2:ggsf]{ggplot2::geom_sf_text()}},
+\code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}, and \code{\link[ggplot2:ggsf]{ggplot2::geom_sf_label()}}
 to match \code{font_family} and color. If \code{FALSE}, make no changes to the theme.
 Default: \code{TRUE}.}
 
@@ -87,7 +87,7 @@ note: headers and footers are not currently supported for "px" units.}
 note: headers and footers are not currently supported for "px" units.}
 
 \item{fill}{Fill for \code{plot.background} theme element passed to
-\code{\link[ggplot2]{element_rect}} Default: \code{NA}.}
+\code{\link[ggplot2:element]{ggplot2::element_rect()}} Default: \code{NA}.}
 
 \item{size}{Size number (only used for "ISO" and "JIS" series). Standard,
 series, and size may all be required to return a single paper when using
@@ -116,9 +116,9 @@ NULL or method = "set" is recommended.
 }
 \seealso{
 \itemize{
-\item \code{\link[ggplot2]{theme}}
-\item \code{\link[ggplot2]{margin}}
-\item \code{\link[ggplot2]{theme_get}}
-\item \code{\link[ggplot2]{update_geom_defaults}}
+\item \code{\link[ggplot2:theme]{ggplot2::theme()}}
+\item \code{\link[ggplot2:element]{ggplot2::margin()}}
+\item \code{\link[ggplot2:theme_get]{ggplot2::theme_get()}}
+\item \code{\link[ggplot2:update_defaults]{ggplot2::update_geom_defaults()}}
 }
 }

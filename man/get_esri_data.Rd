@@ -83,5 +83,5 @@ box based on location and filtering by location name (if location name column
 is provided).
 }
 \seealso{
-\code{\link[esri2sf]{esri2sf}}
+\code{\link[esri2sf:esri2sf]{esri2sf::esri2sf()}}
 }

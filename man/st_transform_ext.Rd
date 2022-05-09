@@ -35,5 +35,5 @@ Take a \code{sf}, \code{sfc}, or \code{bbox} object and transform to coordinate 
 system to match the object provided to \code{crs}.
 }
 \seealso{
-\code{\link[sf]{st_transform}},\code{\link[sf]{st_crs}}
+\code{\link[sf:st_transform]{sf::st_transform()}},\code{\link[sf:st_crs]{sf::st_crs()}}
 }

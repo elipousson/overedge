@@ -87,14 +87,14 @@ attribution elsewhere on the webpage or document.}
 \item{linetype}{Line type of panel border, Default: 'solid'}
 
 \item{expand}{Default \code{FALSE.} If \code{TRUE}, the function adds
-\code{\link[ggplot2]{scale_y_continuous}} and
-\code{\link[ggplot2]{scale_x_continuous}} to expand the map extent to
+\code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}} and
+\code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_continuous()}} to expand the map extent to
 provided parameters.}
 
 \item{hide_grid}{If \code{TRUE}, hide major grid lines. Default: \code{TRUE}}
 
 \item{label_axes}{A description of which axes to label passed to
-\code{\link[ggplot2]{coord_sf}}; defaults to '----' which hides axes
+\code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}}; defaults to '----' which hides axes
 labels.}
 
 \item{...}{Additional parameter passed to \link[mapboxapi:layer_static_mapbox]{mapboxapi::layer_static_mapbox}}
@@ -103,5 +103,5 @@ labels.}
 Use mapboxapi to make a Mapbox static map layer
 }
 \seealso{
-\code{\link[mapboxapi]{layer_static_mapbox}}
+\code{\link[mapboxapi:layer_static_mapbox]{mapboxapi::layer_static_mapbox()}}
 }

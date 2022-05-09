@@ -52,10 +52,10 @@ without modification.}
 
 \item{neatline}{If TRUE, add \code{layer_neatline} with \code{expand = TRUE}; defaults to FALSE.}
 
-\item{...}{Additional parameters to pass to \code{\link[ggplot2]{geom_sf}}}
+\item{...}{Additional parameters to pass to \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}}}
 }
 \value{
-\code{\link[ggplot2]{geom_sf}} function.
+\code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} function.
 }
 \description{
 Returns a mask for an area or areas as a simple feature object.
