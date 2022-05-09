@@ -40,6 +40,7 @@
 #' @export
 #' @importFrom sf st_crs st_filter st_as_sf st_union
 #' @importFrom rlang list2
+#' @importFrom dplyr bind_cols
 get_location <- function(type,
                          name = NULL,
                          name_col = "name",
@@ -131,7 +132,13 @@ get_location <- function(type,
   }
 
   if (!is.null(label)) {
-    location$label <- label
+    location <-
+      dplyr::bind_cols(
+        location,
+        "label" = label
+      )
+
+    location <- relocate_sf_col(location)
   }
 
   location <- as_sf_class(x = location, class = class, crs = crs, col = col)
