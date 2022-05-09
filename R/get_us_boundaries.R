@@ -14,7 +14,6 @@
 #' @return A `sf` object with county boundaries (contemporary or historical)
 #' @seealso
 #'  [tigris::states()]
-#'  [USAboundaries::us_counties()]
 #' @rdname get_us_counties
 #' @noRd
 #' @importFrom dplyr select

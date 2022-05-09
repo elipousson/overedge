@@ -29,7 +29,7 @@
 #'   parameters
 #' @example examples/layer_neatline.R
 #' @seealso
-#'  [ggplot2::CoordSf()],[ggplot2::scale_continuous()]
+#'  [ggplot2::CoordSf()]
 #' @family layer
 #' @aliases set_map_limits
 #' @export
