@@ -65,8 +65,8 @@ read_sf_ext <- function(..., bbox = NULL) {
   read_sf_fn <-
     dplyr::case_when(
       !is.null(params$package) ~ "pkg",
-      !is.null(params$path) && is.null(params$filename) ~ "path",
       !is.null(params$url) ~ "url",
+      !is.null(params$path) && is.null(params$filename) ~ "path",
       TRUE ~ "error"
     )
 
