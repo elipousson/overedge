@@ -1,10 +1,12 @@
 nc <- read_sf_path(system.file("shape/nc.shp", package = "sf"))
 
 raleigh_msa <-
-  get_location(type = nc,
-             name_col = "NAME",
-             name =  c("Franklin", "Johnston", "Wake"),
-             crs = 3857)
+  get_location(
+    type = nc,
+    name_col = "NAME",
+    name =  c("Franklin", "Johnston", "Wake"),
+    crs = 3857
+    )
 
 ggplot2::ggplot() +
   layer_frame(
@@ -21,4 +23,3 @@ ggplot2::ggplot() +
   ggplot2::guides(
     fill = "none"
   )
-
