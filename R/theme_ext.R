@@ -8,15 +8,15 @@
 #'   is pulled from current set theme which is helpful for resetting all text
 #'   families to the theme.
 #' @param geom_text If `TRUE`, update text family for
-#'   \code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_sf_text}},
-#'   \code{\link[ggplot2]{geom_label}}, and \code{\link[ggplot2]{geom_sf_label}}
+#'   [ggplot2::geom_text()], [ggplot2::geom_sf_text()],
+#'   [ggplot2::geom_label()], and [ggplot2::geom_sf_label()]
 #'   to match `font_family` and color. If `FALSE`, make no changes to the theme.
 #'   Default: `TRUE`.
 #' @param fill Fill for `plot.background` theme element passed to
-#'   \code{\link[ggplot2]{element_rect}} Default: `NA`.
+#'   [ggplot2::element_rect()] Default: `NA`.
 #' @param color Color for text elements (passed to
-#'   \code{\link[ggplot2]{element_text}} by theme_text), `plot.background`
-#'   (passed to \code{\link[ggplot2]{element_rect}} by theme_margin). Default:
+#'   [ggplot2::element_text()] by theme_text), `plot.background`
+#'   (passed to [ggplot2::element_rect()] by theme_margin). Default:
 #'   `NA`.
 #' @param hjust,vjust Horizontal and vertical justification.
 #' @param position Legend position (“left”,“top”, “right”, “bottom”) or a
@@ -37,10 +37,10 @@
 #' @inheritParams get_paper
 #' @inheritParams get_margin
 #' @seealso
-#'  - \code{\link[ggplot2]{theme}}
-#'  - \code{\link[ggplot2]{margin}}
-#'  - \code{\link[ggplot2]{theme_get}}
-#'  - \code{\link[ggplot2]{update_geom_defaults}}
+#'  - [ggplot2::theme()]
+#'  - [ggplot2::margin()]
+#'  - [ggplot2::theme_get()]
+#'  - [ggplot2::update_geom_defaults()]
 #' @md
 #' @name theme_ext
 NULL

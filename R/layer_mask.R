@@ -8,11 +8,11 @@
 #' @param color mask edge color; defaults to `NA`
 #' @param alpha mask alpha/transparency; defaults to 0.5
 #' @param mask A `sf` or `bbox` object to define the edge of the mask.
-#'   \code{diag_ratio}, \code{dist}, and \code{asp} parameters are ignored if a
-#'   \code{mask} is provided. defaults to `NULL`
-#' @param neatline If TRUE, add \code{layer_neatline} with `expand = TRUE`; defaults to FALSE.
-#' @param ... Additional parameters to pass to \code{\link[ggplot2]{geom_sf}}
-#' @return  \code{\link[ggplot2]{geom_sf}} function.
+#'   `diag_ratio`, `dist`, and `asp` parameters are ignored if a
+#'   `mask` is provided. defaults to `NULL`
+#' @param neatline If TRUE, add `layer_neatline` with `expand = TRUE`; defaults to FALSE.
+#' @param ... Additional parameters to pass to [ggplot2::geom_sf()]
+#' @return  [ggplot2::geom_sf()] function.
 #' @family layer
 #' @export
 #' @importFrom sf st_transform st_difference st_union

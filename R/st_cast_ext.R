@@ -10,7 +10,7 @@
 #' @inheritParams sf::st_cast
 #' @param simplify If TRUE, simplify geometry type; defaults to TRUE.
 #' @seealso
-#'  \code{\link[sf]{st_cast}}
+#'  [sf::st_cast()]
 #' @rdname st_cast_ext
 #' @export
 #' @importFrom sf st_cast

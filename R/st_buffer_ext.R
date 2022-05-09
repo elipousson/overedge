@@ -14,7 +14,7 @@
 #' @param dist buffer distance in units. Optional.
 #' @param diag_ratio ratio of diagonal distance of area's bounding box used as
 #'   buffer distance. e.g. if the diagonal distance is 3000 meters and the
-#'   "diag_ratio = 0.1"  a 300 meter will be used. Ignored when \code{dist} is
+#'   "diag_ratio = 0.1"  a 300 meter will be used. Ignored when `dist` is
 #'   provided.
 #' @param unit Units for buffer. Supported options include "meter", "foot",
 #'   "kilometer", and "mile", "nautical mile" Common abbreviations (e.g. "km"

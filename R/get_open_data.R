@@ -24,7 +24,7 @@
 #' @param query SODA $query parameter. A full SoQL query string, all as one
 #'   parameter. <https://dev.socrata.com/docs/queries/query.html>
 #' @param geometry If `TRUE` and latitude/longitude columns available, return a
-#'   \code{\link{sf}} object. Default `FALSE`.
+#'   [sf()] object. Default `FALSE`.
 #' @param coords Name(s) of column with coordinate data, Default: c("longitude",
 #'   "latitude")
 #' @param token Access token or API Key; required to access data from Socrata.

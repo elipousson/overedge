@@ -50,7 +50,7 @@
 #' - or "pd" (Public Domain Mark).
 #'
 #' @seealso
-#'  \code{\link[FlickrAPI]{getPhotoSearch}}
+#'  [FlickrAPI::getPhotoSearch()]
 #' @rdname get_flickr_photos
 #' @export
 #' @importFrom purrr map_dfr

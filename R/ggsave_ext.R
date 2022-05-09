@@ -28,7 +28,7 @@
 #'   [gt::gtsave()].
 #' @example examples/ggsave_ext.R
 #' @seealso
-#'  \code{\link[ggplot2]{ggsave}}
+#'  [ggplot2::ggsave()]
 #' @rdname ggsave_ext
 #' @export
 #' @importFrom ggplot2 ggsave last_plot

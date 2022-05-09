@@ -22,11 +22,11 @@
 #' [Public Domain work in the U.S.](http://www.usa.gov/publicdomain/label/1.0/).
 #' @format A data frame with 1855 rows and 5 variables:
 #' \describe{
-#'   \item{\code{name}}{Icon name}
-#'   \item{\code{url}}{Icon URL on GitHub repo}
-#'   \item{\code{style}}{Icon style (Weather Underground icons only)}
-#'   \item{\code{size}}{Icon width/height (pixels)}
-#'   \item{\code{repo}}{GitHub repository for icon collection}
+#'   \item{`name`}{Icon name}
+#'   \item{`url`}{Icon URL on GitHub repo}
+#'   \item{`style`}{Icon style (Weather Underground icons only)}
+#'   \item{`size`}{Icon width/height (pixels)}
+#'   \item{`repo`}{GitHub repository for icon collection}
 #' }
 "map_icons"
 
@@ -41,15 +41,15 @@
 #' and other sources.
 #' @format A data frame with 85 rows and 9 variables:
 #' \describe{
-#'   \item{\code{name}}{Name of paper}
-#'   \item{\code{series}}{Series}
-#'   \item{\code{standard}}{Standard}
-#'   \item{\code{size}}{Size in series}
-#'   \item{\code{units}}{Units ("in", "mm", or "px") for dimensions}
-#'   \item{\code{width}}{Width in units}
-#'   \item{\code{height}}{Height in units}
-#'   \item{\code{orientation}}{Portrait (width greater than height), landscape, or square}
-#'   \item{\code{type}}{Type (paper, postcard, print, or social)}
+#'   \item{`name`}{Name of paper}
+#'   \item{`series`}{Series}
+#'   \item{`standard`}{Standard}
+#'   \item{`size`}{Size in series}
+#'   \item{`units`}{Units ("in", "mm", or "px") for dimensions}
+#'   \item{`width`}{Width in units}
+#'   \item{`height`}{Height in units}
+#'   \item{`orientation`}{Portrait (width greater than height), landscape, or square}
+#'   \item{`type`}{Type (paper, postcard, print, or social)}
 #' }
 "paper_sizes"
 
@@ -60,17 +60,17 @@
 #'
 #' @format A data frame with 11 rows and 11 variables:
 #' \describe{
-#'   \item{\code{symbol}}{symbols}
-#'   \item{\code{symbol_aliases}}{symbol aliases}
-#'   \item{\code{name_singular}}{singular names}
-#'   \item{\code{name_singular_aliases}}{singular name aliases}
-#'   \item{\code{name_plural}}{character plural names}
-#'   \item{\code{name_plural_aliases}}{plural name aliases}
-#'   \item{\code{def}}{short definition}
-#'   \item{\code{definition}}{definition}
-#'   \item{\code{comment}}{comment}
-#'   \item{\code{dimensionless}}{logical indicator for dimensionless units}
-#'   \item{\code{source_xml}}{source XML}
+#'   \item{`symbol`}{symbols}
+#'   \item{`symbol_aliases`}{symbol aliases}
+#'   \item{`name_singular`}{singular names}
+#'   \item{`name_singular_aliases`}{singular name aliases}
+#'   \item{`name_plural`}{character plural names}
+#'   \item{`name_plural_aliases`}{plural name aliases}
+#'   \item{`def`}{short definition}
+#'   \item{`definition`}{definition}
+#'   \item{`comment`}{comment}
+#'   \item{`dimensionless`}{logical indicator for dimensionless units}
+#'   \item{`source_xml`}{source XML}
 #' }
 "dist_units"
 
@@ -85,22 +85,22 @@
 #'
 #' @format A data frame with 32 rows and 16 variables:
 #' \describe{
-#'   \item{\code{scale}}{Scale name}
-#'   \item{\code{standard}}{Standard (USGS, architectural, or engineering)}
-#'   \item{\code{series}}{Series name (USGS map scales only)}
-#'   \item{\code{actual_ft}}{Scale distance for 1 ft actual.}
-#'   \item{\code{actual_ft_unit}}{Unit of scale for 1 ft actual.}
-#'   \item{\code{scale_in}}{Actual distance for 1 in scale.}
-#'   \item{\code{scale_in_unit}}{Unit of actual distance for 1 in scale.}
-#'   \item{\code{scale_in_accuracy}}{Accuracy of 1 in scale (approximate or exact)}
-#'   \item{\code{scale_cm}}{Actual distance for 1 cm scale.}
-#'   \item{\code{scale_cm_unit}}{Unit of actual distance for 1 cm scale.}
-#'   \item{\code{scale_cm_accuracy}}{Accuracy of 1 cm scale (approximate or exact)}
-#'   \item{\code{size_latlon}}{Standard size in latitude/longitude}
-#'   \item{\code{size_latlon_unit}}{Unit of latitude/longitude size (minutes or degrees)}
-#'   \item{\code{area_approx}}{Approximate actual area}
-#'   \item{\code{area_approx_unit}}{Approximate area unit}
-#'   \item{\code{series_status}}{Series status (select USGS map series are "abandoned")}
+#'   \item{`scale`}{Scale name}
+#'   \item{`standard`}{Standard (USGS, architectural, or engineering)}
+#'   \item{`series`}{Series name (USGS map scales only)}
+#'   \item{`actual_ft`}{Scale distance for 1 ft actual.}
+#'   \item{`actual_ft_unit`}{Unit of scale for 1 ft actual.}
+#'   \item{`scale_in`}{Actual distance for 1 in scale.}
+#'   \item{`scale_in_unit`}{Unit of actual distance for 1 in scale.}
+#'   \item{`scale_in_accuracy`}{Accuracy of 1 in scale (approximate or exact)}
+#'   \item{`scale_cm`}{Actual distance for 1 cm scale.}
+#'   \item{`scale_cm_unit`}{Unit of actual distance for 1 cm scale.}
+#'   \item{`scale_cm_accuracy`}{Accuracy of 1 cm scale (approximate or exact)}
+#'   \item{`size_latlon`}{Standard size in latitude/longitude}
+#'   \item{`size_latlon_unit`}{Unit of latitude/longitude size (minutes or degrees)}
+#'   \item{`area_approx`}{Approximate actual area}
+#'   \item{`area_approx_unit`}{Approximate area unit}
+#'   \item{`series_status`}{Series status (select USGS map series are "abandoned")}
 #' }
 "standard_scales"
 
@@ -123,13 +123,13 @@
 #'
 #' @format A data frame with 52 rows and 6 variables:
 #' \describe{
-#'   \item{\code{name}}{State name}
-#'   \item{\code{geoid}}{State GeoID (labelled)}
-#'   \item{\code{abb}}{State abbreviation (USPS)}
-#'   \item{\code{est_pop}}{Estimated state population (B01001_001), American Community Survey 5 year, 2015-2019}
-#'   \item{\code{statefp}}{State FIPS}
-#'   \item{\code{bbox}}{Bounding box}
-#'   \item{\code{wkt}}{Well known text (labelled)}
+#'   \item{`name`}{State name}
+#'   \item{`geoid`}{State GeoID (labelled)}
+#'   \item{`abb`}{State abbreviation (USPS)}
+#'   \item{`est_pop`}{Estimated state population (B01001_001), American Community Survey 5 year, 2015-2019}
+#'   \item{`statefp`}{State FIPS}
+#'   \item{`bbox`}{Bounding box}
+#'   \item{`wkt`}{Well known text (labelled)}
 #' }
 "us_states"
 
@@ -145,15 +145,15 @@
 #'
 #' @format A data frame with 3220 rows and 7 variables:
 #' \describe{
-#'   \item{\code{name}}{County name (tidycensus)}
-#'   \item{\code{name_short}}{County name without state (tigris)}
-#'   \item{\code{geoid}}{County GeoID (labelled)}
-#'   \item{\code{abb_state}}{State abbreviation (USPS)}
-#'   \item{\code{est_pop}}{Estimated county population (B01001_001), American Community Survey 5 year, 2015-2019}
-#'   \item{\code{countyfp}}{County FIPS}
-#'   \item{\code{statefp}}{State FIPS}
-#'   \item{\code{bbox}}{Bounding box}
-#'   \item{\code{wkt}}{Well known text (labelled)}
+#'   \item{`name`}{County name (tidycensus)}
+#'   \item{`name_short`}{County name without state (tigris)}
+#'   \item{`geoid`}{County GeoID (labelled)}
+#'   \item{`abb_state`}{State abbreviation (USPS)}
+#'   \item{`est_pop`}{Estimated county population (B01001_001), American Community Survey 5 year, 2015-2019}
+#'   \item{`countyfp`}{County FIPS}
+#'   \item{`statefp`}{State FIPS}
+#'   \item{`bbox`}{Bounding box}
+#'   \item{`wkt`}{Well known text (labelled)}
 #' }
 "us_counties"
 

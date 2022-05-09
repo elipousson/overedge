@@ -11,8 +11,8 @@
 #' @inheritParams ggplot2::scale_fill_manual
 #' @inheritParams ggplot2::discrete_scale
 #' @seealso
-#'  \code{\link[scales]{viridis_pal}}
-#'  \code{\link[paletteer]{paletteer_d}}
+#'  [scales::viridis_pal()]
+#'  [paletteer::paletteer_d()]
 #' @name scale_group_data
 #' @export
 #' @importFrom ggplot2 scale_fill_manual scale_color_manual

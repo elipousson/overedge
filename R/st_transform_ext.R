@@ -16,7 +16,7 @@
 #'   rotate must be between -45 and 45 degrees.
 #' @return An `sf`, `sfc`, or `bbox` object transformed to a new coordinate
 #'   reference system.
-#' @seealso \code{\link[sf]{st_transform}},\code{\link[sf]{st_crs}}
+#' @seealso [sf::st_transform()],[sf::st_crs()]
 #' @rdname st_transform_ext
 #' @export
 #' @importFrom sf st_transform st_crs

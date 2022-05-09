@@ -118,7 +118,7 @@ str_remove_filetype <- function(x = NULL, filetype = NULL) {
 #'   parameter as a postfix.
 #' @param sep Separator character passed as the collapse parameter of [paste()].
 #' @param clean If `TRUE`, prefix, postfix, and string are all converted to
-#'   snake case with \code{\link[janitor]{make_clean_names()}}.
+#'   snake case with [janitor::make_clean_names()].
 #' @noRd
 #' @importFrom janitor make_clean_names
 str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", clean = TRUE) {

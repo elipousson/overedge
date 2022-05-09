@@ -7,7 +7,7 @@
 #' @param end_col PARAM_DESCRIPTION, Default: 'end'
 #' @param type PARAM_DESCRIPTION, Default: 'closed'
 #' @seealso
-#'  \code{\link[ggplot2]{reexports}}, \code{\link[ggplot2]{geom_segment}}, \code{\link[ggplot2]{aes}}
+#'  [ggplot2::reexports()], [ggplot2::geom_segment()], [ggplot2::aes()]
 #' @rdname layer_arrows
 #' @noRd
 #' @importFrom ggplot2 arrow geom_curve aes

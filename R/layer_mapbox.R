@@ -12,7 +12,7 @@
 #' @inheritParams layer_neatline
 #' @param ... Additional parameter passed to [mapboxapi::layer_static_mapbox]
 #' @seealso
-#' \code{\link[mapboxapi]{layer_static_mapbox}}
+#' [mapboxapi::layer_static_mapbox()]
 #' @rdname layer_mapbox
 #' @md
 #' @export

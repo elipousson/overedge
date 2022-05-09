@@ -26,8 +26,8 @@
 #' @param ... Additional parameters to  [ggsvg::geom_point_svg()].
 #' @example examples/layer_icon.R
 #' @seealso
-#'  \code{\link[ggsvg]{geom_point_svg}}
-#'  \code{\link[overedge]{map_icons}}
+#'  [ggsvg::geom_point_svg()]
+#'  [map_icons]
 #' @rdname layer_icon
 #' @family layer
 #' @export

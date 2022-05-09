@@ -22,7 +22,7 @@
 #' @inheritParams sf_bbox_to_lonlat_query
 #' @inheritParams st_bbox_ext
 #' @seealso
-#'  \code{\link[esri2sf]{esri2sf}}
+#'  [esri2sf::esri2sf()]
 #' @rdname get_esri_data
 #' @export
 #' @importFrom glue glue

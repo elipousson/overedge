@@ -232,11 +232,11 @@ get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
 #' @param header,footer Header and footer height in units; defaults to 0. Please
 #'   note: headers and footers are not currently supported for "px" units.
 #' @inheritParams get_paper
-#' @return A \code{\link[ggplot2]{margin}} element intended for use with
-#'   \code{\link[ggplot2]{element_rect}} and the `plot.background` theme element.
+#' @return A [ggplot2::margin()] element intended for use with
+#'   [ggplot2::element_rect()] and the `plot.background` theme element.
 #' @example examples/get_margin.R
 #' @seealso
-#'  \code{\link[ggplot2]{margin}}
+#'  [ggplot2::margin()]
 #' @rdname get_margin
 #' @export
 #' @importFrom ggplot2 margin

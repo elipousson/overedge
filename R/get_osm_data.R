@@ -1,6 +1,6 @@
 #' Use osmdata to get Open Street Map data for a location
 #'
-#' Wraps \code{osmdata} functions to query OSM data by adjusted bounding box or
+#' Wraps `osmdata` functions to query OSM data by adjusted bounding box or
 #' by enclosing ways/relations around the center of a location. timeout and
 #' nodes_only parameters are not fully supported currently.
 #'

@@ -2,7 +2,7 @@
 #' buffer, aspect ratio, and panel border
 #'
 #' Set limits for a map to the bounding box of an x using
-#' \code{\link[ggplot2]{coord_sf}}. Optionally, adjust the x size by applying a
+#' [ggplot2::coord_sf()]. Optionally, adjust the x size by applying a
 #' buffer and/or adjust the aspect ratio of the limiting bounding box to match a
 #' set aspect ratio.
 #'
@@ -10,10 +10,10 @@
 #' @param unit Buffer units; defaults to meter.
 #' @param data `sf` or `bbox` class object
 #' @param crs Coordinate reference system to use for
-#'   \code{\link[ggplot2]{coord_sf}}.
+#'   [ggplot2::coord_sf()].
 #' @param expand Default `FALSE.` If `TRUE`, the function adds
-#'   \code{\link[ggplot2]{scale_y_continuous}} and
-#'   \code{\link[ggplot2]{scale_x_continuous}} to expand the map extent to
+#'   [ggplot2::scale_y_continuous()] and
+#'   [ggplot2::scale_x_continuous()] to expand the map extent to
 #'   provided parameters.
 #' @param size Size of panel border, Default: 1
 #' @param color Color of panel border, Default: 'black'
@@ -22,14 +22,14 @@
 #' @param linetype Line type of panel border, Default: 'solid'
 #' @param hide_grid If `TRUE`, hide major grid lines. Default: `TRUE`
 #' @param label_axes A description of which axes to label passed to
-#'   \code{\link[ggplot2]{coord_sf}}; defaults to '----' which hides axes
+#'   [ggplot2::coord_sf()]; defaults to '----' which hides axes
 #'   labels.
-#' @param ... Additional parameters to pass to \code{\link[ggplot2]{coord_sf}}.
-#' @return \code{\link[ggplot2]{coord_sf}} function with xlim and ylim
+#' @param ... Additional parameters to pass to [ggplot2::coord_sf()].
+#' @return [ggplot2::coord_sf()] function with xlim and ylim
 #'   parameters
 #' @example examples/layer_neatline.R
 #' @seealso
-#'  \code{\link[ggplot2]{CoordSf}},\code{\link[ggplot2]{scale_continuous}}
+#'  [ggplot2::CoordSf()],[ggplot2::scale_continuous()]
 #' @family layer
 #' @aliases set_map_limits
 #' @export

@@ -13,8 +13,8 @@
 #'   map_date is required).
 #' @return A `sf` object with county boundaries (contemporary or historical)
 #' @seealso
-#'  \code{\link[tigris]{states}}
-#'  \code{\link[USAboundaries]{us_counties}}
+#'  [tigris::states()]
+#'  [USAboundaries::us_counties()]
 #' @rdname get_us_counties
 #' @noRd
 #' @importFrom dplyr select

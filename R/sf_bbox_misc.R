@@ -194,8 +194,8 @@ sf_bbox_transform <- function(bbox, crs = NULL) {
 #'   feature object; defaults to "geometry".
 #' @return sf object
 #' @seealso
-#'  - \code{\link[sf]{st_as_sf}},\code{\link[sf]{st_as_sfc}}
-#'  - \code{\link[sfx]{st_extent}}
+#'  - [sf::st_as_sf()],[sf::st_as_sfc()]
+#'  - [sfx::st_extent()]
 #' @rdname sf_bbox_misc
 #' @export
 #' @importFrom sf st_sf st_geometry

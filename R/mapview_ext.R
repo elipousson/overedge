@@ -5,7 +5,7 @@
 #' @inheritParams mapview::mapview
 #' @inheritDotParams mapview::mapview
 #' @seealso
-#'  \code{\link[mapview]{mapView}}
+#'  [mapview::mapView()]
 #' @name mapview_ext
 NULL
 

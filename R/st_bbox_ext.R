@@ -15,7 +15,7 @@
 #' @inheritParams get_asp
 #' @param crs Coordinate reference system of bounding box to return
 #' @param class Class of object to return (sf or bbox); defaults to "bbox".
-#' @return Class \code{bbox} object
+#' @return Class `bbox` object
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext
 #' @export

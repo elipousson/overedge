@@ -43,7 +43,7 @@
 #' @inheritParams ggplot2::geom_sf
 #' @return ggplot2 geom
 #' @seealso
-#'  \code{\link[ggplot2]{CoordSf}}
+#'  [ggplot2::CoordSf()]
 #' @rdname layer_location_data
 #' @family layer
 #' @export

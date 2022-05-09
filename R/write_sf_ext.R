@@ -21,7 +21,7 @@
 #'   "data.csv". Objects that are not simple features are written to RDS with
 #'   `readr::write_rds()`.
 #' @param data_dir cache data directory, defaults to
-#'   \code{\link[rappdirs]{user_cache_dir}} when data_dir is NULL. (only used
+#'   [rappdirs::user_cache_dir()] when data_dir is NULL. (only used
 #'   for write_sf_cache; default is used when cache = TRUE for write_sf_ext)
 #' @param overwrite Logical. Default `FALSE`. If `TRUE`, overwrite any existing
 #'   cached files that use the same file name.
@@ -32,7 +32,7 @@
 #' @inheritParams make_filename
 #' @inheritParams write_sf_cache
 #' @seealso
-#'  \code{\link[sf]{st_write}}
+#'  [sf::st_write()]
 #' @export
 #' @md
 #' @importFrom purrr discard walk

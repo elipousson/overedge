@@ -33,7 +33,7 @@
 #' @return [sf_to_df()] returns a data frame with geometry dropped or converted
 #'   to wkt or coordinates for the centroid or point on surface; [df_to_sf()]
 #'   returns a simple feature object with POINT geometry.
-#' @seealso \code{\link[sf]{st_coordinates}}
+#' @seealso [sf::st_coordinates()]
 #' @example examples/sf_to_df.R
 #' @rdname sf_to_df
 #' @export
@@ -59,8 +59,8 @@ sf_to_df <- function(x,
 #' @rdname sf_to_df
 #' @name df_to_sf
 #' @seealso
-#'  \code{\link[ggspatial]{df_spatial}}
-#'  \code{\link[sf]{st_as_sf}}
+#'  [ggspatial::df_spatial()]
+#'  [sf::st_as_sf()]
 #' @export
 #' @importFrom sf st_sf st_geometry st_as_sf
 #' @importFrom rlang has_length has_name
