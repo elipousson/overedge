@@ -101,7 +101,8 @@ get_location <- function(type,
       message = "The name/id did not match any features of the type provided."
     )
   } else {
-    location <- location_filter(data = type, location = location, trim = FALSE, crop = FALSE)
+    location <-
+      location_filter(data = type, location = location, trim = FALSE, crop = FALSE)
   }
 
   if (!is.null(name)) {

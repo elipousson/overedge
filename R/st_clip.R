@@ -56,15 +56,18 @@ st_clip <- function(x,
   return(x)
 }
 
-#' Make clip area from bounding box
+#' Make clip area from bounding box.
 #'
-#' Utility function for st_clip
+#' Utility function for [st_clip]
 #'
-#' @param x Bounding box object
-#' @param clip Clip style
-#' @param center center (data frame or list lon and lat values)
-#' @param crs Coordinate reference system
-#' @param style Style (not currently used), Default: `NULL`
+#' @param x A `bbox` object.
+#' @param clip A clip style. Supported options include "top", "right", "bottom",
+#'   "left", "topright", "bottomright", "bottomleft", or "topleft".
+#' @param center Center coordinates in a data frame or a named list with
+#'   longitude and latitude values.
+#' @param crs Coordinate reference system to return.
+#' @param style Style (either "corner" or "side"); defaults to `NULL` where
+#'   style is determined by the selected "clip" value.
 #' @noRd
 #' @importFrom sf st_sf st_sfc st_convex_hull st_union
 make_clip <- function(x, clip, crs, style = NULL) {
@@ -122,11 +125,14 @@ make_clip <- function(x, clip, crs, style = NULL) {
     }
   }
 
+  clip_geometry <-
+    sf::st_sfc(sf::st_convex_hull(sf::st_union(pts)))
+
   clip <-
     sf::st_sf(
       name = "",
       crs = crs,
-      geometry = sf::st_sfc(sf::st_convex_hull(sf::st_union(pts)))
+      geometry = clip_geometry
     )
 
   return(clip)
