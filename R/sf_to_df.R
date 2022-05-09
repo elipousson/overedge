@@ -331,6 +331,7 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), crs 
 #' @noRd
 #' @importFrom rlang has_name
 tabular_to_sf <- function(x, coords = c("lon", "lat"), geo = FALSE, address = "address") {
+  # FIXME: This function maybe should be merged into df_to_sf
   if (geo) {
     stopifnot(
       rlang::has_name(data, address)
@@ -346,4 +347,6 @@ tabular_to_sf <- function(x, coords = c("lon", "lat"), geo = FALSE, address = "a
     coords <- check_coords(data, coords = coords)
     data <- df_to_sf(data, coords = coords)
   }
+
+  return(data)
 }
