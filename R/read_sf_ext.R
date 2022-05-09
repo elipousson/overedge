@@ -36,25 +36,26 @@
 #' Sheet (passed to [googlesheets4::read_sheet]), or a query or wkt filter
 #' parameter if the url is some other type (passed to [sf::read_sf]).
 #'
-#' [read_sf_ext] is a flexible function that only has bbox as a named parameters
+#' [read_sf_ext] is a flexible function that only has bbox as a named parameter
 #' and all other parameters in ... are passed to one of the other overedge
 #' read_sf functions.
 #'
-#' @param bbox A bounding box object; Default: `NULL`. If "bbox" is provided,
-#'   read_sf only returns features intersecting the bounding box.
-#' @param path A file path; used by [read_sf_path()] only.
+#' @param bbox A bounding box object; defaults to `NULL`. If `"bbox"` is provided,
+#'   only returns features intersecting the bounding box.
+#' @param path A file path.
 #' @param url A url for a spatial data file, a GitHub gist, or a ArcGIS
 #'   FeatureServer or MapServer to access with [get_esri_data()]
-#' @param data character; name of data; used by [read_sf_pkg()] only
-#' @param package character; package name; used by [read_sf_pkg()] only
-#' @param filetype file type supported by [sf::read_sf()]., Default: 'gpkg';
-#'   used by [read_sf_pkg()] only and required only if the data is in the
-#'   package cache directory or extdata system files.
-#' @param coords Character vector with coordinate values; used for
-#'   [read_sf_url()] if the "url" is a Google Sheet.
-#' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults to `FALSE`.
+#' @param data Character; name of dataset; used by [read_sf_pkg()] only.
+#' @param package Character; package name; used by [read_sf_pkg()] only.
+#' @param filetype File type supported for dsn parameter of [sf::read_sf()];
+#'   Default: 'gpkg'; used by [read_sf_pkg()] only and required only if the data
+#'   is in the package cache directory or extdata system files.
+#' @param coords Character vector with coordinate values. Coordinates must be
+#'   latlon data (with coordinate reference system 4326).
+#' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults
+#'   to `FALSE`.
 #' @inheritParams address_to_sf
-#' @param ... additional parameters passed to multiple functions; see details.
+#' @param ... Additional parameters passed to multiple functions; see details.
 #' @name read_sf_ext
 #' @family read_write
 #' @export

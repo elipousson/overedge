@@ -112,6 +112,7 @@ read_sf_geojson function (using the suggested
   coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>,
   geo <span class="op">=</span> <span class="cn">FALSE</span>,
   address <span class="op">=</span> <span class="st">"address"</span>,
+  show_col_types <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -149,39 +150,48 @@ read_sf_geojson function (using the suggested
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
-<dd><p>additional parameters passed to multiple functions; see details.</p></dd>
+<dd><p>Additional parameters passed to multiple functions; see details.</p></dd>
 <dt>bbox</dt>
-<dd><p>A bounding box object; Default: <code>NULL</code>. If "bbox" is provided,
-read_sf only returns features intersecting the bounding box.</p></dd>
+<dd><p>A bounding box object; defaults to <code>NULL</code>. If <code>"bbox"</code> is provided,
+only returns features intersecting the bounding box.</p></dd>
 <dt>data</dt>
-<dd><p>character; name of data; used by <code>read_sf_pkg()</code> only</p></dd>
+<dd><p>Character; name of dataset; used by <code>read_sf_pkg()</code> only.</p></dd>
 <dt>package</dt>
-<dd><p>character; package name; used by <code>read_sf_pkg()</code> only</p></dd>
+<dd><p>Character; package name; used by <code>read_sf_pkg()</code> only.</p></dd>
 <dt>filetype</dt>
-<dd><p>file type supported by <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code>., Default: 'gpkg';
-used by <code>read_sf_pkg()</code> only and required only if the data is in the
-package cache directory or extdata system files.</p></dd>
+<dd><p>File type supported for dsn parameter of <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code>;
+Default: 'gpkg'; used by <code>read_sf_pkg()</code> only and required only if the data
+is in the package cache directory or extdata system files.</p></dd>
 <dt>path</dt>
-<dd><p>A file path; used by <code>read_sf_path()</code> only.</p></dd>
+<dd><p>A file path.</p></dd>
 <dt>sheet</dt>
 <dd><p>Sheet to read. Either a string (the name of a sheet), or an
 integer (the position of the sheet). Ignored if the sheet is specified via
 <code>range</code>. If neither argument specifies the sheet, defaults to the first
 sheet.</p></dd>
 <dt>coords</dt>
-<dd><p>Character vector with coordinate values; used for
-<code>read_sf_url()</code> if the "url" is a Google Sheet.</p></dd>
+<dd><p>Character vector with coordinate values. Coordinates must be
+latlon data (with coordinate reference system 4326).</p></dd>
 <dt>geo</dt>
-<dd><p>If <code>TRUE</code>, use <a href="address_to_sf.html">address_to_sf</a> to geocode address column; defaults to <code>FALSE</code>.</p></dd>
+<dd><p>If <code>TRUE</code>, use <a href="address_to_sf.html">address_to_sf</a> to geocode address column; defaults
+to <code>FALSE</code>.</p></dd>
 <dt>address</dt>
 <dd><p>Address column name, Default: 'address'</p></dd>
 <dt>url</dt>
 <dd><p>A url for a spatial data file, a GitHub gist, or a ArcGIS
 FeatureServer or MapServer to access with <code><a href="get_esri_data.html">get_esri_data()</a></code></p></dd>
+<dt>show_col_types</dt>
+<dd><p>If <code>FALSE</code>, do not show the guessed column types. If
+<code>TRUE</code> always show the column types, even if they are supplied. If <code>NULL</code>
+(the default) only show the column types if they are not explicitly supplied
+by the <code>col_types</code> argument.</p></dd>
 <dt>geojson</dt>
 <dd><p>string or vector of GeoJSON, or a URL or file pointing to a geojson file</p></dd>
 <dt>id</dt>
-<dd><p>(character) A gist id, or a gist URL</p></dd>
+<dd><p>The name of a column in which to store the file path. This is
+useful when reading multiple input files and there is data in the file
+paths, such as the data collection date. If <code>NULL</code> (the default) no extra
+column is created.</p></dd>
 <dt>filename</dt>
 <dd><p>File name; if file name is <code>NULL</code>, name and file type are
 both required.</p></dd>
@@ -231,7 +241,7 @@ provided, a expected layer name is created based on the file path.</p>
 MapServer url (passed to <a href="get_esri_data.html">get_esri_data</a>) or sheet if the url is for a Google
 Sheet (passed to <a href="https://googlesheets4.tidyverse.org/reference/range_read.html" class="external-link">googlesheets4::read_sheet</a>), or a query or wkt filter
 parameter if the url is some other type (passed to <a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf</a>).</p>
-<p>read_sf_ext is a flexible function that only has bbox as a named parameters
+<p>read_sf_ext is a flexible function that only has bbox as a named parameter
 and all other parameters in ... are passed to one of the other overedge
 read_sf functions.</p>
     </div>

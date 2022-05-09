@@ -71,30 +71,31 @@ read_sf_gsheet(
 )
 }
 \arguments{
-\item{...}{additional parameters passed to multiple functions; see details.}
+\item{...}{Additional parameters passed to multiple functions; see details.}
 
-\item{bbox}{A bounding box object; Default: \code{NULL}. If "bbox" is provided,
-read_sf only returns features intersecting the bounding box.}
+\item{bbox}{A bounding box object; defaults to \code{NULL}. If \code{"bbox"} is provided,
+only returns features intersecting the bounding box.}
 
-\item{data}{character; name of data; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only}
+\item{data}{Character; name of dataset; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
-\item{package}{character; package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only}
+\item{package}{Character; package name; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only.}
 
-\item{filetype}{file type supported by \code{\link[sf:st_read]{sf::read_sf()}}., Default: 'gpkg';
-used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data is in the
-package cache directory or extdata system files.}
+\item{filetype}{File type supported for dsn parameter of \code{\link[sf:st_read]{sf::read_sf()}};
+Default: 'gpkg'; used by \code{\link[=read_sf_pkg]{read_sf_pkg()}} only and required only if the data
+is in the package cache directory or extdata system files.}
 
-\item{path}{A file path; used by \code{\link[=read_sf_path]{read_sf_path()}} only.}
+\item{path}{A file path.}
 
 \item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
 integer (the position of the sheet). Ignored if the sheet is specified via
 \code{range}. If neither argument specifies the sheet, defaults to the first
 sheet.}
 
-\item{coords}{Character vector with coordinate values; used for
-\code{\link[=read_sf_url]{read_sf_url()}} if the "url" is a Google Sheet.}
+\item{coords}{Character vector with coordinate values. Coordinates must be
+latlon data (with coordinate reference system 4326).}
 
-\item{geo}{If \code{TRUE}, use \link{address_to_sf} to geocode address column; defaults to \code{FALSE}.}
+\item{geo}{If \code{TRUE}, use \link{address_to_sf} to geocode address column; defaults
+to \code{FALSE}.}
 
 \item{address}{Address column name, Default: 'address'}
 
@@ -187,7 +188,7 @@ MapServer url (passed to \link{get_esri_data}) or sheet if the url is for a Goog
 Sheet (passed to \link[googlesheets4:range_read]{googlesheets4::read_sheet}), or a query or wkt filter
 parameter if the url is some other type (passed to \link[sf:st_read]{sf::read_sf}).
 
-\link{read_sf_ext} is a flexible function that only has bbox as a named parameters
+\link{read_sf_ext} is a flexible function that only has bbox as a named parameter
 and all other parameters in ... are passed to one of the other overedge
 read_sf functions.
 }
