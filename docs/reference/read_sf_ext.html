@@ -95,9 +95,25 @@ read_sf_geojson function (using the suggested
 
 <span class="fu">read_sf_path</span><span class="op">(</span><span class="va">path</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">read_sf_excel</span><span class="op">(</span><span class="va">path</span>, sheet <span class="op">=</span> <span class="cn">NULL</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">read_sf_excel</span><span class="op">(</span>
+  <span class="va">path</span>,
+  sheet <span class="op">=</span> <span class="cn">NULL</span>,
+  bbox <span class="op">=</span> <span class="cn">NULL</span>,
+  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>,
+  geo <span class="op">=</span> <span class="cn">FALSE</span>,
+  address <span class="op">=</span> <span class="st">"address"</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
 
-<span class="fu">read_sf_csv</span><span class="op">(</span><span class="va">path</span>, url <span class="op">=</span> <span class="cn">NULL</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">read_sf_csv</span><span class="op">(</span>
+  <span class="va">path</span>,
+  url <span class="op">=</span> <span class="cn">NULL</span>,
+  bbox <span class="op">=</span> <span class="cn">NULL</span>,
+  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>,
+  geo <span class="op">=</span> <span class="cn">FALSE</span>,
+  address <span class="op">=</span> <span class="st">"address"</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
 
 <span class="fu">read_sf_url</span><span class="op">(</span><span class="va">url</span>, bbox <span class="op">=</span> <span class="cn">NULL</span>, coords <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
 
@@ -124,6 +140,8 @@ read_sf_geojson function (using the suggested
   bbox <span class="op">=</span> <span class="cn">NULL</span>,
   coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>,
   ask <span class="op">=</span> <span class="cn">FALSE</span>,
+  geo <span class="op">=</span> <span class="cn">FALSE</span>,
+  address <span class="op">=</span> <span class="st">"address"</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -153,6 +171,10 @@ sheet.</p></dd>
 <dt>coords</dt>
 <dd><p>Character vector with coordinate values; used for
 <code>read_sf_url()</code> if the "url" is a Google Sheet.</p></dd>
+<dt>geo</dt>
+<dd><p>If <code>TRUE</code>, use <a href="address_to_sf.html">address_to_sf</a> to geocode address column; defaults to <code>FALSE</code>.</p></dd>
+<dt>address</dt>
+<dd><p>Address column name, Default: 'address'</p></dd>
 <dt>url</dt>
 <dd><p>A url for a spatial data file, a GitHub gist, or a ArcGIS
 FeatureServer or MapServer to access with <code><a href="get_esri_data.html">get_esri_data()</a></code></p></dd>

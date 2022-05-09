@@ -19,9 +19,25 @@ read_sf_pkg(data, bbox = NULL, package = NULL, filetype = "gpkg", ...)
 
 read_sf_path(path, bbox = NULL, ...)
 
-read_sf_excel(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"), ...)
+read_sf_excel(
+  path,
+  sheet = NULL,
+  bbox = NULL,
+  coords = c("lon", "lat"),
+  geo = FALSE,
+  address = "address",
+  ...
+)
 
-read_sf_csv(path, url = NULL, bbox = NULL, coords = c("lon", "lat"), ...)
+read_sf_csv(
+  path,
+  url = NULL,
+  bbox = NULL,
+  coords = c("lon", "lat"),
+  geo = FALSE,
+  address = "address",
+  ...
+)
 
 read_sf_url(url, bbox = NULL, coords = NULL, ...)
 
@@ -48,6 +64,8 @@ read_sf_gsheet(
   bbox = NULL,
   coords = c("lon", "lat"),
   ask = FALSE,
+  geo = FALSE,
+  address = "address",
   ...
 )
 }
@@ -74,6 +92,10 @@ sheet.}
 
 \item{coords}{Character vector with coordinate values; used for
 \code{\link[=read_sf_url]{read_sf_url()}} if the "url" is a Google Sheet.}
+
+\item{geo}{If \code{TRUE}, use \link{address_to_sf} to geocode address column; defaults to \code{FALSE}.}
+
+\item{address}{Address column name, Default: 'address'}
 
 \item{url}{A url for a spatial data file, a GitHub gist, or a ArcGIS
 FeatureServer or MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}}

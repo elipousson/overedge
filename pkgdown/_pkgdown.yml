@@ -28,6 +28,7 @@ reference:
   - starts_with("as_point")
   - starts_with("as_sf")
   - '`sf_to_df`'
+  - '`address_to_sf`'
   - starts_with("sf_bbox")
   - '`st_bbox_ext`'
   - '`st_buffer_ext`'

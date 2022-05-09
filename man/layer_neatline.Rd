@@ -86,7 +86,7 @@ ggplot2::ggplot() +
   layer_neatline(data = nc[1, ], dist = 20, unit = "mi", color = "none")
 }
 \seealso{
-\code{\link[ggplot2:ggsf]{ggplot2::CoordSf()}},\code{\link[ggplot2:scale_continuous]{ggplot2::scale_continuous()}}
+\code{\link[ggplot2:ggsf]{ggplot2::CoordSf()}}
 
 Other layer: 
 \code{\link{layer_frame}()},
