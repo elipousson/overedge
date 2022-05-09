@@ -31,20 +31,28 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
       is_sfg(x) ~ "sfg",
       is_sfc(x) ~ "sfc",
       is_sf_list(x) ~ "sf_list",
-      is.data.frame(x) ~ "df",
       is_raster(x) ~ "raster",
-      is_sp(x) ~ "sp"
+      is_sp(x) ~ "sp",
+      is.data.frame(x) ~ "df",
+      # FIXME: Converting character strings to sf using as_sf may be an inappropriate pattern
+      is_state_name(x) | is_state_geoid(x) ~ "state",
+      is_county_geoid(x) | is_county_name(x) ~ "county",
+      # FIXME: Is there any better way of testing an address than just confirming it is a character?
+      is.character(x) ~ "address"
     )
 
   x <-
-    switch(x_is,
+    switch(unique(x_is),
       "bbox" = sf_bbox_to_sf(x, ...),
       "sfg" = sf::st_sf(sf::st_sfc(x), ...),
       "sfc" = sf::st_sf(x, ...),
       "sf_list" = dplyr::bind_rows(x),
-      "df" = df_to_sf(x, ...),
       "raster" = sf::st_sf(sf::st_as_sfc(sf::st_bbox(x)), ...),
-      "sp" = sf::st_as_sf(x, ...)
+      "sp" = sf::st_as_sf(x, ...),
+      "df" = df_to_sf(x, ...),
+      "state" = get_states(x, class = "sf"),
+      "county" = get_counties(x, class = "sf"),
+      "address" = address_to_sf(x)
     )
 
   if (!is.null(sf_col) && (attributes(x)$sf_column != sf_col)) {

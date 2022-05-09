@@ -60,7 +60,7 @@ sf_filter <- function(data, location, join = NULL, trim = FALSE) {
 #'
 #' Location can be:
 #'
-#' - A sf, bbox, or sfc object
+#' - A `sf`, `bbox`, or `sfc` object
 #' - A U.S. state (name, abbreviation, or GeoID) or county (GeoID)
 #' - An address
 #'
@@ -103,34 +103,21 @@ location_filter <- function(data,
 
   if (!types$null && types$chr) {
     if (types$state) {
-      location <- get_state_location(location)
+      location <- get_states(location, class = "sf")
     } else if (types$county) {
-      location <- get_county_location(location)
+      location <- get_counties(location, class = "sf")
     } else {
       # FIXME: Could this be replaced with a call to make_features
-
-      is_pkg_installed("tidygeocoder")
-
-      # Geocode the address
-      location <-
-        tidygeocoder::geo(
-          address = location,
-          long = "lon",
-          lat = "lat",
-          quiet = rlang::is_interactive()
-        )
-
-      # Convert address df to sf
-      location <- df_to_sf(location, coords = c("lon", "lat"), crs = data)
+      location <- address_to_sf(location, crs = data)
     }
 
     types$sf <- TRUE
     types$sf_ext <- TRUE
   } else if (!types$null && any(c(has_us_state_param, has_us_county_param))) {
     if (has_us_state_param) {
-      location <- get_state_location(location = c(params$state, params$statefp, params$abb)[[1]])
+      location <- get_states(location = c(params$state, params$statefp, params$abb)[[1]], class = "sf")
     } else if (has_us_county_param) {
-      location <- get_county_location(location = c(params$county, params$geoid)[[1]])
+      location <- get_counties(location = c(params$county, params$geoid)[[1]], class = "sf")
     }
 
     types$sf <- TRUE
@@ -174,35 +161,23 @@ location_filter <- function(data,
   return(data)
 }
 
-#' Get simple feature for location if location is a state name, abbreviation, or FIPS code
+#' Use tidygeocoder to convert an address to an sf POINT object
 #'
 #' @noRd
-get_state_location <- function(location, class = "sf") {
-  stopifnot(
-    is.character(location) || is.integer(location)
-  )
+#' @importFrom rlang is_interactive
+address_to_sf <- function(x, crs = NULL, ...) {
+  is_pkg_installed("tidygeocoder")
 
-  if (location %in% us_states$abb) {
-    location <- get_states(abb = location, class = class)
-  } else if (location %in% us_states$name) {
-    location <- get_states(name = location, class = class)
-  } else if (location %in% us_states$statefp) {
-    # FIXME: What about numeric/integer locations?
-    location <- get_states(geoid = location, class = class)
-  }
+  # Geocode the address
+  x <-
+    tidygeocoder::geo(
+      address = x,
+      long = "lon",
+      lat = "lat",
+      quiet = rlang::is_interactive(),
+      ...
+    )
 
-  return(location)
-}
-
-#' Get simple feature for location if location is a county GeoID or county name
-#'
-#' @noRd
-get_county_location <- function(location, class = "sf") {
-  if (location %in% us_counties$geoid) {
-    location <- get_counties(geoid = location, class = class)
-  } else if (location %in% us_counties$name) {
-    location <- get_counties(name = location, class = class)
-  }
-
-  return(location)
+  # Convert address df to sf
+  return(df_to_sf(x, coords = c("lon", "lat"), crs = crs))
 }

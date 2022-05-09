@@ -1,38 +1,38 @@
 #' Get data for a location
 #'
-#' Returns data for a selected area or areas with an optional buffer. If both
-#' crop and trim are FALSE, the function uses \code{\link[sf]{st_intersects}} to
-#' filter data to include the full geometry of anything that overlaps with the
-#' area or bbox (if the area is not provided).
+#' Returns data for a selected location or a list of locations (for
+#' [map_location_data]). If data is a character string, the parameter is passed
+#' to [read_sf_url], [read_sf_path], or [read_sf_pkg]. This function uses
+#' [location_filter()] to filter (using [sf::st_intersects]), crop, or trim data
+#' to the provided location. location can also be an an address, county GeoID,
+#' state name, abbreviation, or GeoID.
 #'
 #' @details Working with sf lists for data and locations:
 #'
-#'   map_data_location makes it easier to work with sf lists. It supports data
-#'   as a character vector, data as an sf list when location is a single object,
-#'   location as a character vector or sf list (including lists of bbox or sfc
+#'   [map_data_location] makes it easier to work with `sf` lists. It supports data
+#'   as a character vector, data as an `sf` list when location is a single object,
+#'   location as a character vector or `sf` list (including lists of `bbox` or `sfc`
 #'   objects), or when both data and location are lists (such as a list created
-#'   by make_location_data_list).
+#'   by [make_location_data_list]).
 #'
 #' @param location sf object. If multiple areas are provided, they are unioned
 #'   into a single sf object using [sf::st_union]
 #' @inheritParams st_bbox_ext
-#' @param data sf object including data in area. data may also be a url or file
-#'   path. data can be the name of a data object or, if package and filetype are
-#'   provided, a cached or external file.
-#' @param url url for FeatureServer or MapServer layer to pass to
-#'   [get_esri_data]. url can be provided to data parameter
-#' @param path path to spatial data file supported by [sf::read_sf]
-#' @param package package name.
-#' @param filetype file type supported by [sf::read_sf]. The file type must be
-#'   provided for extdata and cached data.
-#' @param fn Function to apply to data before returning.
+#' @param data Character string (e.g. url, file path, or name of data from
+#'   package), a `sf`, `sfc`, or `bbox`  object including data in area.
+#' @param package Name of the package to search for data.
+#' @param filetype File type to use if passing parameters to [read_sf_download]
+#'   or [read_sf_pkg] (required for extdata and cached data).
+#' @param fn Function to apply to data after filtering by location but before
+#'   returning from function.
 #' @inheritParams location_filter
-#' @param from_crs coordinate reference system of the data.
-#' @param crs coordinate reference system to return
+#' @param from_crs Coordinate reference system of the data (used to convert the
+#'   CRS of the bounding box used in reading/filtering data).
+#' @param crs Coordinate reference system to return
 #' @param class Class of object to return.
 #' @param index A list of possible location, data, and (optionally) package
 #'   values. List must be named and include a value named package and package
-#'   must be `NULL`, to set package based on index. If list is not NULL and
+#'   must be `NULL`, to set package based on index. If list is not `NULL` and
 #'   location and/or data as character or numeric values, the location and data
 #'   are assumed to be index values for the index list. The index parameter
 #'   supports nested lists created by [make_location_data_list] (using only the
@@ -52,8 +52,6 @@ get_location_data <- function(location = NULL,
                               unit = NULL,
                               asp = NULL,
                               data = NULL,
-                              url = NULL,
-                              path = NULL,
                               package = NULL,
                               filetype = "gpkg",
                               fn = NULL,
@@ -77,7 +75,15 @@ get_location_data <- function(location = NULL,
     data <- get_index_param(index, data = data)
   }
 
+  # FIXME: cannot pass the bbox via params but that is OK
+  # If a bounding box is not in the params this should pass NULL but I need to double-check
+  bbox <- NULL # params$bbox
+
   if (!is.null(location)) {
+    if (is.character(location)) {
+      location <- as_sf(location)
+    }
+
     # Get adjusted bounding box using any adjustment variables provided
     bbox <-
       st_bbox_ext(
@@ -88,10 +94,6 @@ get_location_data <- function(location = NULL,
         asp = asp,
         crs = from_crs
       )
-  } else {
-    # FIXME: cannot pass the bbox via params but that is OK
-    # If a bounding box is not in the params this should pass NULL but I need to double-check
-    bbox <- NULL # params$bbox
   }
 
   if (is_bbox(data)) {
@@ -118,29 +120,21 @@ get_location_data <- function(location = NULL,
       )
   }
 
-  # FIXME: Document how the filter works
   data <-
     location_filter(
       data = data,
       location = location,
       bbox = bbox,
       trim = trim,
-      crop = crop,
-      ...
+      crop = crop
     )
 
   data <- use_fn(data = data, fn = fn)
 
   params <- rlang::list2(...)
 
-  if (!is.null(params$col)) {
-    col <- params$col
-  } else {
-    col <- NULL
-  }
-
   # TODO: Is the following pattern of setting col based on ... and converting the class something that should be pulled into a separate utility function?
-  data <- as_sf_class(x = data, class = class, crs = crs, col = col)
+  data <- as_sf_class(x = data, class = class, crs = crs, col = params$col)
 
   return(data)
 }
@@ -160,8 +154,6 @@ map_location_data <- function(location = NULL,
                               unit = NULL,
                               asp = NULL,
                               data = NULL,
-                              url = NULL,
-                              path = NULL,
                               package = NULL,
                               filetype = "gpkg",
                               fn = NULL,

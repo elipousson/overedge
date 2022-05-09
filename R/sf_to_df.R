@@ -73,7 +73,7 @@ df_to_sf <- function(x,
                      rev = TRUE,
                      remove_coords = FALSE) {
   if (rlang::has_name(x, "geometry")) {
-    x <- df_geom_to_sf(x)
+    x <- df_geom_to_sf(x, crs = from_crs)
   } else if (rlang::has_name(x, "wkt")) {
     x <- df_wkt_to_sf(x, crs = from_crs)
   } else {
@@ -232,10 +232,10 @@ df_geom_to_sf <- function(x) {
 #' Convert a data frame with a wkt column to an sf object
 #' @noRd
 #' @importFrom sf st_geometry st_as_sfc
-df_wkt_to_sf <- function(x, crs) {
+df_wkt_to_sf <- function(x, crs = NULL) {
   sf::st_geometry(x) <- sf::st_as_sfc(x$wkt, crs = crs)
   x$wkt <- NULL
-  return(x)
+  return(sf::st_as_sf(x, crs = crs))
 }
 
 #' Format coordinates as numeric values and remove missing coordinates from data frame
