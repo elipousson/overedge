@@ -52,6 +52,8 @@
 #'   package cache directory or extdata system files.
 #' @param coords Character vector with coordinate values; used for
 #'   [read_sf_url()] if the "url" is a Google Sheet.
+#' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults to `FALSE`.
+#' @inheritParams address_to_sf
 #' @param ... additional parameters passed to multiple functions; see details.
 #' @name read_sf_ext
 #' @family read_write
@@ -197,7 +199,7 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 #' @export
 #' @importFrom rlang list2
 #' @importFrom purrr map
-read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"), ...) {
+read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "lat"), geo = FALSE, address = "address", ...) {
   is_pkg_installed("readxl")
   # Convert XLS or XLSX file with coordinates to sf
 
@@ -220,9 +222,7 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
 
   data <- readxl::read_excel(path = path, sheet = sheet, ...)
 
-  coords <- check_coords(data, coords = coords)
-
-  data <- df_to_sf(data, coords = coords)
+  data <- tabular_to_sf(data, coords = coords, geo = geo, address = address)
 
   data <- bbox_filter(data, bbox = bbox)
 
@@ -232,16 +232,14 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
 #' @name read_sf_csv
 #' @rdname read_sf_ext
 #' @export
-read_sf_csv <- function(path, url = NULL, bbox = NULL, coords = c("lon", "lat"), ...) {
+read_sf_csv <- function(path, url = NULL, bbox = NULL, coords = c("lon", "lat"), geo = FALSE, address = "address", ...) {
   if (rlang::is_missing(path) && !is.null(url)) {
     path <- url
   }
 
-  data <- readr::read_csv(path = path, ...)
+  data <- readr::read_csv(file = path, ...)
 
-  coords <- check_coords(data, coords = coords)
-
-  data <- df_to_sf(data, coords = coords)
+  data <- tabular_to_sf(data, coords = coords, geo = geo, address = address)
 
   data <- bbox_filter(data, bbox = bbox)
 
@@ -468,7 +466,7 @@ read_sf_download <-
 #'   not provided to [read_sf_gsheet].
 #' @export
 #' @importFrom rlang is_missing
-read_sf_gsheet <- function(url, sheet = NULL, ss = NULL, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, ...) {
+read_sf_gsheet <- function(url, sheet = NULL, ss = NULL, bbox = NULL, coords = c("lon", "lat"), ask = FALSE, geo = FALSE, address = "address", ...) {
   # Convert Google Sheet with coordinates to sf
   is_pkg_installed("googlesheets4")
 
@@ -483,9 +481,7 @@ read_sf_gsheet <- function(url, sheet = NULL, ss = NULL, bbox = NULL, coords = c
 
   data <- googlesheets4::read_sheet(ss = ss, sheet = sheet, ...)
 
-  coords <- check_coords(data, coords = coords)
-
-  data <- df_to_sf(data, coords = coords)
+  data <- tabular_to_sf(data, coords = coords, geo = geo, address = address)
 
   data <- bbox_filter(data, bbox = bbox)
 

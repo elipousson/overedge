@@ -160,24 +160,3 @@ location_filter <- function(data,
 
   return(data)
 }
-
-#' Use tidygeocoder to convert an address to an sf POINT object
-#'
-#' @noRd
-#' @importFrom rlang is_interactive
-address_to_sf <- function(x, crs = NULL, ...) {
-  is_pkg_installed("tidygeocoder")
-
-  # Geocode the address
-  x <-
-    tidygeocoder::geo(
-      address = x,
-      long = "lon",
-      lat = "lat",
-      quiet = rlang::is_interactive(),
-      ...
-    )
-
-  # Convert address df to sf
-  return(df_to_sf(x, coords = c("lon", "lat"), crs = crs))
-}

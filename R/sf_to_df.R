@@ -72,8 +72,8 @@ df_to_sf <- function(x,
                      sep = ",",
                      rev = TRUE,
                      remove_coords = FALSE) {
-  if (rlang::has_name(x, "geometry")) {
-    x <- df_geom_to_sf(x, crs = from_crs)
+  if (rlang::has_name(x, "geometry") && !all(rlang::has_name(x, coords))) {
+    x <- df_geom_to_sf(x) # , crs = from_crs)
   } else if (rlang::has_name(x, "wkt")) {
     x <- df_wkt_to_sf(x, crs = from_crs)
   } else {
@@ -263,4 +263,87 @@ format_coords <- function(x, coords = c("lon", "lat")) {
   }
 
   return(x)
+}
+
+
+
+#' Use tidygeocoder to convert an address or data frame with an address column
+#' to an sf object
+#'
+#' Wraps [tidygeocoder::geo] and [tidygeocoder::geocode] to convert a character
+#' string or a data frame with an address column.
+#'
+#' @param x Data frame with an address column. Multiple address columns are not currently supported.
+#' @param address Address column name, Default: 'address'
+#' @inheritParams df_to_sf
+#' @param ... Additional parameters passed to [tidygeocoder::geo] or [tidygeocoder::geocode]
+#' @return A `sf` object with POINT geometry for all geocoded addresses with valid coordinates.
+#' @seealso
+#'  \code{\link[tidygeocoder]{geo}}, \code{\link[tidygeocoder]{geocode}}
+#' @rdname address_to_sf
+#' @export
+#' @importFrom rlang is_interactive
+address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), crs = NULL, ...) {
+  is_pkg_installed("tidygeocoder")
+
+  if (is.character(x)) {
+    # Geocode the address
+    # FIXME: Consider adding support for a vector of multiple addresses
+    x <-
+      tidygeocoder::geo(
+        address = x,
+        long = "lon",
+        lat = "lat",
+        quiet = rlang::is_interactive(),
+        ...
+      )
+  } else if (is.data.frame(x)) {
+    # Geocode the address
+    x <-
+      tidygeocoder::geocode(
+        x,
+        address = address,
+        long = "lon",
+        lat = "lat",
+        quiet = rlang::is_interactive(),
+        ...
+      )
+  }
+
+  x <-
+    dplyr::rename(
+      x,
+      "{coords[[1]]}" := lon,
+      "{coords[[2]]}" := lat
+    )
+
+  stopifnot(
+    nrow(x) > 0
+  )
+
+  # Convert address df to sf
+  return(df_to_sf(x, coords = coords, crs = crs))
+}
+
+
+#' Convert tabular data from read_sf_csv, read_sf_xls, or read_sf_gsheet into an sf object
+#'
+#' @noRd
+#' @importFrom rlang has_name
+tabular_to_sf <- function(x, coords = c("lon", "lat"), geo = FALSE, address = "address") {
+  if (geo) {
+    stopifnot(
+      rlang::has_name(data, address)
+    )
+
+    data <-
+      address_to_sf(
+        data,
+        address = address
+      )
+  } else {
+    # FIXME: This call to check_coords should be unecessary
+    coords <- check_coords(data, coords = coords)
+    data <- df_to_sf(data, coords = coords)
+  }
 }
