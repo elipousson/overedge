@@ -36,6 +36,7 @@ read_sf_csv(
   coords = c("lon", "lat"),
   geo = FALSE,
   address = "address",
+  show_col_types = FALSE,
   ...
 )
 
@@ -100,9 +101,17 @@ sheet.}
 \item{url}{A url for a spatial data file, a GitHub gist, or a ArcGIS
 FeatureServer or MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}}
 
+\item{show_col_types}{If \code{FALSE}, do not show the guessed column types. If
+\code{TRUE} always show the column types, even if they are supplied. If \code{NULL}
+(the default) only show the column types if they are not explicitly supplied
+by the \code{col_types} argument.}
+
 \item{geojson}{string or vector of GeoJSON, or a URL or file pointing to a geojson file}
 
-\item{id}{(character) A gist id, or a gist URL}
+\item{id}{The name of a column in which to store the file path. This is
+useful when reading multiple input files and there is data in the file
+paths, such as the data collection date. If \code{NULL} (the default) no extra
+column is created.}
 
 \item{filename}{File name; if file name is \code{NULL}, name and file type are
 both required.}

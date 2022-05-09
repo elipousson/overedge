@@ -222,7 +222,7 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
 
   data <- readxl::read_excel(path = path, sheet = sheet, ...)
 
-  data <- tabular_to_sf(data, coords = coords, geo = geo, address = address)
+  data <- df_to_sf(data, coords = coords, geo = geo, address = address)
 
   data <- bbox_filter(data, bbox = bbox)
 
@@ -231,15 +231,16 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
 
 #' @name read_sf_csv
 #' @rdname read_sf_ext
+#' @inheritParams readr::read_csv
 #' @export
-read_sf_csv <- function(path, url = NULL, bbox = NULL, coords = c("lon", "lat"), geo = FALSE, address = "address", ...) {
+read_sf_csv <- function(path, url = NULL, bbox = NULL, coords = c("lon", "lat"), geo = FALSE, address = "address", show_col_types = FALSE, ...) {
   if (rlang::is_missing(path) && !is.null(url)) {
     path <- url
   }
 
-  data <- readr::read_csv(file = path, ...)
+  data <- readr::read_csv(file = path, show_col_types = show_col_types, ...)
 
-  data <- tabular_to_sf(data, coords = coords, geo = geo, address = address)
+  data <- df_to_sf(data, coords = coords, geo = geo, address = address, crs = NULL)
 
   data <- bbox_filter(data, bbox = bbox)
 
@@ -481,7 +482,7 @@ read_sf_gsheet <- function(url, sheet = NULL, ss = NULL, bbox = NULL, coords = c
 
   data <- googlesheets4::read_sheet(ss = ss, sheet = sheet, ...)
 
-  data <- tabular_to_sf(data, coords = coords, geo = geo, address = address)
+  data <- df_to_sf(data, coords = coords, geo = geo, address = address)
 
   data <- bbox_filter(data, bbox = bbox)
 

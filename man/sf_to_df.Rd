@@ -23,7 +23,9 @@ df_to_sf(
   into = NULL,
   sep = ",",
   rev = TRUE,
-  remove_coords = FALSE
+  remove_coords = FALSE,
+  geo = FALSE,
+  address = "address"
 )
 
 check_coords(x = NULL, coords = NULL, default = c("lon", "lat"), rev = FALSE)

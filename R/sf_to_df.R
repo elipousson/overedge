@@ -71,34 +71,60 @@ df_to_sf <- function(x,
                      into = NULL,
                      sep = ",",
                      rev = TRUE,
-                     remove_coords = FALSE) {
-  if (rlang::has_name(x, "geometry") && !all(rlang::has_name(x, coords))) {
-    x <- df_geom_to_sf(x) # , crs = from_crs)
-  } else if (rlang::has_name(x, "wkt")) {
-    x <- df_wkt_to_sf(x, crs = from_crs)
-  } else {
-    if (rlang::has_length(coords, 1) && rlang::has_length(into, 2)) {
-      x <- separate_coords(x = x, coords = coords, into = into, sep = sep)
-      coords <- into
-    } else {
-      coords <- check_coords(x = x, coords = coords, rev = rev)
-    }
-
-    x <- format_coords(x, coords = coords)
-
-    x <-
-      sf::st_as_sf(
-        x,
-        coords = c(coords[[1]], coords[[2]]),
-        agr = "constant",
-        crs = from_crs,
-        stringsAsFactors = FALSE,
-        remove = remove_coords
-      )
+                     remove_coords = FALSE,
+                     geo = FALSE,
+                     address = "address") {
+  if (is_sf(x)) {
+    cli::cli_warn("df_to_sf requires a data frame. Dropping geometry from the provided simple feature object.")
+    x <- sf::st_drop_geometry(x)
   }
+
+  type <-
+    dplyr::case_when(
+      rlang::has_name(x, "geometry") && !all(rlang::has_name(x, coords)) ~ "geometry_df",
+      rlang::has_name(x, "wkt") ~ "wkt_df",
+      geo && rlang::has_name(x, address) ~ "address_df",
+      TRUE ~ "coords_df"
+    )
+
+  x <-
+    switch(type,
+      "geometry_df" = geometry_df_to_sf(x),
+      "wkt_df" = wkt_df_to_sf(x, crs = from_crs),
+      "coords_df" = coords_df_to_sf(x, coords = coords, crs = from_crs, into = into, sep = sep, rev = rev, remove_coords = remove_coords),
+      "address_df" = address_to_sf(x, address = address, coords = coords, crs = crs, remove_coords = remove_coords)
+    )
 
   x <-
     st_transform_ext(x = x, crs = crs, class = "sf")
+
+  return(x)
+}
+
+#' Convert a data frame with a geometry list column to an sf object
+#' @name coords_df_to_sf
+#' @noRd
+#' @importFrom rlang has_length
+#' @importFrom sf st_as_sf
+coords_df_to_sf <- function(x, coords = c("lon", "lat"), into = NULL, sep = ",", rev = FALSE, remove_coords = FALSE, crs = 4326) {
+  if (rlang::has_length(coords, 1) && rlang::has_length(into, 2)) {
+    x <- separate_coords(x = x, coords = coords, into = into, sep = sep)
+    coords <- into
+  } else {
+    coords <- check_coords(x = x, coords = coords, rev = rev)
+  }
+
+  x <- format_coords(x, coords = coords)
+
+  x <-
+    sf::st_as_sf(
+      x,
+      coords = c(coords[[1]], coords[[2]]),
+      agr = "constant",
+      crs = crs,
+      stringsAsFactors = FALSE,
+      remove = remove_coords
+    )
 
   return(x)
 }
@@ -225,14 +251,14 @@ separate_coords <- function(x, coords, into, sep) {
 #' Convert a data frame with a geometry list column to an sf object
 #' @noRd
 #' @importFrom sf st_as_sf
-df_geom_to_sf <- function(x) {
+geometry_df_to_sf <- function(x) {
   return(sf::st_as_sf(x))
 }
 
 #' Convert a data frame with a wkt column to an sf object
 #' @noRd
 #' @importFrom sf st_geometry st_as_sfc
-df_wkt_to_sf <- function(x, crs = NULL) {
+wkt_df_to_sf <- function(x, crs = NULL) {
   sf::st_geometry(x) <- sf::st_as_sfc(x$wkt, crs = crs)
   x$wkt <- NULL
   return(sf::st_as_sf(x, crs = crs))
@@ -245,6 +271,10 @@ df_wkt_to_sf <- function(x, crs = NULL) {
 format_coords <- function(x, coords = c("lon", "lat")) {
   lon <- coords[[1]]
   lat <- coords[[2]]
+
+  stopifnot(
+    is.data.frame(x)
+  )
 
   # Check that lat/lon are numeric
   if (any(!is.numeric(x[[lon]])) | any(!is.numeric(x[[lat]]))) {
@@ -265,8 +295,6 @@ format_coords <- function(x, coords = c("lon", "lat")) {
   return(x)
 }
 
-
-
 #' Use tidygeocoder to convert an address or data frame with an address column
 #' to an sf object
 #'
@@ -283,12 +311,23 @@ format_coords <- function(x, coords = c("lon", "lat")) {
 #' @rdname address_to_sf
 #' @export
 #' @importFrom rlang is_interactive
-address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), crs = NULL, ...) {
+address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), remove_coords = FALSE, crs = NULL, ...) {
   is_pkg_installed("tidygeocoder")
 
   if (is.character(x)) {
     # Geocode the address
     # FIXME: Consider adding support for a vector of multiple addresses
+
+    if (length(x) > 1) {
+      x <-
+        purrr::map_dfr(
+          x,
+          ~ address_to_sf(x = .x, address = address, coords = coords, remove_coords = remove_coords, crs = crs)
+        )
+
+      return(x)
+    }
+
     x <-
       tidygeocoder::geo(
         address = x,
@@ -297,24 +336,29 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), crs 
         quiet = rlang::is_interactive(),
         ...
       )
-  } else if (is.data.frame(x)) {
-    # Geocode the address
-    x <-
-      tidygeocoder::geocode(
-        x,
-        address = address,
-        long = "lon",
-        lat = "lat",
-        quiet = rlang::is_interactive(),
-        ...
-      )
   }
+
+  stopifnot(is.data.frame(x))
+
+  # Geocode the address
+  x <- has_same_name_col(x, col = "lon")
+  x <- has_same_name_col(x, col = "lat")
+
+  x <-
+    tidygeocoder::geocode(
+      x,
+      address = address,
+      long = "lon",
+      lat = "lat",
+      quiet = rlang::is_interactive(),
+      ...
+    )
 
   x <-
     dplyr::rename(
       x,
-      "{coords[[1]]}" := lon,
-      "{coords[[2]]}" := lat
+      "{coords[[1]]}" := "lon",
+      "{coords[[2]]}" := "lat"
     )
 
   stopifnot(
@@ -322,31 +366,7 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), crs 
   )
 
   # Convert address df to sf
-  return(df_to_sf(x, coords = coords, crs = crs))
-}
+  x <- df_to_sf(x, coords = coords, from_crs = 4326, remove_coords = remove_coords, crs = crs)
 
-
-#' Convert tabular data from read_sf_csv, read_sf_xls, or read_sf_gsheet into an sf object
-#'
-#' @noRd
-#' @importFrom rlang has_name
-tabular_to_sf <- function(x, coords = c("lon", "lat"), geo = FALSE, address = "address") {
-  # FIXME: This function maybe should be merged into df_to_sf
-  if (geo) {
-    stopifnot(
-      rlang::has_name(data, address)
-    )
-
-    data <-
-      address_to_sf(
-        data,
-        address = address
-      )
-  } else {
-    # FIXME: This call to check_coords should be unecessary
-    coords <- check_coords(data, coords = coords)
-    data <- df_to_sf(data, coords = coords)
-  }
-
-  return(data)
+  return(x)
 }

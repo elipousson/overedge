@@ -9,6 +9,7 @@ address_to_sf(
   x,
   address = "address",
   coords = c("lon", "lat"),
+  remove_coords = FALSE,
   crs = NULL,
   ...
 )
@@ -20,6 +21,10 @@ address_to_sf(
 
 \item{coords}{Coordinate columns for input dataframe or output sf object (if
 geometry is 'centroid' or 'point') Default: c("lon", "lat").}
+
+\item{remove_coords}{For \link{df_to_sf}, if \code{TRUE}, remove the coordinate columns
+after converting a data frame to simple feature object; defaults to
+\code{FALSE}.}
 
 \item{crs}{Cordinate reference system to return, Default: 4326 for \link{sf_to_df}
 and NULL for \link{df_to_sf}}
