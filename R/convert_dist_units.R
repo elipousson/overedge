@@ -21,7 +21,7 @@ convert_dist_units <- function(dist,
   }
 
   if (!is.null(from)) {
-    from <- match.arg(from, c(dist_unit_options, area_unit_options))
+    from <- match.arg(from, c(overedge::dist_unit_options, overedge::area_unit_options))
 
     if (!is_units(dist)) {
       from <- gsub(" ", "_", from)
@@ -36,7 +36,7 @@ convert_dist_units <- function(dist,
 
   if (!is.null(to)) {
     to <- gsub(" ", "_", to)
-    to <- match.arg(to, c(dist_unit_options, area_unit_options))
+    to <- match.arg(to, c(overedge::dist_unit_options, overedge::area_unit_options))
 
     dist <-
       units::set_units(
