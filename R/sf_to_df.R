@@ -82,17 +82,17 @@ df_to_sf <- function(x,
   type <-
     dplyr::case_when(
       rlang::has_name(x, "geometry") && !all(rlang::has_name(x, coords)) ~ "geometry_df",
+      geo && rlang::has_name(x, address) && !all(rlang::has_name(x, coords)) ~ "address_df",
       rlang::has_name(x, "wkt") ~ "wkt_df",
-      geo && rlang::has_name(x, address) ~ "address_df",
       TRUE ~ "coords_df"
     )
 
   x <-
     switch(type,
       "geometry_df" = geometry_df_to_sf(x),
+      "address_df" = address_to_sf(x, address = address, coords = coords, crs = crs, remove_coords = remove_coords),
       "wkt_df" = wkt_df_to_sf(x, crs = from_crs),
       "coords_df" = coords_df_to_sf(x, coords = coords, crs = from_crs, into = into, sep = sep, rev = rev, remove_coords = remove_coords),
-      "address_df" = address_to_sf(x, address = address, coords = coords, crs = crs, remove_coords = remove_coords)
     )
 
   x <-
