@@ -135,12 +135,12 @@ write_sf_cache <- function(data,
       path = NULL
     )
 
-  data_dir_path <- file.path(data_dir, filename)
+  path <- file.path(data_dir, filename)
 
   write_sf_types(
-    data = date,
+    data = data,
     filename = filename,
-    path = data_dir_path,
+    path = path,
     filetype = filetype,
     overwrite = overwrite
   )

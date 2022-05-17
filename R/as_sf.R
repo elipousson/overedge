@@ -41,8 +41,12 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
       is.character(x) ~ "address"
     )
 
+  if (length(x_is) > 1) {
+    x_is <- unique(x_is)
+  }
+
   x <-
-    switch(unique(x_is),
+    switch(x_is,
       "bbox" = sf_bbox_to_sf(x, ...),
       "sfg" = sf::st_sf(sf::st_sfc(x), ...),
       "sfc" = sf::st_sf(x, ...),
