@@ -26,6 +26,8 @@ get_states <- function(location = NULL,
                        ...) {
   params <- rlang::list2(...)
 
+  us_states <- overedge::us_states
+
   # FIXME: This could be simplified by using is_state_name and is_state_geoid
   if (is.character(location)) {
     if (location %in% us_states$geoid) {
@@ -83,6 +85,8 @@ get_counties <- function(location = NULL,
                          class = "df",
                          ...) {
   params <- rlang::list2(...)
+
+  us_counties <- overedge::us_counties
 
   if (is.character(location)) {
     if (is_county_geoid(location)) {
