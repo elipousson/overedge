@@ -2,6 +2,7 @@
 % Please edit documentation in R/format_data.R
 \name{format_data}
 \alias{format_data}
+\alias{str_trim_squish}
 \alias{rename_with_xwalk}
 \alias{fix_date}
 \alias{relocate_sf_col}
@@ -19,8 +20,11 @@ format_data(
   replace_na_with = NULL,
   replace_with_na = NULL,
   replace_empty_char_with_na = TRUE,
-  fix_date = TRUE
+  fix_date = TRUE,
+  sf_col = NULL
 )
+
+str_trim_squish(x)
 
 rename_with_xwalk(x, xwalk = NULL)
 
@@ -65,14 +69,14 @@ defaults to \code{NULL}.}
 \item{fix_date}{If \code{TRUE}, fix UNIX dates (common issue with dates from
 FeatureServer and MapServer sources) , Default: \code{TRUE}}
 
+\item{sf_col}{Name to use for the sf column after renaming; defaults to "geometry".}
+
 \item{xwalk}{a data frame with two columns using the first column as name and
 the second column as value; or a named list. The existing names of x must
 be the values and the new names must be the names.}
 
 \item{.after}{The location to place sf column after; defaults to
 \link[dplyr:reexports]{dplyr::everything}.}
-
-\item{sf_col}{Name to use for the sf column after renaming; defaults to "geometry".}
 
 \item{city, county, state}{City, county, and state to bind to data frame or
 \code{sf} object.}
@@ -96,15 +100,16 @@ named .id column.}
 "y" is bound to the "x" data frame or tibble as a new column.}
 }
 \value{
-Data with formatting functions applied.
+The input data frame or simple feature object with formatting functions applied.
 }
 \description{
 This function can apply the following common data cleaning tasks:
 }
 \details{
 \itemize{
-\item Applies \link[stringr:str_trim]{stringr::str_squish} and \link[stringr:str_trim]{stringr::str_trim} to all character columns
-\item Optionally replaces all character values of "" with NA values
+\item Applies \link[stringr:str_trim]{stringr::str_squish} and \link[stringr:str_trim]{stringr::str_trim} to all character
+columns (\link{str_trim_squish})
+\item Optionally replaces all character values of "" with \code{NA} values
 \item Optionally corrects UNIX formatted dates with 1970-01-01 origins
 \item Optionally renames variables by passing a named list of variables
 }
@@ -124,9 +129,13 @@ enclosing polygon.
 }
 
 Simple feature only functions:
+
+If \code{"sf_col"} is not \code{NULL} for \link{format_data}, the function calls
+\link{rename_sf_col} and \link{relocate_sf_col}
 \itemize{
-\item \link{rename_sf_col}
-\item \link{relocate_sf_col}
-\item \link{bind_boundary_col}
+\item \link{rename_sf_col}: Rename sf column.
+\item \link{relocate_sf_col}: Relocate sf column after everything (default) or specified column.
 }
+
+\link{bind_boundary_col} is also only able to work with simple feature objects.
 }

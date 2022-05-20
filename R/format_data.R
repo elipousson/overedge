@@ -2,8 +2,9 @@
 #'
 #' This function can apply the following common data cleaning tasks:
 #'
-#' - Applies [stringr::str_squish] and [stringr::str_trim] to all character columns
-#' - Optionally replaces all character values of "" with NA values
+#' - Applies [stringr::str_squish] and [stringr::str_trim] to all character
+#' columns ([str_trim_squish])
+#' - Optionally replaces all character values of "" with `NA` values
 #' - Optionally corrects UNIX formatted dates with 1970-01-01 origins
 #' - Optionally renames variables by passing a named list of variables
 #'
@@ -22,9 +23,13 @@
 #'
 #' @details Simple feature only functions:
 #'
-#' - [rename_sf_col]
-#' - [relocate_sf_col]
-#' - [bind_boundary_col]
+#' If `"sf_col"` is not `NULL` for [format_data], the function calls
+#' [rename_sf_col] and [relocate_sf_col]
+#'
+#' - [rename_sf_col]: Rename sf column.
+#' - [relocate_sf_col]: Relocate sf column after everything (default) or specified column.
+#'
+#' [bind_boundary_col] is also only able to work with simple feature objects.
 #'
 #' @param x A tibble or data frame object
 #' @param var_names A named list following the format, `list("New var name" = old_var_name)`, or a two column data frame with the first column being the
@@ -39,11 +44,9 @@
 #'   [naniar::replace_with_na_if], Default: `TRUE`
 #' @param fix_date If `TRUE`, fix UNIX dates (common issue with dates from
 #'   FeatureServer and MapServer sources) , Default: `TRUE`
-#' @return Data with formatting functions applied.
+#' @return The input data frame or simple feature object with formatting functions applied.
 #' @rdname format_data
 #' @export
-#' @importFrom dplyr mutate across rename
-#' @importFrom stringr str_trim str_squish
 #' @importFrom tibble deframe
 #' @importFrom tidyr replace_na
 format_data <- function(x,
@@ -52,15 +55,9 @@ format_data <- function(x,
                         replace_na_with = NULL,
                         replace_with_na = NULL,
                         replace_empty_char_with_na = TRUE,
-                        fix_date = TRUE) {
-  x <-
-    dplyr::mutate(
-      x,
-      dplyr::across(
-        where(is.character),
-        ~ stringr::str_trim(stringr::str_squish(.x))
-      )
-    )
+                        fix_date = TRUE,
+                        sf_col = NULL) {
+  x <- str_trim_squish(x)
 
   if (!is.null(var_names)) {
     x <- rename_with_xwalk(x, xwalk = var_names)
@@ -100,7 +97,27 @@ format_data <- function(x,
     x <- fix_date(x)
   }
 
+  if (!is.null(sf_col) && is_sf(x)) {
+    x <- rename_sf_col(x, sf_col = sf_col)
+    x <- relocate_sf_col(x, sf_col = sf_col)
+  }
+
   return(x)
+}
+
+#' @name str_trim_squish
+#' @rdname format_data
+#' @export
+#' @importFrom dplyr mutate across
+#' @importFrom stringr str_trim str_squish
+str_trim_squish <- function(x) {
+  dplyr::mutate(
+    x,
+    dplyr::across(
+      where(is.character),
+      ~ stringr::str_trim(stringr::str_squish(.x))
+    )
+  )
 }
 
 #' @name rename_with_xwalk
