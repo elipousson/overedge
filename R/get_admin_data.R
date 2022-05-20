@@ -28,27 +28,29 @@ get_states <- function(location = NULL,
 
   us_states <- overedge::us_states
 
-  # FIXME: This could be simplified by using is_state_name and is_state_geoid
-  if (is.character(location)) {
-    if (location %in% us_states$geoid) {
-      params$geoid <- location
-    } else if (location %in% us_states$abb) {
-      params$abb <- location
-    } else if (location %in% us_states$statefp) {
-      params$statefp <- location
-    } else if (location %in% us_states$name) {
-      params$name <- location
-    }
+  type <- ""
+
+  if (is_sf(location, ext = TRUE)) {
+    type <- "sf"
   }
 
-  type <-
-    dplyr::case_when(
-      is_sf(location, ext = TRUE) ~ "sf",
-      !is.null(params$geoid) ~ "geoid",
-      !is.null(params$abb) ~ "abb",
-      !is.null(params$statefp) ~ "statefp",
-      !is.null(params$name) ~ "name"
-    )
+  # FIXME: This could be simplified by using is_state_name and is_state_geoid
+  if (type != "sf") {
+    if (is_state_geoid(location)) {
+      params$geoid <- location
+      params$geoid <- match.arg(as.character(params$geoid), us_states$statefp)
+    } else if (is_state_name(location)) {
+      params$name <- location
+      params$name <- match.arg(params$name, c(us_states$name, us_states$abb))
+    }
+
+    type <-
+      dplyr::case_when(
+        is_state_geoid(params$geoid) ~ "geoid",
+        is_state_name(params$name) ~ "name"
+      )
+  }
+
 
   matching <-
     switch(type,
@@ -63,10 +65,8 @@ get_states <- function(location = NULL,
         data = us_states,
         crs = 3857
       ),
-      "abb" = (us_states$abb %in% match.arg(params$abb, us_states$abb)),
-      "name" = (us_states$name %in% match.arg(params$name, us_states$name)),
-      "statefp" = (us_states$statefp %in% match.arg(params$statefp, us_states$statefp)),
-      "geoid" = (us_states$geoid %in% match.arg(params$geoid, us_states$geoid))
+      "name" = (us_states$name %in% params$name) | (us_states$abb %in% params$name),
+      "geoid" = (us_states$statefp %in% params$geoid)
     )
 
   df <- us_states[matching, ]
@@ -87,21 +87,28 @@ get_counties <- function(location = NULL,
   params <- rlang::list2(...)
 
   us_counties <- overedge::us_counties
+  type <- ""
 
-  if (is.character(location)) {
-    if (is_county_geoid(location)) {
-      params$geoid <- location
-    } else if (is_county_name(location)) {
-      params$name <- location
-    }
+  if (is_sf(location, ext = TRUE)) {
+    type <- "sf"
   }
 
-  type <-
-    dplyr::case_when(
-      is_sf(location, ext = TRUE) ~ "sf",
-      !is.null(params$geoid) ~ "geoid",
-      !is.null(params$name) ~ "name"
-    )
+  if (type != "sf") {
+    if (is_county_geoid(location)) {
+      params$geoid <- location
+      params$geoid <- match.arg(as.character(params$geoid), us_counties$geoid)
+    } else if (is_county_name(location)) {
+      params$name <- location
+      params$name <- match.arg(params$name, us_counties$name)
+    }
+
+    type <-
+      dplyr::case_when(
+        is_county_geoid(params$geoid) ~ "geoid",
+        is_county_name(params$name) ~ "name"
+      )
+  }
+
 
   matching <-
     switch(type,
@@ -116,8 +123,8 @@ get_counties <- function(location = NULL,
         data = us_counties,
         crs = 3857
       ),
-      "name" = (us_counties$name %in% match.arg(params$name, us_counties$name)),
-      "geoid" = (us_counties$geoid %in% match.arg(params$geoid, us_counties$geoid))
+      "name" = (us_counties$name %in% params$name),
+      "geoid" = (us_counties$geoid %in% params$geoid)
     )
 
   df <- us_counties[matching, ]

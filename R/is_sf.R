@@ -179,21 +179,37 @@ is_sf_or_what <- function(x = NULL, return = NULL, us = FALSE, null.ok = TRUE) {
 }
 
 #' @noRd
-is_state_name <- function(x) {
-  x %in% c(us_states$name, us_states$abb)
+is_state_name <- function(x, null.ok = TRUE) {
+  if (is.null(x) && null.ok) {
+    return(FALSE)
+  }
+
+  x %in% c(overedge::us_states$name, overedge::us_states$abb)
 }
 
 #' @noRd
-is_state_geoid <- function(x) {
-  x %in% c(as.integer(us_states$statefp), us_states$statefp)
+is_state_geoid <- function(x, null.ok = TRUE) {
+  if (is.null(x) && null.ok) {
+    return(FALSE)
+  }
+
+  x %in% c(as.integer(overedge::us_states$statefp), overedge::us_states$statefp)
 }
 
 #' @noRd
-is_county_name <- function(x) {
-  x %in% c(us_counties$name, us_counties$name_short)
+is_county_name <- function(x, null.ok = TRUE) {
+  if (is.null(x) && null.ok) {
+    return(FALSE)
+  }
+
+  x %in% c(overedge::us_counties$name, overedge::us_counties$name_short)
 }
 
 #' @noRd
-is_county_geoid <- function(x) {
-  x %in% c(as.integer(us_counties$geoid), us_counties$geoid)
+is_county_geoid <- function(x, null.ok = TRUE) {
+  if (is.null(x) && null.ok) {
+    return(FALSE)
+  }
+
+  x %in% c(as.integer(overedge::us_counties$geoid), overedge::us_counties$geoid)
 }
