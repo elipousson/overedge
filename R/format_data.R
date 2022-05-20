@@ -70,7 +70,7 @@ format_data <- function(x,
     x <- janitor::clean_names(x, "snake")
   }
 
-  if (!is.null(replace_na)) {
+  if (!is.null(replace_na_with)) {
     x <-
       tidyr::replace_na(x, replace = replace_na_with)
   }
@@ -224,7 +224,7 @@ bind_block_col <- function(x,
                            bldg_num = "bldg_num",
                            street_dir_prefix = "street_dir_prefix",
                            street_name = "street_name",
-                           street_suffix =  "street_type") {
+                           street_suffix = "street_type") {
   stopifnot(
     rlang::has_name(x, c(bldg_num, street_dir_prefix, street, street_suffix))
   )
