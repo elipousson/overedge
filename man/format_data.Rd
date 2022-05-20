@@ -6,6 +6,8 @@
 \alias{relocate_sf_col}
 \alias{rename_sf_col}
 \alias{bind_address_col}
+\alias{bind_block_col}
+\alias{bind_boundary_col}
 \alias{bind_units_col}
 \title{Format data using common approaches}
 \usage{
@@ -26,6 +28,16 @@ relocate_sf_col(x, .after = dplyr::everything())
 rename_sf_col(x, sf_col = "geometry")
 
 bind_address_col(x, city = NULL, county = NULL, state = NULL)
+
+bind_block_col(
+  x,
+  bldg_num = "bldg_num",
+  street_dir_prefix = "street_dir_prefix",
+  street_name = "street_name",
+  street_suffix = "street_type"
+)
+
+bind_boundary_col(x, boundary = NULL, ...)
 
 bind_units_col(x, y, units = NULL, drop = FALSE, keep_all = TRUE, .id = NULL)
 }
@@ -58,6 +70,9 @@ FeatureServer and MapServer sources) , Default: \code{TRUE}}
 \item{city, county, state}{City, county, and state to bind to data frame or
 \code{sf} object.}
 
+\item{boundary}{An sf object with a column named "name" or a list of sf
+objects where all items in the list have a "name" column.}
+
 \item{y}{Vector of numeric or units values to bind to x.}
 
 \item{units}{Units to use for y (if numeric) or convert to (if y is units
@@ -86,4 +101,9 @@ This function can apply the following common data cleaning tasks:
 \item Optionally corrects UNIX formatted dates with 1970-01-01 origins
 \item Optionally renames variables by passing a named list of variables
 }
+
+Bind address cols and block cols:
+
+bind_block_col a data frame with columns named "bldg_num",
+"street_dir_prefix", "street_name", and "street_type"
 }

@@ -7,6 +7,10 @@
 #' - Optionally corrects UNIX formatted dates with 1970-01-01 origins
 #' - Optionally renames variables by passing a named list of variables
 #'
+#' @details Bind address cols and block cols:
+#'
+#' bind_block_col a data frame with columns named "bldg_num",
+#' "street_dir_prefix", "street_name", and "street_type"
 #'
 #' @param x A tibble or data frame object
 #' @param var_names A named list following the format, `list("New var name" = old_var_name)`, or a two column data frame with the first column being the
@@ -177,6 +181,60 @@ bind_address_col <- function(x, city = NULL, county = NULL, state = NULL) {
   return(x)
 }
 
+#' @name bind_block_col
+#' @rdname format_data
+#' @export
+#' @importFrom rlang has_name
+#' @importFrom dplyr mutate if_else
+bind_block_col <- function(x,
+                           bldg_num = "bldg_num",
+                           street_dir_prefix = "street_dir_prefix",
+                           street_name = "street_name",
+                           street_suffix =  "street_type") {
+  stopifnot(
+    rlang::has_name(x, c(bldg_num, street_dir_prefix, street, street_suffix))
+  )
+
+  dplyr::mutate(
+    x,
+    block_num = floor({{ bldg_num }} / 100) * 100,
+    bldg_num_even_odd = dplyr::if_else(({{ bldg_num }} %% 2) == 0, "Even", "Odd"),
+    block_num_st = paste(block_num, {{ street_dir_prefix }}, {{ street }}, {{ street_suffix }}),
+    block_face_st = paste(bldg_num_even_odd, {{ street_dir_prefix }}, {{ street }}, {{ street_suffix }})
+  )
+}
+
+#' @param boundary An sf object with a column named "name" or a list of sf
+#'   objects where all items in the list have a "name" column.
+#' @name bind_boundary_col
+#' @rdname format_data
+#' @export
+#' @importFrom rlang has_name
+#' @importFrom dplyr rename select
+#' @importFrom sf st_join
+bind_boundary_col <- function(x, boundary = NULL, ...) {
+  if (!is_sf_list(boundaries)) {
+    boundary <- as_sf_list(boundary)
+  }
+  stopifnot(
+    all(sapply(boundary, rlang::has_name, "name"))
+  )
+
+  for (nm in names(boundary)) {
+    y <-
+      dplyr::rename(
+        dplyr::select(boundary[[nm]], name),
+        "{nm}" := "name"
+      )
+
+    x <- has_same_name_col(x, col = nm)
+    x <- sf::st_join(x, y, ...)
+  }
+
+  x <- relocate_sf_col(x)
+
+  return(x)
+}
 
 #' @name bind_units_col
 #' @rdname format_data
