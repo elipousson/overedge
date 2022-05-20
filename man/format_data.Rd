@@ -2,6 +2,7 @@
 % Please edit documentation in R/format_data.R
 \name{format_data}
 \alias{format_data}
+\alias{rename_with_xwalk}
 \alias{fix_date}
 \alias{relocate_sf_col}
 \alias{rename_sf_col}
@@ -9,17 +10,19 @@
 \alias{bind_block_col}
 \alias{bind_boundary_col}
 \alias{bind_units_col}
-\title{Format data using common approaches}
+\title{Format data frames and simple features using common approaches}
 \usage{
 format_data(
   x,
   var_names = NULL,
   clean_names = TRUE,
-  replace_na = NULL,
+  replace_na_with = NULL,
   replace_with_na = NULL,
   replace_empty_char_with_na = TRUE,
   fix_date = TRUE
 )
+
+rename_with_xwalk(x, xwalk = NULL)
 
 fix_date(x)
 
@@ -50,7 +53,7 @@ defaults to \code{NULL}.}
 
 \item{clean_names}{If \code{TRUE}, pass data frame to \link[janitor:clean_names]{janitor::clean_names}; defaults to \code{TRUE}.}
 
-\item{replace_na}{A named list to pass to \link[tidyr:replace_na]{tidyr::replace_na}; defaults to
+\item{replace_na_with}{A named list to pass to \link[tidyr:replace_na]{tidyr::replace_na}; defaults to
 \code{NULL}.}
 
 \item{replace_with_na}{A named list to pass to \link[naniar:replace_with_na]{naniar::replace_with_na};
@@ -61,6 +64,10 @@ defaults to \code{NULL}.}
 
 \item{fix_date}{If \code{TRUE}, fix UNIX dates (common issue with dates from
 FeatureServer and MapServer sources) , Default: \code{TRUE}}
+
+\item{xwalk}{a data frame with two columns using the first column as name and
+the second column as value; or a named list. The existing names of x must
+be the values and the new names must be the names.}
 
 \item{.after}{The location to place sf column after; defaults to
 \link[dplyr:reexports]{dplyr::everything}.}
@@ -102,8 +109,24 @@ This function can apply the following common data cleaning tasks:
 \item Optionally renames variables by passing a named list of variables
 }
 
-Bind address cols and block cols:
+Bind columns:
+\itemize{
+\item \link{bind_address_col} bind a provided value for city, county, and state to a
+data frame (to supplement address data with consistent values for these
+variables)
+\item \link{bind_block_col} requires a data frame with columns named "bldg_num",
+"street_dir_prefix", "street_name", and "street_type" and binds derived
+values for whether a building is on the even or odd side of a block and
+create a block number (street segment), and block face (street segment side)
+identifier.
+\item \link{bind_boundary_col} uses \link[sf:st_join]{sf::st_join} to assign simple feature data to an
+enclosing polygon.
+}
 
-bind_block_col a data frame with columns named "bldg_num",
-"street_dir_prefix", "street_name", and "street_type"
+Simple feature only functions:
+\itemize{
+\item \link{rename_sf_col}
+\item \link{relocate_sf_col}
+\item \link{bind_boundary_col}
+}
 }

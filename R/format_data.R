@@ -1,4 +1,4 @@
-#' Format data using common approaches
+#' Format data frames and simple features using common approaches
 #'
 #' This function can apply the following common data cleaning tasks:
 #'
@@ -7,17 +7,31 @@
 #' - Optionally corrects UNIX formatted dates with 1970-01-01 origins
 #' - Optionally renames variables by passing a named list of variables
 #'
-#' @details Bind address cols and block cols:
+#' @details Bind columns:
 #'
-#' bind_block_col a data frame with columns named "bldg_num",
-#' "street_dir_prefix", "street_name", and "street_type"
+#'  - [bind_address_col] bind a provided value for city, county, and state to a
+#'  data frame (to supplement address data with consistent values for these
+#'  variables)
+#' - [bind_block_col] requires a data frame with columns named "bldg_num",
+#' "street_dir_prefix", "street_name", and "street_type" and binds derived
+#' values for whether a building is on the even or odd side of a block and
+#' create a block number (street segment), and block face (street segment side)
+#' identifier.
+#'  - [bind_boundary_col] uses [sf::st_join] to assign simple feature data to an
+#'  enclosing polygon.
+#'
+#' @details Simple feature only functions:
+#'
+#' - [rename_sf_col]
+#' - [relocate_sf_col]
+#' - [bind_boundary_col]
 #'
 #' @param x A tibble or data frame object
 #' @param var_names A named list following the format, `list("New var name" = old_var_name)`, or a two column data frame with the first column being the
 #'   new variable names and the second column being the old variable names;
 #'   defaults to `NULL`.
 #' @param clean_names If `TRUE`, pass data frame to [janitor::clean_names]; defaults to `TRUE`.
-#' @param replace_na A named list to pass to [tidyr::replace_na]; defaults to
+#' @param replace_na_with A named list to pass to [tidyr::replace_na]; defaults to
 #'   `NULL`.
 #' @param replace_with_na A named list to pass to [naniar::replace_with_na];
 #'   defaults to `NULL`.
@@ -35,7 +49,7 @@
 format_data <- function(x,
                         var_names = NULL,
                         clean_names = TRUE,
-                        replace_na = NULL,
+                        replace_na_with = NULL,
                         replace_with_na = NULL,
                         replace_empty_char_with_na = TRUE,
                         fix_date = TRUE) {
@@ -49,18 +63,7 @@ format_data <- function(x,
     )
 
   if (!is.null(var_names)) {
-    # https://twitter.com/PipingHotData/status/1497014703473704965
-
-    if (is.data.frame(var_names)) {
-      var_names <-
-        tibble::deframe(var_names)
-    }
-
-    x <-
-      dplyr::rename(
-        x,
-        !!!var_names
-      )
+    x <- rename_with_xwalk(x, xwalk = var_names)
   }
 
   if (clean_names) {
@@ -69,7 +72,7 @@ format_data <- function(x,
 
   if (!is.null(replace_na)) {
     x <-
-      tidyr::replace_na(x, replace = replace_na)
+      tidyr::replace_na(x, replace = replace_na_with)
   }
 
 
@@ -96,6 +99,37 @@ format_data <- function(x,
   if (fix_date) {
     x <- fix_date(x)
   }
+
+  return(x)
+}
+
+#' @name rename_with_xwalk
+#' @rdname format_data
+#' @param xwalk a data frame with two columns using the first column as name and
+#'   the second column as value; or a named list. The existing names of x must
+#'   be the values and the new names must be the names.
+#' @export
+#' @importFrom tibble deframe
+#' @importFrom rlang is_named
+#' @importFrom dplyr rename
+rename_with_xwalk <- function(x, xwalk = NULL) {
+
+  # From https://twitter.com/PipingHotData/status/1497014703473704965
+
+  if (is.data.frame(xwalk) && (ncol(xwalk) == 2)) {
+    xwalk <-
+      tibble::deframe(xwalk)
+  }
+
+  stopifnot(
+    rlang::is_named(xwalk) && is.list(xwalk)
+  )
+
+  x <-
+    dplyr::rename(
+      x,
+      !!!xwalk
+    )
 
   return(x)
 }
@@ -279,5 +313,9 @@ bind_units_col <- function(x, y, units = NULL, drop = FALSE, keep_all = TRUE, .i
       "{.id}" := y
     )
 
-  return(relocate_sf_col(x))
+  if (is_sf(x)) {
+    x <- relocate_sf_col(x)
+  }
+
+  return(x)
 }
