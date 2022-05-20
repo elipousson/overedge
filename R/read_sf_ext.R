@@ -358,7 +358,10 @@ read_sf_geojson <- function(url,
     !rlang::is_missing(url)
   )
 
-  data <- geojsonsf::geojson_sf(geojson = url, ...)
+  data <-
+    suppressWarnings(
+      geojsonsf::geojson_sf(geojson = url, ...)
+    )
 
   data <- bbox_filter(data, bbox = bbox)
 
