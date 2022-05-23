@@ -115,7 +115,11 @@ str_trim_squish <- function(x) {
     x,
     dplyr::across(
       where(is.character),
-      ~ stringr::str_trim(stringr::str_squish(.x))
+      ~ dplyr::if_else(
+        !is.null(.x) & !is.na(.x),
+        stringr::str_trim(stringr::str_squish(.x)),
+                          .x
+        )
     )
   )
 }
