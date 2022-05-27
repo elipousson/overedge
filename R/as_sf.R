@@ -59,7 +59,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
       "address" = address_to_sf(x)
     )
 
-  if (!is.null(sf_col) && (is.null(attributes(x)$sf_column) | (attributes(x)$sf_column != sf_col))) {
+  if (!is.null(sf_col)) {
     sf::st_geometry(x) <- sf_col
   }
 
