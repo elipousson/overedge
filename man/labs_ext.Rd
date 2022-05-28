@@ -13,6 +13,8 @@ labs_ext(
   location = NULL,
   name_col = NULL,
   source = NULL,
+  .na = "NA",
+  .null = NULL,
   ...
 )
 }
@@ -28,9 +30,6 @@ bottom-right of the plot by default.}
 \item{tag}{The text for the tag label which will be displayed at the
 top-left of the plot by default.}
 
-\item{alt}{Text used for the generation of alt-text for the plot.
-See \link[ggplot2]{get_alt_text} for examples.}
-
 \item{location}{sf or bbox object or character string}
 
 \item{name_col}{Column name holding name or identifier for distinct
@@ -38,6 +37,8 @@ places within the simple feature collection provided to location. Not
 supported for bbox objects.}
 
 \item{source}{Data source(s). Not yet used or supported by function.}
+
+\item{.na, .null}{Additional parameters passed to \link[glue:glue]{glue::glue}}
 
 \item{...}{A list of new name-value pairs. The name should be an aesthetic.}
 }
