@@ -9,8 +9,10 @@
 #'   places within the simple feature collection provided to location. Not
 #'   supported for bbox objects.
 #' @param source Data source(s). Not yet used or supported by function.
+#' @param .na,.null Additional parameters passed to [glue::glue]
 #' @export
 #' @importFrom ggplot2 labs waiver
+#' @importFrom glue glue
 labs_ext <- function(title = ggplot2::waiver(),
                      subtitle = ggplot2::waiver(),
                      caption = ggplot2::waiver(),
@@ -19,14 +21,16 @@ labs_ext <- function(title = ggplot2::waiver(),
                      location = NULL,
                      name_col = NULL, # Check param name
                      source = NULL,
+                     .na = "NA",
+                     .null = NULL,
                      ...) {
   labs_glued <-
     ggplot2::labs(
-      title = glue::glue(title),
-      subtitle = glue::glue(subtitle),
-      caption = glue::glue(caption),
-      tag = glue::glue(tag),
-      alt = glue::glue(alt),
+      title = glue::glue(title, .null = .null),
+      subtitle = glue::glue(subtitle, .null = .null),
+      caption = glue::glue(caption, .null = .null),
+      tag = glue::glue(tag, .null = .null),
+      alt = glue::glue(alt, .null = .null),
       ...
     )
 

@@ -2,17 +2,19 @@ Package: overedge
 Title: Assorted Functions For Easier Map Making
 Version: 0.0.0.9000
 Authors@R: 
-    person(
-    given = "Eli", family = "Pousson", email = "eli.pousson@gmail.com",
-    role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-8280-1706"))
-Description: Assorted functions to support data wrangling and visualization for map making with a focus on the ggplot2 and sf packages.
-URL: https://github.com/elipousson/overedge, https://elipousson.github.io/overedge/
-BugReports: https://github.com/elipousson/overedge/issues
+    person("Eli", "Pousson", , "eli.pousson@gmail.com", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0001-8280-1706"))
+Description: Assorted functions to support data wrangling and
+    visualization for map making with a focus on the ggplot2 and sf
+    packages.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+URL: https://github.com/elipousson/overedge,
+    https://elipousson.github.io/overedge/
+BugReports: https://github.com/elipousson/overedge/issues
+Depends: 
+    R (>= 2.10)
 Imports: 
+    cli,
     dplyr,
     fs,
     ggplot2,
@@ -24,22 +26,11 @@ Imports:
     rlang,
     sf,
     stringr,
+    tibble,
     tidyr,
     tidyselect,
     units,
-    utils,
-    cli,
-    tibble
-Remotes:
-    koki25ando/FlickrAPI,
-    yonghah/esri2sf,
-    coolbutuseless/ggsvg,
-    elipousson/birdseyeview,
-    elipousson/mapbaltimore,
-    elipousson/mapboxapi
-Depends: 
-    R (>= 2.10)
-LazyData: true
+    utils
 Suggests: 
     birdseyeview,
     covr,
@@ -64,8 +55,8 @@ Suggests:
     mapview,
     naniar,
     osmdata,
-    patchwork,
     paletteer,
+    patchwork,
     rappdirs,
     readxl,
     rmarkdown,
@@ -73,5 +64,17 @@ Suggests:
     scales,
     testthat (>= 3.0.0),
     tidygeocoder
+VignetteBuilder: 
+    knitr
+Remotes:
+    coolbutuseless/ggsvg,
+    elipousson/birdseyeview,
+    elipousson/mapbaltimore,
+    elipousson/mapboxapi,
+    koki25ando/FlickrAPI,
+    yonghah/esri2sf
 Config/testthat/edition: 3
-VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.0
