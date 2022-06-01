@@ -62,13 +62,15 @@ get_open_data <- function(data = NULL,
 
   is_pkg_installed("RSocrata")
 
-  # Check for an API key
-  if ((is.null(token) | token == "") && !(data == "list")) {
-    cli::cli_abort("An API key or access token is required.")
-  } else if (data == "list") {
+  if (data == "list") {
     url <- source_url
     data_list <- RSocrata::ls.socrata(url = url)
     return(data_list)
+  }
+
+  # Check for an API key
+  if (is.null(token) | (token == "")) {
+    cli::cli_abort("An API key or access token is required.")
   }
 
   if (!is.null(location)) {
@@ -87,7 +89,10 @@ get_open_data <- function(data = NULL,
     bbox <- NULL
   }
 
-  if (is_url(source_url)) {
+  if (!is_url(source_url)) {
+    cli::cli_abort("A valid source_url is required.")
+  }
+
     url <-
       make_socrata_url(
         data = data,
@@ -100,9 +105,6 @@ get_open_data <- function(data = NULL,
         name = name,
         coords = coords
       )
-  } else {
-    cli::cli_abort("A valid source_url is required.")
-  }
 
   # Download data from Socrata Open Data portal
   data <-
@@ -200,7 +202,7 @@ get_socrata_data <- function(data = NULL,
     asp = asp,
     name_col = name_col,
     name = name,
-    coords = c("longitude", "latitude"),
+    coords = coords,
     geometry = geometry,
     token = token,
     from_crs = from_crs,
