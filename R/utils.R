@@ -1,4 +1,33 @@
 
+.onLoad <- function(libname, pkgname) {
+  utils::data(
+    list = c(
+      "us_counties", "us_states",
+      "paper_sizes", "standard_scales",
+      "map_icons", "osm_building_tags",
+      "dist_unit_options", "dist_units",
+      "area_unit_options"
+    ),
+    package = pkgname,
+    envir = parent.env(environment())
+  )
+}
+
+utils::globalVariables(c(
+  ".data", ":=", "actual_unit",
+  "coord_col", "img_orientation", "lat", "location_bbox", "lon",
+  "name", "repo", "show_area",
+  "svg_url", "admin_level", "center", "gps_img_direction",
+  "img_direction", "img_direction_ref", "latitude", "latitude_ref", "longitude",
+  "longitude_ref", "orientation",
+  "gps_latitude", "gps_longitude", "source_file",
+  "address", "asp", "block_height", "block_width", "col_width", "cols", "geometry", "gutter",
+  "height", "id", "image_description", "image_height", "image_width",
+  "row_height", "rows", "width", "df", "where", ".id", "nm",
+  "angle", "number_col", "package", "paper", "x", "x1", "x2", "y1", "y2",
+  "get_start_end_point", "path"
+))
+
 #' Group data by column if present
 #'
 #' @param data Data frame or simple feature object
@@ -163,18 +192,3 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
 
   return(x)
 }
-
-utils::globalVariables(c(
-  ".data", ":=", "actual_unit",
-  "coord_col", "img_orientation", "lat", "location_bbox", "lon",
-  "map_icons", "name", "paper_sizes", "repo", "show_area",
-  "standard_scales", "svg_url", "admin_level", "center", "gps_img_direction",
-  "img_direction", "img_direction_ref", "latitude", "latitude_ref", "longitude",
-  "longitude_ref", "orientation", "us_counties", "us_states",
-  "gps_latitude", "gps_longitude", "osm_building_tags", "source_file",
-  "address", "asp", "block_height", "block_width", "col_width", "cols", "geometry", "gutter",
-  "height", "id", "image_description", "image_height", "image_width",
-  "row_height", "rows", "width", "df", "where", ".id", "nm", "area_unit_options",
-  "angle", "number_col", "package", "paper", "x", "x1", "x2", "y1", "y2",
-  "get_start_end_point", "path"
-))

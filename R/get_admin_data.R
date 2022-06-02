@@ -26,7 +26,7 @@ get_states <- function(location = NULL,
                        ...) {
   params <- rlang::list2(...)
 
-  us_states <- overedge::us_states
+  us_states <- us_states
 
   type <- ""
 
@@ -86,7 +86,7 @@ get_counties <- function(location = NULL,
                          ...) {
   params <- rlang::list2(...)
 
-  us_counties <- overedge::us_counties
+  us_counties <- us_counties
   type <- ""
 
   if (is_sf(location, ext = TRUE)) {

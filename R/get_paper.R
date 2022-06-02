@@ -135,7 +135,7 @@ get_paper <- function(paper = "letter",
 get_paper_name <- function(paper) {
   paper <-
     dplyr::filter(
-      overedge::paper_sizes,
+      paper_sizes,
       tolower(.data$name) %in% tolower(paper)
     )
 }
@@ -147,7 +147,7 @@ get_paper_name <- function(paper) {
 get_paper_standard <- function(standard, series = NULL, size = NULL) {
   paper_standard <- match.arg(standard, c("ANSI", "ISO", "British Imperial", "JIS", "USPS", "Facebook", "Instagram", "Twitter"), several.ok = TRUE)
   paper <- dplyr::filter(
-    overedge::paper_sizes,
+    paper_sizes,
     .data$standard %in% paper_standard
   )
 
@@ -186,7 +186,7 @@ get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
     paper_height <- height
 
     paper <- dplyr::filter(
-      overedge::paper_sizes,
+      paper_sizes,
       .data$width %in% paper_width,
       .data$height %in% paper_height,
       .data$units %in% paper_units
@@ -195,7 +195,7 @@ get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
     paper_width <- width
 
     paper <- dplyr::filter(
-      overedge::paper_sizes,
+      paper_sizes,
       .data$width %in% paper_width,
       .data$units %in% paper_units
     )
@@ -203,7 +203,7 @@ get_paper_dims <- function(width = NULL, height = NULL, units = NULL) {
     paper_height <- height
 
     paper <- dplyr::filter(
-      overedge::paper_sizes,
+      paper_sizes,
       .data$height %in% paper_height,
       .data$units %in% paper_units
     )
