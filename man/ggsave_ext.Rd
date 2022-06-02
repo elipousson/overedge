@@ -92,13 +92,7 @@ sensitive.}
 
 \item{orientation}{Page orientation ("portrait", "landscape", or "square").}
 
-\item{width}{Plot size in \code{units} ("in", "cm", "mm", or "px").
-If not supplied, uses the size of current graphics device.}
-
-\item{height}{Plot size in \code{units} ("in", "cm", "mm", or "px").
-If not supplied, uses the size of current graphics device.}
-
-\item{units}{Plot size in \code{units} ("in", "cm", "mm", or "px").
+\item{width, height, units}{Plot size in \code{units} ("in", "cm", "mm", or "px").
 If not supplied, uses the size of current graphics device.}
 
 \item{scale}{Multiplicative scaling factor.}

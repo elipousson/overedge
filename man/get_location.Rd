@@ -13,7 +13,7 @@ get_location(
   location = NULL,
   index = NULL,
   union = FALSE,
-  crs = NULL,
+  crs = getOption("overedge.crs"),
   label = NULL,
   class = "sf",
   ...

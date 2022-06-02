@@ -143,7 +143,7 @@ represents Drive files
 returns
 }
 
-Processed through \code{\link[googlesheets4:sheets_id]{as_sheets_id()}}.}
+Processed through \code{\link[googlesheets4:as_sheets_id]{as_sheets_id()}}.}
 
 \item{ask}{If \code{TRUE}, ask for the name of the Google Sheet to read if ss is
 not provided to \link{read_sf_gsheet}.}

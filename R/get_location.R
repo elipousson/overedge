@@ -49,7 +49,7 @@ get_location <- function(type,
                          location = NULL,
                          index = NULL,
                          union = FALSE,
-                         crs = NULL,
+                         crs = getOption("overedge.crs"),
                          label = NULL,
                          class = "sf",
                          ...) {
@@ -60,13 +60,8 @@ get_location <- function(type,
     is.logical(union)
   )
 
-  if (is.list(index)) {
-    if (!is.null(index$type) && is.null(type)) {
-      type <- unique(index$type)
-    } else if (is.character(type) || is.numeric(type)) {
-      # Return data from index list if provided
-      type <- index[[type]]
-    }
+  if (is.list(index) && !is_sf(type)) {
+    type <- get_index_param(index = index, type = type)
   }
 
   if (is.character(type)) {

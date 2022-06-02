@@ -9,7 +9,7 @@ get_location_data(
   location = NULL,
   dist = getOption("overedge.dist"),
   diag_ratio = getOption("overedge.diag_ratio"),
-  unit = getOption("overedge.unit"),
+  unit = getOption("overedge.unit", default = "meter"),
   asp = getOption("overedge.asp"),
   data = NULL,
   package = getOption("overedge.data_package"),

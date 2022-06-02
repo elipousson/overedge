@@ -8,11 +8,11 @@ buffer, aspect ratio, and panel border}
 \usage{
 layer_neatline(
   data = NULL,
-  dist = NULL,
-  diag_ratio = NULL,
-  unit = "meter",
-  asp = NULL,
-  crs = NULL,
+  dist = getOption("overedge.dist"),
+  diag_ratio = getOption("overedge.diag_ratio"),
+  unit = getOption("overedge.unit", default = "meter"),
+  asp = getOption("overedge.asp"),
+  crs = getOption("overedge.crs"),
   color = "black",
   bgcolor = "white",
   size = 1,

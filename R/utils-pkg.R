@@ -5,9 +5,9 @@
 #' @param dist,diag_ratio,unit,asp,data_package,data_filetype,from_crs,crs options to set, e.g. "crs = 2804" with
 #'   `pkg = "overedge"` to set "overedge.crs" to 2804.
 #' @param overwrite If `TRUE`, overwrite any existing option value.
-#' @noRd
+#' @export
 #' @importFrom rlang list2
-#' @importFrom cli cli_alert_success cli_warn
+#' @importFrom cli cli_alert_success cli_warn cli_vec
 set_overedge_options <- function(dist = NULL,
                                  diag_ratio = NULL,
                                  unit = NULL,
@@ -57,13 +57,12 @@ set_overedge_options <- function(dist = NULL,
       update_options
     )
 
+    update_options <-
+      cli::cli_vec(update_options, style = list(vec_last = " and "))
+
     cli::cli_alert_success(
-      "overedge options updated."
-    )
-    cli::cli_li(
-      items = update_options,
-      class = ".val"
-    )
+      "overedge options updated for {.arg {update_options}}."
+      )
   }
 }
 

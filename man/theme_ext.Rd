@@ -80,10 +80,7 @@ provided, margins are half the distance between the two evenly distributed.
 This sets the margin distance for height as well as width so does not work
 well with header and footers and should be improved in the future.}
 
-\item{header}{Header and footer height in units; defaults to 0. Please
-note: headers and footers are not currently supported for "px" units.}
-
-\item{footer}{Header and footer height in units; defaults to 0. Please
+\item{header, footer}{Header and footer height in units; defaults to 0. Please
 note: headers and footers are not currently supported for "px" units.}
 
 \item{fill}{Fill for \code{plot.background} theme element passed to
