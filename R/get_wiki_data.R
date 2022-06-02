@@ -34,7 +34,7 @@ get_wiki_data <- function(location,
   req <- httr2::request(paste0("https://", lang, ".wikipedia.org/w/api.php"))
   req <-
     httr2::req_url_query(
-      req = req,
+      req,
       action = "query",
       list = "geosearch"
     )
@@ -53,14 +53,14 @@ get_wiki_data <- function(location,
   if (!radius) {
     req <-
       httr2::req_url_query(
-        req = req,
+        req,
         gsbbox = make_gsbbox(location, dist = dist, diag_ratio = diag_ratio, asp = asp, unit = unit)
       )
   } else {
     #  dist <- as.numeric(sf_bbox_diagdist(bbox, drop = FALSE)) / 2
     req <-
       httr2::req_url_query(
-        req = req,
+        req,
         gscoord = make_gscoord(location),
         gsradius = dist
       )
@@ -71,14 +71,14 @@ get_wiki_data <- function(location,
 
     req <-
       httr2::req_url_query(
-        req = req,
+        req,
         gsprimary = paste0(primary, collapse = "|")
       )
   }
 
   req <-
     httr2::req_url_query(
-      req = req,
+      req,
       gslimit = limit,
       format = "json"
     )
