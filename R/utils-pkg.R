@@ -1,28 +1,68 @@
-#' Set package options
+#' Set overedge packge options
 #'
-#' @param ... options to set, e.g. "crs = 2804" with `pkg = "overedge"` to set
-#'   "overedge.crs" to 2804.
+#' Can set options for package, diag_ratio, dist, asp, or crs
+#'
+#' @param dist,diag_ratio,unit,asp,data_package,data_filetype,from_crs,crs options to set, e.g. "crs = 2804" with
+#'   `pkg = "overedge"` to set "overedge.crs" to 2804.
 #' @param overwrite If `TRUE`, overwrite any existing option value.
-#' @param pkg Name of a package; default to "overedge"
-#' @param repo GitHub repository to use for the package.
 #' @noRd
 #' @importFrom rlang list2
 #' @importFrom cli cli_alert_success cli_warn
-set_pkg_options <- function(..., overwrite = TRUE, pkg = "overedge") {
-
-  option <- rlang::list2(...)
-  option_nm <- paste(pkg, names(option), sep = ".")
-  existing_option <- getOption(option_nm)
-
-  if (is.null(existing_option) | overwrite) {
-    options(option_nm = option)
-    cli::cli_alert_success(
-      "{.var {option_nm}} set to {.val {as.character(option)}}."
+set_overedge_options <- function(dist = NULL,
+                                 diag_ratio = NULL,
+                                 unit = NULL,
+                                 asp = NULL,
+                                 data_package = NULL,
+                                 data_filetype = NULL,
+                                 from_crs = NULL,
+                                 crs = NULL,
+                                 overwrite = TRUE) {
+  possible_options <-
+    c(
+      "overedge.dist",
+      "overedge.diag_ratio",
+      "overedge.unit",
+      "overedge.asp",
+      "overedge.data_package",
+      "overedge.data_filetype",
+      "overedge.from_crs",
+      "overedge.crs"
     )
-  } else if (!overwrite) {
-    cli::cli_warn(
-      "The option {.var {option_nm}} is {.val {existing_option}}.
-    Set {.arg overwrite} to {.val TRUE} to replace with {.val {as.character(option)}}."
+
+  update_options <-
+    purrr::set_names(
+      list(
+        dist, diag_ratio, unit, asp,
+        data_package, data_filetype, from_crs,
+        crs
+      ),
+      nm = possible_options
+    )
+
+  update_options <-
+    update_options[!sapply(update_options, is.null)]
+
+  existing_options <-
+    sapply(
+      possible_options,
+      getOption
+    )
+
+  existing_options <-
+    existing_options[!sapply(existing_options, is.null)]
+
+
+  if (overwrite | all(sapply(existing_options, is.null))) {
+    options(
+      update_options
+    )
+
+    cli::cli_alert_success(
+      "overedge options updated."
+    )
+    cli::cli_li(
+      items = update_options,
+      class = ".val"
     )
   }
 }

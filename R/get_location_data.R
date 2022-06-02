@@ -47,18 +47,18 @@
 #' @importFrom sf st_crs st_crop st_transform st_intersection st_filter
 #' @importFrom rlang as_function
 get_location_data <- function(location = NULL,
-                              dist = NULL,
-                              diag_ratio = NULL,
-                              unit = NULL,
-                              asp = NULL,
+                              dist = getOption("overedge.dist"),
+                              diag_ratio = getOption("overedge.diag_ratio"),
+                              unit = getOption("overedge.unit", default = "meter"),
+                              asp = getOption("overedge.asp"),
                               data = NULL,
-                              package = NULL,
-                              filetype = "gpkg",
+                              package = getOption("overedge.data_package"),
+                              filetype = getOption("overedge.data_filetype", default = "gpkg"),
                               fn = NULL,
                               crop = TRUE,
                               trim = FALSE,
-                              from_crs = NULL,
-                              crs = NULL,
+                              from_crs = getOption("overedge.from_crs"),
+                              crs = getOption("overedge.crs"),
                               class = "sf",
                               label = NULL,
                               index = NULL,
@@ -303,6 +303,7 @@ map_location_data <- function(location = NULL,
 #' @noRd
 get_index_param <- function(index = NULL,
                             location = NULL,
+                            type = NULL,
                             data = NULL) {
 
   # Return data from index list if provided (may include bbox, sfc, or sf
@@ -328,6 +329,15 @@ get_index_param <- function(index = NULL,
       }
     }
     return(data)
+  }
+
+  if (!is.null(index$type)) {
+    type <- unique(index$type)
+    return(type)
+  } else if (!is.null(type) && (is.character(type) || is.numeric(type))) {
+    # Return data from index list if provided
+    type <- index[[type]]
+    return(type)
   }
 
   return(NULL)
