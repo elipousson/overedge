@@ -8,7 +8,7 @@
 \alias{make_img_leafpop}
 \title{Use mapview to interactively explore spatial data}
 \usage{
-mapview_col(x, nm = "data", col = NULL, na.rm = TRUE, ...)
+mapview_col(x, col = NULL, nm = "data", na.rm = TRUE, ...)
 
 mapview_exif(path = NULL, filetype = "jpeg", popup = TRUE, ...)
 
@@ -32,11 +32,11 @@ make_img_leafpop(images, popup = TRUE)
 \code{character string} pointing to a tile image folder or file on disk.
   If missing, a blank map will be drawn. A value of NULL will return NULL.}
 
+\item{col}{Column name passed to zcol parameter, Default: \code{NULL}}
+
 \item{nm}{Character vector. If x is a sf list, filter the mapview data to
 those named in nm. If \code{NULL}, mapview displays the first item in the sf
 list; defaults to "data".}
-
-\item{col}{Column name passed to zcol parameter, Default: \code{NULL}}
 
 \item{na.rm}{If TRUE and col is not NULL, filter NA values from the col
 before passing to \link[mapview:mapView]{mapview::mapview}}
@@ -72,7 +72,8 @@ largest include "sq", "t", "s", "q", "m", "n", "z", "c", "l", and "o"}
 \item{images}{A simple feature object with columns for the image path/url, image width, and image height.}
 }
 \description{
-A wrapper for \link[mapview:mapView]{mapview::mapview}
+A wrapper for \link[mapview:mapView]{mapview::mapview}. x can be an sf object or sf list. If nm is
+NULL and x is an sf list the first item in the list is used.
 }
 \seealso{
 \code{\link[mapview:mapView]{mapview::mapView()}}

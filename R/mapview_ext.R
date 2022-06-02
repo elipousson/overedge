@@ -1,6 +1,7 @@
 #' Use mapview to interactively explore spatial data
 #'
-#' A wrapper for [mapview::mapview]
+#' A wrapper for [mapview::mapview]. x can be an sf object or sf list. If nm is
+#' NULL and x is an sf list the first item in the list is used.
 #'
 #' @inheritParams mapview::mapview
 #' @inheritDotParams mapview::mapview
@@ -11,15 +12,16 @@ NULL
 
 #' @rdname mapview_ext
 #' @name mapview_col
+#' @param col Column name passed to zcol parameter, Default: `NULL`
 #' @param nm Character vector. If x is a sf list, filter the mapview data to
 #'   those named in nm. If `NULL`, mapview displays the first item in the sf
 #'   list; defaults to "data".
-#' @param col Column name passed to zcol parameter, Default: `NULL`
 #' @param na.rm If TRUE and col is not NULL, filter NA values from the col
 #'   before passing to [mapview::mapview]
 #' @inheritParams make_img_leafpop
 #' @export
-mapview_col <- function(x, nm = "data", col = NULL, na.rm = TRUE, ...) {
+#' @importFrom dplyr filter
+mapview_col <- function(x, col = NULL, nm = "data", na.rm = TRUE, ...) {
   is_pkg_installed(pkg = "mapview")
 
   if (is_sf_list(x)) {
@@ -28,17 +30,18 @@ mapview_col <- function(x, nm = "data", col = NULL, na.rm = TRUE, ...) {
       nm_x <- (names(x) %in% nm)
       x <- x[nm_x]
     } else {
-      # TODO: Document pattern of using the first item is the list if nm is NULL
       x <- x[[1]]
     }
-  } else if (!is_sf(x)) {
+  }
+
+  if (!is_sf(x)) {
     x <- as_sf(x)
   }
 
   if (!is.null(col)) {
 
     if (na.rm) {
-      x <- x[!is.na(x[[col]]),]
+      x <- dplyr::filter(x, !is.na(.data[[col]]))
     }
 
     mapview::mapview(x, zcol = col, ...)
