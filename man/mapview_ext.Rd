@@ -8,7 +8,7 @@
 \alias{make_img_leafpop}
 \title{Use mapview to interactively explore spatial data}
 \usage{
-mapview_col(x, nm = "data", col = NULL, ...)
+mapview_col(x, nm = "data", col = NULL, na.rm = TRUE, ...)
 
 mapview_exif(path = NULL, filetype = "jpeg", popup = TRUE, ...)
 
@@ -33,10 +33,13 @@ make_img_leafpop(images, popup = TRUE)
   If missing, a blank map will be drawn. A value of NULL will return NULL.}
 
 \item{nm}{Character vector. If x is a sf list, filter the mapview data to
-those named in nm. If \code{NULL}, mapview displays the first item in the sf list;
-defaults to "data".}
+those named in nm. If \code{NULL}, mapview displays the first item in the sf
+list; defaults to "data".}
 
 \item{col}{Column name passed to zcol parameter, Default: \code{NULL}}
+
+\item{na.rm}{If TRUE and col is not NULL, filter NA values from the col
+before passing to \link[mapview:mapView]{mapview::mapview}}
 
 \item{...}{
   Arguments passed on to \code{\link[mapview:mapView]{mapview::mapview}}
