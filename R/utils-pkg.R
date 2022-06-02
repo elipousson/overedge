@@ -1,3 +1,32 @@
+#' Set package options
+#'
+#' @param ... options to set, e.g. "crs = 2804" with `pkg = "overedge"` to set
+#'   "overedge.crs" to 2804.
+#' @param overwrite If `TRUE`, overwrite any existing option value.
+#' @param pkg Name of a package; default to "overedge"
+#' @param repo GitHub repository to use for the package.
+#' @noRd
+#' @importFrom rlang list2
+#' @importFrom cli cli_alert_success cli_warn
+set_pkg_options <- function(..., overwrite = TRUE, pkg = "overedge") {
+
+  option <- rlang::list2(...)
+  option_nm <- paste(pkg, names(option), sep = ".")
+  existing_option <- getOption(option_nm)
+
+  if (is.null(existing_option) | overwrite) {
+    options(option_nm = option)
+    cli::cli_alert_success(
+      "{.var {option_nm}} set to {.val {as.character(option)}}."
+    )
+  } else if (!overwrite) {
+    cli::cli_warn(
+      "The option {.var {option_nm}} is {.val {existing_option}}.
+    Set {.arg overwrite} to {.val TRUE} to replace with {.val {as.character(option)}}."
+    )
+  }
+}
+
 #' Is this package installed?
 #'
 #' @param package Name of a package.
