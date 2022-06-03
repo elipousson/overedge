@@ -26,6 +26,7 @@ read_sf_excel(
   coords = c("lon", "lat"),
   geo = FALSE,
   address = "address",
+  from_crs = 4326,
   ...
 )
 
@@ -37,6 +38,7 @@ read_sf_csv(
   geo = FALSE,
   address = "address",
   show_col_types = FALSE,
+  from_crs = 4326,
   ...
 )
 
@@ -67,6 +69,7 @@ read_sf_gsheet(
   ask = FALSE,
   geo = FALSE,
   address = "address",
+  from_crs = 4326,
   ...
 )
 }
