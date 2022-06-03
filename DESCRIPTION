@@ -34,7 +34,7 @@ Imports:
 Suggests: 
     birdseyeview,
     covr,
-    esri2sf,
+    esri2sf (>= 0.1.1),
     exiftoolr,
     FlickrAPI (>= 0.1.0.1),
     geojsonsf,

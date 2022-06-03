@@ -71,7 +71,7 @@ vector.}
 
 \item{nm}{Name or vector of names to add to the layers; defaults to \code{NULL}.}
 
-\item{meta}{Name of metadata list value to return from \link[esri2sf:esri2sf]{esri2sf::esrimeta}.}
+\item{meta}{Name of metadata list value to return from \link[esri2sf:esrimeta]{esri2sf::esrimeta}.}
 
 \item{clean}{If TRUE, use janitor::make_clean_names on the returned metadata
 value (typically used for name values).}

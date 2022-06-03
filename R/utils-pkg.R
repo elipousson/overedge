@@ -68,12 +68,12 @@ set_overedge_options <- function(dist = NULL,
 
 #' Is this package installed?
 #'
-#' @param package Name of a package.
+#' @param pkg Name of a package.
 #' @param repo GitHub repository to use for the package.
-#' @importFrom rlang is_installed check_installed
+#' @importFrom rlang check_installed
 #' @noRd
 is_pkg_installed <- function(pkg, repo = NULL) {
-  if (!rlang::is_installed(pkg = pkg)) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
     if (!is.null(repo)) {
       pkg <- repo
     }
