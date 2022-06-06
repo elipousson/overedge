@@ -166,8 +166,8 @@ use_fn <- function(data, fn = NULL) {
 #' @importFrom rlang has_name
 #' @importFrom cli cli_abort cli_alert_success
 #' @importFrom dplyr rename
-has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet = FALSE) {
-  if (rlang::has_name(x, col)) {
+has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet = FALSE, drop = TRUE) {
+  if (rlang::has_name(x, col) && !drop) {
     new_col <- paste0(prefix, "_", col)
 
     if (ask && !quiet) {
@@ -187,6 +187,12 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
       dplyr::rename(
         x,
         "{new_col}" := col
+      )
+  } else if (rlang::has_name(x, col) && drop) {
+    x <-
+      dplyr::select(
+        x,
+        -dplyr::all_of(col)
       )
   }
 
