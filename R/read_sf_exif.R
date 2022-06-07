@@ -289,9 +289,7 @@ write_exif <- function(path = NULL,
 #' @rdname read_sf_exif
 #' @param key_list List of sf objects with features with keywords, e.g. boundaries
 #' @param key_col Column name in key_list with the values to use for keywords.
-#' @param join geometry predicate function; defaults to `NULL`, set to
-#'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
-#'   or [sf::st_nearest_feature] if key_list contains other types.
+#' @inheritParams set_join_by_geom_type
 #' @export
 #' @importFrom fs dir_ls
 #' @importFrom purrr map_dfr walk2
@@ -310,13 +308,8 @@ write_exif_keywords <- function(path,
   file_list <- get_path_file_list(path, filetype)
   key_list <- as_sf_list(key_list, nm = NULL, crs = data)
 
-  if (is.null(join)) {
-    if (all(sapply(key_list, is_polygon) | sapply(key_list, is_multipolygon))) {
-      join <- sf::st_intersects
-    } else {
-      join <- sf::st_nearest_feature
-    }
-  }
+  join <-
+    set_join_by_geom_type(key_list, join = join)
 
   data <-
     purrr::map_dfr(

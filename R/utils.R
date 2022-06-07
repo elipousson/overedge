@@ -162,7 +162,7 @@ use_fn <- function(data, fn = NULL) {
 
 #' Does the data frame has a column with the same name?
 #'
-#' @noRd
+#' @name has_same_name_col
 #' @importFrom rlang has_name
 #' @importFrom cli cli_abort cli_alert_success
 #' @importFrom dplyr rename
@@ -197,4 +197,23 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
   }
 
   return(x)
+}
+
+#' Set join function based on geometry type
+#'
+#' @name set_join_by_geom_type
+#' @param join geometry predicate function; defaults to `NULL`, set to
+#'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
+#'   or [sf::st_nearest_feature] if key_list contains other types.
+#' @importFrom sf st_intersects st_nearest_feature
+set_join_by_geom_type <- function(x, join = NULL) {
+  if (is.null(join)) {
+    if (all(sapply(x, is_polygon) | sapply(x, is_multipolygon))) {
+      join <- sf::st_intersects
+    } else {
+      join <- sf::st_nearest_feature
+    }
+  }
+
+  return(join)
 }

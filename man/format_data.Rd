@@ -44,7 +44,7 @@ bind_block_col(
   street_suffix = "street_type"
 )
 
-bind_boundary_col(x, boundary = NULL, ...)
+bind_boundary_col(x, boundary = NULL, join = NULL, ...)
 
 bind_units_col(x, y, units = NULL, drop = FALSE, keep_all = TRUE, .id = NULL)
 }
@@ -83,6 +83,10 @@ be the values and the new names must be the names.}
 
 \item{boundary}{An sf object with a column named "name" or a list of sf
 objects where all items in the list have a "name" column.}
+
+\item{join}{geometry predicate function; defaults to \code{NULL}, set to
+\link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON objects
+or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}
 
 \item{y}{Vector of numeric or units values to bind to x.}
 

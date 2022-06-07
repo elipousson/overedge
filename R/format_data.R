@@ -136,21 +136,40 @@ str_trim_squish <- function(x) {
 rename_with_xwalk <- function(x, xwalk = NULL) {
 
   # From https://twitter.com/PipingHotData/status/1497014703473704965
+  # https://stackoverflow.com/questions/20987295/rename-multiple-columns-by-names/41343022#41343022
+  #
 
   if (is.data.frame(xwalk) && (ncol(xwalk) == 2)) {
     xwalk <-
-      tibble::deframe(xwalk)
+      as.list(
+        tibble::deframe(xwalk)
+      )
   }
 
   stopifnot(
-    rlang::is_named(xwalk) && is.list(xwalk)
+    "`xwalk` must be a named list or two column data frame." = rlang::is_named(xwalk),
+    "`xwalk` must include all column names for the data frame `x`." = all(xwalk %in% colnames(x))
   )
 
+  if (is_sf(x) && (attributes(x)$sf_column %in% xwalk)) {
+
+    sf_col <- as.character(names(xwalk[xwalk == attributes(x)$sf_column]))
+
+    x <-
+      rename_sf_col(
+        x,
+        sf_col = sf_col
+        )
+
+    xwalk[[sf_col]] <- NULL
+  }
+
   x <-
-    dplyr::rename(
+    dplyr::rename_with(
       x,
-      !!!xwalk
-    )
+      ~ names(xwalk)[which(xwalk == .x)],
+      .cols = as.character(xwalk)
+      )
 
   return(x)
 }
@@ -190,10 +209,10 @@ relocate_sf_col <- function(x, .after = dplyr::everything()) {
 #' @export
 #' @importFrom dplyr everything relocate all_of
 rename_sf_col <- function(x, sf_col = "geometry") {
-  dplyr::rename(
-    x,
-    "{sf_col}" := dplyr::all_of(attributes(x)$sf_column)
-  )
+  names(x)[names(x) == attr(x, "sf_column")] = sf_col
+  attr(x, "sf_column") <- sf_col
+
+  return(x)
 }
 
 #' @name bind_address_col
@@ -259,21 +278,28 @@ bind_block_col <- function(x,
   )
 }
 
-#' @param boundary An sf object with a column named "name" or a list of sf
-#'   objects where all items in the list have a "name" column.
 #' @name bind_boundary_col
 #' @rdname format_data
+#' @param boundary An sf object with a column named "name" or a list of sf
+#'   objects where all items in the list have a "name" column.
+#' @inheritParams set_join_by_geom_type
 #' @export
 #' @importFrom rlang has_name
 #' @importFrom dplyr rename select
 #' @importFrom sf st_join
-bind_boundary_col <- function(x, boundary = NULL, ...) {
-  if (!is_sf_list(boundaries)) {
-    boundary <- as_sf_list(boundary)
+bind_boundary_col <- function(x, boundary = NULL, join = NULL, ...) {
+
+  if (!is_sf_list(boundary)) {
+    boundary <- as_sf_list(boundary, crs = x)
+  } else {
+    boundary <- st_transform_ext(boundary, crs = x)
   }
+
   stopifnot(
     all(sapply(boundary, rlang::has_name, "name"))
   )
+
+  join <- set_join_by_geom_type(boundary, join = join)
 
   for (nm in names(boundary)) {
     y <-
@@ -282,8 +308,8 @@ bind_boundary_col <- function(x, boundary = NULL, ...) {
         "{nm}" := "name"
       )
 
-    x <- has_same_name_col(x, col = nm)
-    x <- sf::st_join(x, y, ...)
+    x <- has_same_name_col(x, col = nm, drop = FALSE)
+    x <- sf::st_join(x, y, join = join, ...)
   }
 
   x <- relocate_sf_col(x)
