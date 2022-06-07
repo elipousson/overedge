@@ -13,7 +13,7 @@ as_bbox(x, crs = NULL, ...)
 
 as_sfc(x, crs = NULL, ...)
 
-as_sf_list(x, nm = "data", col = NULL, crs = NULL)
+as_sf_list(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can
@@ -37,6 +37,10 @@ is provided, the values of the grouping column are used as names.}
 
 \item{col}{For \link{as_sf_list}, the name of the column used to group data if x
 is a sf object or used to group and nest data before passing to x.}
+
+\item{clean_names}{If \code{TRUE}, clean names provided to nm or created based on
+value of col using \link[janitor:clean_names]{janitor::clean_names}. If \code{FALSE}, use names as
+provided.}
 }
 \description{
 Both functions will pass a NULL value without returning an error. If a POINT

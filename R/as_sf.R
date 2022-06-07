@@ -163,10 +163,13 @@ as_crs <- function(x, crs = NULL, ...) {
 #'   is provided, the values of the grouping column are used as names.
 #' @param col For [as_sf_list], the name of the column used to group data if x
 #'   is a sf object or used to group and nest data before passing to x.
+#' @param clean_names If `TRUE`, clean names provided to nm or created based on
+#'   value of col using [janitor::clean_names]. If `FALSE`, use names as
+#'   provided.
 #' @export
 #' @importFrom dplyr summarize group_keys group_nest
 #' @importFrom janitor make_clean_names
-as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
+as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE) {
   stopifnot(
     is.null(col) || (is.character(col) && (length(col) == 1)),
     !is.null(x)
@@ -206,7 +209,12 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL) {
   )
 
   if (is.null(names(x)) && !is.null(nm)) {
-    names(x) <- janitor::make_clean_names(nm)
+
+    if (clean_names) {
+      nm <- janitor::make_clean_names(nm)
+    }
+
+    names(x) <- nm
   }
 
   if (!is.null(crs)) {
