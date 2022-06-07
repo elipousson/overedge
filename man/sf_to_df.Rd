@@ -66,6 +66,11 @@ to \link[tidyr:separate]{tidyr::separate}.}
 after converting a data frame to simple feature object; defaults to
 \code{FALSE}.}
 
+\item{geo}{If \code{TRUE}, use \link{address_to_sf} to geocode address column; defaults
+to \code{FALSE}.}
+
+\item{address}{Address column name passed to \link[tidygeocoder:geocode]{tidygeocoder::geocode} or \link[tidygeocoder:geo]{tidygeocoder::geo}}
+
 \item{default}{c("lon", "lat").}
 
 \item{value}{If TRUE, return the value of the coordinate column names. Used by \link{has_coords}.}

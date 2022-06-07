@@ -102,6 +102,9 @@ to \code{FALSE}.}
 
 \item{address}{Address column name, Default: 'address'}
 
+\item{from_crs}{For \link{df_to_sf}, coordinate reference system used by
+coordinates or well known text in data frame.}
+
 \item{url}{A url for a spatial data file, a GitHub gist, or a ArcGIS
 FeatureServer or MapServer to access with \code{\link[=get_esri_data]{get_esri_data()}}}
 

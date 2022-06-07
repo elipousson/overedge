@@ -39,7 +39,6 @@ mapview_col <- function(x, col = NULL, nm = "data", na.rm = TRUE, ...) {
   }
 
   if (!is.null(col)) {
-
     if (na.rm) {
       x <- dplyr::filter(x, !is.na(.data[[col]]))
     }

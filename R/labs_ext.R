@@ -9,6 +9,7 @@
 #'   places within the simple feature collection provided to location. Not
 #'   supported for bbox objects.
 #' @param source Data source(s). Not yet used or supported by function.
+#' @param alt Text used for the generation of alt-text for the plot.
 #' @param .na,.null Additional parameters passed to [glue::glue]
 #' @export
 #' @importFrom ggplot2 labs waiver

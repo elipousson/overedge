@@ -7,6 +7,8 @@
 set_join_by_geom_type(x, join = NULL)
 }
 \arguments{
+\item{x}{A \code{sf} or \code{sfc} object passed to \link[sf:st_geometry_type]{sf::st_geometry_type}}
+
 \item{join}{geometry predicate function; defaults to \code{NULL}, set to
 \link[sf:geos_binary_pred]{sf::st_intersects} if key_list contains only POLYGON or MULTIPOLYGON objects
 or \link[sf:st_nearest_feature]{sf::st_nearest_feature} if key_list contains other types.}

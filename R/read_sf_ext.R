@@ -55,6 +55,7 @@
 #' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults
 #'   to `FALSE`.
 #' @inheritParams address_to_sf
+#' @inheritParams df_to_sf
 #' @param ... Additional parameters passed to multiple functions; see details.
 #' @name read_sf_ext
 #' @family read_write

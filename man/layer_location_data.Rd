@@ -76,10 +76,10 @@ provided. Default TRUE.}
 This option ignores any \code{dist}, \code{diag_ratio}, or \code{asp} parameters. Default
 \code{FALSE}.}
 
-\item{from_crs}{Coordinate reference system of the data (used to convert the
-CRS of the bounding box used in reading/filtering data).}
+\item{from_crs}{Coordinate reference system used to match the location CRS to
+the source data.}
 
-\item{crs}{Coordinate reference system to return}
+\item{crs}{Coordinate reference system to return.}
 
 \item{label_col}{Column name or id for a column with the text or labels to
 pass to any text geom.}

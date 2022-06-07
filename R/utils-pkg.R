@@ -62,7 +62,7 @@ set_overedge_options <- function(dist = NULL,
 
     cli::cli_alert_success(
       "overedge options updated for {.arg {update_options}}."
-      )
+    )
   }
 }
 

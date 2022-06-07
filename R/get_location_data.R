@@ -9,7 +9,7 @@
 #'
 #' @details Working with sf lists for data and locations:
 #'
-#'   [map_data_location] makes it easier to work with `sf` lists. It supports data
+#'   [map_location_data] makes it easier to work with `sf` lists. It supports data
 #'   as a character vector, data as an `sf` list when location is a single object,
 #'   location as a character vector or `sf` list (including lists of `bbox` or `sfc`
 #'   objects), or when both data and location are lists (such as a list created
@@ -26,9 +26,9 @@
 #' @param fn Function to apply to data after filtering by location but before
 #'   returning from function.
 #' @inheritParams location_filter
-#' @param from_crs Coordinate reference system of the data (used to convert the
-#'   CRS of the bounding box used in reading/filtering data).
-#' @param crs Coordinate reference system to return
+#' @param from_crs Coordinate reference system used to match the location CRS to
+#'   the source data.
+#' @param crs Coordinate reference system to return.
 #' @param class Class of object to return.
 #' @param index A list of possible location, data, and (optionally) package
 #'   values. List must be named and include a value named package and package

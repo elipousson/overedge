@@ -209,7 +209,6 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
   )
 
   if (is.null(names(x)) && !is.null(nm)) {
-
     if (clean_names) {
       nm <- janitor::make_clean_names(nm)
     }

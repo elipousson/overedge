@@ -12,7 +12,8 @@ make_filename(
   path = NULL,
   prefix = NULL,
   postfix = NULL,
-  cache = FALSE
+  cache = FALSE,
+  pad = "0"
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ date/time prefix; defaults to \code{NULL}.}
 
 \item{cache}{If TRUE, path is set to the overedge cache directory using
 \code{\link[=get_data_dir]{get_data_dir()}}; defaults to \code{FALSE}.}
+
+\item{pad}{Single padding character added to digits in string; defaults to
+"0"}
 }
 \description{
 A helper function to create consistent file names for plots created with

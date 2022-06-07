@@ -97,7 +97,8 @@ location names (e.g. County)}
 
 \item{token}{Access token or API Key; required to access data from Socrata.}
 
-\item{from_crs}{Coordinate reference system for source data.}
+\item{from_crs}{Coordinate reference system used to match the location CRS to
+the source data.}
 
 \item{crs}{Coordinate reference system to return.}
 }

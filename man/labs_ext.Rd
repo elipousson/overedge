@@ -30,6 +30,8 @@ bottom-right of the plot by default.}
 \item{tag}{The text for the tag label which will be displayed at the
 top-left of the plot by default.}
 
+\item{alt}{Text used for the generation of alt-text for the plot.}
+
 \item{location}{sf or bbox object or character string}
 
 \item{name_col}{Column name holding name or identifier for distinct

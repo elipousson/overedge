@@ -13,8 +13,6 @@
 #'   single column or two separated columns.
 #' @param crs Cordinate reference system to return, Default: 4326 for [sf_to_df]
 #'   and NULL for [df_to_sf]
-#' @param from_crs For [df_to_sf], coordinate reference system used by
-#'   coordinates or well known text in data frame.
 #' @param geometry Type of geometry to include in data frame. options include
 #'   "drop", "wkt", "centroid", "point", Default: 'centroid'.
 #' @param coords Coordinate columns for input dataframe or output sf object (if
@@ -58,6 +56,11 @@ sf_to_df <- function(x,
 
 #' @rdname sf_to_df
 #' @name df_to_sf
+#' @param from_crs For [df_to_sf], coordinate reference system used by
+#'   coordinates or well known text in data frame.
+#' @param geo If `TRUE`, use [address_to_sf] to geocode address column; defaults
+#'   to `FALSE`.
+#' @param address Address column name passed to [tidygeocoder::geocode] or [tidygeocoder::geo]
 #' @seealso
 #'  [ggspatial::df_spatial()]
 #'  [sf::st_as_sf()]

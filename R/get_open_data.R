@@ -29,7 +29,8 @@
 #'   "latitude")
 #' @param token Access token or API Key; required to access data from Socrata.
 #' @param location sf or bbox obkect
-#' @param from_crs Coordinate reference system for source data.
+#' @param from_crs Coordinate reference system used to match the location CRS to
+#'   the source data.
 #' @param crs Coordinate reference system to return.
 #' @example examples/get_open_data.R
 #' @export
@@ -93,18 +94,18 @@ get_open_data <- function(data = NULL,
     cli::cli_abort("A valid source_url is required.")
   }
 
-    url <-
-      make_socrata_url(
-        data = data,
-        source_url = source_url,
-        select = select,
-        where = where,
-        query = query,
-        bbox = bbox,
-        name_col = name_col,
-        name = name,
-        coords = coords
-      )
+  url <-
+    make_socrata_url(
+      data = data,
+      source_url = source_url,
+      select = select,
+      where = where,
+      query = query,
+      bbox = bbox,
+      name_col = name_col,
+      name = name,
+      coords = coords
+    )
 
   # Download data from Socrata Open Data portal
   data <-

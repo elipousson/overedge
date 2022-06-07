@@ -19,6 +19,7 @@
 #' @param postfix File name postfix; defaults to `NULL`.
 #' @param cache If TRUE, path is set to the overedge cache directory using
 #'   [get_data_dir()]; defaults to `FALSE`.
+#' @inheritParams str_pad_digit
 #' @family read_write
 #' @export
 make_filename <- function(name = NULL,
@@ -28,7 +29,8 @@ make_filename <- function(name = NULL,
                           path = NULL,
                           prefix = NULL,
                           postfix = NULL,
-                          cache = FALSE) {
+                          cache = FALSE,
+                          pad = "0") {
   stopifnot(
     is.character(name) || is.character(filename)
   )
@@ -64,7 +66,8 @@ make_filename <- function(name = NULL,
       prefix = prefix,
       string = filename,
       postfix = postfix,
-      clean = TRUE
+      clean = TRUE,
+      pad = pad
     )
 
   filename <-
@@ -78,7 +81,8 @@ make_filename <- function(name = NULL,
 }
 
 
-#' @noRd
+#' Add file type to string
+#'
 #' @importFrom stringr str_detect
 str_add_filetype <- function(x, filetype = NULL) {
   if (stringr::str_detect(x, "\\.")) {
@@ -89,7 +93,10 @@ str_add_filetype <- function(x, filetype = NULL) {
 }
 
 
-#' @noRd
+#' Remove file type from string
+#'
+#' @param x String
+#' @param filetype File type string
 str_remove_filetype <- function(x = NULL, filetype = NULL) {
   if (!is.null(filetype)) {
     sub(
@@ -119,9 +126,9 @@ str_remove_filetype <- function(x = NULL, filetype = NULL) {
 #' @param sep Separator character passed as the collapse parameter of [paste()].
 #' @param clean If `TRUE`, prefix, postfix, and string are all converted to
 #'   snake case with [janitor::make_clean_names()].
-#' @noRd
+#' @inheritParams str_pad_digit
 #' @importFrom janitor make_clean_names
-str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", clean = TRUE) {
+str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", clean = TRUE, pad = "0", width = NULL) {
   stopifnot(
     is.character(prefix) || is.null(prefix),
     is.character(string) || is.null(string),
@@ -142,6 +149,8 @@ str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", 
     string <- janitor::make_clean_names(string)
   }
 
+  string <- str_pad_digit(string, pad = pad, width = width)
+
   string <- paste(c(prefix, string), collapse = sep)
 
   if (!is.null(postfix)) {
@@ -154,4 +163,42 @@ str_prefix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", 
   string <- gsub("_{2}", "_", string)
 
   return(string)
+}
+
+#' Pad a string with digits
+#'
+#' @param pad Single padding character added to digits in string; defaults to
+#'   "0"
+#' @inheritParams stringr::str_pad
+#' @importFrom stringr str_length str_pad str_replace
+str_pad_digit <- function(string, pad = "0", side = "left", width = NULL) {
+  digit_string <-
+    str_extract_digit(string)
+
+  if (is.null(width)) {
+    width <-
+      max(stringr::str_length(digit_string))
+  }
+
+  digit_string <-
+    stringr::str_pad(
+      digit_string,
+      pad = pad,
+      width = width
+    )
+
+  stringr::str_replace(
+    string,
+    pattern = "[:digit:]",
+    replacement = digit_string
+  )
+}
+
+#' Extract digits from a string
+#'
+#' @inheritParams stringr::str_extract
+#' @noRd
+#' @importFrom stringr str_extract
+str_extract_digit <- function(string) {
+  stringr::str_extract(string, "[:digit:]")
 }

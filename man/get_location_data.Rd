@@ -85,10 +85,10 @@ provided. Default TRUE.}
 This option ignores any \code{dist}, \code{diag_ratio}, or \code{asp} parameters. Default
 \code{FALSE}.}
 
-\item{from_crs}{Coordinate reference system of the data (used to convert the
-CRS of the bounding box used in reading/filtering data).}
+\item{from_crs}{Coordinate reference system used to match the location CRS to
+the source data.}
 
-\item{crs}{Coordinate reference system to return}
+\item{crs}{Coordinate reference system to return.}
 
 \item{class}{Class of object to return.}
 
@@ -121,7 +121,7 @@ state name, abbreviation, or GeoID.
 \details{
 Working with sf lists for data and locations:
 
-\link{map_data_location} makes it easier to work with \code{sf} lists. It supports data
+\link{map_location_data} makes it easier to work with \code{sf} lists. It supports data
 as a character vector, data as an \code{sf} list when location is a single object,
 location as a character vector or \code{sf} list (including lists of \code{bbox} or \code{sfc}
 objects), or when both data and location are lists (such as a list created

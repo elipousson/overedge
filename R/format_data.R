@@ -118,8 +118,8 @@ str_trim_squish <- function(x) {
       ~ dplyr::if_else(
         !is.null(.x) & !is.na(.x),
         stringr::str_trim(stringr::str_squish(.x)),
-                          .x
-        )
+        .x
+      )
     )
   )
 }
@@ -152,14 +152,13 @@ rename_with_xwalk <- function(x, xwalk = NULL) {
   )
 
   if (is_sf(x) && (attributes(x)$sf_column %in% xwalk)) {
-
     sf_col <- as.character(names(xwalk[xwalk == attributes(x)$sf_column]))
 
     x <-
       rename_sf_col(
         x,
         sf_col = sf_col
-        )
+      )
 
     xwalk[[sf_col]] <- NULL
   }
@@ -169,7 +168,7 @@ rename_with_xwalk <- function(x, xwalk = NULL) {
       x,
       ~ names(xwalk)[which(xwalk == .x)],
       .cols = as.character(xwalk)
-      )
+    )
 
   return(x)
 }
@@ -209,7 +208,7 @@ relocate_sf_col <- function(x, .after = dplyr::everything()) {
 #' @export
 #' @importFrom dplyr everything relocate all_of
 rename_sf_col <- function(x, sf_col = "geometry") {
-  names(x)[names(x) == attr(x, "sf_column")] = sf_col
+  names(x)[names(x) == attr(x, "sf_column")] <- sf_col
   attr(x, "sf_column") <- sf_col
 
   return(x)
@@ -288,7 +287,6 @@ bind_block_col <- function(x,
 #' @importFrom dplyr rename select
 #' @importFrom sf st_join
 bind_boundary_col <- function(x, boundary = NULL, join = NULL, ...) {
-
   if (!is_sf_list(boundary)) {
     boundary <- as_sf_list(boundary, crs = x)
   } else {
