@@ -3,7 +3,7 @@
 #' An extended version of [sf::read_sf()] that support reading spatial data
 #' based on a file path, URL, or the data name and associated package.
 #' Optionally provide a bounding box to filter data (not supported for all data
-#' types). If a file or path is provided for a GeoJSON file, the
+#' types). If a file path or url is provided for a GeoJSON file, the
 #' [read_sf_geojson] function (using the suggested
 #' [{geojsonsf}](https://github.com/SymbolixAU/geojsonsf) package) is used.
 #'
@@ -71,11 +71,12 @@ read_sf_ext <- function(..., bbox = NULL) {
       !is.null(params$package) ~ "pkg",
       !is.null(params$url) ~ "url",
       !is.null(params$path) && is.null(params$filename) ~ "path",
-      TRUE ~ "error"
+      TRUE ~ "missing"
     )
 
-  if (read_sf_fn == "error") {
-    cli::cli_abort("The parameters provided did not match any overedge read_sf function.")
+  if (read_sf_fn == "missing") {
+    cli::cli_abort("The parameters provided did not match any overedge read_sf function.
+                   Are you missing a {.arg package}, {.arg url}, or {.arg path} argument?")
   }
 
   read_sf_fn <-
@@ -104,8 +105,10 @@ read_sf_ext <- function(..., bbox = NULL) {
 #' @importFrom dplyr case_when
 read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
   stopifnot(
-    !is.null(package) & is_pkg_installed(package)
+    "The {.arg package} argument is missing." = !is.null(package)
   )
+
+  is_pkg_installed(package)
 
   # Read package data
   if (data %in% ls_pkg_data(package)) {
@@ -138,61 +141,52 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     fs::file_exists(path)
   )
 
-  path_type <-
-    dplyr::case_when(
-      stringr::str_detect(path, "\\.csv$") ~ "csv",
-      stringr::str_detect(path, "\\.xlsx$|\\.xls$") ~ "excel",
-      stringr::str_detect(path, "\\.geojson$") ~ "geojson",
-      TRUE ~ "spatial_data"
-    )
+  filetype <- str_extract_filetype(path)
 
-  if (path_type != "spatial_data") {
+  if (filetype %in% c("csv", "xlsx", "xls", "geojson")) {
     data <-
-      switch(path_type,
+      switch(filetype,
         "csv" = read_sf_csv(path = path, bbox = bbox, ...),
-        "excel" = read_sf_excel(path = path, bbox = bbox, ...),
-        "geoson" = read_sf_geojson(geojson = path, bbox = bbox, ...)
+        "xlsx" = read_sf_excel(path = path, bbox = bbox, ...),
+        "xls" = read_sf_excel(path = path, bbox = bbox, ...),
+        "geojson" = read_sf_geojson(geojson = path, bbox = bbox, ...)
       )
-
-    return(data)
+  } else {
+    data <- read_sf_query(path = path, bbox = bbox, ...)
   }
 
-  params <- rlang::list2(...)
+  return(data)
+}
 
-  if (is.null(params$query)) {
-    params$query <- NA
 
-    if (all(rlang::has_name(params, c("name", "name_col")))) {
-      if (is.null(params$table)) {
-        params$table <-
-          stringr::str_extract(
-            basename(path),
-            "[:graph:]+(?=\\.)"
-          )
-      }
-
-      params$query <-
-        glue::glue("select * from {params$table} where {params$name_col} = '{params$name}'")
+#' @noRd
+read_sf_query <- function(path, bbox = NULL, query = NA, table = NULL, name = NULL, name_col = NULL, wkt_filter = character(0), ...) {
+  if (!any(sapply(c(name, name_col), is.null))) {
+    if (is.null(table)) {
+      table <-
+        stringr::str_extract(
+          basename(path),
+          "[:graph:]+(?=\\.)"
+        )
     }
+
+    query <-
+      glue::glue("select * from {table} where {name_col} = '{name}'")
   }
 
-  if (is.null(params$wkt_filter)) {
-    params$wkt_filter <- character(0)
 
-    if (!is.null(bbox)) {
-      # Convert bbox to well known text
-      params$wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
-    }
+  if (!is.null(bbox)) {
+    # Convert bbox to well known text
+    wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
   }
 
   # Read external, cached, or data at path with wkt_filter
-  data <- sf::read_sf(
+  sf::read_sf(
     dsn = path,
-    wkt_filter = params$wkt_filter,
-    query = params$query
+    wkt_filter = wkt_filter,
+    query = query,
+    ...
   )
-
-  return(data)
 }
 
 #' @name read_sf_excel
