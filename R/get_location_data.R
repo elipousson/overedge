@@ -280,7 +280,7 @@ map_location_data <- function(location = NULL,
   }
 
   data <- purrr::discard(data, ~ nrow(.x) == 0)
-  data <- as_sf_class(x = data, class = class, crs = crs, ...)
+  data <- as_sf_class(x = data, class = class, crs = crs) #, ...)
 
   if (load && is_sf_list(data, named = TRUE)) {
     list2env(data, envir = .GlobalEnv)
