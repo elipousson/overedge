@@ -37,20 +37,35 @@ mapview_col <- function(x, col = NULL, nm = "data", na.rm = TRUE, ...) {
   if (!is_sf(x)) {
     x <- as_sf(x)
   }
-
-  if (!is.null(col)) {
-    if (na.rm) {
-      x <- dplyr::filter(x, !is.na(.data[[col]]))
-    }
-
-    mapview::mapview(x, zcol = col, ...)
-  } else {
-    mapview::mapview(x, ...)
+  if (na.rm) {
+    x <- dplyr::filter(x, !is.na(.data[[col]]))
   }
+
+  if (is.null(col)) {
+    return(mapview::mapview(x, ...))
+  }
+
+  mapview::mapview(x, zcol = col, ...)
+}
+
+#' @rdname mapview_ext
+#' @name mapview_yn
+#' @export
+mapview_yn <- function(x, col = NULL, no.rm = TRUE, ...) {
+  if (no.rm) {
+    if (is.character(x[[col]])) {
+      x <- dplyr::filter(x, tolower(.data[[col]]) %in% c("y", "yes", "true"))
+    } else if (is.logical(x[[col]])) {
+      x <- dplyr::filter(x, .data[[col]])
+    }
+  }
+
+  mapview_col(x, col = col, ...)
 }
 
 #' @rdname mapview_ext
 #' @name mapview_exif
+#' @export
 #' @inheritParams read_sf_exif
 mapview_exif <- function(path = NULL,
                          filetype = "jpeg",

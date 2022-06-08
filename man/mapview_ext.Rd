@@ -3,12 +3,15 @@
 \name{mapview_ext}
 \alias{mapview_ext}
 \alias{mapview_col}
+\alias{mapview_yn}
 \alias{mapview_exif}
 \alias{mapview_flickr}
 \alias{make_img_leafpop}
 \title{Use mapview to interactively explore spatial data}
 \usage{
 mapview_col(x, col = NULL, nm = "data", na.rm = TRUE, ...)
+
+mapview_yn(x, col = NULL, no.rm = TRUE, ...)
 
 mapview_exif(path = NULL, filetype = "jpeg", popup = TRUE, ...)
 
