@@ -97,48 +97,49 @@ location_filter <- function(data,
 
   params <- rlang::list2(...)
 
-  has_bbox_param <- rlang::has_name(params, "bbox") && is_bbox(params$bbox)
   has_us_state_param <- any(rlang::has_name(params, c("state", "statefp", "abb")))
   has_us_county_param <- any(rlang::has_name(params, c("county", "geoid")))
 
-  if (!types$null && types$chr) {
-    if (types$state) {
-      location <- get_states(location, class = "sf")
-    } else if (types$county) {
-      location <- get_counties(location, class = "sf")
-    } else {
-      # FIXME: Could this be replaced with a call to make_features
-      location <- address_to_sf(location, crs = data)
-    }
+  bbox <- NULL
 
-    types$sf <- TRUE
-    types$sf_ext <- TRUE
-  } else if (!types$null && any(c(has_us_state_param, has_us_county_param))) {
-    if (has_us_state_param) {
-      location <- get_states(location = c(params$state, params$statefp, params$abb)[[1]], class = "sf")
-    } else if (has_us_county_param) {
-      location <- get_counties(location = c(params$county, params$geoid)[[1]], class = "sf")
-    }
-
-    types$sf <- TRUE
-    types$sf_ext <- TRUE
-  }
-
-  if (!types$null && types$sf_ext && !has_bbox_param) {
-    bbox <-
-      st_bbox_ext(
-        x = location,
-        dist = dist,
-        diag_ratio = diag_ratio,
-        asp = asp,
-        unit = units,
-        crs = data,
-        class = "bbox"
-      )
-  } else if (has_bbox_param) {
+  if (rlang::has_name(params, "bbox") && is_bbox(params$bbox)) {
     bbox <- params$bbox
-  } else {
-    bbox <- NULL
+  } else if (!types$null) {
+    if (types$chr) {
+      if (types$state) {
+        location <- get_states(location, class = "sf")
+      } else if (types$county) {
+        location <- get_counties(location, class = "sf")
+      } else {
+        # FIXME: Could this be replaced with a call to make_features
+        location <- address_to_sf(location, crs = data)
+      }
+
+      types$sf <- TRUE
+      types$sf_ext <- TRUE
+    } else if (any(c(has_us_state_param, has_us_county_param))) {
+      if (has_us_state_param) {
+        location <- get_states(location = c(params$state, params$statefp, params$abb)[[1]], class = "sf")
+      } else if (has_us_county_param) {
+        location <- get_counties(location = c(params$county, params$geoid)[[1]], class = "sf")
+      }
+
+      types$sf <- TRUE
+      types$sf_ext <- TRUE
+    }
+
+    if (types$sf_ext) {
+      bbox <-
+        st_bbox_ext(
+          x = location,
+          dist = dist,
+          diag_ratio = diag_ratio,
+          asp = asp,
+          unit = units,
+          crs = data,
+          class = "bbox"
+        )
+    }
   }
 
   is_lonlat <- sf::st_is_longlat(data)
