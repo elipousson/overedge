@@ -318,35 +318,16 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), remo
   is_pkg_installed("tidygeocoder")
 
   if (is.character(x)) {
-    # Geocode the address
-    # FIXME: Consider adding support for a vector of multiple addresses
-
-    if (length(x) > 1) {
-      x <-
-        purrr::map_dfr(
-          x,
-          ~ address_to_sf(x = .x, address = address, coords = coords, remove_coords = remove_coords, crs = crs)
-        )
-
-      return(x)
-    }
-
-    x <-
-      tidygeocoder::geo(
-        address = x,
-        long = "lon",
-        lat = "lat",
-        quiet = rlang::is_interactive(),
-        ...
-      )
+    # Make vector into address column
+    x <- tibble::as_tibble_col(x, address)
   }
 
   stopifnot(is.data.frame(x))
 
-  # Geocode the address
   x <- has_same_name_col(x, col = "lon")
   x <- has_same_name_col(x, col = "lat")
 
+  # Geocode the address column
   x <-
     tidygeocoder::geocode(
       x,
@@ -357,19 +338,20 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), remo
       ...
     )
 
-  x <-
-    dplyr::rename(
-      x,
-      "{coords[[1]]}" := "lon",
-      "{coords[[2]]}" := "lat"
-    )
+  if (nrow(x) > 0) {
+    x <-
+      dplyr::rename(
+        x,
+        "{coords[[1]]}" := "lon",
+        "{coords[[2]]}" := "lat"
+      )
 
-  stopifnot(
-    nrow(x) > 0
-  )
-
-  # Convert address df to sf
-  x <- df_to_sf(x, coords = coords, from_crs = 4326, remove_coords = remove_coords, crs = crs)
+    # Convert address df to sf
+    x <-
+      df_to_sf(x, coords = coords, from_crs = 4326, remove_coords = remove_coords, crs = crs)
+  } else {
+    # FIXME: Add warning or error here if geocoding does not work
+  }
 
   return(x)
 }
