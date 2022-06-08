@@ -77,20 +77,16 @@ get_flickr_photos <- function(api_key = NULL,
 
   flickr_crs <- 4326
 
-  if (!is.null(location)) {
-    # Get adjusted bounding box if any adjustment variables provided
-    bbox <-
-      st_bbox_ext(
-        x = location,
-        dist = dist,
-        diag_ratio = diag_ratio,
-        unit = unit,
-        asp = asp,
-        crs = flickr_crs
-      )
-  } else {
-    bbox <- NULL
-  }
+  # Get adjusted bounding box if any adjustment variables provided
+  bbox <-
+    st_bbox_ext(
+      x = location,
+      dist = dist,
+      diag_ratio = diag_ratio,
+      unit = unit,
+      asp = asp,
+      crs = flickr_crs
+    )
 
   if (length(page) > 1) {
     purrr::map_dfr(
