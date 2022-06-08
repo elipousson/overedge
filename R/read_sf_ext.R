@@ -160,7 +160,9 @@ read_sf_path <- function(path, bbox = NULL, ...) {
 
 
 #' @noRd
-read_sf_query <- function(path, bbox = NULL, query = NA, table = NULL, name = NULL, name_col = NULL, wkt_filter = character(0), ...) {
+read_sf_query <- function(path, bbox = NULL, query = NULL, table = NULL, name = NULL, name_col = NULL, wkt_filter = NULL, ...) {
+
+
   if (!any(sapply(c(name, name_col), is.null))) {
     if (is.null(table)) {
       table <-
@@ -174,10 +176,17 @@ read_sf_query <- function(path, bbox = NULL, query = NA, table = NULL, name = NU
       glue::glue("select * from {table} where {name_col} = '{name}'")
   }
 
+  if (is.null(query)) {
+    query <- NA
+  }
 
   if (!is.null(bbox)) {
     # Convert bbox to well known text
     wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
+  }
+
+  if (is.null(wkt_filter)) {
+    wkt_filter <- character(0)
   }
 
   # Read external, cached, or data at path with wkt_filter
