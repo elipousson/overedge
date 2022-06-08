@@ -26,7 +26,12 @@ st_bbox_ext <- function(x = NULL,
                         asp = NULL,
                         unit = NULL,
                         crs = NULL,
-                        class = "bbox") {
+                        class = "bbox",
+                        null.ok = TRUE) {
+  if (is.null(x)) {
+    return(x)
+  }
+
   if (is_sf_list(x, ext = TRUE)) {
     bbox_list <-
       purrr::map(
