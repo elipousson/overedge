@@ -53,7 +53,8 @@ get_open_data <- function(data = NULL,
                           geometry = FALSE,
                           token = NULL,
                           from_crs = 4326,
-                          crs = NULL) {
+                          crs = NULL,
+                          clean_names = TRUE) {
   if (source_type != "socrata") {
     cli::cli_abort(
       "This function currently only supports access to Socrata open data portals.
@@ -74,21 +75,17 @@ get_open_data <- function(data = NULL,
     cli::cli_abort("An API key or access token is required.")
   }
 
-  if (!is.null(location)) {
-    # FIXME: Check on how to access the point or polygon data types via SODA
-    # See <https://dev.socrata.com/docs/datatypes/point.html> for more information
-    # Get adjusted bounding box if any adjustment variables provided
-    bbox <- st_bbox_ext(
-      x = location,
-      dist = dist,
-      diag_ratio = diag_ratio,
-      unit = unit,
-      asp = asp,
-      crs = from_crs
-    )
-  } else {
-    bbox <- NULL
-  }
+  # FIXME: Check on how to access the point or polygon data types via SODA
+  # See <https://dev.socrata.com/docs/datatypes/point.html> for more information
+  # Get adjusted bounding box if any adjustment variables provided
+  bbox <- st_bbox_ext(
+    x = location,
+    dist = dist,
+    diag_ratio = diag_ratio,
+    unit = unit,
+    asp = asp,
+    crs = from_crs
+  )
 
   if (!is_url(source_url)) {
     cli::cli_abort("A valid source_url is required.")
@@ -111,8 +108,10 @@ get_open_data <- function(data = NULL,
   data <-
     as.data.frame(RSocrata::read.socrata(url = url, app_token = token))
 
-  data <-
-    janitor::clean_names(data, "snake")
+  if (clean_names) {
+    data <-
+      janitor::clean_names(data)
+  }
 
   if (geometry) {
     data <- df_to_sf(x = data, coords = coords, crs = crs)
@@ -186,7 +185,8 @@ get_socrata_data <- function(data = NULL,
                              geometry = FALSE,
                              token = NULL,
                              from_crs = 4326,
-                             crs = NULL) {
+                             crs = NULL,
+                             clean_names = TRUE) {
   is_pkg_installed("RSocrata")
 
   get_open_data(
@@ -207,6 +207,7 @@ get_socrata_data <- function(data = NULL,
     geometry = geometry,
     token = token,
     from_crs = from_crs,
-    crs = crs
+    crs = crs,
+    clean_names = clean_names
   )
 }

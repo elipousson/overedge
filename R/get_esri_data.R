@@ -38,6 +38,7 @@ get_esri_data <- function(location = NULL,
                           coords_col = NULL,
                           name_col = NULL,
                           name = NULL,
+                          clean_names = TRUE,
                           ...) {
   is_pkg_installed(pkg = "esri2sf", repo = "yonghah/esri2sf")
 
@@ -129,7 +130,9 @@ get_esri_data <- function(location = NULL,
     data <- df_to_sf(data, coords = coords_col)
   }
 
-  data <- janitor::clean_names(data, "snake")
+  if (clean_names) {
+    data <- janitor::clean_names(data)
+  }
 
   return(data)
 }
