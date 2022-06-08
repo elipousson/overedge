@@ -19,6 +19,7 @@ get_esri_data(
   coords_col = NULL,
   name_col = NULL,
   name = NULL,
+  clean_names = TRUE,
   ...
 )
 

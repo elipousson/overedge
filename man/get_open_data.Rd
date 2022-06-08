@@ -23,7 +23,8 @@ get_open_data(
   geometry = FALSE,
   token = NULL,
   from_crs = 4326,
-  crs = NULL
+  crs = NULL,
+  clean_names = TRUE
 )
 
 get_socrata_data(
@@ -43,7 +44,8 @@ get_socrata_data(
   geometry = FALSE,
   token = NULL,
   from_crs = 4326,
-  crs = NULL
+  crs = NULL,
+  clean_names = TRUE
 )
 }
 \arguments{

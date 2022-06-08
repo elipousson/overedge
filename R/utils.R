@@ -163,6 +163,7 @@ use_fn <- function(data, fn = NULL) {
 #' Does the data frame has a column with the same name?
 #'
 #' @name has_same_name_col
+#' @noRd
 #' @importFrom rlang has_name
 #' @importFrom cli cli_abort cli_alert_success
 #' @importFrom dplyr rename
@@ -207,6 +208,7 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
 #'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
 #'   or [sf::st_nearest_feature] if key_list contains other types.
 #' @importFrom sf st_intersects st_nearest_feature
+#' @noRd
 set_join_by_geom_type <- function(x, join = NULL) {
   if (is.null(join)) {
     if (all(sapply(x, is_polygon) | sapply(x, is_multipolygon))) {

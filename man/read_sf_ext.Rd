@@ -158,7 +158,7 @@ not provided to \link{read_sf_gsheet}.}
 An extended version of \code{\link[sf:st_read]{sf::read_sf()}} that support reading spatial data
 based on a file path, URL, or the data name and associated package.
 Optionally provide a bounding box to filter data (not supported for all data
-types). If a file or path is provided for a GeoJSON file, the
+types). If a file path or url is provided for a GeoJSON file, the
 \link{read_sf_geojson} function (using the suggested
 \href{https://github.com/SymbolixAU/geojsonsf}{{geojsonsf}} package) is used.
 }

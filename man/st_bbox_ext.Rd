@@ -13,7 +13,8 @@ st_bbox_ext(
   asp = NULL,
   unit = NULL,
   crs = NULL,
-  class = "bbox"
+  class = "bbox",
+  null.ok = TRUE
 )
 
 st_bbox_asp(x = NULL, asp = NULL, class = "bbox")

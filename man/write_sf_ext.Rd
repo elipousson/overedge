@@ -14,7 +14,7 @@ write_sf_ext(
   prefix = NULL,
   postfix = NULL,
   filename = NULL,
-  filetype = "geojson",
+  filetype = NULL,
   path = NULL,
   cache = FALSE,
   overwrite = FALSE
@@ -79,7 +79,7 @@ date/time prefix; defaults to \code{NULL}.}
 "data.csv". Objects that are not simple features are written to RDS with
 \code{readr::write_rds()}.}
 
-\item{filetype}{File type to write and cache, Default: 'geojson' for
+\item{filetype}{File type to write and cache, Default: \code{NULL} for
 \code{write_sf_ext()}}
 
 \item{path}{Path to file or data directory.}
@@ -91,8 +91,8 @@ defaults to \code{FALSE}.}
 cached files that use the same file name.}
 
 \item{data_dir}{cache data directory, defaults to
-\code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}} when data_dir is NULL. (only used
-for write_sf_cache; default is used when cache = TRUE for write_sf_ext)}
+\code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}} when data_dir is \code{NULL}. (only used
+for write_sf_cache; default is used when \code{cache = TRUE} for write_sf_ext)}
 
 \item{description}{(character) Brief description of gist (optional)}
 

@@ -22,6 +22,7 @@ get_location_data(
   class = "sf",
   label = NULL,
   index = NULL,
+  col = NULL,
   ...
 )
 

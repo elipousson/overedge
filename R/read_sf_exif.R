@@ -289,7 +289,9 @@ write_exif <- function(path = NULL,
 #' @rdname read_sf_exif
 #' @param key_list List of sf objects with features with keywords, e.g. boundaries
 #' @param key_col Column name in key_list with the values to use for keywords.
-#' @inheritParams set_join_by_geom_type
+#' @param join geometry predicate function; defaults to `NULL`, set to
+#'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
+#'   or [sf::st_nearest_feature] if key_list contains other types.
 #' @export
 #' @importFrom fs dir_ls
 #' @importFrom purrr map_dfr walk2

@@ -2,7 +2,6 @@
 % Please edit documentation in R/format_data.R
 \name{format_data}
 \alias{format_data}
-\alias{str_trim_squish}
 \alias{rename_with_xwalk}
 \alias{fix_date}
 \alias{relocate_sf_col}
@@ -23,8 +22,6 @@ format_data(
   fix_date = TRUE,
   sf_col = NULL
 )
-
-str_trim_squish(x)
 
 rename_with_xwalk(x, xwalk = NULL)
 

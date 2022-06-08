@@ -13,7 +13,8 @@ make_filename(
   prefix = NULL,
   postfix = NULL,
   cache = FALSE,
-  pad = "0"
+  pad = NULL,
+  width = NULL
 )
 }
 \arguments{
@@ -42,6 +43,8 @@ date/time prefix; defaults to \code{NULL}.}
 
 \item{pad}{Single padding character added to digits in string; defaults to
 "0"}
+
+\item{width}{Minimum width of padded strings.}
 }
 \description{
 A helper function to create consistent file names for plots created with
