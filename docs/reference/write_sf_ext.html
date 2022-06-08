@@ -26,7 +26,7 @@ with make_filename() and features including:"><!-- mathjax --><script src="https
     
     <a class="navbar-brand me-2" href="../index.html">overedge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,9 @@ with make_filename() and features including:"><!-- mathjax --><script src="https
     <a class="dropdown-item" href="../articles/working-sf-bbox.html">Working with simple feature and bounding box objects</a>
     <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -197,7 +200,8 @@ provided data.</p></dd>
 <li><p>If filetype is "csv" or the filename ends in ".csv" the file is
 automatically converted to a dataframe using <code><a href="sf_to_df.html">df_to_sf()</a></code>; if file type is
 "gsheet" the file is converted and turned into a new Google Sheet document
-(if a Google account is authorized with the googlesheets4 package using the <code>write_sf_gsheet()</code> function.).</p></li>
+(if a Google account is authorized with the googlesheets4 package using the
+<code>write_sf_gsheet()</code> function.).</p></li>
 <li><p>If cache is <code>TRUE</code> use write_sf_cache to cache file after writing a copy to
 the path provided.</p></li>
 <li><p>If data is a named sf list, pass the name of each sf object in the list to

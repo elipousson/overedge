@@ -26,7 +26,7 @@ applied."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
     
     <a class="navbar-brand me-2" href="../index.html">overedge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,9 @@ applied."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
     <a class="dropdown-item" href="../articles/working-sf-bbox.html">Working with simple feature and bounding box objects</a>
     <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -94,9 +97,10 @@ applied.</p>
     <dl><dt>x</dt>
 <dd><p>A <code>sf</code>, <code>bbox</code>, <code>sfc</code>, <code>raster</code>, <code>sp</code>, or data frame object that can
 be converted into a simple feature or bounding box object. <code>as_bbox()</code> can
-also convert a vector with xmin, ymin, xmax, and ymax values. <code>as_sf_list()</code>
-only supports sf objects or a data frames with a sf list column named
-"data" (typically created by using <code><a href="https://dplyr.tidyverse.org/reference/group_nest.html" class="external-link">dplyr::group_nest()</a></code> on an sf object.</p></dd>
+also convert a vector with xmin, ymin, xmax, and ymax values.
+<code>as_sf_list()</code> only supports sf objects or a data frames with a sf list
+column named "data" (typically created by using <code><a href="https://dplyr.tidyverse.org/reference/group_nest.html" class="external-link">dplyr::group_nest()</a></code> on an
+sf object.</p></dd>
 <dt>crs</dt>
 <dd><p>Coordinate reference system for <code>sf</code>, <code>bbox</code>, <code>sfc</code> or <code>sf</code> list
 object to return.</p></dd>
