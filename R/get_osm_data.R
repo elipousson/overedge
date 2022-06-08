@@ -93,7 +93,7 @@ get_osm_data <- function(location = NULL,
     options("overedge.osm_attribution" = FALSE)
   }
 
-  return(data)
+  data
 }
 
 
@@ -122,10 +122,12 @@ get_osm_id <- function(id, type = NULL, crs = NULL, geometry = NULL, osmdata = F
       )
     )
 
-  data <-
-    get_osm_data_geometry(data, geometry = id_type$geometry, crs = crs, osmdata = osmdata)
-
-  return(data)
+  get_osm_data_geometry(
+    data,
+    geometry = id_type$geometry,
+    crs = crs,
+    osmdata = osmdata
+  )
 }
 
 #' @noRd
@@ -195,7 +197,8 @@ get_osm_boundaries <- function(location,
                                crs = NULL,
                                enclosing = "relation",
                                geometry = NULL,
-                               osmdata = FALSE) {
+                               osmdata = FALSE,
+                               clean_names = TRUE) {
   boundaries <-
     get_osm_data_enclosing(
       location = location,
@@ -215,7 +218,9 @@ get_osm_boundaries <- function(location,
       )
   }
 
-  boundaries <- janitor::clean_names(boundaries)
+  if (clean_names) {
+    boundaries <- janitor::clean_names(boundaries)
+  }
 
   boundaries_nm <- names(boundaries)
 
@@ -243,9 +248,7 @@ get_osm_boundaries <- function(location,
 
   boundaries <- boundaries[, !(boundaries_nm %in% drop_nm_cols)]
 
-  boundaries <- st_transform_ext(x = boundaries, crs = crs)
-
-  return(boundaries)
+  st_transform_ext(x = boundaries, crs = crs)
 }
 
 
@@ -312,10 +315,12 @@ get_osm_data_features <- function(location = NULL,
   data <-
     suppressMessages(osmdata::osmdata_sf(query))
 
-  data <-
-    get_osm_data_geometry(data, geometry = geometry, crs = crs, osmdata = osmdata)
-
-  return(data)
+  get_osm_data_geometry(
+    data,
+    geometry = geometry,
+    crs = crs,
+    osmdata = osmdata
+  )
 }
 
 #' @noRd
@@ -355,10 +360,12 @@ get_osm_data_enclosing <- function(location,
       )
   }
 
-  data <-
-    get_osm_data_geometry(data, geometry = geometry, crs = crs, osmdata = osmdata)
-
-  return(data)
+  get_osm_data_geometry(
+    data,
+    geometry = geometry,
+    crs = crs,
+    osmdata = osmdata
+  )
 }
 
 #' Get geometry from osmdata list
@@ -367,7 +374,11 @@ get_osm_data_enclosing <- function(location,
 #' @importFrom purrr pluck
 #' @importFrom sf st_transform
 #' @importFrom janitor clean_names
-get_osm_data_geometry <- function(data, geometry = NULL, crs = NULL, osmdata = FALSE) {
+get_osm_data_geometry <- function(data,
+                                  geometry = NULL,
+                                  crs = NULL,
+                                  osmdata = FALSE,
+                                  clean_names = TRUE) {
   geometry <-
     match.arg(
       geometry,
@@ -382,7 +393,6 @@ get_osm_data_geometry <- function(data, geometry = NULL, crs = NULL, osmdata = F
 
   geometry <- paste0("osm_", geometry)
 
-
   if (!osmdata) {
     data <-
       purrr::pluck(
@@ -394,12 +404,14 @@ get_osm_data_geometry <- function(data, geometry = NULL, crs = NULL, osmdata = F
       data <- sf::st_transform(data, crs)
     }
 
-    data <- janitor::clean_names(data)
-  } else {
-    data <- osmdata::unique_osmdata(data)
+    if (clean_names) {
+      data <- janitor::clean_names(data)
+    }
+
+    return(data)
   }
 
-  return(data)
+  osmdata::unique_osmdata(data)
 }
 
 #' Get OSM value from osm_building_tags or osmdata::available_tags

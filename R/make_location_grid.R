@@ -211,10 +211,10 @@ get_grid_params <- function(bbox,
     square <- FALSE
   }
 
+  flat_topped <- FALSE
+
   if (style == "flat_top_hex") {
     flat_topped <- TRUE
-  } else {
-    flat_topped <- FALSE
   }
 
   if (style %in% c("circle", "circle_offset")) {

@@ -117,7 +117,7 @@ get_open_data <- function(data = NULL,
     data <- df_to_sf(x = data, coords = coords, crs = crs)
   }
 
-  return(data)
+  data
 }
 
 #' @noRd
@@ -163,7 +163,7 @@ make_socrata_url <- function(data = NULL,
     }
   }
 
-  return(url)
+  url
 }
 
 #' @rdname get_open_data

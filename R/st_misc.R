@@ -44,7 +44,7 @@ st_scale_rotate <- function(x, scale = 1, rotate = 0) {
   sf::st_geometry(x) <- y
   sf::st_crs(x) <- center$crs
 
-  return(x)
+  x
 }
 
 

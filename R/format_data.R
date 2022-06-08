@@ -102,7 +102,7 @@ format_data <- function(x,
     x <- relocate_sf_col(x, sf_col = sf_col)
   }
 
-  return(x)
+  x
 }
 
 #' @name rename_with_xwalk
@@ -151,7 +151,7 @@ rename_with_xwalk <- function(x, xwalk = NULL) {
       .cols = as.character(xwalk)
     )
 
-  return(x)
+  x
 }
 
 #' @name format_data
@@ -192,7 +192,7 @@ rename_sf_col <- function(x, sf_col = "geometry") {
   names(x)[names(x) == attr(x, "sf_column")] <- sf_col
   attr(x, "sf_column") <- sf_col
 
-  return(x)
+  x
 }
 
 #' @name bind_address_col
@@ -232,7 +232,7 @@ bind_address_col <- function(x, city = NULL, county = NULL, state = NULL) {
       )
   }
 
-  return(x)
+  x
 }
 
 #' @name bind_block_col
@@ -293,9 +293,7 @@ bind_boundary_col <- function(x, boundary = NULL, join = NULL, ...) {
     x <- sf::st_join(x, y, join = join, ...)
   }
 
-  x <- relocate_sf_col(x)
-
-  return(x)
+  relocate_sf_col(x)
 }
 
 #' @name bind_units_col
@@ -345,5 +343,5 @@ bind_units_col <- function(x, y, units = NULL, drop = FALSE, keep_all = TRUE, .i
     x <- relocate_sf_col(x)
   }
 
-  return(x)
+  x
 }

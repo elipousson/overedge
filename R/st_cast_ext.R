@@ -45,5 +45,5 @@ st_cast_ext <- function(x, to = "POINT", simplify = TRUE, ...) {
     }
   }
 
-  return(x)
+  x
 }

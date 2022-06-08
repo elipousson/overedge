@@ -75,5 +75,5 @@ get_us_counties <- function(location = NULL,
       )
   }
 
-  return(location_counties)
+  location_counties
 }

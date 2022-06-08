@@ -38,7 +38,7 @@ st_erase <- function(x, y, flip = FALSE, union = TRUE) {
     x <- st_transform_ext(x = x, crs = lonlat_crs)
   }
 
-  return(x)
+  x
 }
 
 #' @rdname st_erase

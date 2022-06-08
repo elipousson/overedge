@@ -158,11 +158,17 @@ st_intersects_data <- function(x, data, wkt = TRUE, crs = 3857) {
 #' @importFrom sf st_as_sf st_as_sfc
 #' @importFrom dplyr bind_cols
 admin_df_as_class <- function(df, class = "df") {
+  class <- match.arg(class, c("df", "bbox", "sf", "sfc"))
+
   if (class == "df") {
     return(df)
-  } else if (class == "bbox") {
+  }
+
+  if (class == "bbox") {
     return(df$bbox)
-  } else if (class == "sf") {
+  }
+
+  if (class == "sf") {
     df$bbox <- NULL
     wkt <- df$wkt
     df$wkt <- NULL
@@ -177,7 +183,9 @@ admin_df_as_class <- function(df, class = "df") {
     )
     # FIXME: The following should have worked but didn't
     # return(as_sf(df, from_crs = 3857))
-  } else if (class == "sfc") {
+  }
+
+  if (class == "sfc") {
     return(sf::st_as_sfc(df$wkt, crs = 3857))
   }
 }

@@ -72,9 +72,9 @@ st_bbox_ext <- function(x = NULL,
 
     if ("sf" %in% class) {
       return(sf_bbox_to_sf(bbox))
-    } else {
-      return(bbox)
     }
+
+    bbox
   }
 }
 
@@ -87,43 +87,42 @@ st_bbox_asp <- function(x = NULL,
   if (is_sf_list(x, ext = TRUE)) {
     bbox_list <- purrr::map(x, ~ st_bbox_asp(x = .x, asp = asp, class = class))
     return(bbox_list)
-  } else {
-    bbox <- as_bbox(x)
-    # Get adjusted aspect ratio
-    asp <- get_asp(asp = asp)
-
-    if (!is.null(asp) && is.numeric(asp)) {
-      # Get width/height
-      xdist <- sf_bbox_xdist(bbox) # Get width
-      ydist <- sf_bbox_ydist(bbox) # Get height
-
-      # Set default nudge to 0
-      x_nudge <- 0
-      y_nudge <- 0
-
-      # Compare adjust aspect ratio to bbox aspect ratio
-      if (asp >= sf_bbox_asp(bbox)) {
-        # adjust x
-        x_nudge <- (asp * ydist - xdist) / 2
-      } else {
-        # adjust y
-        y_nudge <- ((xdist / asp) - ydist) / 2
-      }
-
-      bbox <-
-        sf_bbox_shift(
-          bbox = bbox,
-          x_nudge = x_nudge,
-          y_nudge = y_nudge,
-          side = c("top", "bottom", "left", "right"),
-          dir = "out"
-        )
-    }
-
-    if ("sf" %in% class) {
-      return(sf_bbox_to_sf(bbox))
-    } else {
-      return(bbox)
-    }
   }
+  bbox <- as_bbox(x)
+  # Get adjusted aspect ratio
+  asp <- get_asp(asp = asp)
+
+  if (!is.null(asp) && is.numeric(asp)) {
+    # Get width/height
+    xdist <- sf_bbox_xdist(bbox) # Get width
+    ydist <- sf_bbox_ydist(bbox) # Get height
+
+    # Set default nudge to 0
+    x_nudge <- 0
+    y_nudge <- 0
+
+    # Compare adjust aspect ratio to bbox aspect ratio
+    if (asp >= sf_bbox_asp(bbox)) {
+      # adjust x
+      x_nudge <- (asp * ydist - xdist) / 2
+    } else {
+      # adjust y
+      y_nudge <- ((xdist / asp) - ydist) / 2
+    }
+
+    bbox <-
+      sf_bbox_shift(
+        bbox = bbox,
+        x_nudge = x_nudge,
+        y_nudge = y_nudge,
+        side = c("top", "bottom", "left", "right"),
+        dir = "out"
+      )
+  }
+
+  if ("sf" %in% class) {
+    return(sf_bbox_to_sf(bbox))
+  }
+
+  bbox
 }

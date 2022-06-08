@@ -21,7 +21,7 @@ bbox_filter <- function(data, bbox = NULL, join = NULL, crop = TRUE) {
     return(sf::st_filter(x = data, y = bbox_sf, join = join))
   }
 
-  return(sf::st_filter(x = data, y = bbox_sf))
+  sf::st_filter(x = data, y = bbox_sf)
 }
 
 #' Filter and/or trim data using an simple feature location
@@ -53,7 +53,7 @@ sf_filter <- function(data, location, join = NULL, trim = FALSE) {
     return(sf::st_filter(x = data, y = location, join = join))
   }
 
-  return(sf::st_filter(x = data, y = location))
+  sf::st_filter(x = data, y = location)
 }
 
 #' Filter, crop, or trim data to a location
@@ -159,5 +159,5 @@ location_filter <- function(data,
     suppressMessages(sf::sf_use_s2(TRUE))
   }
 
-  return(data)
+  data
 }

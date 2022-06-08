@@ -277,7 +277,7 @@ write_sf_gsheet <- function(data,
     return(data)
   }
 
-  return(join_sf_gsheet(data, ss = ss, sheet = sheet, key = key))
+  join_sf_gsheet(data, ss = ss, sheet = sheet, key = key)
 }
 
 #' @noRd

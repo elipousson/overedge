@@ -43,15 +43,13 @@ sf_to_df <- function(x,
   x <-
     st_transform_ext(x, crs = crs)
 
-  x <-
-    get_coords(
-      x,
-      geometry = geometry,
-      coords = coords,
-      keep_all = keep_all,
-      drop = TRUE
-    )
-  return(x)
+  get_coords(
+    x,
+    geometry = geometry,
+    coords = coords,
+    keep_all = keep_all,
+    drop = TRUE
+  )
 }
 
 #' @rdname sf_to_df
@@ -98,10 +96,7 @@ df_to_sf <- function(x,
       "coords_df" = coords_df_to_sf(x, coords = coords, crs = from_crs, into = into, sep = sep, rev = rev, remove_coords = remove_coords),
     )
 
-  x <-
-    st_transform_ext(x = x, crs = crs, class = "sf")
-
-  return(x)
+  st_transform_ext(x = x, crs = crs, class = "sf")
 }
 
 #' Convert a data frame with a geometry list column to an sf object
@@ -119,17 +114,14 @@ coords_df_to_sf <- function(x, coords = c("lon", "lat"), into = NULL, sep = ",",
 
   x <- format_coords(x, coords = coords)
 
-  x <-
-    sf::st_as_sf(
-      x,
-      coords = c(coords[[1]], coords[[2]]),
-      agr = "constant",
-      crs = crs,
-      stringsAsFactors = FALSE,
-      remove = remove_coords
-    )
-
-  return(x)
+  sf::st_as_sf(
+    x,
+    coords = c(coords[[1]], coords[[2]]),
+    agr = "constant",
+    crs = crs,
+    stringsAsFactors = FALSE,
+    remove = remove_coords
+  )
 }
 
 
@@ -177,7 +169,7 @@ check_coords <- function(x = NULL, coords = NULL, default = c("lon", "lat"), rev
     coords <- rev(coords)
   }
 
-  return(coords)
+  coords
 }
 
 #' @rdname sf_to_df
@@ -248,14 +240,14 @@ separate_coords <- function(x, coords, into, sep) {
       )
     )
 
-  return(x)
+  x
 }
 
 #' Convert a data frame with a geometry list column to an sf object
 #' @noRd
 #' @importFrom sf st_as_sf
 geometry_df_to_sf <- function(x) {
-  return(sf::st_as_sf(x))
+  sf::st_as_sf(x)
 }
 
 #' Convert a data frame with a wkt column to an sf object
@@ -264,7 +256,7 @@ geometry_df_to_sf <- function(x) {
 wkt_df_to_sf <- function(x, crs = NULL) {
   sf::st_geometry(x) <- sf::st_as_sfc(x$wkt, crs = crs)
   x$wkt <- NULL
-  return(sf::st_as_sf(x, crs = crs))
+  sf::st_as_sf(x, crs = crs)
 }
 
 #' Format coordinates as numeric values and remove missing coordinates from data frame
@@ -295,7 +287,7 @@ format_coords <- function(x, coords = c("lon", "lat")) {
     x <- x[!na_coords, ]
   }
 
-  return(x)
+  x
 }
 
 #' Use tidygeocoder to convert an address or data frame with an address column
@@ -353,5 +345,5 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), remo
     # FIXME: Add warning or error here if geocoding does not work
   }
 
-  return(x)
+  x
 }

@@ -90,7 +90,7 @@ st_buffer_ext <- function(x,
     }
   }
 
-  return(x)
+  x
 }
 
 #' Limit distance to the min/max values of dist_limits
@@ -150,5 +150,5 @@ st_edge <- function(x,
     x <- st_erase(x, x_dist)
   }
 
-  return(x)
+  x
 }

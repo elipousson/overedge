@@ -134,14 +134,11 @@ layer_neatline <- function(data = NULL,
     )
 
 
-  neatline <-
-    list(
-      limits,
-      expand,
-      hide_grid,
-      label_axes,
-      panel_theme
-    )
-
-  return(neatline)
+  list(
+    limits,
+    expand,
+    hide_grid,
+    label_axes,
+    panel_theme
+  )
 }

@@ -32,24 +32,23 @@ is_geom_type <- function(x, type = NULL, by_geometry = FALSE, ext = TRUE) {
   geom_type <-
     sf::st_geometry_type(x, by_geometry = by_geometry)
 
-  if (ext) {
-    geom_type <-
-      list(
-        "TYPES" = geom_type,
-        "POINTS" = sf::st_is(x, c("POINT", "MULTIPOINT")),
-        "POLYGONS" = sf::st_is(x, c("POLYGON", "MULTIPOLYGON")),
-        "LINESTRINGS" = sf::st_is(x, c("LINESTRING", "MULTILINESTRING")),
-        "COLLECTION" = sf::st_is(x, "GEOMETRYCOLLECTION"),
-        "OTHER" = sf::st_is(x, c(
-          "GEOMETRY", "CIRCULARSTRING", "COMPOUNDCURVE",
-          "CURVEPOLYGON", "MULTICURVE", "MULTISURFACE",
-          "CURVE", "SURFACE", "POLYHEDRALSURFACE",
-          "TIN", "TRIANGLE"
-        ))
-      )
+  if (!ext) {
+    return(geom_type)
   }
 
-  return(geom_type)
+  list(
+    "TYPES" = geom_type,
+    "POINTS" = sf::st_is(x, c("POINT", "MULTIPOINT")),
+    "POLYGONS" = sf::st_is(x, c("POLYGON", "MULTIPOLYGON")),
+    "LINESTRINGS" = sf::st_is(x, c("LINESTRING", "MULTILINESTRING")),
+    "COLLECTION" = sf::st_is(x, "GEOMETRYCOLLECTION"),
+    "OTHER" = sf::st_is(x, c(
+      "GEOMETRY", "CIRCULARSTRING", "COMPOUNDCURVE",
+      "CURVEPOLYGON", "MULTICURVE", "MULTISURFACE",
+      "CURVE", "SURFACE", "POLYHEDRALSURFACE",
+      "TIN", "TRIANGLE"
+    ))
+  )
 }
 
 #' @name is_point

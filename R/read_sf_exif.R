@@ -152,17 +152,16 @@ read_sf_exif <- function(path = NULL,
 
   data <- df_to_sf(data, crs = exif_crs)
 
-  if (!is.null(bbox)) {
-    data <-
-      get_location_data(
-        location = bbox,
-        data = data,
-        from_crs = exif_crs,
-        crs = sf::st_crs(bbox)
-      )
+  if (is.null(bbox)) {
+    return(data)
   }
 
-  return(data)
+  get_location_data(
+    location = bbox,
+    data = data,
+    from_crs = exif_crs,
+    crs = sf::st_crs(bbox)
+  )
 }
 
 #' Get filetype from the path (using most frequent type if multiple are at the path)

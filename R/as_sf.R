@@ -63,7 +63,7 @@ as_sf <- function(x, crs = NULL, sf_col = "geometry", ...) {
     sf::st_geometry(x) <- sf_col
   }
 
-  return(as_crs(x, crs = crs))
+  as_crs(x, crs = crs)
 }
 
 #' @name as_bbox
@@ -99,7 +99,7 @@ as_bbox <- function(x, crs = NULL, ...) {
       "other" = sf::st_bbox(as_sf(x), ...)
     )
 
-  return(sf_bbox_transform(bbox = x, crs = crs))
+  sf_bbox_transform(bbox = x, crs = crs)
 }
 
 
@@ -126,9 +126,7 @@ as_sfc <- function(x, crs = NULL, ...) {
       "other" = sf::st_geometry(as_sf(x, ...))
     )
 
-  x <- as_crs(x, crs = crs)
-
-  return(x)
+  as_crs(x, crs = crs)
 }
 
 #' Lightweight alternative to st_transform_ext that assumes x is a sf or sfc
@@ -228,7 +226,7 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
     }
   }
 
-  return(x)
+  x
 }
 
 #' Convert data to a different class
@@ -247,15 +245,12 @@ as_sf_class <- function(x, class = NULL, crs = NULL, ...) {
 
   class <- match.arg(class, c("sf", "sfc", "bbox", "list"))
 
-  x <-
-    switch(class,
-      "sf" = as_sf(x, crs = crs, ...),
-      "sfc" = as_sfc(x, crs = crs, ...),
-      "bbox" = as_bbox(x, crs = crs, ...),
-      "list" = as_sf_list(x, crs = crs, ...)
-    )
-
-  return(x)
+  switch(class,
+    "sf" = as_sf(x, crs = crs, ...),
+    "sfc" = as_sfc(x, crs = crs, ...),
+    "bbox" = as_bbox(x, crs = crs, ...),
+    "list" = as_sf_list(x, crs = crs, ...)
+  )
 }
 
 

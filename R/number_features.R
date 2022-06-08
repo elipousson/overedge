@@ -79,7 +79,7 @@ number_features <- function(data,
     data[[.id]] <- paste0(data[[.id]], suffix)
   }
 
-  return(data)
+  data
 }
 
 #' Adapted from https://stackoverflow.com/a/44274075
@@ -98,7 +98,7 @@ int_to_alph <- function(num, suffix = NULL, base = 26) {
     return(Recall(rest, base, suffix))
   }
 
-  return(suffix)
+  suffix
 }
 
 #' @name sort_features
@@ -193,12 +193,8 @@ sort_features <- function(data,
   }
 
   if (desc) {
-    data <-
-      dplyr::arrange(data, dplyr::desc(dplyr::across(dplyr::all_of(sort))), .by_group = by_group)
-  } else {
-    data <-
-      dplyr::arrange(data, dplyr::across(dplyr::all_of(sort)), .by_group = by_group)
+    return(dplyr::arrange(data, dplyr::desc(dplyr::across(dplyr::all_of(sort))), .by_group = by_group))
   }
 
-  return(data)
+  dplyr::arrange(data, dplyr::across(dplyr::all_of(sort)), .by_group = by_group)
 }

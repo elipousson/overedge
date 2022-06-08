@@ -74,10 +74,7 @@ get_coords <- function(x, coords = NULL, geometry = NULL, crs = NULL, keep_all =
     x <- sf::st_drop_geometry(x)
   }
 
-  x <-
-    relocate_sf_col(x)
-
-  return(x)
+  relocate_sf_col(x)
 }
 
 #' @name get_minmax
@@ -141,8 +138,5 @@ get_minmax <- function(x, crs = NULL, keep_all = TRUE, drop = TRUE) {
       minmax_df
     )
 
-  x <-
-    relocate_sf_col(x)
-
-  return(x)
+  relocate_sf_col(x)
 }

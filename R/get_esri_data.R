@@ -134,7 +134,7 @@ get_esri_data <- function(location = NULL,
     data <- janitor::clean_names(data)
   }
 
-  return(data)
+  data
 }
 
 #' Get multiple ArcGIS feature server layers

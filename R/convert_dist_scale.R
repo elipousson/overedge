@@ -71,12 +71,12 @@ convert_dist_scale <- function(dist = NULL,
     to = actual_unit
   )
 
-  if (!is.null(paper)) {
-    paper$actual_width <- dist[[1]]
-    paper$actual_height <- dist[[2]]
-    paper$scale <- scale$scale
-    return(paper)
-  } else {
+  if (is.null(paper)) {
     return(dist)
   }
+
+  paper$actual_width <- dist[[1]]
+  paper$actual_height <- dist[[2]]
+  paper$scale <- scale$scale
+  paper
 }

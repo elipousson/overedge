@@ -85,6 +85,5 @@ make_filename <- function(name = NULL,
     filename <- file.path(path, filename)
   }
 
-  return(filename)
+  filename
 }
-

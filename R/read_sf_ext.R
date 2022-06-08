@@ -126,10 +126,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
       filename %in% ls_pkg_cache(package) ~ file.path(get_data_dir(package = package), filename)
     )
 
-  # Read data from path
-  data <- read_sf_path(path = path, bbox = bbox, ...)
-
-  return(data)
+  read_sf_path(path = path, bbox = bbox, ...)
 }
 
 #' @name read_sf_path
@@ -155,13 +152,15 @@ read_sf_path <- function(path, bbox = NULL, ...) {
     data <- read_sf_query(path = path, bbox = bbox, ...)
   }
 
-  return(data)
+  data
 }
 
 
 #' @noRd
-read_sf_query <- function(path, bbox = NULL, query = NULL, table = NULL, name = NULL, name_col = NULL, wkt_filter = NULL, ...) {
-
+read_sf_query <- function(path, bbox = NULL, query = NULL, table = NULL, name = NULL, name_col = NULL, wkt_filter = NULL) {
+  if (is.null(query)) {
+    query <- NA
+  }
 
   if (!any(sapply(c(name, name_col), is.null))) {
     if (is.null(table)) {
@@ -173,28 +172,23 @@ read_sf_query <- function(path, bbox = NULL, query = NULL, table = NULL, name = 
     }
 
     query <-
-      glue::glue("select * from {table} where {name_col} = '{name}'")
-  }
-
-  if (is.null(query)) {
-    query <- NA
-  }
-
-  if (!is.null(bbox)) {
-    # Convert bbox to well known text
-    wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
+      as.character(glue::glue("select * from {table} where {name_col} = '{name}'"))
   }
 
   if (is.null(wkt_filter)) {
     wkt_filter <- character(0)
+
+    if (!is.null(bbox)) {
+      # Convert bbox to well known text
+      wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
+    }
   }
 
   # Read external, cached, or data at path with wkt_filter
   sf::read_sf(
     dsn = path,
     wkt_filter = wkt_filter,
-    query = query,
-    ...
+    query = query
   )
 }
 
@@ -229,9 +223,7 @@ read_sf_excel <- function(path, sheet = NULL, bbox = NULL, coords = c("lon", "la
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
 
-  data <- bbox_filter(data, bbox = bbox)
-
-  return(data)
+  bbox_filter(data, bbox = bbox)
 }
 
 #' @name read_sf_csv

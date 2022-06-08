@@ -137,9 +137,7 @@ get_location <- function(type,
     location <- relocate_sf_col(location)
   }
 
-  location <- as_sf_class(x = location, class = class, crs = crs, col = col)
-
-  return(location)
+  as_sf_class(x = location, class = class, crs = crs, col = col)
 }
 
 
@@ -167,11 +165,8 @@ location_union <- function(location = NULL, name_col = "name") {
       )
     )
 
-  location <-
-    dplyr::rename(
-      location,
-      "{name_col}" := name
-    )
-
-  return(location)
+  dplyr::rename(
+    location,
+    "{name_col}" := name
+  )
 }

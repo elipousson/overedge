@@ -50,7 +50,7 @@ make_location_data_list <- function(data = NULL, location = NULL, key = c("locat
     names(location_data_list) <- key
   }
 
-  return(location_data_list)
+  location_data_list
 }
 
 
@@ -110,7 +110,5 @@ get_location_data_list <- function(data = NULL, location = NULL, nm = NULL, ...)
       )
   }
 
-  location_data_list <- make_location_data_list(data, location)
-
-  return(location_data_list)
+  make_location_data_list(data, location)
 }

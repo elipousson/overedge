@@ -197,7 +197,7 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
       )
   }
 
-  return(x)
+  x
 }
 
 #' Set join function based on geometry type
@@ -210,13 +210,13 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
 #' @importFrom sf st_intersects st_nearest_feature
 #' @noRd
 set_join_by_geom_type <- function(x, join = NULL) {
-  if (is.null(join)) {
-    if (all(sapply(x, is_polygon) | sapply(x, is_multipolygon))) {
-      join <- sf::st_intersects
-    } else {
-      join <- sf::st_nearest_feature
-    }
+  if (!is.null(join)) {
+    return(join)
   }
 
-  return(join)
+  if (all(sapply(x, is_polygon) | sapply(x, is_multipolygon))) {
+    return(sf::st_intersects)
+  }
+
+  sf::st_nearest_feature
 }

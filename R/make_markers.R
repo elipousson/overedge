@@ -85,7 +85,5 @@ make_markers <- function(data,
     cli::cli_warn("Function passed to fn is being applied to grouped data.")
   }
 
-  data <- use_fn(data, fn)
-
-  return(data)
+  use_fn(data, fn)
 }

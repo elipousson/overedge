@@ -126,9 +126,7 @@ get_location_data <- function(location = NULL,
 
   data <- use_fn(data = data, fn = fn)
 
-  data <- as_sf_class(x = data, class = class, crs = crs, col = col)
-
-  return(data)
+  as_sf_class(x = data, class = class, crs = crs, col = col)
 }
 
 #' @name map_location_data
@@ -280,12 +278,12 @@ map_location_data <- function(location = NULL,
   }
 
   data <- purrr::discard(data, ~ nrow(.x) == 0)
-  data <- as_sf_class(x = data, class = class, crs = crs) #, ...)
+  data <- as_sf_class(x = data, class = class, crs = crs) # , ...)
 
   if (load && is_sf_list(data, named = TRUE)) {
     list2env(data, envir = .GlobalEnv)
   } else {
-    return(data)
+    data
   }
 }
 
@@ -332,5 +330,5 @@ get_index_param <- function(index = NULL,
     return(type)
   }
 
-  return(NULL)
+  NULL
 }

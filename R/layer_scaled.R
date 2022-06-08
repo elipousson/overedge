@@ -60,27 +60,24 @@ layer_scaled <-
 
     if (!clip && !fit_check) {
       cli::cli_abort("This data covers a larger area than can be displayed at this scale ({scale}) on this paper ({paper})")
-    } else {
-      center <- st_center(data, ext = TRUE)
-      scaled_dist <- max(c(scaled_paper$width_actual, scaled_paper$height_actual)) / 2
-
-      scaled_bbox <-
-        st_bbox_ext(
-          x = center$sf,
-          dist = scaled_dist,
-          asp = scaled_paper$asp,
-          unit = scaled_paper$unit_actual,
-          crs = crs
-        )
     }
 
-    scaled_layer <-
-      layer_neatline(
-        data = scaled_bbox,
-        color = NA,
-        bgcolor = "none",
-        expand = TRUE
+    center <- st_center(data, ext = TRUE)
+    scaled_dist <- max(c(scaled_paper$width_actual, scaled_paper$height_actual)) / 2
+
+    scaled_bbox <-
+      st_bbox_ext(
+        x = center$sf,
+        dist = scaled_dist,
+        asp = scaled_paper$asp,
+        unit = scaled_paper$unit_actual,
+        crs = crs
       )
 
-    return(scaled_layer)
+    layer_neatline(
+      data = scaled_bbox,
+      color = NA,
+      bgcolor = "none",
+      expand = TRUE
+    )
   }

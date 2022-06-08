@@ -99,7 +99,7 @@ get_wiki_data <- function(location,
     return(df_to_sf(resp$query$geosearch))
   }
 
-  return(resp$query$geosearch)
+  resp$query$geosearch
 }
 
 #' Make geospatial coordinate query

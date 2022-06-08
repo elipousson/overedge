@@ -27,10 +27,10 @@ is_class <- function(x, classes = NULL, null.ok = FALSE) {
 #' @export
 #' @md
 is_sf <- function(x, ext = FALSE, null.ok = FALSE) {
+  classes <- "sf"
+
   if (ext) {
-    classes <- c("sf", "sfc", "bbox")
-  } else {
-    classes <- "sf"
+    classes <- c(classes, "sfc", "bbox")
   }
 
   is_class(x, classes = classes, null.ok = null.ok)
@@ -86,8 +86,7 @@ is_sf_list <- function(x, named = FALSE, ext = FALSE, null.ok = FALSE) {
     return(is_sf_list)
   }
 
-  named <- rlang::is_named(x)
-  return(is_sf_list && named)
+  is_sf_list && rlang::is_named(x)
 }
 
 #' @name is_raster

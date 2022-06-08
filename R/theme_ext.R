@@ -143,11 +143,11 @@ theme_margin <- function(margin = "standard",
       )
     )
 
-  if (!is.null(method)) {
-    theme_method(margin_theme, method = method)
-  } else {
+  if (is.null(method)) {
     return(margin_theme)
   }
+
+  theme_method(margin_theme, method = method)
 }
 
 #' @rdname theme_ext
@@ -184,7 +184,6 @@ theme_legend <- function(position = NULL,
         margin <- NULL
       } else {
         # use a character margin as a margin type
-
         dist <- NULL
       }
 
@@ -204,11 +203,11 @@ theme_legend <- function(position = NULL,
       )
   }
 
-  if (!is.null(method)) {
-    theme_method(legend_theme, method = method)
-  } else {
+  if (is.null(method)) {
     return(legend_theme)
   }
+
+  theme_method(legend_theme, method = method)
 }
 
 #' Get position, justification, and box justification for an ggplot2 legend
@@ -310,12 +309,10 @@ make_legend_position <- function(justification = NULL, position = NULL, inset = 
 #' @importFrom ggplot2 element_blank element_rect
 make_legend_bg <- function(bgcolor = NULL) {
   if (is.null(bgcolor)) {
-    leg_bg <- ggplot2::element_blank()
-  } else {
-    leg_bg <- ggplot2::element_rect(fill = bgcolor)
+    return(ggplot2::element_blank())
   }
 
-  return(leg_bg)
+  ggplot2::element_rect(fill = bgcolor)
 }
 
 #' @param title Named list with title face and alignment (e.g. list(face = "Georgia", align = "left"))

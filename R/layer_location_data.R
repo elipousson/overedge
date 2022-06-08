@@ -176,5 +176,5 @@ layer_location_data <-
       params$direction <- "both"
     }
 
-    return(rlang::exec(geom, !!!params))
+    rlang::exec(geom, !!!params)
   }

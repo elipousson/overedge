@@ -72,7 +72,7 @@ count_features <- function(data = NULL,
     # Return boundary data geometry
   }
 
-  return(data)
+  data
 }
 
 #' @noRd

@@ -50,10 +50,10 @@ st_clip <- function(x,
         clip = clip
       )
 
-    x <- st_erase(x = x, y = clip, flip = flip)
+    return(st_erase(x = x, y = clip, flip = flip))
   }
 
-  return(x)
+  x
 }
 
 #' Make clip area from bounding box.

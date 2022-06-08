@@ -64,7 +64,7 @@ st_transform_ext <- function(x = NULL,
     x <- sf::st_transform(x = x, crs = crs)
   }
 
-  return(as_sf_class(x, class = class))
+  as_sf_class(x, class = class)
 }
 
 #' @name st_transform_omerc
