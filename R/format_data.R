@@ -105,25 +105,6 @@ format_data <- function(x,
   return(x)
 }
 
-#' @name str_trim_squish
-#' @rdname format_data
-#' @export
-#' @importFrom dplyr mutate across
-#' @importFrom stringr str_trim str_squish
-str_trim_squish <- function(x) {
-  dplyr::mutate(
-    x,
-    dplyr::across(
-      where(is.character),
-      ~ dplyr::if_else(
-        !is.null(.x) & !is.na(.x),
-        stringr::str_trim(stringr::str_squish(.x)),
-        .x
-      )
-    )
-  )
-}
-
 #' @name rename_with_xwalk
 #' @rdname format_data
 #' @param xwalk a data frame with two columns using the first column as name and
@@ -281,7 +262,9 @@ bind_block_col <- function(x,
 #' @rdname format_data
 #' @param boundary An sf object with a column named "name" or a list of sf
 #'   objects where all items in the list have a "name" column.
-#' @inheritParams set_join_by_geom_type
+#' @param join geometry predicate function; defaults to `NULL`, set to
+#'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
+#'   or [sf::st_nearest_feature] if key_list contains other types.
 #' @export
 #' @importFrom rlang has_name
 #' @importFrom dplyr rename select
