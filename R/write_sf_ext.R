@@ -21,11 +21,11 @@
 #'   "data.csv". Objects that are not simple features are written to RDS with
 #'   `readr::write_rds()`.
 #' @param data_dir cache data directory, defaults to
-#'   [rappdirs::user_cache_dir()] when data_dir is NULL. (only used
-#'   for write_sf_cache; default is used when cache = TRUE for write_sf_ext)
+#'   [rappdirs::user_cache_dir()] when data_dir is `NULL`. (only used
+#'   for write_sf_cache; default is used when `cache = TRUE` for write_sf_ext)
 #' @param overwrite Logical. Default `FALSE`. If `TRUE`, overwrite any existing
 #'   cached files that use the same file name.
-#' @param filetype File type to write and cache, Default: 'geojson' for
+#' @param filetype File type to write and cache, Default: `NULL` for
 #'   `write_sf_ext()`
 #' @param cache If `TRUE`, write `sf` object to file in cache directory;
 #'   defaults to `FALSE`.
@@ -44,7 +44,7 @@ write_sf_ext <- function(data,
                          prefix = NULL,
                          postfix = NULL,
                          filename = NULL,
-                         filetype = "geojson",
+                         filetype = NULL,
                          path = NULL,
                          cache = FALSE,
                          overwrite = FALSE) {
@@ -64,6 +64,7 @@ write_sf_ext <- function(data,
       )
     )
   } else {
+
     # If data is sf object, write or cache it
     filename <-
       make_filename(
@@ -76,13 +77,17 @@ write_sf_ext <- function(data,
         postfix = postfix
       )
 
+    if (is.null(filetype)) {
+      filetype <- str_extract_filetype(filenname)
+    }
+
     if (is.null(path)) {
       path <- filename
     } else {
       path <- file.path(path, filename)
     }
 
-    if (filetype == "geojson") {
+    if (!is.null(filetype) && ("geojson" %in% filetype)) {
       data <-
         st_transform_ext(
           data,
@@ -178,7 +183,7 @@ write_sf_gist <- function(data,
 
   path <- tempdir()
 
-  if (filetype == "geojson") {
+  if ("geojson" %in% filetype) {
     data <-
       st_transform_ext(
         data,
