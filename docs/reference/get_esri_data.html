@@ -89,15 +89,16 @@ is provided).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_esri_data</span><span class="op">(</span>
   location <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">url</span>,
-  dist <span class="op">=</span> <span class="cn">NULL</span>,
-  diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,
-  unit <span class="op">=</span> <span class="cn">NULL</span>,
-  asp <span class="op">=</span> <span class="cn">NULL</span>,
-  crs <span class="op">=</span> <span class="cn">NULL</span>,
+  dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.dist"</span><span class="op">)</span>,
+  diag_ratio <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.diag_ratio"</span><span class="op">)</span>,
+  unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.unit"</span><span class="op">)</span>,
+  asp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.asp"</span><span class="op">)</span>,
+  crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.crs"</span><span class="op">)</span>,
   where <span class="op">=</span> <span class="cn">NULL</span>,
   coords_col <span class="op">=</span> <span class="cn">NULL</span>,
   name_col <span class="op">=</span> <span class="cn">NULL</span>,
   name <span class="op">=</span> <span class="cn">NULL</span>,
+  clean_names <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -172,8 +173,7 @@ value (typically used for name values).</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

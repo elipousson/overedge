@@ -104,7 +104,8 @@ Details on SoQL queries are found in the Socrata API documentation
   geometry <span class="op">=</span> <span class="cn">FALSE</span>,
   token <span class="op">=</span> <span class="cn">NULL</span>,
   from_crs <span class="op">=</span> <span class="fl">4326</span>,
-  crs <span class="op">=</span> <span class="cn">NULL</span>
+  crs <span class="op">=</span> <span class="cn">NULL</span>,
+  clean_names <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
 
 <span class="fu">get_socrata_data</span><span class="op">(</span>
@@ -124,7 +125,8 @@ Details on SoQL queries are found in the Socrata API documentation
   geometry <span class="op">=</span> <span class="cn">FALSE</span>,
   token <span class="op">=</span> <span class="cn">NULL</span>,
   from_crs <span class="op">=</span> <span class="fl">4326</span>,
-  crs <span class="op">=</span> <span class="cn">NULL</span>
+  crs <span class="op">=</span> <span class="cn">NULL</span>,
+  clean_names <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -181,7 +183,8 @@ location names (e.g. County)</p></dd>
 <dt>token</dt>
 <dd><p>Access token or API Key; required to access data from Socrata.</p></dd>
 <dt>from_crs</dt>
-<dd><p>Coordinate reference system for source data.</p></dd>
+<dd><p>Coordinate reference system used to match the location CRS to
+the source data.</p></dd>
 <dt>crs</dt>
 <dd><p>Coordinate reference system to return.</p></dd>
 </dl></div>
@@ -210,8 +213,7 @@ location names (e.g. County)</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

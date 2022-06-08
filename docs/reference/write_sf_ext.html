@@ -87,7 +87,7 @@ with <code><a href="make_filename.html">make_filename()</a></code> and features 
   prefix <span class="op">=</span> <span class="cn">NULL</span>,
   postfix <span class="op">=</span> <span class="cn">NULL</span>,
   filename <span class="op">=</span> <span class="cn">NULL</span>,
-  filetype <span class="op">=</span> <span class="st">"geojson"</span>,
+  filetype <span class="op">=</span> <span class="cn">NULL</span>,
   path <span class="op">=</span> <span class="cn">NULL</span>,
   cache <span class="op">=</span> <span class="cn">FALSE</span>,
   overwrite <span class="op">=</span> <span class="cn">FALSE</span>
@@ -155,7 +155,7 @@ date/time prefix; defaults to <code>NULL</code>.</p></dd>
 "data.csv". Objects that are not simple features are written to RDS with
 <code><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">readr::write_rds()</a></code>.</p></dd>
 <dt>filetype</dt>
-<dd><p>File type to write and cache, Default: 'geojson' for
+<dd><p>File type to write and cache, Default: <code>NULL</code> for
 <code>write_sf_ext()</code></p></dd>
 <dt>path</dt>
 <dd><p>Path to file or data directory.</p></dd>
@@ -167,8 +167,8 @@ defaults to <code>FALSE</code>.</p></dd>
 cached files that use the same file name.</p></dd>
 <dt>data_dir</dt>
 <dd><p>cache data directory, defaults to
-<code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code> when data_dir is NULL. (only used
-for write_sf_cache; default is used when cache = TRUE for write_sf_ext)</p></dd>
+<code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code> when data_dir is <code>NULL</code>. (only used
+for write_sf_cache; default is used when <code>cache = TRUE</code> for write_sf_ext)</p></dd>
 <dt>description</dt>
 <dd><p>(character) Brief description of gist (optional)</p></dd>
 <dt>public</dt>
@@ -218,8 +218,7 @@ for each object in the list.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

@@ -85,18 +85,18 @@ set based on the name_col but values passed to mapping take precedence.</p>
   data <span class="op">=</span> <span class="cn">NULL</span>,
   geom <span class="op">=</span> <span class="st">"sf"</span>,
   location <span class="op">=</span> <span class="cn">NULL</span>,
-  dist <span class="op">=</span> <span class="cn">NULL</span>,
-  diag_ratio <span class="op">=</span> <span class="cn">NULL</span>,
-  unit <span class="op">=</span> <span class="st">"meter"</span>,
-  asp <span class="op">=</span> <span class="cn">NULL</span>,
-  package <span class="op">=</span> <span class="cn">NULL</span>,
-  filetype <span class="op">=</span> <span class="cn">NULL</span>,
+  dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.dist"</span><span class="op">)</span>,
+  diag_ratio <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.diag_ratio"</span><span class="op">)</span>,
+  unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.unit"</span>, default <span class="op">=</span> <span class="st">"meter"</span><span class="op">)</span>,
+  asp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.asp"</span><span class="op">)</span>,
+  package <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.data_package"</span><span class="op">)</span>,
+  filetype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.data_filetype"</span><span class="op">)</span>,
   fn <span class="op">=</span> <span class="cn">NULL</span>,
   geom_fn <span class="op">=</span> <span class="cn">NULL</span>,
   crop <span class="op">=</span> <span class="cn">TRUE</span>,
   trim <span class="op">=</span> <span class="cn">FALSE</span>,
-  from_crs <span class="op">=</span> <span class="cn">NULL</span>,
-  crs <span class="op">=</span> <span class="cn">NULL</span>,
+  from_crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.from_crs"</span><span class="op">)</span>,
+  crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"overedge.crs"</span><span class="op">)</span>,
   label_col <span class="op">=</span> <span class="st">"name"</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -155,10 +155,10 @@ provided. Default TRUE.</p></dd>
 This option ignores any <code>dist</code>, <code>diag_ratio</code>, or <code>asp</code> parameters. Default
 <code>FALSE</code>.</p></dd>
 <dt>from_crs</dt>
-<dd><p>Coordinate reference system of the data (used to convert the
-CRS of the bounding box used in reading/filtering data).</p></dd>
+<dd><p>Coordinate reference system used to match the location CRS to
+the source data.</p></dd>
 <dt>crs</dt>
-<dd><p>Coordinate reference system to return</p></dd>
+<dd><p>Coordinate reference system to return.</p></dd>
 <dt>label_col</dt>
 <dd><p>Column name or id for a column with the text or labels to
 pass to any text geom.</p></dd>
@@ -208,8 +208,7 @@ ggplot2 layer to use instead of one of the preset geom functions.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

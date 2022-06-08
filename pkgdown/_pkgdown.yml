@@ -64,6 +64,8 @@ reference:
   - '`ggsave_ext`'
   - '`make_filename`'
   - '`get_data_dir`'
+  - starts_with("str_")
+  - '`set_overedge_options`'
 - title: Unit and formatting utilities
   contents:
   - starts_with("is_dist")

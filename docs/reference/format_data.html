@@ -85,8 +85,6 @@
   sf_col <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
-<span class="fu">str_trim_squish</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-
 <span class="fu">rename_with_xwalk</span><span class="op">(</span><span class="va">x</span>, xwalk <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 
 <span class="fu">fix_date</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
@@ -105,7 +103,7 @@
   street_suffix <span class="op">=</span> <span class="st">"street_type"</span>
 <span class="op">)</span>
 
-<span class="fu">bind_boundary_col</span><span class="op">(</span><span class="va">x</span>, boundary <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">bind_boundary_col</span><span class="op">(</span><span class="va">x</span>, boundary <span class="op">=</span> <span class="cn">NULL</span>, join <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="fu">bind_units_col</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, units <span class="op">=</span> <span class="cn">NULL</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, keep_all <span class="op">=</span> <span class="cn">TRUE</span>, .id <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
@@ -147,6 +145,10 @@ dplyr::everything.</p></dd>
 <dt>boundary</dt>
 <dd><p>An sf object with a column named "name" or a list of sf
 objects where all items in the list have a "name" column.</p></dd>
+<dt>join</dt>
+<dd><p>geometry predicate function; defaults to <code>NULL</code>, set to
+<a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">sf::st_intersects</a> if key_list contains only POLYGON or MULTIPOLYGON objects
+or <a href="https://r-spatial.github.io/sf/reference/st_nearest_feature.html" class="external-link">sf::st_nearest_feature</a> if key_list contains other types.</p></dd>
 <dt>y</dt>
 <dd><p>Vector of numeric or units values to bind to x.</p></dd>
 <dt>units</dt>
@@ -171,7 +173,7 @@ named .id column.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     
 <ul><li><p>Applies <a href="https://stringr.tidyverse.org/reference/str_trim.html" class="external-link">stringr::str_squish</a> and <a href="https://stringr.tidyverse.org/reference/str_trim.html" class="external-link">stringr::str_trim</a> to all character
-columns (str_trim_squish)</p></li>
+columns (<a href="str_misc.html">str_trim_squish</a>)</p></li>
 <li><p>Optionally replaces all character values of "" with <code>NA</code> values</p></li>
 <li><p>Optionally corrects UNIX formatted dates with 1970-01-01 origins</p></li>
 <li><p>Optionally renames variables by passing a named list of variables</p></li>
@@ -201,8 +203,7 @@ rename_sf_col and relocate_sf_col</p><ul><li><p>rename_sf_col: Rename sf column.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
