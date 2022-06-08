@@ -76,6 +76,7 @@ get_location <- function(type,
         ...
       )
   }
+
   # If location is not provided
   if (is.null(location)) {
     if (!is.null(name)) {
