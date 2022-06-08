@@ -12,7 +12,8 @@ test_that("get_location_data works", {
     "sf"
   )
 
-  # FIXME: This class is broken
+  withr::with_package(package = "mapbaltimore", {
+
   expect_s3_class(
     get_location_data(
       location = get_location(
@@ -28,6 +29,7 @@ test_that("get_location_data works", {
     ),
     "sf"
   )
+  })
 
   expect_s3_class(
     get_location_data(

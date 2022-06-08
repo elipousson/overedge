@@ -63,7 +63,8 @@ Suggests:
     RSocrata,
     scales,
     testthat (>= 3.0.0),
-    tidygeocoder
+    tidygeocoder,
+    withr
 VignetteBuilder: 
     knitr
 Remotes:

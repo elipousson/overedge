@@ -122,23 +122,26 @@ test_that("get_location works", {
   #  "sf"
   # )
 
-  # Get mapbaltimore
-  expect_s3_class(
-    get_location(
-      type = "neighborhoods",
-      name = "Harwood",
-      package = "mapbaltimore"
-    ),
-    "sf"
-  )
+  withr::with_package(package = "mapbaltimore", {
 
-  expect_error(
-    get_location(
-      type = "neighborhoods",
-      name = "Harwood",
-      package = "mapbaltimore",
-      index = "This index is not a list."
-    ),
-    "is.list(index) || is.null(index) is not TRUE"
-  )
+    # Get mapbaltimore
+    expect_s3_class(
+      get_location(
+        type = "neighborhoods",
+        name = "Harwood",
+        package = "mapbaltimore"
+      ),
+      "sf"
+    )
+
+    expect_error(
+      get_location(
+        type = "neighborhoods",
+        name = "Harwood",
+        package = "mapbaltimore",
+        index = "This index is not a list."
+      ),
+      "is.list(index) || is.null(index) is not TRUE"
+    )
+  })
 })
