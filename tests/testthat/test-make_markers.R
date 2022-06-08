@@ -14,8 +14,14 @@ test_that("make_markers works", {
 
   marker_df <-
     data.frame(
-      name = c("Kenan Memorial Stadium", "Downtown Durham YMCA"),
-      address = c("104 Stadium Dr, Chapel Hill, NC 27514", "218 W Morgan St, Durham, NC 27701"),
+      name = c(
+        "Kenan Memorial Stadium",
+        "Downtown Durham YMCA"
+      ),
+      address = c(
+        "104 Stadium Dr, Chapel Hill, NC 27514",
+        "218 W Morgan St, Durham, NC 27701"
+      ),
       category = c("Sports", "Recreation")
     )
 
