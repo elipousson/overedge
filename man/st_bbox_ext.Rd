@@ -43,6 +43,8 @@ to units matching GDAL units for x; defaults to "meter"}
 \item{crs}{Coordinate reference system of bounding box to return}
 
 \item{class}{Class of object to return (sf or bbox); defaults to "bbox".}
+
+\item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{NULL}.}
 }
 \value{
 Class \code{bbox} object

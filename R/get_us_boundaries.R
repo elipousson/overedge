@@ -32,11 +32,10 @@ get_us_counties <- function(location = NULL,
   is_pkg_installed("USAboundariesData")
 
   package <- "USAboundariesData"
+  data <- "counties_contemporary_lores"
 
   if (historical) {
     data <- "counties_historical_lores"
-  } else {
-    data <- "counties_contemporary_lores"
   }
 
   counties <-

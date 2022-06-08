@@ -103,6 +103,8 @@ location names (e.g. County)}
 the source data.}
 
 \item{crs}{Coordinate reference system to return.}
+
+\item{clean_names}{If \code{TRUE}, pass data frame to \link[janitor:clean_names]{janitor::clean_names}; defaults to \code{TRUE}.}
 }
 \description{
 get_socrata_data is get_open_data with source_type set to "socrata" (the only

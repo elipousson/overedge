@@ -205,8 +205,8 @@ has_same_name_col <- function(x, col = NULL, prefix = "orig", ask = FALSE, quiet
 #' @name set_join_by_geom_type
 #' @inheritParams is_geom_type
 #' @param join geometry predicate function; defaults to `NULL`, set to
-#'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON objects
-#'   or [sf::st_nearest_feature] if key_list contains other types.
+#'   [sf::st_intersects] if key_list contains only POLYGON or MULTIPOLYGON
+#'   objects or [sf::st_nearest_feature] if key_list contains other types.
 #' @importFrom sf st_intersects st_nearest_feature
 #' @noRd
 set_join_by_geom_type <- function(x, join = NULL) {

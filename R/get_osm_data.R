@@ -30,6 +30,7 @@
 #'   "polygon" geometry.
 #' @inheritParams osmdata::opq
 #' @inheritParams osmdata::add_osm_features
+#' @inheritParams format_data
 #' @return A simple feature object with features using selected geometry type or
 #'   an `osmdata` object with features from all geometry types.
 #' @export
@@ -197,8 +198,7 @@ get_osm_boundaries <- function(location,
                                crs = NULL,
                                enclosing = "relation",
                                geometry = NULL,
-                               osmdata = FALSE,
-                               clean_names = TRUE) {
+                               osmdata = FALSE) {
   boundaries <-
     get_osm_data_enclosing(
       location = location,
@@ -218,9 +218,7 @@ get_osm_boundaries <- function(location,
       )
   }
 
-  if (clean_names) {
-    boundaries <- janitor::clean_names(boundaries)
-  }
+  boundaries <- janitor::clean_names(boundaries)
 
   boundaries_nm <- names(boundaries)
 
@@ -280,20 +278,12 @@ get_osm_data_features <- function(location = NULL,
       crs = osm_crs
     )
 
-  if (nodes_only) {
-    query <-
-      osmdata::opq(
-        bbox = bbox_osm,
-        nodes_only = nodes_only,
-        timeout = 90
-      )
-  } else {
-    query <-
-      osmdata::opq(
-        bbox = bbox_osm,
-        timeout = 90
-      )
-  }
+  query <-
+    osmdata::opq(
+      bbox = bbox_osm,
+      nodes_only = nodes_only,
+      timeout = 90
+    )
 
   if (is.null(features)) {
     query <-
@@ -377,8 +367,7 @@ get_osm_data_enclosing <- function(location,
 get_osm_data_geometry <- function(data,
                                   geometry = NULL,
                                   crs = NULL,
-                                  osmdata = FALSE,
-                                  clean_names = TRUE) {
+                                  osmdata = FALSE) {
   geometry <-
     match.arg(
       geometry,
@@ -402,10 +391,6 @@ get_osm_data_geometry <- function(data,
 
     if (!is.null(crs)) {
       data <- sf::st_transform(data, crs)
-    }
-
-    if (clean_names) {
-      data <- janitor::clean_names(data)
     }
 
     return(data)

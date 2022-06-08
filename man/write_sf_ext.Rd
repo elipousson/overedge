@@ -125,7 +125,8 @@ with \code{\link[=make_filename]{make_filename()}} and features including:
 \item If filetype is "csv" or the filename ends in ".csv" the file is
 automatically converted to a dataframe using \code{\link[=df_to_sf]{df_to_sf()}}; if file type is
 "gsheet" the file is converted and turned into a new Google Sheet document
-(if a Google account is authorized with the {googlesheets4} package using the \code{\link[=write_sf_gsheet]{write_sf_gsheet()}} function.).
+(if a Google account is authorized with the {googlesheets4} package using the
+\code{\link[=write_sf_gsheet]{write_sf_gsheet()}} function.).
 \item If cache is \code{TRUE} use write_sf_cache to cache file after writing a copy to
 the path provided.
 \item If data is a named sf list, pass the name of each sf object in the list to

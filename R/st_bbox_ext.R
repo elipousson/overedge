@@ -15,6 +15,7 @@
 #' @inheritParams get_asp
 #' @param crs Coordinate reference system of bounding box to return
 #' @param class Class of object to return (sf or bbox); defaults to "bbox".
+#' @param null.ok If `TRUE` and x is `NULL`, return `NULL`.
 #' @return Class `bbox` object
 #' @aliases st_bbox_adj
 #' @name st_bbox_ext
@@ -58,7 +59,8 @@ st_bbox_ext <- function(x = NULL,
         unit = unit
       )
 
-    # FIXME: Switching back to the regular st_transform function means that CRS cannot be an sf object for this function
+    # FIXME: Switching back to the regular st_transform function means that CRS
+    # cannot be an sf object for this function
     if (!is.null(crs)) {
       x <- st_transform_ext(x, crs = crs)
     }

@@ -54,13 +54,20 @@ parameter as a postfix.}
 
 \item{sep}{Separator character passed as the collapse parameter of \code{\link[=paste]{paste()}}.}
 
-\item{clean_names}{If \code{TRUE}, prefix, postfix, and string are all converted to
-snake case with \code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}.}
+\item{clean_names}{If \code{TRUE}, prefix, postfix, and string are all converted
+to snake case with \code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}.}
 
 \item{pad}{Single padding character added to digits in string; defaults to
 "0"}
 
 \item{width}{Minimum width of padded strings.}
+
+\item{post}{If \code{TRUE}, use the prefix string as a postfix; defaults to
+\code{FALSE}.}
+
+\item{dttm_sep}{Date time separator. Only used by \link{str_prefix} if prefix is
+"date" or "time" and not accessible when using \link{str_fix} or
+\link{make_filename}.}
 
 \item{side}{Side on which padding character is added (left, right or both).}
 
@@ -77,7 +84,7 @@ Functions include:
 \item str_prefix: Add a prefix or a postfix to a string
 \item str_add_filetype: Add file type to string
 \item str_remove_filetype: Remove file type from string
-\item str_extract_filetype: Extract filetype from string
+\item str_extract_filetype: Extract file type from string
 \item str_pad_digits: Pad a string with digits
 \item str_extract_digits: Extract digits from a string
 \item str_trim_squish: remove double-spaces, trailing and leading spaces

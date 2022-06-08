@@ -39,17 +39,16 @@ layer_scaled <-
 
     if (!is_sf(data, ext = TRUE)) {
       cli::cli_abort("data must be a bounding box or simple feature object.")
-    } else {
-      # Get adjusted bounding box for data
-      bbox <- st_bbox_ext(
-        x = data,
-        dist = dist,
-        diag_ratio = diag_ratio,
-        unit = unit,
-        asp = asp,
-        crs = crs
-      )
     }
+
+    bbox <- st_bbox_ext(
+      x = data,
+      dist = dist,
+      diag_ratio = diag_ratio,
+      unit = unit,
+      asp = asp,
+      crs = crs
+    )
 
     # Compare bbox xdist and ydist to actual dimensions
     ydist <- sf_bbox_ydist(bbox, units = TRUE)

@@ -6,9 +6,10 @@
 #'
 #' @param x A `sf`, `bbox`, `sfc`, `raster`, `sp`, or data frame object that can
 #'   be converted into a simple feature or bounding box object. [as_bbox()] can
-#'   also convert a vector with xmin, ymin, xmax, and ymax values. [as_sf_list()]
-#'   only supports sf objects or a data frames with a sf list column named
-#'   "data" (typically created by using [dplyr::group_nest()] on an sf object.
+#'   also convert a vector with xmin, ymin, xmax, and ymax values.
+#'   [as_sf_list()] only supports sf objects or a data frames with a sf list
+#'   column named "data" (typically created by using [dplyr::group_nest()] on an
+#'   sf object.
 #' @param sf_col A column name to use for the geometry column created by
 #'   [as_sf]; defaults to "geometry".
 #' @param crs Coordinate reference system for `sf`, `bbox`, `sfc` or `sf` list

@@ -8,7 +8,8 @@
 #' - If filetype is "csv" or the filename ends in ".csv" the file is
 #' automatically converted to a dataframe using [df_to_sf()]; if file type is
 #' "gsheet" the file is converted and turned into a new Google Sheet document
-#' (if a Google account is authorized with the {googlesheets4} package using the [write_sf_gsheet()] function.).
+#' (if a Google account is authorized with the {googlesheets4} package using the
+#' [write_sf_gsheet()] function.).
 #' - If cache is `TRUE` use write_sf_cache to cache file after writing a copy to
 #' the path provided.
 #' - If data is a named sf list, pass the name of each sf object in the list to
@@ -285,7 +286,11 @@ write_sf_gsheet <- function(data,
 #' @importFrom sf write_sf
 #' @importFrom stringr str_detect
 #' @importFrom cli cli_alert_success cli_abort
-write_sf_types <- function(data, filename = NULL, path = NULL, filetype = NULL, overwrite = TRUE) {
+write_sf_types <- function(data,
+                           filename = NULL,
+                           path = NULL,
+                           filetype = NULL,
+                           overwrite = TRUE) {
   if (!is.null(filename) && (filename %in% list.files(path))) {
     if (!overwrite) {
       overwrite <-
@@ -312,14 +317,17 @@ write_sf_types <- function(data, filename = NULL, path = NULL, filetype = NULL, 
   if (is_sf(data)) {
     cli::cli_alert_success("Writing {.file {path}}")
 
-    if (grepl(".csv$", path) | (!is.null(filetype) && (filetype == "csv"))) {
+    if (grepl(".csv$", path) |
+      (!is.null(filetype) && (filetype == "csv"))) {
       readr::write_csv(
         x = sf_to_df(data),
         file = path
       )
-    } else if (!is.null(filetype) && (filetype == "gsheet")) {
+    } else if (!is.null(filetype) &&
+      (filetype == "gsheet")) {
       write_sf_gsheet(data = data, filename = filename)
-    } else if (!is.null(filename) && !stringr::str_detect(path, paste0(filename, "$"))) {
+    } else if (!is.null(filename) &&
+      !stringr::str_detect(path, paste0(filename, "$"))) {
       sf::write_sf(
         obj = data,
         dsn = file.path(path, filename)

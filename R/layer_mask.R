@@ -85,5 +85,5 @@ layer_mask <- function(data = NULL,
       )
   }
 
-  return(list(mask_layer, neatline_layer))
+  list(mask_layer, neatline_layer)
 }

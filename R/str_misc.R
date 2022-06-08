@@ -9,7 +9,7 @@
 #' - str_prefix: Add a prefix or a postfix to a string
 #' - str_add_filetype: Add file type to string
 #' - str_remove_filetype: Remove file type from string
-#' - str_extract_filetype: Extract filetype from string
+#' - str_extract_filetype: Extract file type from string
 #' - str_pad_digits: Pad a string with digits
 #' - str_extract_digits: Extract digits from a string
 #' - str_trim_squish: remove double-spaces, trailing and leading spaces
@@ -43,8 +43,8 @@ str_trim_squish <- function(string) {
 #' @param postfix Character string or character vector to add to string
 #'   parameter as a postfix.
 #' @param sep Separator character passed as the collapse parameter of [paste()].
-#' @param clean_names If `TRUE`, prefix, postfix, and string are all converted to
-#'   snake case with [janitor::make_clean_names()].
+#' @param clean_names If `TRUE`, prefix, postfix, and string are all converted
+#'   to snake case with [janitor::make_clean_names()].
 #' @inheritParams str_pad_digits
 #' @name str_fix
 #' @rdname str_misc
@@ -74,6 +74,11 @@ str_fix <- function(prefix = NULL, string = NULL, postfix = NULL, sep = "_", cle
 
 #' @name str_prefix
 #' @rdname str_misc
+#' @param post If `TRUE`, use the prefix string as a postfix; defaults to
+#'   `FALSE`.
+#' @param dttm_sep Date time separator. Only used by [str_prefix] if prefix is
+#'   "date" or "time" and not accessible when using [str_fix] or
+#'   [make_filename].
 #' @export
 #' @importFrom janitor make_clean_names
 str_prefix <- function(string = NULL, prefix = NULL, sep = "_", clean_names = TRUE, post = FALSE, dttm_sep = "-") {
@@ -174,5 +179,5 @@ str_remove_filetype <- function(string, filetype = NULL) {
 #' @export
 #' @importFrom stringr str_extract
 str_extract_filetype <- function(string) {
-  tolower(stringr::str_extract(string, "(?<=\\.).+$"))
+  tolower(stringr::str_extract(string, "(?<=\\.)[:alnum:]+$(?!\\.)"))
 }

@@ -51,7 +51,7 @@ make_filename <- function(name = NULL,
     filename <- str_remove_filetype(filename, filetype)
   }
 
-  # If file name is not provided, generate filename from label, name, pad and width
+  # If file name is not provided, file name is based on label, name, pad and width
   if (is.null(filename)) {
     filename <-
       str_fix(
@@ -73,17 +73,15 @@ make_filename <- function(name = NULL,
       pad = NULL
     )
 
-  # Add the filetype to the filename
   filename <-
     str_add_filetype(
       filename,
       filetype
     )
 
-  # Add a path to the filename
-  if (!is.null(path)) {
-    filename <- file.path(path, filename)
+  if (is.null(path)) {
+    return(filename)
   }
 
-  filename
+  file.path(path, filename)
 }

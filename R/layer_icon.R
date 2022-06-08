@@ -85,19 +85,21 @@ layer_icon <- function(data = NULL,
       icon <- dplyr::filter(icon, stringr::str_detect(repo, source))
     }
 
-    if (nrow(icon) == 1) {
-      ggsvg::geom_point_svg(
-        data = data,
-        ggplot2::aes(x = lon, y = lat),
-        svg = icon$url,
-        color = color,
-        defaults = list(color = "black"),
-        ...
+    if (nrow(icon) != 1) {
+      cli::cli_abort(
+        "The provided parameters match more than one icon.
+        Provide the `px` and/or `source` to select a single icon."
       )
-    } else {
-      cli::cli_abort("The provided parameters match more than one icon.
-                        Provide the `px` and/or `source` to select a single icon.")
     }
+
+    ggsvg::geom_point_svg(
+      data = data,
+      ggplot2::aes(x = lon, y = lat),
+      svg = icon$url,
+      color = color,
+      defaults = list(color = "black"),
+      ...
+    )
   } else if (!is.null(svg)) {
     ggsvg::geom_point_svg(
       data = data,

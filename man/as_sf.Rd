@@ -18,9 +18,10 @@ as_sf_list(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE)
 \arguments{
 \item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can
 be converted into a simple feature or bounding box object. \code{\link[=as_bbox]{as_bbox()}} can
-also convert a vector with xmin, ymin, xmax, and ymax values. \code{\link[=as_sf_list]{as_sf_list()}}
-only supports sf objects or a data frames with a sf list column named
-"data" (typically created by using \code{\link[dplyr:group_nest]{dplyr::group_nest()}} on an sf object.}
+also convert a vector with xmin, ymin, xmax, and ymax values.
+\code{\link[=as_sf_list]{as_sf_list()}} only supports sf objects or a data frames with a sf list
+column named "data" (typically created by using \code{\link[dplyr:group_nest]{dplyr::group_nest()}} on an
+sf object.}
 
 \item{crs}{Coordinate reference system for \code{sf}, \code{bbox}, \code{sfc} or \code{sf} list
 object to return.}

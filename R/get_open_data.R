@@ -32,6 +32,7 @@
 #' @param from_crs Coordinate reference system used to match the location CRS to
 #'   the source data.
 #' @param crs Coordinate reference system to return.
+#' @inheritParams format_data
 #' @example examples/get_open_data.R
 #' @export
 #' @importFrom cli cli_abort

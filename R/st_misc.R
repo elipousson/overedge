@@ -64,20 +64,17 @@ st_center <- function(x,
   geometry <- as_sfc(x)
   centroid <- suppressWarnings(sf::st_centroid(geometry, ...))
 
-  if (ext) {
-    center <-
-      list(
-        "sfc" = centroid, # sfc based on centroid
-        "sf" = get_coords(as_sf(centroid), drop = FALSE), # sf based on centroid (won't include original cols)
-        "geometry" = geometry, # original geometry (sfc)
-        "x" = x, # original object
-        "crs" = sf::st_crs(x) # original crs
-      )
-  } else {
-    center <- centroid
+  if (!ext) {
+    return(centroid)
   }
 
-  return(center)
+  list(
+    "sfc" = centroid, # sfc based on centroid
+    "sf" = get_coords(as_sf(centroid), drop = FALSE), # sf based on centroid (won't include original cols)
+    "geometry" = geometry, # original geometry (sfc)
+    "x" = x, # original object
+    "crs" = sf::st_crs(x) # original crs
+  )
 }
 
 #' @rdname st_misc
@@ -138,19 +135,16 @@ st_circle <- function(x, scale = 1, inscribed = FALSE, dTolerance = 0) {
         dTolerance = dTolerance
       )
 
-    circle <- st_scale_rotate(circle, scale = scale)
-  } else {
-    radius <- sf_bbox_diagdist(as_bbox(x)) / 2
-    center <- st_center(x, ext = FALSE)
-
-    circle <-
-      st_buffer_ext(
-        x = center,
-        dist = radius * scale
-      )
+    return(st_scale_rotate(circle, scale = scale))
   }
 
-  return(circle)
+  radius <- sf_bbox_diagdist(as_bbox(x)) / 2
+  center <- st_center(x, ext = FALSE)
+
+  st_buffer_ext(
+    x = center,
+    dist = radius * scale
+  )
 }
 
 #' @rdname st_misc

@@ -148,21 +148,15 @@ read_sf_path <- function(path, bbox = NULL, ...) {
         "xls" = read_sf_excel(path = path, bbox = bbox, ...),
         "geojson" = read_sf_geojson(geojson = path, bbox = bbox, ...)
       )
-  } else {
-    data <- read_sf_query(path = path, bbox = bbox, ...)
   }
 
-  data
+  read_sf_query(path = path, bbox = bbox, ...)
 }
 
 
 #' @noRd
-read_sf_query <- function(path, bbox = NULL, query = NULL, table = NULL, name = NULL, name_col = NULL, wkt_filter = NULL) {
-  if (is.null(query)) {
-    query <- NA
-  }
-
-  if (!any(sapply(c(name, name_col), is.null))) {
+read_sf_query <- function(path, bbox = NULL, query = NA, table = NULL, name = NULL, name_col = NULL, wkt_filter = character(0), ...) {
+  if (!is.null(name) && !is.null(name_col)) {
     if (is.null(table)) {
       table <-
         stringr::str_extract(
@@ -172,23 +166,20 @@ read_sf_query <- function(path, bbox = NULL, query = NULL, table = NULL, name = 
     }
 
     query <-
-      as.character(glue::glue("select * from {table} where {name_col} = '{name}'"))
+      glue::glue("select * from {table} where {name_col} = '{name}'")
   }
 
-  if (is.null(wkt_filter)) {
-    wkt_filter <- character(0)
-
-    if (!is.null(bbox)) {
-      # Convert bbox to well known text
-      wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
-    }
+  if (!is.null(bbox)) {
+    # Convert bbox to well known text
+    wkt_filter <- sf_bbox_to_wkt(bbox = bbox)
   }
 
   # Read external, cached, or data at path with wkt_filter
   sf::read_sf(
     dsn = path,
     wkt_filter = wkt_filter,
-    query = query
+    query = query,
+    ...
   )
 }
 

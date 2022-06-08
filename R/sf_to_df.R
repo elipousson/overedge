@@ -340,7 +340,13 @@ address_to_sf <- function(x, address = "address", coords = c("lon", "lat"), remo
 
     # Convert address df to sf
     x <-
-      df_to_sf(x, coords = coords, from_crs = 4326, remove_coords = remove_coords, crs = crs)
+      df_to_sf(
+        x,
+        coords = coords,
+        from_crs = 4326,
+        remove_coords = remove_coords,
+        crs = crs
+      )
   } else {
     # FIXME: Add warning or error here if geocoding does not work
   }

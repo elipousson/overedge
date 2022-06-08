@@ -84,13 +84,9 @@ st_omerc <- function(x, rotate = 0) {
   coords <-
     get_coords(sf::st_union(x), keep_all = FALSE, crs = 4326)
 
-  proj <- "omerc"
-  datum <- "WGS84"
-  units <- "m"
-
   crs <-
     glue::glue(
-      "+proj={proj} +lat_0={coords$lat} +lonc={coords$lon} +datum={datum} +units={units} +no_defs +gamma={rotate}"
+      "+proj=omerc +lat_0={coords$lat} +lonc={coords$lon} +datum=WGS84 +units=m +no_defs +gamma={rotate}"
     )
 
   sf::st_transform(x = x, crs = crs)
