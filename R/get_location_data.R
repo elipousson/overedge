@@ -62,6 +62,7 @@ get_location_data <- function(location = NULL,
                               class = "sf",
                               label = NULL,
                               index = NULL,
+                              col = NULL,
                               ...) {
   if (!is.null(index) && is.list(index)) {
     # FIXME: This is set to work with 1 or 2 level list indices with naming conventions that match make_location_data_list
@@ -75,26 +76,20 @@ get_location_data <- function(location = NULL,
     data <- get_index_param(index, data = data)
   }
 
-  # FIXME: cannot pass the bbox via params but that is OK
-  # If a bounding box is not in the params this should pass NULL but I need to double-check
-  bbox <- NULL # params$bbox
-
-  if (!is.null(location)) {
-    if (is.character(location)) {
-      location <- as_sf(location)
-    }
-
-    # Get adjusted bounding box using any adjustment variables provided
-    bbox <-
-      st_bbox_ext(
-        x = location,
-        dist = dist,
-        diag_ratio = diag_ratio,
-        unit = unit,
-        asp = asp,
-        crs = from_crs
-      )
+  if (!is.null(location) && is.character(location)) {
+    location <- as_sf(location)
   }
+
+  # Get adjusted bounding box using any adjustment variables provided
+  bbox <-
+    st_bbox_ext(
+      x = location,
+      dist = dist,
+      diag_ratio = diag_ratio,
+      unit = unit,
+      asp = asp,
+      crs = from_crs
+    )
 
   if (is_bbox(data)) {
     data <- as_sf(data)
@@ -131,10 +126,7 @@ get_location_data <- function(location = NULL,
 
   data <- use_fn(data = data, fn = fn)
 
-  params <- rlang::list2(...)
-
-  # TODO: Is the following pattern of setting col based on ... and converting the class something that should be pulled into a separate utility function?
-  data <- as_sf_class(x = data, class = class, crs = crs, col = params$col)
+  data <- as_sf_class(x = data, class = class, crs = crs, col = col)
 
   return(data)
 }
