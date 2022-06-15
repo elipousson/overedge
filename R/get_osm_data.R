@@ -292,8 +292,6 @@ get_osm_data_features <- function(location = NULL,
         key = key,
         value = value
       )
-
-    geometry <- "points"
   } else if (is.character(features)) {
     query <-
       osmdata::add_osm_features(
