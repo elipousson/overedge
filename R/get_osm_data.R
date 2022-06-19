@@ -139,8 +139,8 @@ get_osm_id_type <- function(id, type = NULL, geometry = NULL) {
   if (is.null(type)) {
     if (has_osm_type_prefix(id)) {
       split_id <- stringr::str_split(id, pattern = "/")
-      type <- split_id[1]
-      id <- split_id[2]
+      type <- split_id[[1]][1]
+      id <- split_id[[1]][2]
     } else if (has_osm_type_name(id)) {
       type <- names(id)
     }
