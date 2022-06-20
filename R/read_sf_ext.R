@@ -12,9 +12,10 @@
 #' [read_sf_url] supports multiple types of urls:
 #'
 #'   - A MapServer or FeatureServer URL
-#'   - A URL for a GitHub gist with a single spatial data file
+#'   - A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)
 #'   - A URL for a spatial data file or a CSV file
 #'   - A Google Sheets URL
+#'   - A public Google Maps URL
 #'
 #' @details Reading data from a package:
 #'
@@ -105,7 +106,7 @@ read_sf_ext <- function(..., bbox = NULL) {
 #' @importFrom dplyr case_when
 read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ...) {
   stopifnot(
-    "The {.arg package} argument is missing." = !is.null(package)
+    "The `package` argument is missing." = !is.null(package)
   )
 
   is_pkg_installed(package)
@@ -135,7 +136,7 @@ read_sf_pkg <- function(data, bbox = NULL, package = NULL, filetype = "gpkg", ..
 #' @importFrom sf read_sf
 read_sf_path <- function(path, bbox = NULL, ...) {
   stopifnot(
-    fs::file_exists(path)
+    "No file exists at `path` provided." = fs::file_exists(path)
   )
 
   filetype <- str_extract_filetype(path)
@@ -230,19 +231,18 @@ read_sf_csv <- function(path, url = NULL, bbox = NULL, coords = c("lon", "lat"),
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, crs = NULL, from_crs = from_crs)
 
-  data <- bbox_filter(data, bbox = bbox)
-
-  return(data)
+  bbox_filter(data, bbox = bbox)
 }
 
 #' @name read_sf_url
 #' @rdname read_sf_ext
+#' @param zm_drop If `TRUE`, drop Z and/or M dimensions using [sf::st_zm]
 #' @export
 #' @importFrom rlang list2
 #' @importFrom stringr str_detect
 #' @importFrom sf read_sf st_zm
 #' @importFrom dplyr case_when
-read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
+read_sf_url <- function(url, bbox = NULL, coords = NULL, zm_drop = TRUE, ...) {
   params <- rlang::list2(...)
 
   stopifnot(
@@ -252,15 +252,16 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
   url_type <-
     dplyr::case_when(
       is_esri_url(url) ~ "esri",
-      is_gsheet(url) ~ "gsheet",
+      is_gsheet_url(url) ~ "gsheet",
       is_gist_url(url) ~ "gist",
+      is_gmap_url(url) ~ "gmap",
       stringr::str_detect(url, "\\.csv$") ~ "csv",
       stringr::str_detect(url, "\\.geojson$") ~ "geojson",
       !is.null(params$filename) ~ "download",
-      TRUE ~ "spatial_data"
+      TRUE ~ "other"
     )
 
-  if (url_type != "spatial_data") {
+  if (url_type != "other") {
     data <-
       switch(url_type,
         "esri" = get_esri_data(
@@ -277,6 +278,10 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
           sheet = params$sheet
         ),
         "gist" = read_sf_gist(
+          url = url,
+          bbox = bbox
+        ),
+        "gmap" = read_sf_gmap(
           url = url,
           bbox = bbox
         ),
@@ -314,12 +319,11 @@ read_sf_url <- function(url, bbox = NULL, coords = NULL, ...) {
     wkt_filter = params$wkt_filter
   )
 
-  data <- bbox_filter(data, bbox = bbox)
+  if (zm_drop) {
+    data <- sf::st_zm(data)
+  }
 
-  # FIXME: This should be documented and maybe should be the default but optional
-  data <- sf::st_zm(data)
-
-  return(data)
+  bbox_filter(data, bbox = bbox)
 }
 
 
@@ -342,7 +346,7 @@ read_sf_geojson <- function(url,
   }
 
   stopifnot(
-    !rlang::is_missing(url)
+    "geojson `url` or `path` is missing." = !rlang::is_missing(url)
   )
 
   data <-
@@ -350,9 +354,7 @@ read_sf_geojson <- function(url,
       geojsonsf::geojson_sf(geojson = url, ...)
     )
 
-  data <- bbox_filter(data, bbox = bbox)
-
-  return(data)
+  bbox_filter(data, bbox = bbox)
 }
 
 #' @name read_sf_gist
@@ -379,15 +381,81 @@ read_sf_gist <- function(url,
   )
 
   if (length(gist_data$files) > 1) {
-    cli::cli_alert_danger("read_sf_gist only uses the first file of any provided gist but this gist has more than one file.")
+    cli::cli_alert_danger("This gist has {length(gist_data$files)} files but only the first file is read.")
   }
 
   url <- gist_data$files[[1]]$raw_url
 
-  data <- read_sf_url(url = url, bbox = bbox, ...)
-
-  return(data)
+  read_sf_url(url = url, bbox = bbox, ...)
 }
+
+
+#' @name read_sf_gmap
+#' @rdname read_sf_ext
+#' @export
+#' @importFrom sf st_layers
+#' @importFrom purrr map_dfr
+#' @importFrom cli cli_progress_along
+read_sf_gmap <- function(url,
+                         bbox = NULL,
+                         zm_drop = TRUE) {
+  url <- make_gmap_url(url)
+
+  layers <-
+    sf::st_layers(
+      dsn = url
+    )
+
+  data <-
+    purrr::map_dfr(
+      cli::cli_progress_along(
+        layers[["name"]],
+        "Downloading map layers"
+      ),
+      function(x) {
+        sf::read_sf(
+          dsn = url,
+          layer = layers[["name"]][x]
+        )
+      }
+    )
+
+  is_pkg_installed("naniar")
+
+  data <-
+    naniar::replace_with_na(data, replace = list("Description" = ""))
+
+
+  if (zm_drop) {
+    data <- sf::st_zm(data)
+  }
+
+  bbox_filter(data, bbox = bbox)
+}
+
+#' Get map ID from url
+get_gmap_id <- function(url) {
+  stringr::str_extract(
+    url,
+    "(?<=mid=)[:graph:]+(?=&)"
+  )
+}
+
+#' Make a Google Maps KML format URL
+make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
+  stopifnot(
+    is_gmap_url(url)
+  )
+
+  if (!is.null(url)) {
+    mid <- get_gmap_id(url)
+  }
+
+  if (format == "kml") {
+    glue::glue("https://www.google.com/maps/d/u/0/kml?forcekml=1&mid={mid}")
+  }
+}
+
 
 #' @name read_sf_download
 #' @rdname read_sf_ext
@@ -446,9 +514,7 @@ read_sf_download <-
     }
 
 
-    data <- read_sf_path(path = destfile, bbox = bbox, ...)
-
-    return(data)
+    read_sf_path(path = destfile, bbox = bbox, ...)
   }
 
 #' @name read_sf_gsheet
@@ -475,9 +541,7 @@ read_sf_gsheet <- function(url, sheet = NULL, ss = NULL, bbox = NULL, coords = c
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
 
-  data <- bbox_filter(data, bbox = bbox)
-
-  return(data)
+  box_filter(data, bbox = bbox)
 }
 
 #' Join data from a Google Sheet to a simple feature object

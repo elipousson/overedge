@@ -18,21 +18,23 @@ is_esri_url <- function(x) {
 #' Is this a Google Sheets URL?
 #'
 #' @noRd
-is_gsheet <- function(x) {
-  grepl(
-    "^https://docs.google.com/spreadsheets/",
-    x
-  )
+is_gsheet_url <- function(x) {
+  grepl("^https://docs.google.com/spreadsheets/", x)
 }
-
 
 #' Is this a GitHub gist URL?
 #'
 #' @noRd
 is_gist_url <- function(x) {
-  grepl("https://gist.github.com/", x)
+  grepl("^https://gist.github.com/", x)
 }
 
+#' Is this a Google Maps URL?
+#'
+#' @noRd
+is_gmap_url <- function(x) {
+  grepl("^https://www.google.com/maps/", x)
+}
 
 #' Is this a unit class object?
 #'

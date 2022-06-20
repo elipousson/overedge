@@ -9,6 +9,7 @@
 \alias{read_sf_url}
 \alias{read_sf_geojson}
 \alias{read_sf_gist}
+\alias{read_sf_gmap}
 \alias{read_sf_download}
 \alias{read_sf_gsheet}
 \title{Read spatial data in a bounding box to a simple feature object}
@@ -42,11 +43,13 @@ read_sf_csv(
   ...
 )
 
-read_sf_url(url, bbox = NULL, coords = NULL, ...)
+read_sf_url(url, bbox = NULL, coords = NULL, zm_drop = TRUE, ...)
 
 read_sf_geojson(url, path = NULL, geojson = NULL, bbox = NULL, ...)
 
 read_sf_gist(url, id = NULL, bbox = NULL, ...)
+
+read_sf_gmap(url, bbox = NULL, zm_drop = TRUE)
 
 read_sf_download(
   url,
@@ -113,6 +116,8 @@ FeatureServer or MapServer to access with \code{\link[=get_esri_data]{get_esri_d
 (the default) only show the column types if they are not explicitly supplied
 by the \code{col_types} argument.}
 
+\item{zm_drop}{If \code{TRUE}, drop Z and/or M dimensions using \link[sf:st_zm]{sf::st_zm}}
+
 \item{geojson}{string or vector of GeoJSON, or a URL or file pointing to a geojson file}
 
 \item{id}{The name of a column in which to store the file path. This is
@@ -168,9 +173,10 @@ Reading data from a url:
 \link{read_sf_url} supports multiple types of urls:
 \itemize{
 \item A MapServer or FeatureServer URL
-\item A URL for a GitHub gist with a single spatial data file
+\item A URL for a GitHub gist with a single spatial data file (first file used if gist contains multiple)
 \item A URL for a spatial data file or a CSV file
 \item A Google Sheets URL
+\item A public Google Maps URL
 }
 
 Reading data from a package:
