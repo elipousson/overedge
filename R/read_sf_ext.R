@@ -543,7 +543,7 @@ read_sf_gsheet <- function(url, sheet = NULL, ss = NULL, bbox = NULL, coords = c
 
   data <- df_to_sf(data, coords = coords, geo = geo, address = address, from_crs = from_crs)
 
-  box_filter(data, bbox = bbox)
+  bbox_filter(data, bbox = bbox)
 }
 
 #' Join data from a Google Sheet to a simple feature object
