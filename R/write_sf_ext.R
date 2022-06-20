@@ -281,38 +281,20 @@ write_sf_gsheet <- function(data,
   join_sf_gsheet(data, ss = ss, sheet = sheet, key = key)
 }
 
+#' Write sf to a file of selected type
+#'
 #' @noRd
 #' @importFrom readr write_csv write_rds
 #' @importFrom sf write_sf
 #' @importFrom stringr str_detect
-#' @importFrom cli cli_alert_success cli_abort
+#' @importFrom cli cli_alert_success
 write_sf_types <- function(data,
                            filename = NULL,
                            path = NULL,
                            filetype = NULL,
                            overwrite = TRUE) {
-  if (!is.null(filename) && (filename %in% list.files(path))) {
-    if (!overwrite) {
-      overwrite <-
-        cli_yeah(
-          "A file with the same name exists in {.file {path}}
-        Do you want to overwrite {.val {filename}}?"
-        )
-    }
 
-    if (overwrite) {
-      cli::cli_alert_success("Removing existing cached data.")
-      # FIXME: Add check to make sure path ends in a filename
-
-      if (!stringr::str_detect(path, paste0(filename, "$"))) {
-        file.remove(file.path(path, filename))
-      } else {
-        file.remove(path)
-      }
-    } else {
-      cli::cli_abort("{.file {filename}} was not overwritten.")
-    }
-  }
+  check_file_overwrite(filename = filename, path = path, overwrite = overwrite)
 
   if (is_sf(data)) {
     cli::cli_alert_success("Writing {.file {path}}")
@@ -356,3 +338,34 @@ write_sf_types <- function(data,
     )
   }
 }
+
+#' Check before overwriting file
+#'
+#' @noRd
+#' @importFrom cli cli_abort cli_alert_success
+#' @importFrom stringr str_detect
+check_file_overwrite <- function(filename = NULL,
+                           path = NULL,
+                           overwrite = TRUE) {
+  if (!is.null(filename) && (filename %in% list.files(path))) {
+    if (!overwrite) {
+      overwrite <-
+        cli_yeah(
+          "A file with the same name exists in {.file {path}}
+        Do you want to overwrite {.val {filename}}?"
+        )
+    }
+
+    if (!overwrite) {
+      cli::cli_abort("{.file {filename}} was not overwritten.")
+    }
+
+    cli::cli_alert_success("Removing {.val {filename}} from {.file {path}}")
+    if (!stringr::str_detect(path, paste0(filename, "$"))) {
+      file.remove(file.path(path, filename))
+    } else {
+      file.remove(path)
+    }
+  }
+}
+
