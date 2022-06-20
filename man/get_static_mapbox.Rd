@@ -18,7 +18,8 @@ get_static_mapbox(
   width = 600,
   height = 400,
   bearing = NULL,
-  pitch = NULL
+  pitch = NULL,
+  ...
 )
 
 get_osm_static_mapbox(
@@ -59,7 +60,8 @@ get_location_static_mapbox(
   width = 600,
   height = 400,
   bearing = NULL,
-  pitch = NULL
+  pitch = NULL,
+  ...
 )
 }
 \arguments{
@@ -99,6 +101,9 @@ longitude, latitude, and zoom are all specified.}
 \item{pitch, bearing}{The map pitch and bearing; defaults to \code{NULL}. pitch can
 range from 0 to 60, and bearing from 0 to 360.}
 
+\item{...}{Additional parameters passed to \link{get_location_data} if type
+is character and index is \code{NULL}.}
+
 \item{id}{OpenStreetMap feature id}
 
 \item{key}{Feature key for overpass API query.}
@@ -106,9 +111,6 @@ range from 0 to 60, and bearing from 0 to 360.}
 \item{level}{administrative level (admin_level) of boundary to return;
 defaults to \code{NULL}. See \url{https://wiki.openstreetmap.org/wiki/Key:admin_level}
 for more information. Only used for \link{get_osm_boundaries}.}
-
-\item{...}{Additional parameters passed to \link{get_location_data} if type
-is character and index is \code{NULL}.}
 
 \item{type}{For get_osm_static_mapbox, type of feature with id; ("node", "way", or "relation"); for get_location_static_mapbox, type of location (see \code{\link[=get_location]{get_location()}} for details.}
 
