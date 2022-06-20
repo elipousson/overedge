@@ -110,7 +110,7 @@ for more information. Only used for \link{get_osm_boundaries}.}
 \item{...}{Additional parameters passed to \link{get_location_data} if type
 is character and index is \code{NULL}.}
 
-\item{type}{type of feature with id; "node", "way", or "relation"}
+\item{type}{For get_osm_static_mapbox, type of feature with id; ("node", "way", or "relation"); for get_location_static_mapbox, type of location (see \code{\link[=get_location]{get_location()}} for details.}
 
 \item{name}{Location name to return.}
 

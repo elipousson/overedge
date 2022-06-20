@@ -28,7 +28,7 @@ object is provided,the "drop" geometry option is not supported.'><!-- mathjax --
     
     <a class="navbar-brand me-2" href="../index.html">overedge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,9 @@ object is provided,the "drop" geometry option is not supported.'><!-- mathjax --
     <a class="dropdown-item" href="../articles/working-sf-bbox.html">Working with simple feature and bounding box objects</a>
     <a class="dropdown-item" href="../articles/working-sf-lists.html">Working with lists of simple feature objects</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -175,23 +178,60 @@ data frame.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_sf_ext.html">read_sf_path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,     type, fid_column_name, drivers, wkt_filter, promote_to_multi,     int64_as_string, dsn_exists, dsn_isdb, getOption("width")):</span> CHAR() can only be applied to a 'CHARSXP', not a 'NULL'</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Convert a sf object to a data frame</span></span>
 <span class="r-in"><span class="va">nc_df</span> <span class="op">&lt;-</span> <span class="fu">sf_to_df</span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is_sf_list(x, ext = TRUE):</span> object 'nc' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Convert a data frame to a sf object</span></span>
 <span class="r-in"><span class="fu">df_to_sf</span><span class="op">(</span><span class="va">nc_df</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, remove_coords <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is_class(x, classes = classes, null.ok = null.ok):</span> object 'nc_df' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Attribute-geometry relationship: 14 constant, 0 aggregate, 0 identity</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.05976 ymin: 34.07684 xmax: -75.80916 ymax: 36.49119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     AREA PERIMETER CNTY_ CNTY_ID NAME  FIPS  FIPSNO CRESS_ID BIR74 SID74 NWBIR74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 0.114      1.44  <span style="text-decoration: underline;">1</span>825    <span style="text-decoration: underline;">1</span>825 Ashe  37009  <span style="text-decoration: underline;">37</span>009        5  <span style="text-decoration: underline;">1</span>091     1      10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 0.061      1.23  <span style="text-decoration: underline;">1</span>827    <span style="text-decoration: underline;">1</span>827 Alle… 37005  <span style="text-decoration: underline;">37</span>005        3   487     0      10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 0.143      1.63  <span style="text-decoration: underline;">1</span>828    <span style="text-decoration: underline;">1</span>828 Surry 37171  <span style="text-decoration: underline;">37</span>171       86  <span style="text-decoration: underline;">3</span>188     5     208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 0.07       2.97  <span style="text-decoration: underline;">1</span>831    <span style="text-decoration: underline;">1</span>831 Curr… 37053  <span style="text-decoration: underline;">37</span>053       27   508     1     123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 0.153      2.21  <span style="text-decoration: underline;">1</span>832    <span style="text-decoration: underline;">1</span>832 Nort… 37131  <span style="text-decoration: underline;">37</span>131       66  <span style="text-decoration: underline;">1</span>421     9    <span style="text-decoration: underline;">1</span>066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 0.097      1.67  <span style="text-decoration: underline;">1</span>833    <span style="text-decoration: underline;">1</span>833 Hert… 37091  <span style="text-decoration: underline;">37</span>091       46  <span style="text-decoration: underline;">1</span>452     7     954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 0.062      1.55  <span style="text-decoration: underline;">1</span>834    <span style="text-decoration: underline;">1</span>834 Camd… 37029  <span style="text-decoration: underline;">37</span>029       15   286     0     115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 0.091      1.28  <span style="text-decoration: underline;">1</span>835    <span style="text-decoration: underline;">1</span>835 Gates 37073  <span style="text-decoration: underline;">37</span>073       37   420     0     254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 0.118      1.42  <span style="text-decoration: underline;">1</span>836    <span style="text-decoration: underline;">1</span>836 Warr… 37185  <span style="text-decoration: underline;">37</span>185       93   968     4     748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 0.124      1.43  <span style="text-decoration: underline;">1</span>837    <span style="text-decoration: underline;">1</span>837 Stok… 37169  <span style="text-decoration: underline;">37</span>169       85  <span style="text-decoration: underline;">1</span>612     1     160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows, and 4 more variables: BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   NWBIR79 &lt;dbl&gt;, geometry &lt;POINT [°]&gt;</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># If lon and lat values are present in a single column, use the into parameter</span></span>
 <span class="r-in"><span class="co"># to split the values back into separate columns</span></span>
 <span class="r-in"><span class="va">nc_df</span><span class="op">$</span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">nc_df</span><span class="op">$</span><span class="va">lon</span>, <span class="va">nc_df</span><span class="op">$</span><span class="va">lat</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in paste(nc_df$lon, nc_df$lat, sep = ","):</span> object 'nc_df' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">df_to_sf</span><span class="op">(</span><span class="va">nc_df</span>, coords <span class="op">=</span> <span class="st">"xy"</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is_class(x, classes = classes, null.ok = null.ok):</span> object 'nc_df' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 16 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Attribute-geometry relationship: 16 constant, 0 aggregate, 0 identity</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.05976 ymin: 34.07684 xmax: -75.80916 ymax: 36.49119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 17</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     AREA PERIMETER CNTY_ CNTY_ID NAME  FIPS  FIPSNO CRESS_ID BIR74 SID74 NWBIR74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 0.114      1.44  <span style="text-decoration: underline;">1</span>825    <span style="text-decoration: underline;">1</span>825 Ashe  37009  <span style="text-decoration: underline;">37</span>009        5  <span style="text-decoration: underline;">1</span>091     1      10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 0.061      1.23  <span style="text-decoration: underline;">1</span>827    <span style="text-decoration: underline;">1</span>827 Alle… 37005  <span style="text-decoration: underline;">37</span>005        3   487     0      10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 0.143      1.63  <span style="text-decoration: underline;">1</span>828    <span style="text-decoration: underline;">1</span>828 Surry 37171  <span style="text-decoration: underline;">37</span>171       86  <span style="text-decoration: underline;">3</span>188     5     208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 0.07       2.97  <span style="text-decoration: underline;">1</span>831    <span style="text-decoration: underline;">1</span>831 Curr… 37053  <span style="text-decoration: underline;">37</span>053       27   508     1     123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 0.153      2.21  <span style="text-decoration: underline;">1</span>832    <span style="text-decoration: underline;">1</span>832 Nort… 37131  <span style="text-decoration: underline;">37</span>131       66  <span style="text-decoration: underline;">1</span>421     9    <span style="text-decoration: underline;">1</span>066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 0.097      1.67  <span style="text-decoration: underline;">1</span>833    <span style="text-decoration: underline;">1</span>833 Hert… 37091  <span style="text-decoration: underline;">37</span>091       46  <span style="text-decoration: underline;">1</span>452     7     954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 0.062      1.55  <span style="text-decoration: underline;">1</span>834    <span style="text-decoration: underline;">1</span>834 Camd… 37029  <span style="text-decoration: underline;">37</span>029       15   286     0     115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 0.091      1.28  <span style="text-decoration: underline;">1</span>835    <span style="text-decoration: underline;">1</span>835 Gates 37073  <span style="text-decoration: underline;">37</span>073       37   420     0     254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 0.118      1.42  <span style="text-decoration: underline;">1</span>836    <span style="text-decoration: underline;">1</span>836 Warr… 37185  <span style="text-decoration: underline;">37</span>185       93   968     4     748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 0.124      1.43  <span style="text-decoration: underline;">1</span>837    <span style="text-decoration: underline;">1</span>837 Stok… 37169  <span style="text-decoration: underline;">37</span>169       85  <span style="text-decoration: underline;">1</span>612     1     160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows, and 6 more variables: BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   NWBIR79 &lt;dbl&gt;, lon &lt;dbl&gt;, lat &lt;dbl&gt;, geometry &lt;POINT [°]&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -203,7 +243,7 @@ data frame.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

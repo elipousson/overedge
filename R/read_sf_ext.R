@@ -434,6 +434,7 @@ read_sf_gmap <- function(url,
 }
 
 #' Get map ID from url
+#' @noRd
 get_gmap_id <- function(url) {
   stringr::str_extract(
     url,
@@ -442,6 +443,7 @@ get_gmap_id <- function(url) {
 }
 
 #' Make a Google Maps KML format URL
+#' @noRd
 make_gmap_url <- function(url = NULL, mid = NULL, format = "kml") {
   stopifnot(
     is_gmap_url(url)

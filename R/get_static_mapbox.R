@@ -7,7 +7,7 @@
 #' [get_osm_data()], [get_osm_id()], or [get_osm_boundaries()] functions.
 #'
 #' @name get_static_mapbox
-#' @type For get_osm_static_mapbox, type of feature with id; ("node", "way", or "relation"); for get_location_static_mapbox, type of location (see [get_location()] for details.
+#' @param type For get_osm_static_mapbox, type of feature with id; ("node", "way", or "relation"); for get_location_static_mapbox, type of location (see [get_location()] for details.
 #' @param dist Buffer distance passed to buffer_dist parameter of [mapboxapi::static_mapbox()].
 #' @param unit Unit of `dist` argument. `dist` is converted from `unit` to meters for [mapboxapi::static_mapbox()].
 #' @param overlay_location If `TRUE`, use the location (or OpenStreetMap feature) as the overlay_sf parameter.
