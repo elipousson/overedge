@@ -64,7 +64,23 @@ cli_yeah <- function(x,
 
 #' @noRd
 #' @importFrom cli cli_alert
-cli_ask <- function(x, prompt = ">> ") {
-  cli::cli_alert(x)
+cli_ask <- function(text, prompt = ">> ", ..., .envir = parent.frame()) {
+  cli::cli_alert(text, ..., .envir = .envir)
   readline(prompt = prompt)
+}
+
+
+
+#' @noRd
+cli_abort_ifnot <- function(..., condition = FALSE, x) {
+  if (!is_logical(condition)) {
+    condition <- as_function(condition)
+    condition <- condition(x)
+  }
+
+  if (is_logical(condition) && !condition) {
+    cli_abort(...)
+  }
+
+  invisible(return(NULL))
 }

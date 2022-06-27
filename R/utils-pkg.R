@@ -66,6 +66,21 @@ set_overedge_options <- function(dist = NULL,
   }
 }
 
+#' @noRd
+ls_pkg_data <- function(pkg, envir = .GlobalEnv) {
+  utils::data(package = pkg, envir = envir)$results[, "Item"]
+}
+
+#' @noRd
+ls_pkg_extdata <- function(pkg) {
+  list.files(system.file("extdata", package = pkg))
+}
+
+#' @noRd
+ls_pkg_cache <- function(pkg) {
+  list.files(get_data_dir(path = NULL, package = pkg))
+}
+
 #' Is this package installed?
 #'
 #' @param pkg Name of a package.
@@ -107,17 +122,3 @@ is_geom_pkg_installed <- function(geom) {
   }
 }
 
-#' @noRd
-ls_pkg_data <- function(pkg, envir = .GlobalEnv) {
-  utils::data(package = pkg, envir = envir)$results[, "Item"]
-}
-
-#' @noRd
-ls_pkg_extdata <- function(pkg) {
-  list.files(system.file("extdata", package = pkg))
-}
-
-#' @noRd
-ls_pkg_cache <- function(pkg) {
-  list.files(get_data_dir(path = NULL, package = pkg))
-}
