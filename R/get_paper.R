@@ -400,51 +400,42 @@ add_margin_to_paper <- function(paper = NULL, margin = NULL) {
 #' @example examples/get_asp.R
 #' @rdname get_asp
 #' @export
+#' @importFrom stringr str_extract
 get_asp <- function(asp = NULL,
                     paper = NULL,
                     orientation = NULL,
                     margin = NULL,
                     unit = NULL,
-                    block_asp = FALSE) {
+                    block_asp = FALSE,
+                    null.ok = TRUE) {
+  type <-
+    dplyr::case_when(
+      is.null(asp) && is.null(paper) && null.ok ~ "null",
+      is.numeric(asp) ~ "num",
+      is.character(asp) && grepl(":", asp) ~ "char",
+      !is.null(paper) && is.null(asp) && !block_asp ~ "paper",
+      !is.null(paper) && is.null(asp) && block_asp ~ "block",
+      TRUE ~ "other"
+    )
 
-  dplyr::case_when(
-    is.null(paper) ~ get_char_asp(asp = asp),
-    !is.null(paper) && is.null(asp) && !block_asp ~ get_paper(paper = paper, orientation = orientation)[["asp"]],
-    !is.null(paper) && is.null(asp) && block_asp ~ get_block_asp(paper = get_paper(paper = paper, orientation = orientation), margin = margin, unit = unit),
+  stopifnot(
+    !is.na(type),
+    type != "other"
+  )
+
+  switch(type,
+    "null" = asp,
+    "num" = asp,
+    "char" = as.numeric(stringr::str_extract(asp, ".+(?=:)")) / as.numeric(stringr::str_extract(asp, "(?<=:).+")),
+    "paper" = get_paper(paper = paper, orientation = orientation)[["asp"]],
+    "block" = get_block_asp(paper = get_paper(paper = paper, orientation = orientation), margin = margin, unit = unit)
   )
 }
 
 #' @noRd
-#' @importFrom stringr str_extract
-#' @importFrom cli cli_abort
-get_char_asp <- function(asp) {
-
-
-  cli_abort_ifnot(
-    "{.field {asp}} must be numeric (e.g. {.val 0.666}) or a width to height ratio (e.g. {.val {'4:6'}}) as a string.",
-    condition = (!is.numeric(asp) | is.character(asp) | is.null(asp))
-  )
-
-
-  if (is.numeric(asp) | is.null(asp)) {
-    return(asp)
-  }
-
-  if (is.character(asp) && grepl(":", asp)) {
-    # If asp is provided as character string (e.g. "16:9") convert to a numeric
-    # ratio
-    width <- as.numeric(stringr::str_extract(asp, ".+(?=:)"))
-    height <- as.numeric(stringr::str_extract(asp, "(?<=:).+"))
-
-    return(width / height)
-  }
-}
-
-#' @noRd
-#' @importFrom cli cli_abort
 get_block_asp <- function(paper, orientation = NULL, margin = NULL, unit = NULL) {
   cli_abort_ifnot(
-    "{.arg paper} must be a data frame object"
+    "{.arg paper} must be a data frame object",
     condition = is.data.frame(paper)
   )
 

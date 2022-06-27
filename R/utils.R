@@ -1,5 +1,7 @@
 
-.onLoad <- function(libname, pkgname) {
+.onLoad <- function(lib, pkg) {
+  run_on_load()
+
   utils::data(
     list = c(
       "us_counties", "us_states",
@@ -8,7 +10,7 @@
       "dist_unit_options", "dist_units",
       "area_unit_options"
     ),
-    package = pkgname,
+    package = pkg,
     envir = parent.env(environment())
   )
 }
