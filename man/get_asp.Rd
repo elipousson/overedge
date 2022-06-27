@@ -10,7 +10,8 @@ get_asp(
   orientation = NULL,
   margin = NULL,
   unit = NULL,
-  block_asp = FALSE
+  block_asp = FALSE,
+  null.ok = TRUE
 )
 }
 \arguments{

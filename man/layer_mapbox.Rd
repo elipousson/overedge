@@ -49,7 +49,7 @@ without modification.}
 \item{style_url}{Map style url used to fill style_id and username parameters,
 Default: "mapbox://styles/mapbox/satellite-streets-v11"}
 
-\item{style_id}{A style ID (required if style_url is NULL).}
+\item{style_id}{A style ID (required if style_url is \code{NULL}).}
 
 \item{username}{A Mapbox username (required if \code{style_url = NULL}).}
 
@@ -59,7 +59,8 @@ precededed by \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} to allow use as a 
 \item{scale}{ratio to scale the output image; \code{scale = 1} will return the
 largest possible image. defaults to 0.5}
 
-\item{scaling_factor}{The scaling factor of the tiles; either \verb{"1x"`` (the default) or }"2x"`}
+\item{scaling_factor}{The scaling factor of the tiles; either \code{"1x"}
+(the default) or \code{"2x"}}
 
 \item{attribution}{Controls whether there is attribution on the image.
 Defaults to \code{TRUE}. If \code{FALSE}, the watermarked attribution is removed from

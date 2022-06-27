@@ -88,10 +88,13 @@ Spatial data that are too large will trigger an error, and should be added
 to the style in Mapbox Studio instead.}
 
 \item{overlay_style}{A named list of vectors specifying how to style the sf
-overlay. Possible names are "stroke", "stroke-width", "stroke-opacity",
-"fill", and "fill-opacity". The fill and stroke color values should be
-specified as six-digit hex codes, and the opacity and width values should
-be supplied as floating-point numbers.}
+overlay. Possible names are "stroke", "stroke-width" (or "stroke_width"),
+"stroke-opacity" (or "stroke_opacity"), "fill", and "fill-opacity" (or
+"fill_opacity"). The fill and stroke color values can be specified as
+six-digit hex codes or color names, and the opacity and width values should
+be supplied as floating-point numbers. If overlay_style is \code{NULL}, the
+style values can be pulled from columns with the same names in
+\code{overlay_sf}.}
 
 \item{zoom}{The map zoom. The map will infer this from the overlay unless
 longitude, latitude, and zoom are all specified.}
@@ -99,7 +102,7 @@ longitude, latitude, and zoom are all specified.}
 \item{width, height}{Map width and height; defaults to 600 px width and 400 px height.}
 
 \item{pitch, bearing}{The map pitch and bearing; defaults to \code{NULL}. pitch can
-range from 0 to 60, and bearing from 0 to 360.}
+range from 0 to 60, and bearing from -360 to 360.}
 
 \item{...}{Additional parameters passed to \link{get_location_data} if type
 is character and index is \code{NULL}.}

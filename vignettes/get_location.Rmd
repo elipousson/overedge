@@ -66,7 +66,7 @@ Here is are a few examples showing how you can use `get_location()` to create ne
 
 If your location data is from another package, you can use the package parameters passed to `get_location_data()` to access that data even without loading the package. This approach works best when the package data uses a consistent naming scheme for columns and data to support. This makes it easy to turn the names into parameters as the example below using the [nycgeo package](https://nycgeo.mattherman.info/).
 
-```{r get_location_package}
+```{r get_location_package, eval = FALSE}
 # remotes::install_github("mfherman/nycgeo")
 
 get_nyc_borough <- function(name = NULL, id = NULL, type = "simple") {
