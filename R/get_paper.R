@@ -406,45 +406,46 @@ get_asp <- function(asp = NULL,
                     margin = NULL,
                     unit = NULL,
                     block_asp = FALSE) {
-  if (is.null(paper)) {
-    # Check aspect ratio
-    asp <- get_char_asp(asp = asp)
-  } else if (!is.null(paper) && is.null(asp)) {
-    # Get aspect ratio for text/plot/map block area
-    paper <- get_paper(paper = paper, orientation = orientation)
 
-    if (block_asp) {
-      asp <- get_block_asp(paper = paper, margin = margin, unit = unit)
-    } else {
-      asp <- paper$asp
-    }
-  }
-
-  return(asp)
+  dplyr::case_when(
+    is.null(paper) ~ get_char_asp(asp = asp),
+    !is.null(paper) && is.null(asp) && !block_asp ~ get_paper(paper = paper, orientation = orientation)[["asp"]],
+    !is.null(paper) && is.null(asp) && block_asp ~ get_block_asp(paper = get_paper(paper = paper, orientation = orientation), margin = margin, unit = unit),
+  )
 }
 
 #' @noRd
 #' @importFrom stringr str_extract
 #' @importFrom cli cli_abort
 get_char_asp <- function(asp) {
+
+
+  cli_abort_ifnot(
+    "{.field {asp}} must be numeric (e.g. {.val 0.666}) or a width to height ratio (e.g. {.val {'4:6'}}) as a string.",
+    condition = (!is.numeric(asp) | is.character(asp) | is.null(asp))
+  )
+
+
+  if (is.numeric(asp) | is.null(asp)) {
+    return(asp)
+  }
+
   if (is.character(asp) && grepl(":", asp)) {
     # If asp is provided as character string (e.g. "16:9") convert to a numeric
     # ratio
-    asp <-
-      as.numeric(stringr::str_extract(asp, ".+(?=:)")) /
-        as.numeric(stringr::str_extract(asp, "(?<=:).+"))
-  } else if (!is.numeric(asp) && !is.null(asp)) {
-    cli::cli_abort("{.field {'asp'}} must be numeric (e.g. {.val {0.666}}) or a string with a width to height ratio (e.g. {.val {'4:6'}}).")
-  }
+    width <- as.numeric(stringr::str_extract(asp, ".+(?=:)"))
+    height <- as.numeric(stringr::str_extract(asp, "(?<=:).+"))
 
-  return(asp)
+    return(width / height)
+  }
 }
 
 #' @noRd
 #' @importFrom cli cli_abort
 get_block_asp <- function(paper, orientation = NULL, margin = NULL, unit = NULL) {
-  stopifnot(
-    is.data.frame(paper)
+  cli_abort_ifnot(
+    "{.arg paper} must be a data frame object"
+    condition = is.data.frame(paper)
   )
 
   if (is.null(unit)) {
