@@ -5,6 +5,7 @@
 \alias{as_bbox}
 \alias{as_sfc}
 \alias{as_sf_list}
+\alias{as_sf_class}
 \title{Convert an object to a simple feature or bounding box object}
 \usage{
 as_sf(x, crs = NULL, sf_col = "geometry", ...)
@@ -14,6 +15,8 @@ as_bbox(x, crs = NULL, ...)
 as_sfc(x, crs = NULL, ...)
 
 as_sf_list(x, nm = "data", col = NULL, crs = NULL, clean_names = TRUE)
+
+as_sf_class(x, class = NULL, crs = NULL, null.ok = TRUE, ...)
 }
 \arguments{
 \item{x}{A \code{sf}, \code{bbox}, \code{sfc}, \code{raster}, \code{sp}, or data frame object that can
@@ -23,15 +26,13 @@ also convert a vector with xmin, ymin, xmax, and ymax values.
 column named "data" (typically created by using \code{\link[dplyr:group_nest]{dplyr::group_nest()}} on an
 sf object.}
 
-\item{crs}{Coordinate reference system for \code{sf}, \code{bbox}, \code{sfc} or \code{sf} list
-object to return.}
+\item{crs}{coordinate reference system}
 
 \item{sf_col}{A column name to use for the geometry column created by
 \link{as_sf}; defaults to "geometry".}
 
-\item{...}{Additional parameters passed to \code{\link[sf:st_bbox]{sf::st_bbox()}} when calling
-\code{\link[=as_bbox]{as_bbox()}} or passed to \code{\link[sf:sf]{sf::st_sf()}}, \code{\link[sf:st_as_sf]{sf::st_as_sf()}}, or \code{\link[=df_to_sf]{df_to_sf()}}
-for \code{\link[=as_sf]{as_sf()}} (depending on class of x)}
+\item{...}{Additional parameters passed to \link{as_sf}, \link{as_sfc}, \link{as_bbox}, or
+\link{as_sf_list}}
 
 \item{nm}{For \link{as_sf_list}, name(s) for sf list; defaults to "data". If col
 is provided, the values of the grouping column are used as names.}
@@ -42,6 +43,11 @@ is a sf object or used to group and nest data before passing to x.}
 \item{clean_names}{If \code{TRUE}, clean names provided to nm or created based on
 value of col using \link[janitor:clean_names]{janitor::clean_names}. If \code{FALSE}, use names as
 provided.}
+
+\item{class}{A class to convert data to; defaults to NULL (which returns
+"sf")}
+
+\item{data}{Data that can be converted to sf, sfc, bbox or a sf list object.}
 }
 \description{
 Both functions will pass a NULL value without returning an error. If a POINT

@@ -135,8 +135,8 @@ as_sfc <- function(x, crs = NULL, ...) {
 #'
 #' @noRd
 #' @importFrom sf st_crs st_transform
-as_crs <- function(x, crs = NULL, ...) {
-  if (is.null(crs)) {
+as_crs <- function(x, crs = NULL, null.ok = TRUE, ...) {
+  if (is.null(crs) && null.ok) {
     return(x)
   }
 
@@ -238,9 +238,11 @@ as_sf_list <- function(x, nm = "data", col = NULL, crs = NULL, clean_names = TRU
 #' @param crs coordinate reference system
 #' @param ... Additional parameters passed to [as_sf], [as_sfc], [as_bbox], or
 #'   [as_sf_list]
-#' @noRd
-as_sf_class <- function(x, class = NULL, crs = NULL, ...) {
-  if (is.null(class)) {
+#' @name as_sf_class
+#' @rdname as_sf
+#' @export
+as_sf_class <- function(x, class = NULL, crs = NULL, null.ok = TRUE, ...) {
+  if (is.null(class) && null.ok) {
     return(x)
   }
 
