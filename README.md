@@ -13,11 +13,31 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Codecov test
 coverage](https://codecov.io/gh/elipousson/overedge/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/overedge?branch=main)
+
 <!-- badges: end -->
 
 The goal of overedge is to provide useful functions for making maps with
 R. This is a collection of miscellaneous functions primarily for working
 with ggplot2 and sf.
+
+## Update (2022 July 25)
+
+I’m in the process of migrating all functions from overedge into three
+more focused packages:
+
+-   [sfext](https://github.com/elipousson/sfext/): sf utilities and
+    read/write functions
+-   [getdata](https://github.com/elipousson/getdata/): data access and
+    formatting functions
+-   [maplayer](https://github.com/elipousson/maplayer/): ggplot2 mapping
+    and theme functions
+
+None of these packages depend on overedge. getdata depends on sfext and
+maplayer depends on both getdata and sfext. I expect overedge to develop
+into a “tidyverse” style package that loads all three packages at once
+but I will continue to maintain the packages separately for ease of
+testing and maintenance. In the interim, I do not recommend using
+overedge.
 
 ## Installation
 
@@ -45,17 +65,8 @@ icons in `map_icons`.
 library(overedge)
 library(ggplot2)
 library(sf)
-#> Linking to GEOS 3.9.1, GDAL 3.4.0, PROJ 8.1.1; sf_use_s2() is TRUE
 
 nc <- st_read(system.file("shape/nc.shp", package = "sf"))
-#> Reading layer `nc' from data source 
-#>   `/Library/Frameworks/R.framework/Versions/4.1/Resources/library/sf/shape/nc.shp' 
-#>   using driver `ESRI Shapefile'
-#> Simple feature collection with 100 features and 14 fields
-#> Geometry type: MULTIPOLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#> Geodetic CRS:  NAD27
 nc <- st_transform(nc, 3857)
 theme_set(theme_void())
 
@@ -67,8 +78,6 @@ nc_map +
   layer_icon(data = nc, icon = "point-start", size = 8)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
-
 You can also use an `icon` column from the provided sf object.
 
 ``` r
@@ -78,33 +87,10 @@ nc_map +
   layer_icon(data = nc, size = 5)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
-
 Check `map_icons` to see all supported icon names.
 
 ``` r
 head(map_icons)
-#>                name
-#> 1         aerialway
-#> 2          airfield
-#> 3           airport
-#> 4      alcohol-shop
-#> 5 american-football
-#> 6    amusement-park
-#>                                                                              url
-#> 1         https://raw.githubusercontent.com/mapbox/maki/main/icons/aerialway.svg
-#> 2          https://raw.githubusercontent.com/mapbox/maki/main/icons/airfield.svg
-#> 3           https://raw.githubusercontent.com/mapbox/maki/main/icons/airport.svg
-#> 4      https://raw.githubusercontent.com/mapbox/maki/main/icons/alcohol-shop.svg
-#> 5 https://raw.githubusercontent.com/mapbox/maki/main/icons/american-football.svg
-#> 6    https://raw.githubusercontent.com/mapbox/maki/main/icons/amusement-park.svg
-#>   size style        repo
-#> 1   15       mapbox/maki
-#> 2   15       mapbox/maki
-#> 3   15       mapbox/maki
-#> 4   15       mapbox/maki
-#> 5   15       mapbox/maki
-#> 6   15       mapbox/maki
 ```
 
 ### Scale and rotate sf objects
@@ -119,8 +105,6 @@ nc_map +
   geom_sf(data = nc_rotated, fill = NA, color = "red")
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
-
 ### Create inscribed squares in sf objects
 
 ``` r
@@ -129,8 +113,6 @@ nc_squares <- st_square(nc, inscribed = TRUE)
 nc_map +
   geom_sf(data = nc_squares, fill = NA, color = "red")
 ```
-
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 ### Add a neatline to a map
 
@@ -146,8 +128,6 @@ nc_map +
     color = "gray60", size = 2, linetype = "dashed"
   )
 ```
-
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 `layer_neatline()` can also be used to focus on a specific area of a map
 with the option to apply a buffer as a distance or ratio of the diagonal
@@ -167,5 +147,3 @@ nc_map +
     hide_grid = FALSE
   )
 ```
-
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />

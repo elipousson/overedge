@@ -2,8 +2,8 @@
 % Please edit documentation in R/is_sf.R
 \name{is_sf}
 \alias{is_sf}
-\alias{is_sfg}
 \alias{is_sfc}
+\alias{is_sfg}
 \alias{is_bbox}
 \alias{is_sf_list}
 \alias{is_raster}
@@ -14,9 +14,9 @@
 \usage{
 is_sf(x, ext = FALSE, null.ok = FALSE)
 
-is_sfg(x, null.ok = FALSE)
-
 is_sfc(x, null.ok = FALSE)
+
+is_sfg(x, null.ok = FALSE)
 
 is_bbox(x, null.ok = FALSE)
 
@@ -34,7 +34,7 @@ is_sf_or_what(x = NULL, return = NULL, us = FALSE, null.ok = TRUE)
 \item{x}{An \code{sf}, \code{sfc}, or \code{bbox} object.}
 
 \item{ext}{If \code{TRUE}, check if x is a \code{sf}, \code{sfc}, or \code{bbox} class object or
-not; defaults to \code{FALSE}. (used by \link{is_sf})}
+not; defaults to \code{FALSE}. \link{is_sf}}
 
 \item{null.ok}{If \code{TRUE} and x is \code{NULL}, return \code{TRUE}; defaults to \code{FALSE}.}
 

@@ -49,13 +49,13 @@ to units matching GDAL units for x; defaults to "meter"}
 character (e.g. "1:3"). If numeric, \code{\link[=get_asp]{get_asp()}} returns the same value
 without modification.}
 
-\item{user_id}{The NSID of the user who's photo to search. If this parameter
-isn't passed then everybody's public photos will be searched.}
+\item{user_id}{The NSID of the user with photos to search. If this parameter
+is NULL passed then all public photos will be searched.}
 
-\item{tags}{A vector of tags you wish to search for.}
+\item{tags}{A vector of tags to search for.}
 
-\item{license_id}{The license id for photos (for possible values see the
-Flickr API method flickr.photos.licenses.getInfo). See details for more information.}
+\item{license_id}{The license id for photos. For possible values see the
+Flickr API method flickr.photos.licenses.getInfo or see details for more information.}
 
 \item{sort}{Supported options include "date-posted","date-taken",
 "interestingness", or "relevance"}

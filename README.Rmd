@@ -16,13 +16,22 @@ knitr::opts_chunk$set(
 # overedge
 
 <!-- badges: start -->
-[![CRAN status](https://www.r-pkg.org/badges/version/overedge)](https://CRAN.R-project.org/package=overedge)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Codecov test coverage](https://codecov.io/gh/elipousson/overedge/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/overedge?branch=main)
+
+[![CRAN status](https://www.r-pkg.org/badges/version/overedge)](https://CRAN.R-project.org/package=overedge) [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Codecov test coverage](https://codecov.io/gh/elipousson/overedge/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/overedge?branch=main)
+
 <!-- badges: end -->
 
 The goal of overedge is to provide useful functions for making maps with R. This is a collection of miscellaneous functions primarily for working with ggplot2 and sf.
+
+## Update (2022 July 25)
+
+I'm in the process of migrating all functions from overedge into three more focused packages:
+
+-   [sfext](https://github.com/elipousson/sfext/): sf utilities and read/write functions
+-   [getdata](https://github.com/elipousson/getdata/): data access and formatting functions
+-   [maplayer](https://github.com/elipousson/maplayer/): ggplot2 mapping and theme functions
+
+None of these packages depend on overedge. getdata depends on sfext and maplayer depends on both getdata and sfext. I expect overedge to develop into a "tidyverse" style package that loads all three packages at once but I will continue to maintain the packages separately for ease of testing and maintenance. In the interim, I do not recommend using overedge.
 
 ## Installation
 
@@ -42,7 +51,7 @@ remotes::install_github("elipousson/overedge")
 
 You can create maps using a single named icon that matches one of the icons in `map_icons`.
 
-```{r}
+```{r, eval = FALSE}
 library(overedge)
 library(ggplot2)
 library(sf)
@@ -61,7 +70,7 @@ nc_map +
 
 You can also use an `icon` column from the provided sf object.
 
-```{r}
+```{r, eval = FALSE}
 nc$icon <- rep(c("1", "2", "3", "4"), nrow(nc) / 4)
 
 nc_map +
@@ -70,7 +79,7 @@ nc_map +
 
 Check `map_icons` to see all supported icon names.
 
-```{r}
+```{r, eval = FALSE}
 head(map_icons)
 ```
 
@@ -78,7 +87,7 @@ head(map_icons)
 
 `st_scale_rotate()` is a convenience function for apply affine transformations to sf objects.
 
-```{r}
+```{r, eval=FALSE}
 nc_rotated <- st_scale_rotate(nc, scale = 0.5, rotate = 15)
 
 nc_map +
@@ -87,7 +96,7 @@ nc_map +
 
 ### Create inscribed squares in sf objects
 
-```{r}
+```{r, eval=FALSE}
 nc_squares <- st_square(nc, inscribed = TRUE)
 
 nc_map +
@@ -98,7 +107,7 @@ nc_map +
 
 `layer_neatline()` hides major grid lines and axis label by default. The function is useful to draw a neatline around a map at a set aspect ratio.
 
-```{r}
+```{r, eval=FALSE}
 nc_map +
   layer_neatline(
     data = nc,
@@ -109,7 +118,7 @@ nc_map +
 
 `layer_neatline()` can also be used to focus on a specific area of a map with the option to apply a buffer as a distance or ratio of the diagonal distance for the input data. The `label_axes` and `hide_grid` parameters will not override a set ggplot theme.
 
-```{r}
+```{r, eval=FALSE}
 theme_set(theme_minimal())
 
 nc_map +

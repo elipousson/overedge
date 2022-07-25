@@ -57,8 +57,8 @@ metadata.}
 
 \item{popup}{If \code{TRUE}, add a popup image to a leaflet map; defaults \code{TRUE}.}
 
-\item{user_id}{The NSID of the user who's photo to search. If this parameter
-isn't passed then everybody's public photos will be searched.}
+\item{user_id}{The NSID of the user with photos to search. If this parameter
+is NULL passed then all public photos will be searched.}
 
 \item{tags}{Optional list of EXIF tags to read from files. Must include GPS
 tags to create an sf object.}
