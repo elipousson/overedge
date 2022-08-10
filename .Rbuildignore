@@ -12,3 +12,4 @@
 ^examples$
 ^codemeta\.json$
 ^\.httr-oauth$
+^\.github$
